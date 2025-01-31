@@ -24,6 +24,8 @@ public class CarController : MonoBehaviour
     public float turnSensitivty = 1.0f;
     public float maxsteerAngle = 30.0f;
 
+    public float maxspeed = 100.0f;
+
     public List<Wheel> wheels; 
     float moveInput;
     float steerInput;
