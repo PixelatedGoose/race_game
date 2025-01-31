@@ -18,11 +18,17 @@ public class CarController : MonoBehaviour
         public Axel axel;
     }
 
-    public float maxAcceleration = 30.0f;
+    public float maxAcceleration = 50.0f;
     public float brakeAcceleration = 50.0f;
+
+    public float turnSensitivty = 1.0f;
+    public float maxsteerAngle = 30.0f;
 
     public List<Wheel> wheels; 
     float moveInput;
+    float steerInput;
+
+    public Vector3 _centerofMass;
 
 
     private Rigidbody carRb;
@@ -30,26 +36,55 @@ public class CarController : MonoBehaviour
     void Start()
     {
         carRb = GetComponent<Rigidbody>();
+        carRb.centerOfMass = _centerofMass;
     }
     void Update()
     {
         GetInputs();
+        Animatewheels();
     }
 
     void LateUpdate()
     {
         Move();
+        steer();
     }
 
     void GetInputs()    
     {
         moveInput = Input.GetAxis("Vertical");
+        steerInput = Input.GetAxis("Horizontal");
     }
 
     void Move() {
         foreach(var wheel in wheels)
         {
-            wheel.wheelCollider.motorTorque = moveInput * 1200 * maxAcceleration * Time.deltaTime;
+            wheel.wheelCollider.motorTorque = moveInput * 1600 * maxAcceleration * Time.deltaTime;
+        }
+
+    }
+
+    void steer() 
+    { 
+        foreach(var wheel in wheels)
+        {
+            if (wheel.axel  == Axel.Front)
+            {
+            var _steerAngle = steerInput * turnSensitivty * maxsteerAngle;
+            wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
+            }
+        }
+
+    }
+    void Animatewheels()
+    {
+        foreach(var wheel in wheels) 
+        {
+            Quaternion rot;
+            Vector3 pos;
+            wheel.wheelCollider.GetWorldPose(out pos, out rot);
+            wheel.wheelModel.transform.position = pos;
+            wheel.wheelModel.transform.rotation = rot;
         }
 
     }
