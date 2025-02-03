@@ -1236,7 +1236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAcceleration: 300
-  brakeAcceleration: 50
+  brakeAcceleration: 600
   turnSensitivty: 1
   maxsteerAngle: 30
   maxspeed: 100
@@ -1270,6 +1270,7 @@ MonoBehaviour:
   besttime: 0
   Ltime: {fileID: 8808136006470933881}
   Btime: {fileID: 5899963910701371}
+  LapCounter: {fileID: 0}
 --- !u!1 &4934781887389325266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1919,6 +1920,10 @@ PrefabInstance:
     - target: {fileID: 1573553140000432865, guid: fa2f7412aab40574395f754355f60046, type: 3}
       propertyPath: maxAcceleration
       value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573553140000432865, guid: fa2f7412aab40574395f754355f60046, type: 3}
+      propertyPath: brakeAcceleration
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 5848582723423247601, guid: fa2f7412aab40574395f754355f60046, type: 3}
       propertyPath: m_LocalPosition.x
