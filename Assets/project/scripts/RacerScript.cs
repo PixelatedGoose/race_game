@@ -31,9 +31,13 @@ public class RacerScript : MonoBehaviour
     {
         if (raceFinished) return;
 
+        if (Input.GetKey(KeyCode.R)) {
+            ResetPosition();
+        }
+
         Ltime.text = "Time: " + laptime.ToString("F2");
 
-        if (transform.position.y < 0)
+        if (transform.position.y < -1)
         {
             ResetPosition();
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
@@ -46,6 +50,7 @@ public class RacerScript : MonoBehaviour
         {
             laptime += Time.deltaTime;
         }
+
     }
 
     void ResetPosition()
@@ -118,4 +123,6 @@ public class RacerScript : MonoBehaviour
         LapCounter.text = "Lap: " + currentLap + "/" + totalLaps;
         Debug.Log("Race Reset");
     }
+
+
 }
