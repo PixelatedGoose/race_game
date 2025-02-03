@@ -18,6 +18,10 @@ public class CarController : MonoBehaviour
         public Axel axel;
     }
 
+    
+
+
+
     public float maxAcceleration = 50.0f;
     public float brakeAcceleration = 50.0f;
 
@@ -25,6 +29,8 @@ public class CarController : MonoBehaviour
     public float maxsteerAngle = 30.0f;
 
     public float maxspeed = 100.0f;
+
+
 
     public List<Wheel> wheels; 
     float moveInput;
@@ -79,9 +85,36 @@ public class CarController : MonoBehaviour
         }
 
     }
+    void HandleDrift()
+{
+    if (Input.GetKey(KeyCode.Space))
+    {
+        foreach (var wheel in wheels)
+        {
+            WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+            sidewaysFriction.extremumSlip = 1.5f; // Increase slip for drifting
+            sidewaysFriction.asymptoteSlip = 2.0f;
+            sidewaysFriction.extremumValue = 0.5f; // Adjust friction values
+            sidewaysFriction.asymptoteValue = 0.75f;
+            wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+        }
+    }
+    else
+    {
+        foreach (var wheel in wheels)
+        {
+            WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+            sidewaysFriction.extremumSlip = 0.2f; // Reset to normal values
+            sidewaysFriction.asymptoteSlip = 0.5f;
+            sidewaysFriction.extremumValue = 1.0f;
+            sidewaysFriction.asymptoteValue = 0.75f;
+            wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+        }
+    }
+}
     void brake()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if(Input.GetKey(KeyCode.LeftShift))
         {
             foreach(var wheel in wheels)
             {
@@ -91,7 +124,7 @@ public class CarController : MonoBehaviour
         else {
             foreach(var wheel in wheels)
             {
-                wheel.wheelCollider.brakeTorque = 0;
+                wheel.wheelCollider.brakeTorque = 0f;
             }
         }
     }
