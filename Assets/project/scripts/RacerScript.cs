@@ -5,48 +5,52 @@ using TMPro;
 
 public class RacerScript : MonoBehaviour
 {
-
     public float laptime;
     public float besttime = 0;
     private bool startTimer = false;
 
     public TextMeshProUGUI Ltime;
     public TextMeshProUGUI Btime;
+    public TextMeshProUGUI LapCounter;
 
     private bool checkpoint1 = false;
     private bool checkpoint2 = false;
 
-
+    private int currentLap = 0;
+    private int totalLaps = 3;
+    private bool raceFinished = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        LapCounter.text = "Lap: " + currentLap + "/" + totalLaps;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Ltime.text = "Time: " + laptime.ToString("F2");
+        if (raceFinished) return;
 
         if (Input.GetKey(KeyCode.R)) {
             ResetPosition();
         }
 
-        if(transform.position.y < -1)
+        Ltime.text = "Time: " + laptime.ToString("F2");
+
+        if (transform.position.y < -1)
         {
             ResetPosition();
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             transform.rotation = Quaternion.Euler(0, 0, 0);
             startTimer = false;
             laptime = 0;
         }
 
-        if(startTimer == true) 
+        if (startTimer)
         {
             laptime += Time.deltaTime;
         }
+
     }
 
     void ResetPosition()
@@ -60,7 +64,7 @@ public class RacerScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.name == "StartFinish")
+        if (other.gameObject.name == "StartFinish")
         {
             if (startTimer == false)
             {
@@ -70,36 +74,53 @@ public class RacerScript : MonoBehaviour
                 checkpoint2 = false;
             }
 
-            if(checkpoint1 == true && checkpoint2 == true)
+            if (checkpoint1 && checkpoint2)
             {
-                startTimer = false;
+                currentLap++;
+                Debug.Log("Current Lap: " + currentLap);
+                LapCounter.text = "Lap: " + currentLap + "/" + totalLaps;
 
-                if(besttime == 0)
+                if (currentLap >= totalLaps)
                 {
-                    besttime = laptime;
+                    raceFinished = true;
+                    startTimer = false;
+                    if (besttime == 0 || laptime < besttime)
+                    {
+                        besttime = laptime;
+                    }
+                    Btime.text = "Best Time: " + besttime.ToString("F2");
+                    Debug.Log("Race Finished!");
+                    ResetRace();
                 }
-                if(laptime<besttime)
+                else
                 {
-                    besttime = laptime;
+                    laptime = 0;
+                    checkpoint1 = false;
+                    checkpoint2 = false;
                 }
-
-                Btime.text = "Best: " + besttime.ToString("F2");
             }
-            
         }
-
-
-        if(other.gameObject.name == "checkpoint1")
+        else if (other.gameObject.name == "checkpoint1")
         {
             Debug.Log("chek1");
             checkpoint1 = true;
         }
-
-        if(other.gameObject.name == "checkpoint2")
+        else if (other.gameObject.name == "checkpoint2")
         {
             Debug.Log("chek2");
             checkpoint2 = true;
         }
+    }
 
+    void ResetRace()
+    {
+        currentLap = 0;
+        laptime = 0;
+        startTimer = false;
+        raceFinished = false;
+        checkpoint1 = false;
+        checkpoint2 = false;
+        LapCounter.text = "Lap: " + currentLap + "/" + totalLaps;
+        Debug.Log("Race Reset");
     }
 }
