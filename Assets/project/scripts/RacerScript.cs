@@ -123,4 +123,6 @@ public class RacerScript : MonoBehaviour
         LapCounter.text = "Lap: " + currentLap + "/" + totalLaps;
         Debug.Log("Race Reset");
     }
+
+
 }
