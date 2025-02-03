@@ -29,26 +29,33 @@ public class RacerScript : MonoBehaviour
     {
         Ltime.text = "Time: " + laptime.ToString("F2");
 
-        if(transform.position.y < 0)
+        if (Input.GetKey(KeyCode.R)) {
+            ResetPosition();
+        }
+
+        if(transform.position.y < -1)
         {
             ResetPosition();
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             transform.rotation = Quaternion.Euler(0, 0, 0);
             startTimer = false;
             laptime = 0;
         }
 
-
         if(startTimer == true) 
         {
-            laptime = laptime + Time.deltaTime;
-
+            laptime += Time.deltaTime;
         }
     }
 
     void ResetPosition()
     {
         transform.position = new Vector3(255, 0.0015f, 845);
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        Debug.Log("Reset");
     }
 
     void OnTriggerEnter(Collider other)
@@ -62,7 +69,6 @@ public class RacerScript : MonoBehaviour
                 checkpoint1 = false;
                 checkpoint2 = false;
             }
-
 
             if(checkpoint1 == true && checkpoint2 == true)
             {
