@@ -12,18 +12,27 @@ public class RacerScript : MonoBehaviour
     public TextMeshProUGUI Ltime;
     public TextMeshProUGUI Btime;
     public TextMeshProUGUI LapCounter;
+    public TextMeshProUGUI resetPrompt; // Add a TextMeshProUGUI for the reset prompt
+
+    public Transform spawnPoint; // Add a Transform variable for the spawn point
 
     private bool checkpoint1 = false;
     private bool checkpoint2 = false;
 
-    private int currentLap = 0;
+    private int currentLap = 1;
     private int totalLaps = 3;
     private bool raceFinished = false;
+
+    private float inactivityTimer = 0f;
+    private float inactivityThreshold = 8f;
+    private Vector3 lastPosition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        LapCounter.text = "Lap: " + currentLap + "/" + totalLaps;
+        LapCounter.text = "" + currentLap + "/" + totalLaps;
+        resetPrompt.gameObject.SetActive(false); // Hide the reset prompt initially
+        lastPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -31,11 +40,15 @@ public class RacerScript : MonoBehaviour
     {
         if (raceFinished) return;
 
-        if (Input.GetKey(KeyCode.R)) {
+        if (Input.GetKey(KeyCode.R))
+        {
+            checkpoint1 = false;
+            checkpoint2 = false;
             ResetPosition();
+            resetPrompt.gameObject.SetActive(false); // Hide the reset prompt when resetting
         }
 
-        Ltime.text = "Time: " + laptime.ToString("F2");
+        Ltime.text = "" + laptime.ToString("F2");
 
         if (transform.position.y < -1)
         {
@@ -51,11 +64,37 @@ public class RacerScript : MonoBehaviour
             laptime += Time.deltaTime;
         }
 
+        // Check for inactivity
+        if (transform.position == lastPosition)
+        {
+            inactivityTimer += Time.deltaTime;
+            if (inactivityTimer >= inactivityThreshold)
+            {
+                resetPrompt.gameObject.SetActive(true); // Show the reset prompt
+            }
+        }
+        else
+        {
+            inactivityTimer = 0f;
+            resetPrompt.gameObject.SetActive(false); // Hide the reset prompt
+        }
+
+        lastPosition = transform.position;
     }
 
     void ResetPosition()
     {
-        transform.position = new Vector3(255, 0.0015f, 845);
+        if (spawnPoint != null)
+        {
+            transform.position = spawnPoint.position;
+            transform.rotation = spawnPoint.rotation;
+        }
+        else
+        {
+            transform.position = new Vector3(255, 0.0015f, 845);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -78,9 +117,9 @@ public class RacerScript : MonoBehaviour
             {
                 currentLap++;
                 Debug.Log("Current Lap: " + currentLap);
-                LapCounter.text = "Lap: " + currentLap + "/" + totalLaps;
+                LapCounter.text = "" + currentLap + "/" + totalLaps;
 
-                if (currentLap >= totalLaps)
+                if (currentLap > totalLaps)
                 {
                     raceFinished = true;
                     startTimer = false;
@@ -88,7 +127,7 @@ public class RacerScript : MonoBehaviour
                     {
                         besttime = laptime;
                     }
-                    Btime.text = "Best Time: " + besttime.ToString("F2");
+                    Btime.text = "Record: " + besttime.ToString("F2");
                     Debug.Log("Race Finished!");
                     ResetRace();
                 }
@@ -114,15 +153,13 @@ public class RacerScript : MonoBehaviour
 
     void ResetRace()
     {
-        currentLap = 0;
+        currentLap = 1;
         laptime = 0;
         startTimer = false;
         raceFinished = false;
         checkpoint1 = false;
         checkpoint2 = false;
-        LapCounter.text = "Lap: " + currentLap + "/" + totalLaps;
+        LapCounter.text = "" + currentLap + "/" + totalLaps;
         Debug.Log("Race Reset");
     }
-
-
 }
