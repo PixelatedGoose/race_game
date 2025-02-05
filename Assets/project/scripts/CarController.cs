@@ -24,6 +24,7 @@ public class CarController : MonoBehaviour
     public float maxsteerAngle = 30.0f;
     public float deceleration = 1.0f; 
     public float maxspeed = 100.0f;
+    public float accelerationRate = 5.0f; // New variable for acceleration rate
 
     public List<Wheel> wheels; 
     float moveInput;
@@ -47,6 +48,7 @@ public class CarController : MonoBehaviour
         HandleDrift();
         HandleBrake();
         Animatewheels();
+        // HandleGravity();
     }
 
     void GetInputs()    
@@ -55,20 +57,29 @@ public class CarController : MonoBehaviour
         steerInput = Input.GetAxis("Horizontal");
     }
 
+    // void HandleGravity() {
+    //     if(carRb != null)
+    //     {
+    //         carRb.AddForce(Vector3.down * carRb.mass * 9.81f);
+    //     }
+    //     // Apply gravity
+    // }
+
     void Move() 
     {
         foreach(var wheel in wheels)
         {
-            if (moveInput != 0)
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
             {
-                wheel.wheelCollider.motorTorque = moveInput * 1600 * maxAcceleration * Time.deltaTime;
+                // Gradually increase motor torque
+                float targetTorque = moveInput * maxAcceleration;
+                wheel.wheelCollider.motorTorque = Mathf.Lerp(wheel.wheelCollider.motorTorque, targetTorque, Time.deltaTime * accelerationRate);
                 wheel.wheelCollider.brakeTorque = 0f; // Remove brake torque when accelerating
             }
             else
             {
                 wheel.wheelCollider.motorTorque = 0f;
                 wheel.wheelCollider.brakeTorque = 0f; // Remove brake torque
-
 
                 Vector3 velocity = carRb.linearVelocity;
                 velocity -= velocity.normalized * deceleration * Time.deltaTime;
@@ -154,13 +165,14 @@ public class CarController : MonoBehaviour
 
     private void Update()
     {
+        // Handle forward and backward movement
+
         // Apply speed limit
         float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
         if (speed > maxspeed)
         {
             carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f); // Convert km/h to m/s
         }
-
-        // Existing code for controlling the car...
     }
+    
 }
