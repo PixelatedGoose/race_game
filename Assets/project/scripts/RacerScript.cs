@@ -14,10 +14,10 @@ public class RacerScript : MonoBehaviour
     public TextMeshProUGUI LapCounter;
     public TextMeshProUGUI resetPrompt; // Add a TextMeshProUGUI for the reset prompt
 
-    public Transform spawnPoint; // Add a Transform variable for the spawn point
+    public Transform startFinishLine; // Add a Transform variable for the start/finish line
+    public Transform[] checkpoints; // Add an array of Transforms for the checkpoints
 
-    private bool checkpoint1 = false;
-    private bool checkpoint2 = false;
+    private bool[] checkpointStates; // Add an array to track checkpoint states
 
     private int currentLap = 1;
     private int totalLaps = 3;
@@ -27,12 +27,17 @@ public class RacerScript : MonoBehaviour
     private float inactivityThreshold = 8f;
     private Vector3 lastPosition;
 
+    private Transform respawnPoint; // Add a Transform variable for the respawn point
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         LapCounter.text = "" + currentLap + "/" + totalLaps;
         resetPrompt.gameObject.SetActive(false); // Hide the reset prompt initially
         lastPosition = transform.position;
+        respawnPoint = startFinishLine; // Initialize respawn point to start/finish line
+
+        checkpointStates = new bool[checkpoints.Length]; // Initialize checkpoint states array
     }
 
     // Update is called once per frame
@@ -42,8 +47,6 @@ public class RacerScript : MonoBehaviour
 
         if (Input.GetKey(KeyCode.R))
         {
-            checkpoint1 = false;
-            checkpoint2 = false;
             ResetPosition();
             resetPrompt.gameObject.SetActive(false); // Hide the reset prompt when resetting
         }
@@ -84,15 +87,15 @@ public class RacerScript : MonoBehaviour
 
     void ResetPosition()
     {
-        if (spawnPoint != null)
+        if (respawnPoint != null)
         {
-            transform.position = spawnPoint.position;
-            transform.rotation = spawnPoint.rotation;
+            transform.position = respawnPoint.position;
+            transform.rotation = respawnPoint.rotation;
         }
         else
         {
-            transform.position = new Vector3(255, 0.0015f, 845);
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            transform.position = startFinishLine.position;
+            transform.rotation = startFinishLine.rotation;
         }
 
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -109,11 +112,24 @@ public class RacerScript : MonoBehaviour
             {
                 startTimer = true;
                 laptime = 0;
-                checkpoint1 = false;
-                checkpoint2 = false;
+                for (int i = 0; i < checkpointStates.Length; i++)
+                {
+                    checkpointStates[i] = false; // Reset all checkpoint states
+                }
+                respawnPoint = startFinishLine; // Set respawn point to start/finish line
             }
 
-            if (checkpoint1 && checkpoint2)
+            bool allCheckpointsPassed = true;
+            for (int i = 0; i < checkpointStates.Length; i++)
+            {
+                if (!checkpointStates[i])
+                {
+                    allCheckpointsPassed = false;
+                    break;
+                }
+            }
+
+            if (allCheckpointsPassed)
             {
                 currentLap++;
                 Debug.Log("Current Lap: " + currentLap);
@@ -134,20 +150,26 @@ public class RacerScript : MonoBehaviour
                 else
                 {
                     laptime = 0;
-                    checkpoint1 = false;
-                    checkpoint2 = false;
+                    for (int i = 0; i < checkpointStates.Length; i++)
+                    {
+                        checkpointStates[i] = false; // Reset all checkpoint states
+                    }
+                    respawnPoint = startFinishLine; // Reset respawn point to start/finish line
                 }
             }
         }
-        else if (other.gameObject.name == "checkpoint1")
+        else
         {
-            Debug.Log("chek1");
-            checkpoint1 = true;
-        }
-        else if (other.gameObject.name == "checkpoint2")
-        {
-            Debug.Log("chek2");
-            checkpoint2 = true;
+            for (int i = 0; i < checkpoints.Length; i++)
+            {
+                if (other.transform == checkpoints[i])
+                {
+                    Debug.Log("Checkpoint " + (i + 1) + " reached");
+                    checkpointStates[i] = true;
+                    respawnPoint = checkpoints[i]; // Set respawn point to the current checkpoint
+                    break;
+                }
+            }
         }
     }
 
@@ -157,8 +179,11 @@ public class RacerScript : MonoBehaviour
         laptime = 0;
         startTimer = false;
         raceFinished = false;
-        checkpoint1 = false;
-        checkpoint2 = false;
+        respawnPoint = startFinishLine; // Reset respawn point to start/finish line
+        for (int i = 0; i < checkpointStates.Length; i++)
+        {
+            checkpointStates[i] = false; // Reset all checkpoint states
+        }
         LapCounter.text = "" + currentLap + "/" + totalLaps;
         Debug.Log("Race Reset");
     }
