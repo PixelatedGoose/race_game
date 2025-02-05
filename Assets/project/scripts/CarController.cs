@@ -24,6 +24,7 @@ public class CarController : MonoBehaviour
     public float maxsteerAngle = 30.0f;
     public float deceleration = 1.0f; 
     public float maxspeed = 100.0f;
+    public float gravityMultiplier = 1.5f; // New variable for gravity multiplier
     public float accelerationRate = 5.0f; // New variable for acceleration rate
 
     public List<Wheel> wheels; 
@@ -36,7 +37,8 @@ public class CarController : MonoBehaviour
 
     void Start()
     {
-        carRb = GetComponent<Rigidbody>();
+        if (carRb == null)
+            carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
     }
 
@@ -48,7 +50,7 @@ public class CarController : MonoBehaviour
         HandleDrift();
         HandleBrake();
         Animatewheels();
-        // HandleGravity();
+        ApplyGravity();
     }
 
     void GetInputs()    
@@ -57,6 +59,17 @@ public class CarController : MonoBehaviour
         steerInput = Input.GetAxis("Horizontal");
     }
 
+    bool IsGrounded()
+    {
+        foreach (var wheel in wheels)
+        {
+            if (wheel.wheelCollider.isGrounded)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     // void HandleGravity() {
     //     if(carRb != null)
     //     {
@@ -102,6 +115,11 @@ public class CarController : MonoBehaviour
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
             }
         }
+    }
+    void ApplyGravity()
+    {
+        if (!IsGrounded())
+        carRb.AddForce(Vector3.down   * gravityMultiplier, ForceMode.Acceleration);
     }
 
     void HandleDrift()
