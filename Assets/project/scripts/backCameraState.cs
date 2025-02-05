@@ -28,7 +28,7 @@ public class backCameraState : MonoBehaviour
                 // backViewImage.SetActive(true);
                 // backViewCamera.SetActive(true);
                 backCamera = true;
-                LeanTween.moveLocalY(backViewImage, 210.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
+                LeanTween.moveLocalY(backViewImage, 380.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
             }
 
             else
@@ -36,7 +36,7 @@ public class backCameraState : MonoBehaviour
                 // backViewImage.SetActive(false);
                 // backViewCamera.SetActive(false);
                 backCamera = false;
-                LeanTween.moveLocalY(backViewImage, 357.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
+                LeanTween.moveLocalY(backViewImage, 675.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
             }
         }
     }
