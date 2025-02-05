@@ -152,4 +152,15 @@ public class CarController : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        // Apply speed limit
+        float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
+        if (speed > maxspeed)
+        {
+            carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f); // Convert km/h to m/s
+        }
+
+        // Existing code for controlling the car...
+    }
 }
