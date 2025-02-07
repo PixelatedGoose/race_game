@@ -47,7 +47,6 @@ public class CarController : MonoBehaviour
         Move();
         Steer();
         HandleDrift();
-        //HandleBrake();
         Animatewheels();
         ApplyGravity();
     }
@@ -133,30 +132,29 @@ public class CarController : MonoBehaviour
     }
 
     void HandleDrift()
-    {   
+    {
         foreach (var wheel in wheels)
-
         {
-  
-            WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-            
+            WheelFrictionCurve  sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+
             if (Input.GetKey(KeyCode.Space))
             {
-                sidewaysFriction.extremumSlip = 1.5f; // Increase slip for drifting
-                sidewaysFriction.asymptoteSlip = 2.0f; 
-                sidewaysFriction.extremumValue = 0.5f; // Adjust friction values
-                sidewaysFriction.asymptoteValue = 0.75f; 
+                sidewaysFriction.extremumSlip = 1.5f;
+                sidewaysFriction.asymptoteSlip = 2.0f;
+                sidewaysFriction.extremumValue = 0.5f;
+                sidewaysFriction.asymptoteValue = 0.75f;
             }
-        else
+            else
             {
-                sidewaysFriction.extremumSlip = 0.2f; // Reset to normal values
+                // Reset to normal values
+                sidewaysFriction.extremumSlip = 0.2f;
                 sidewaysFriction.asymptoteSlip = 0.5f;
                 sidewaysFriction.extremumValue = 1.0f;
-                sidewaysFriction.asymptoteValue = 0.5f;
-
+                sidewaysFriction.asymptoteValue = 1f;
             }
+
+            // Assign the updated friction values back to the wheelCollider
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-            
         }
     }
 
