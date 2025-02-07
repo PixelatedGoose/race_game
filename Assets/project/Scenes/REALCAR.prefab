@@ -691,6 +691,10 @@ PrefabInstance:
       propertyPath: checkpoints.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3582652508530400840, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: turnSensitivty
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 3621995110324072295, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_Name
       value: REALCAR
