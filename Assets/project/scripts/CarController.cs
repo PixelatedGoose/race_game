@@ -24,9 +24,8 @@ public class CarController : MonoBehaviour
     public float maxsteerAngle = 30.0f;
     public float deceleration = 1.0f; 
     public float maxspeed = 100.0f;
-    public float gravityMultiplier = 1.5f; // New variable for gravity multiplier
-    public float accelerationRate = 5.0f; // New variable for acceleration rate
-
+    public float gravityMultiplier = 1.5f; 
+    public float accelerationRate = 5.0f;
     public List<Wheel> wheels; 
     float moveInput;
     float steerInput;
@@ -48,7 +47,7 @@ public class CarController : MonoBehaviour
         Move();
         Steer();
         HandleDrift();
-        HandleBrake();
+        //HandleBrake();
         Animatewheels();
         ApplyGravity();
     }
@@ -70,38 +69,49 @@ public class CarController : MonoBehaviour
         }
         return false;
     }
-    // void HandleGravity() {
-    //     if(carRb != null)
-    //     {
-    //         carRb.AddForce(Vector3.down * carRb.mass * 9.81f);
-    //     }
-    //     // Apply gravity
-    // }
+
 
     void Move() 
     {
         foreach(var wheel in wheels)
         {
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                // Gradually increase motor torque
+                // Apply brake torque
+                wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
+                wheel.wheelCollider.motorTorque = 0f; // Ensure motor torque is zero when braking
+            }
+            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            {
+                // Apply motor torque directly for more responsiveness
                 float targetTorque = moveInput * maxAcceleration;
-                wheel.wheelCollider.motorTorque = Mathf.Lerp(wheel.wheelCollider.motorTorque, targetTorque, Time.deltaTime * accelerationRate);
-                wheel.wheelCollider.brakeTorque = 0f; // Remove brake torque when accelerating
+                wheel.wheelCollider.motorTorque = targetTorque;
+                wheel.wheelCollider.brakeTorque = 0f;
+                
+                
+                
+                 // Remove brake torque when accelerating
             }
             else
             {
                 wheel.wheelCollider.motorTorque = 0f;
                 wheel.wheelCollider.brakeTorque = 0f; // Remove brake torque
-
-                Vector3 velocity = carRb.linearVelocity;
-                velocity -= velocity.normalized * deceleration * Time.deltaTime;
-                if (velocity.magnitude < 0.1f) 
-                {
-                    velocity = Vector3.zero;
-                }
-                carRb.linearVelocity = velocity;
             }
+        }
+
+        // Always apply deceleration when no input is provided
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        {
+            Vector3 velocity = carRb.linearVelocity;
+            if (IsGrounded())
+            {
+                velocity -= velocity.normalized * deceleration * Time.deltaTime;
+            }
+            if (velocity.magnitude < 0.1f) 
+            {
+                velocity = Vector3.zero;
+            }
+            carRb.linearVelocity = velocity;
         }
     }
 
@@ -111,7 +121,7 @@ public class CarController : MonoBehaviour
         {
             if (wheel.axel == Axel.Front)
             {
-                var _steerAngle = steerInput * turnSensitivty * maxsteerAngle;
+                var _steerAngle = steerInput * turnSensitivty;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
             }
         }
@@ -123,50 +133,34 @@ public class CarController : MonoBehaviour
     }
 
     void HandleDrift()
-    {
-        if (Input.GetKey(KeyCode.Space))
+    {   
+        foreach (var wheel in wheels)
+
         {
-            foreach (var wheel in wheels)
+  
+            WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+            
+            if (Input.GetKey(KeyCode.Space))
             {
-                WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
                 sidewaysFriction.extremumSlip = 1.5f; // Increase slip for drifting
                 sidewaysFriction.asymptoteSlip = 2.0f; 
                 sidewaysFriction.extremumValue = 0.5f; // Adjust friction values
                 sidewaysFriction.asymptoteValue = 0.75f; 
-                wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
-        }
         else
-        {
-            foreach (var wheel in wheels)
             {
-                WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
                 sidewaysFriction.extremumSlip = 0.2f; // Reset to normal values
                 sidewaysFriction.asymptoteSlip = 0.5f;
                 sidewaysFriction.extremumValue = 1.0f;
-                sidewaysFriction.asymptoteValue = 0.75f;
-                wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+                sidewaysFriction.asymptoteValue = 0.5f;
+
             }
+            wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+            
         }
     }
 
-    void HandleBrake()
-    {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            foreach (var wheel in wheels)
-            {
-                wheel.wheelCollider.brakeTorque = 1 * brakeAcceleration * Time.deltaTime;
-            }
-        }
-        else
-        {
-            foreach (var wheel in wheels)
-            {
-                wheel.wheelCollider.brakeTorque = 0f;
-            }
-        }
-    }
+ 
 
     void Animatewheels()
     {
