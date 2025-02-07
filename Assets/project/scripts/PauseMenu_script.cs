@@ -34,4 +34,19 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
+
+    public void ContinueGame()
+    {
+        foreach (GameObject obj in pauseMenuObjects)
+        {
+            obj.SetActive(false);
+        }
+        Time.timeScale = 1;
+    }
+
+    public void QuitGame()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadSceneAsync(0);
+    }
 }
