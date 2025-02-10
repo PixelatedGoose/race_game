@@ -134,16 +134,16 @@ public class RacerScript : MonoBehaviour
                 currentLap++;
                 Debug.Log("Current Lap: " + currentLap);
                 LapCounter.text = "" + currentLap + "/" + totalLaps;
-
+                if (besttime == 0 || laptime < besttime)
+                {
+                    besttime = laptime;
+                }
+                Btime.text = "Record: " + besttime.ToString("F2");
+                
                 if (currentLap > totalLaps)
                 {
                     raceFinished = true;
                     startTimer = false;
-                    if (besttime == 0 || laptime < besttime)
-                    {
-                        besttime = laptime;
-                    }
-                    Btime.text = "Record: " + besttime.ToString("F2");
                     Debug.Log("Race Finished!");
                     ResetRace();
                 }
