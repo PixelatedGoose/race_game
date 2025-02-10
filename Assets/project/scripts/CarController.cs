@@ -15,6 +15,8 @@ public class CarController : MonoBehaviour
     {
         public GameObject wheelModel;
         public WheelCollider wheelCollider;
+
+        public GameObject wheelEffectobj;
         public Axel axel;
     }
 
@@ -31,6 +33,8 @@ public class CarController : MonoBehaviour
     float steerInput;
 
     public Vector3 _centerofMass;
+
+
 
     private Rigidbody carRb;
 
@@ -49,6 +53,7 @@ public class CarController : MonoBehaviour
         HandleDrift();
         Animatewheels();
         ApplyGravity();
+        WheelEffects();
     }
 
     void GetInputs()    
@@ -171,6 +176,21 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.rotation = rot;
         }
 
+    }
+
+    void WheelEffects()
+    {
+        foreach(var wheel in wheels)
+        {
+            if(Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear)
+            {
+                wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>().emitting = true;
+            }
+            else
+            {
+                wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>().emitting = false;
+            }
+        }
     }
 
     private void Update()
