@@ -184,6 +184,7 @@ public class CarController : MonoBehaviour
         {
             if(Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear)
             {
+                Console.WriteLine("Trail");
                 wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>().emitting = true;
             }
             else
@@ -202,6 +203,14 @@ public class CarController : MonoBehaviour
         if (speed > maxspeed)
         {
             carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f); // Convert km/h to m/s
+        }
+        if (speed > 20.0f)
+        {
+            turnSensitivty = 10.0f;
+        }
+        else
+        {
+            turnSensitivty = 30.0f;
         }
     }
     

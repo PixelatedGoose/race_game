@@ -1612,10 +1612,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: skidmark
       objectReference: {fileID: 0}
-    - target: {fileID: 9018762691249555885, guid: 37090528e2e5eeb4ead4d4402a7fea13, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 2078d9428218af54fa6eaa4ae7fdbaa1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
