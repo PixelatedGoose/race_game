@@ -19,7 +19,7 @@ public class CameraFollow : MonoBehaviour
     void FollowTarget()
     {
         HandleMovement();
-        HandleRotaion();
+        HandleRotation();
     }
 
     void HandleMovement()
@@ -32,7 +32,7 @@ public class CameraFollow : MonoBehaviour
     }
 
 
-    void HandleRotaion()
+    void HandleRotation()
     {
         var direction = carTarget.position - transform.position;
         var rotation =  new Quaternion();
