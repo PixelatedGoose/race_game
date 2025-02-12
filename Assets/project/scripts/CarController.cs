@@ -33,10 +33,8 @@ public class CarController : MonoBehaviour
     public List<Wheel> wheels; 
     float moveInput;
     float steerInput;
-
     public Vector3 _centerofMass;
     public LayerMask grass;
-
     public float targetTorque;
 
     private Rigidbody carRb;
@@ -50,7 +48,7 @@ public class CarController : MonoBehaviour
 
     void LateUpdate()
     {
-        Land();
+        //Land();
         GetInputs();
         Move();
         Steer();
@@ -59,6 +57,8 @@ public class CarController : MonoBehaviour
         ApplyGravity();
         WheelEffects();
         Decelerate();
+        ApplySpeedLimit();
+        Applyturnsensitivity();
     }
 
     void GetInputs()    
@@ -67,63 +67,32 @@ public class CarController : MonoBehaviour
         steerInput = Input.GetAxis("Horizontal");
     }
 
-    bool IsGrounded()
-    {
-        foreach (var wheel in wheels)
-        {
-            if (wheel.wheelCollider.isGrounded)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
-    bool IsOnGrass()
+    void ApplySpeedLimit()
     {
-        foreach (var wheel in wheels)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
-            {
-                if (((1 << hit.collider.gameObject.layer) & grass) != 0)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+    // maxspeed = 100
+
+    // Apply speed limit
+    float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
+    if (speed > maxspeed)
+    {
+        carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
     }
+
+    }
+
+    void Applyturnsensitivity()
+    {
+        float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
+        turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f); //vaihtaa kääntymis herkyyttä nopeuden mukaan
+    }
+
 
 
     void Move() 
     {
-        foreach(var wheel in wheels)
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
-                wheel.wheelCollider.motorTorque = 0f; //auto pysähtyy
-            }
-            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
-            {
-                // auto kiihtyy
-                float targetTorque = moveInput * maxAcceleration;
-                wheel.wheelCollider.motorTorque = targetTorque;
-                wheel.wheelCollider.brakeTorque = 0f;
 
-            }
-            else
-            {
-                wheel.wheelCollider.motorTorque = 0f;
-                wheel.wheelCollider.brakeTorque = 0f; 
-            }
-        }
-    }
-
-    void Land()
-    {
         targetTorque = moveInput * maxAcceleration;
 
         if (IsOnGrass())
@@ -135,15 +104,28 @@ public class CarController : MonoBehaviour
         {
             maxspeed = Mathf.Lerp(maxspeed, 100.0f, Time.deltaTime); 
         }
-
-        foreach (var wheel in wheels)
+        foreach(var wheel in wheels)
         {
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            if (Input.GetKey(KeyCode.LeftShift))
             {
+                wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
+                wheel.wheelCollider.motorTorque = 0f; //auto pysähtyy
+            }
+            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            {
+                // auto kiihtyy
                 wheel.wheelCollider.motorTorque = targetTorque;
+                wheel.wheelCollider.brakeTorque = 0f;
+
+            }
+            else
+            {
+                wheel.wheelCollider.motorTorque = wheel.wheelCollider.brakeTorque = 0f; //kummatkin nolla
             }
         }
     }
+
+
 
     void Decelerate()
     {
@@ -200,8 +182,6 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.extremumValue = 1.0f;
                 sidewaysFriction.asymptoteValue = 1f;
             }
-
-
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
     }
@@ -227,7 +207,6 @@ public class CarController : MonoBehaviour
         {
             if(Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear)
             {
-                Console.WriteLine("Trail");
                 wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>().emitting = true;
             }
             else
@@ -237,24 +216,27 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        // maxspeed
 
-        // Apply speed limit
-        float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
-        if (speed > maxspeed)
-        {
-            carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
-        }
-        if (speed > 40.0f)
-        {
-            turnSensitivty = 10.0f;
-        }
-        else
-        {
-            turnSensitivty = 35.0f;
-        }
+
+    bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 500 * 1.0f);
     }
-    
+
+
+    bool IsOnGrass()
+    {
+        foreach (var wheel in wheels)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
+            {
+                if (((1 << hit.collider.gameObject.layer) & grass) != 0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }    
 }
