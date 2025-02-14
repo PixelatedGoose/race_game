@@ -24,13 +24,13 @@ public class backCameraState : MonoBehaviour
             if(backCamera == false)
             {
                 backCamera = true;
-                LeanTween.moveLocalY(backViewImage, 380.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
+                LeanTween.moveLocalY(backViewImage, -164.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
             }
 
             else
             {
                 backCamera = false;
-                LeanTween.moveLocalY(backViewImage, 675.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
+                LeanTween.moveLocalY(backViewImage, 0.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
             }
         }
     }
