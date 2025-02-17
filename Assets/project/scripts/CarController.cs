@@ -38,6 +38,7 @@ public class CarController : MonoBehaviour
     public float targetTorque;
     public Material grassMaterial;
     public Material roadMaterial;
+    public Material driftmaterial;
 
     public Rigidbody carRb;
 
@@ -45,13 +46,11 @@ public class CarController : MonoBehaviour
     {
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
-            Debug.Log("carRb =" + GetComponent<Rigidbody>());
         carRb.centerOfMass = _centerofMass;
     }
 
     void Update()
     {
-        //Land();
         GetInputs();
         Move();
         Steer();
@@ -100,15 +99,21 @@ public class CarController : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-            if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
+            if (!Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
             {
-                if (((1 << hit.collider.gameObject.layer) & grass) != 0)
-                {
-                    return true;
-                }
+                return false;
+            }
+            if (((1 << hit.collider.gameObject.layer) & grass) == 0)
+            {
+                return false;
             }
         }
-        return false;
+        return true;
+    }
+
+    bool IsWheelGrounded(Wheel wheel)
+    {
+        return Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance);
     } 
 
 
