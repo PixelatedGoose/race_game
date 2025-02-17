@@ -36,17 +36,20 @@ public class CarController : MonoBehaviour
     public Vector3 _centerofMass;
     public LayerMask grass;
     public float targetTorque;
+    public Material grassMaterial;
+    public Material roadMaterial;
 
-    private Rigidbody carRb;
+    public Rigidbody carRb;
 
     void Start()
     {
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
+            Debug.Log("carRb =" + GetComponent<Rigidbody>());
         carRb.centerOfMass = _centerofMass;
     }
 
-    void LateUpdate()
+    void Update()
     {
         //Land();
         GetInputs();
@@ -59,13 +62,54 @@ public class CarController : MonoBehaviour
         Decelerate();
         ApplySpeedLimit();
         Applyturnsensitivity();
+        OnGrass();
     }
+
+    void OnGrass()
+    {        
+        TrailRenderer trailRenderer = null;
+        foreach (var wheel in wheels)
+        {
+            trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
+            if (IsOnGrass())
+            {
+                trailRenderer.material = grassMaterial;
+            }
+            else
+            {
+                trailRenderer.material = roadMaterial;
+            }
+        }
+    }   
+    
+    
 
     void GetInputs()    
     {
         moveInput = Input.GetAxis("Vertical");
         steerInput = Input.GetAxis("Horizontal");
     }
+
+    bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 500 * 1.0f);
+    }
+
+
+    bool IsOnGrass()
+    {
+        foreach (var wheel in wheels)
+        {
+            if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
+            {
+                if (((1 << hit.collider.gameObject.layer) & grass) != 0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    } 
 
 
 
@@ -74,18 +118,18 @@ public class CarController : MonoBehaviour
     // maxspeed = 100
 
     // Apply speed limit
-    float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
-    if (speed > maxspeed)
-    {
-        carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
-    }
+        float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
+        if (speed > maxspeed)
+        {
+            carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
+        }
 
     }
 
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
-        turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f); //vaihtaa kääntymis herkyyttä nopeuden mukaan
+        turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f); //vaihtaa k채채ntymis herkyytt채 nopeuden mukaan
     }
 
 
@@ -109,7 +153,7 @@ public class CarController : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
-                wheel.wheelCollider.motorTorque = 0f; //auto pysähtyy
+                wheel.wheelCollider.motorTorque = 0f; //auto pys채htyy
             }
             else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
             {
@@ -158,7 +202,9 @@ public class CarController : MonoBehaviour
     void ApplyGravity()
     {
         if (!IsGrounded())
-        carRb.AddForce(Vector3.down   * gravityMultiplier, ForceMode.Acceleration);
+        {
+            carRb.AddForce(Vector3.down   * gravityMultiplier, ForceMode.Acceleration);
+        }
     }
 
     void HandleDrift()
@@ -215,29 +261,5 @@ public class CarController : MonoBehaviour
                 wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>().emitting = false;
             }
         }
-    }
-
-
-
-    bool IsGrounded()
-    {
-        return Physics.Raycast(transform.position, Vector3.down, 500 * 1.0f);
-    }
-
-
-    bool IsOnGrass()
-    {
-        foreach (var wheel in wheels)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
-            {
-                if (((1 << hit.collider.gameObject.layer) & grass) != 0)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }    
+    }   
 }
