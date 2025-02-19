@@ -18,6 +18,7 @@ public class CarController : MonoBehaviour
         public WheelCollider wheelCollider;
 
         public GameObject wheelEffectobj;
+        public ParticleSystem smokeParticle;
         public Axel axel;
     }
 
@@ -81,8 +82,6 @@ public class CarController : MonoBehaviour
         }
     }   
     
-    
-
     void GetInputs()    
     {
         moveInput = Input.GetAxis("Vertical");
@@ -94,16 +93,29 @@ public class CarController : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, 500 * 1.0f);
     }
 
+    bool IsWheelGrounded(Wheel wheel)
+    {
+        return Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance);
+    }
+
+    bool IsWheelOnGrass(Wheel wheel)
+    {
+        if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
+        {
+            return ((1 << hit.collider.gameObject.layer) & grass) != 0;
+        }
+        return false;
+    }
 
     bool IsOnGrass()
     {
         foreach (var wheel in wheels)
         {
-            if (!Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
+            if (!IsWheelGrounded(wheel))
             {
                 return false;
             }
-            if (((1 << hit.collider.gameObject.layer) & grass) == 0)
+            if (!IsWheelOnGrass(wheel))
             {
                 return false;
             }
@@ -111,37 +123,23 @@ public class CarController : MonoBehaviour
         return true;
     }
 
-    bool IsWheelGrounded(Wheel wheel)
-    {
-        return Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance);
-    } 
-
-
-
     void ApplySpeedLimit()
     {
-    // maxspeed = 100
-
-    // Apply speed limit
         float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
         if (speed > maxspeed)
         {
             carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
         }
-
     }
 
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
-        turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f); //vaihtaa k채채ntymis herkyytt채 nopeuden mukaan
+        turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f);
     }
 
-
-
-    void Move() 
+    void Move()
     {
-
         targetTorque = moveInput * maxAcceleration;
 
         if (IsOnGrass())
@@ -151,30 +149,27 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            maxspeed = Mathf.Lerp(maxspeed, 100.0f, Time.deltaTime); 
+            maxspeed = Mathf.Lerp(maxspeed, 100.0f, Time.deltaTime);
         }
-        foreach(var wheel in wheels)
+
+        foreach (var wheel in wheels)
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
-                wheel.wheelCollider.motorTorque = 0f; //auto pys채htyy
+                wheel.wheelCollider.motorTorque = 0f;
             }
             else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
             {
-                // auto kiihtyy
                 wheel.wheelCollider.motorTorque = targetTorque;
                 wheel.wheelCollider.brakeTorque = 0f;
-
             }
             else
             {
-                wheel.wheelCollider.motorTorque = wheel.wheelCollider.brakeTorque = 0f; //kummatkin nolla
+                wheel.wheelCollider.motorTorque = wheel.wheelCollider.brakeTorque = 0f;
             }
         }
     }
-
-
 
     void Decelerate()
     {
@@ -204,11 +199,12 @@ public class CarController : MonoBehaviour
             }
         }
     }
+
     void ApplyGravity()
     {
         if (!IsGrounded())
         {
-            carRb.AddForce(Vector3.down   * gravityMultiplier, ForceMode.Acceleration);
+            carRb.AddForce(Vector3.down * gravityMultiplier, ForceMode.Acceleration);
         }
     }
 
@@ -216,7 +212,7 @@ public class CarController : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-            WheelFrictionCurve  sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+            WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
 
             if (Input.GetKey(KeyCode.Space))
             {
@@ -227,7 +223,6 @@ public class CarController : MonoBehaviour
             }
             else
             {
-                // laittaa normaalit arvot 
                 sidewaysFriction.extremumSlip = 0.2f;
                 sidewaysFriction.asymptoteSlip = 0.5f;
                 sidewaysFriction.extremumValue = 1.0f;
@@ -236,8 +231,6 @@ public class CarController : MonoBehaviour
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
     }
-
- 
 
     void Animatewheels()
     {
@@ -249,22 +242,32 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rot;
         }
-
     }
-    // bobbing effect
+
+    //bobbing effect
 
     void WheelEffects()
     {
         foreach(var wheel in wheels)
         {
-            if(Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear)
+            var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
+            if (Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
             {
-                wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>().emitting = true;
+                trailRenderer.emitting = true;
+                wheel.smokeParticle.Emit(1);
+                if (IsWheelOnGrass(wheel))
+                {
+                    trailRenderer.material = grassMaterial;
+                }
+                else
+                {
+                    trailRenderer.material = driftmaterial;
+                }
             }
             else
             {
-                wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>().emitting = false;
+                trailRenderer.emitting = false;
             }
         }
-    }   
+    }
 }
