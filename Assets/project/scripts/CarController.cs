@@ -31,7 +31,7 @@ public class CarController : MonoBehaviour
     public float gravityMultiplier = 1.5f; 
     public float accelerationRate = 5.0f;
     public float grassSpeedMultiplier = 0.5f;
-    public List<Wheel> wheels; 
+    public List<Wheel> wheels;
     float moveInput;
     float steerInput;
     public Vector3 _centerofMass;
