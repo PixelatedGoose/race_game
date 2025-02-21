@@ -1158,7 +1158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fullMenu: {fileID: 319257630}
-  mapChangeButton: {fileID: 0}
+  mapChangeButton: {fileID: 1501124970}
   chosenMap: 0
 --- !u!108 &841104202 stripped
 Light:
