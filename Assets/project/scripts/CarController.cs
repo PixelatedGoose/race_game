@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CarController : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class CarController : MonoBehaviour
     public float gravityMultiplier = 1.5f; 
     public float accelerationRate = 5.0f;
     public float grassSpeedMultiplier = 0.5f;
-    public List<Wheel> wheels;
+    public List<Wheel> wheels; 
     float moveInput;
     float steerInput;
     public Vector3 _centerofMass;
@@ -40,7 +41,6 @@ public class CarController : MonoBehaviour
     public Material grassMaterial;
     public Material roadMaterial;
     public Material driftmaterial;
-
     public Rigidbody carRb;
 
     void Start()
@@ -53,16 +53,19 @@ public class CarController : MonoBehaviour
     void Update()
     {
         GetInputs();
+        Animatewheels();
+        WheelEffects();
+    }
+    void FixedUpdate()
+    {
         Move();
         Steer();
         HandleDrift();
-        Animatewheels();
-        ApplyGravity();
-        WheelEffects();
         Decelerate();
         ApplySpeedLimit();
         Applyturnsensitivity();
         OnGrass();
+        ApplyGravity();
     }
 
     void OnGrass()
