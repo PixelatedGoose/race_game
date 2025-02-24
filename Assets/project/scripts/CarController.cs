@@ -42,9 +42,11 @@ public class CarController : MonoBehaviour
     public Material roadMaterial;
     public Material driftmaterial;
     public Rigidbody carRb;
+    private GameManager gameManager;
 
     void Start()
     {
+        gameManager = GetComponent<GameManager>();
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
@@ -233,8 +235,15 @@ public class CarController : MonoBehaviour
             }
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
+        if (Input.GetKey(KeyCode.Space) && Input.GetKey(KeyCode.A) || (Input.GetKey(KeyCode.Space) && Input.GetKey(KeyCode.D)))
+        {
+            GameManager.instance.AddPoints();
+        }
+        else
+        {
+            GameManager.instance.StopAddingPoints();
+        } 
     }
-
     void Animatewheels()
     {
         foreach(var wheel in wheels) 
@@ -246,16 +255,14 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.rotation = rot;
         }
     }
-
     //bobbing effect
-
     void WheelEffects()
     {
         foreach(var wheel in wheels)
         {
             var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
             if (Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
-            {
+            {                     
                 trailRenderer.emitting = true;
                 wheel.smokeParticle.Emit(1);
                 if (IsWheelOnGrass(wheel))

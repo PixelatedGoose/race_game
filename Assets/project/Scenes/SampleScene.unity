@@ -133,10 +133,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 80436862}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9017420ecce254f4785f4bce756abd57, type: 3}
+  m_Script: {fileID: 11500000, guid: ab64f29baee327542850c47bc690945a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 626352510}
 --- !u!1 &216666108
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,9 +411,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Score:
-
-'
+  m_Text: 
 --- !u!222 &626352511
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -639,11 +636,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &744114678 stripped
-Light:
-  m_CorrespondingSourceObject: {fileID: 1864640289754993523, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
-  m_PrefabInstance: {fileID: 1269534265}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,11 +685,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &839768894 stripped
-Light:
-  m_CorrespondingSourceObject: {fileID: 210715059323131502, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
-  m_PrefabInstance: {fileID: 1269534265}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &856917350
 GameObject:
   m_ObjectHideFlags: 0
@@ -1143,6 +1130,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: REALCAR
       objectReference: {fileID: 0}
+    - target: {fileID: 1445728435640658549, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 39
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445728435640658549, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9908356
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445728435640658549, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.13507389
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445728435640658549, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 15.526
+      objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: ScoreText
       value: 
@@ -1157,7 +1160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7691087905362571268, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -46.531204
+      value: -22.5
       objectReference: {fileID: 0}
     - target: {fileID: 7691087905362571268, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1304,11 +1307,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1959587334024615407, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
   m_PrefabInstance: {fileID: 1269534265}
   m_PrefabAsset: {fileID: 0}
---- !u!108 &1768768418 stripped
-Light:
-  m_CorrespondingSourceObject: {fileID: 7530438695844709834, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
-  m_PrefabInstance: {fileID: 1269534265}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1768768419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1321,10 +1319,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192af7d6912ec7f4f90dca3414c292d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointLight: {fileID: 1768768418}
-  right: {fileID: 744114678}
-  left: {fileID: 839768894}
-  duration: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
