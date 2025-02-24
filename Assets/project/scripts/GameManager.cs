@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour
 
         while (isAddingPoints)   
         {
-            yield return new WaitForSeconds(1f);   
-            score += 100;   
+            yield return new WaitForSeconds(0.01f);   
+            score += 1;   
             Score.text = "Points: " + score.ToString();               
 
         }

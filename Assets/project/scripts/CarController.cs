@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +44,8 @@ public class CarController : MonoBehaviour
     public Material driftmaterial;
     public Rigidbody carRb;
     private GameManager gameManager;
+
+    bool isDrifting;
 
     void Start()
     {
@@ -215,6 +218,8 @@ public class CarController : MonoBehaviour
 
     void HandleDrift()
     {
+        float speed = carRb.linearVelocity.magnitude * 3.6f;
+
         foreach (var wheel in wheels)
         {
             WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
@@ -225,6 +230,8 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteSlip = 2.0f;
                 sidewaysFriction.extremumValue = 0.5f;
                 sidewaysFriction.asymptoteValue = 0.75f;
+
+                isDrifting = true;
             }
             else
             {
@@ -232,11 +239,14 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteSlip = 0.5f;
                 sidewaysFriction.extremumValue = 1.0f;
                 sidewaysFriction.asymptoteValue = 1f;
+
+                isDrifting = false;
             }
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
-        if (Input.GetKey(KeyCode.Space) && Input.GetKey(KeyCode.A) || (Input.GetKey(KeyCode.Space) && Input.GetKey(KeyCode.D)))
+        if (isDrifting && steerInput != 0 && speed != 0 && Input.GetKey(KeyCode.W))
         {
+
             GameManager.instance.AddPoints();
         }
         else
