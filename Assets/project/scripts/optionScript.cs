@@ -1,12 +1,20 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class optionScript : MonoBehaviour
 {
     public Material pixelCount; // Assign this in the Inspector
+
+    void Start()
+    {
+        InitializeSliderValue("pixel");
+        // Add other sliders here if needed
+    }
+
     public void setToggleOptionValue(string optionObjectName)
     {
-        var optionToggle = GameObject.Find(optionObjectName).GetComponent<UnityEngine.UI.Toggle>(); //etsi togglen nimi
+        var optionToggle = GameObject.Find(optionObjectName).GetComponent<Toggle>(); //etsi togglen nimi
 
         if (optionToggle.isOn)
         {
@@ -26,7 +34,7 @@ public class optionScript : MonoBehaviour
 
     public void setSliderOptionValue(string optionObjectName)
     {
-        var optionSlider = GameObject.Find(optionObjectName).GetComponent<UnityEngine.UI.Slider>(); //etsi sliderin nimi
+        var optionSlider = GameObject.Find(optionObjectName).GetComponent<Slider>(); //etsi sliderin nimi
 
         PlayerPrefs.SetFloat(optionObjectName + "_value", optionSlider.value); //aseta sliderin value
 
@@ -36,6 +44,15 @@ public class optionScript : MonoBehaviour
         if (optionObjectName == "pixel")
         {
             pixelCount.SetFloat("_pixelcount", PlayerPrefs.GetFloat("pixel_value") * 64);
+        }
+    }
+
+    private void InitializeSliderValue(string optionObjectName)
+    {
+        var optionSlider = GameObject.Find(optionObjectName).GetComponent<Slider>();
+        if (PlayerPrefs.HasKey(optionObjectName + "_value"))
+        {
+            optionSlider.value = PlayerPrefs.GetFloat(optionObjectName + "_value");
         }
     }
 }
