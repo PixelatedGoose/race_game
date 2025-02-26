@@ -15,8 +15,8 @@ public class MainMenu : MonoBehaviour
     private void Awake()
     {
         // huom. tää ei oo valmis
-        var optionSlider = GameObject.Find("pixel").GetComponent<UnityEngine.UI.Slider>();
-        optionSlider.value = OptionScript.pixelCount.GetFloat("_pixelcount");
+        // var optionSlider = GameObject.Find("pixel").GetComponent<UnityEngine.UI.Slider>();
+        // optionSlider.value = OptionScript.pixelCount.GetFloat("_pixelcount");
     }
 
     private void Start()
