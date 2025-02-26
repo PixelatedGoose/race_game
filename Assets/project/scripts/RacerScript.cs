@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class RacerScript : MonoBehaviour
+public class RacerScript : MonoBehaviour, IDataPersistence
 {
     
     public float laptime;
-    public float besttime = 0;
+    public float besttime;
     private bool startTimer = false;
 
     public TextMeshProUGUI Ltime;
@@ -28,11 +28,30 @@ public class RacerScript : MonoBehaviour
     private float inactivityThreshold = 8f;
     private Vector3 lastPosition;
 
-    private Transform respawnPoint; 
+    private Transform respawnPoint;
+
+
+    public void LoadData(GameData data)
+    {
+        if (data != null)
+        {
+            Debug.Log("Loaded Best Time: " + data.besttime);
+            this.besttime = data.besttime;
+            Btime.text = "Record: " + besttime.ToString("F2");
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.besttime = this.besttime;
+    }
+
+
 
     void Start()
     {
         InitializeRace(); //tekee asiat kun peli alkaa
+        test(); 
     }
 
     void Update()
@@ -210,5 +229,10 @@ public class RacerScript : MonoBehaviour
         }
         LapCounter.text = "" + currentLap + "/" + totalLaps;
         Debug.Log("Race Reset");
+    }
+
+    void test()
+    {
+        print(besttime);
     }
 }
