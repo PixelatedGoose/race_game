@@ -14,7 +14,17 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        // huom. tää ei oo valmis
+        //PlayerPrefs.DeleteAll(); //VAIN DEBUGAAMISTA VARTEN
+        if (PlayerPrefs.HasKey("pixel_value"))
+        {
+            Debug.Log("pixel_value löydetty; ei muuteta");
+        }
+        else
+        {
+            OptionScript.pixelCount.SetFloat("_pixelcount", 256);
+            Debug.Log("pixel_value ei löydetty; arvo on nyt 256");
+        }
+
         // var optionSlider = GameObject.Find("pixel").GetComponent<UnityEngine.UI.Slider>();
         // optionSlider.value = OptionScript.pixelCount.GetFloat("_pixelcount");
     }

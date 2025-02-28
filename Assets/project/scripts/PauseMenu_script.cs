@@ -18,14 +18,18 @@ public class PauseMenu : MonoBehaviour
                 {
                     obj.SetActive(!isActive);
                 }
+                LeanTween.cancel(pauseMenuObjects[0]);
+                LeanTween.moveLocalY(pauseMenuObjects[0], 460.0f, 0.0f).setEaseInOutCirc().setIgnoreTimeScale(true);
+                LeanTween.moveLocalY(pauseMenuObjects[0], 0.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
 
                 if (isActive)
                 {
-                    Time.timeScale = 1; // Resume game
+                    Time.timeScale = 1;
+                    LeanTween.moveLocalY(pauseMenuObjects[0], 460.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
                 }
                 else
                 {
-                    Time.timeScale = 0; // Pause game
+                    Time.timeScale = 0;
                 }
             }
             else

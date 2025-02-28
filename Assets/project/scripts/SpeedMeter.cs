@@ -17,7 +17,7 @@ public class SpeedMeter : MonoBehaviour
     private float speed;
 
     [Header("UI")]
-    public TextMeshProUGUI speedLabel;
+    public Text speedLabel;
     public RectTransform arrow;
 
     private void Update()

@@ -365,6 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
+  pixelSlider: {fileID: 1870876367}
 --- !u!1 &204483597
 GameObject:
   m_ObjectHideFlags: 0
@@ -1403,6 +1404,7 @@ MonoBehaviour:
   fullMenu: {fileID: 319257630}
   mapChangeButton: {fileID: 1501124970}
   chosenMap: 0
+  pixelSlider: {fileID: 1870876367}
 --- !u!108 &841104202 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 7530438695844709834, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
@@ -1933,7 +1935,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Pixel Amount
+  m_Text: 'Pixel Amount:'
 --- !u!222 &1041219446
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2201,7 +2203,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 153222936}
-        m_TargetAssemblyTypeName: optionsScript, Assembly-CSharp
+        m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
         m_MethodName: setToggleOptionValue
         m_Mode: 5
         m_Arguments:
@@ -2306,6 +2308,85 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364308203}
+  m_CullTransparentMesh: 1
+--- !u!1 &1376972130
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1376972131}
+  - component: {fileID: 1376972133}
+  - component: {fileID: 1376972132}
+  m_Layer: 5
+  m_Name: LabelPA
+  m_TagString: avoidNullException
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1376972131
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376972130}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.20000002, y: 0.20000002, z: 0.20000002}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1870876366}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 339, y: 0}
+  m_SizeDelta: {x: 897, y: 161}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1376972132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376972130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 8d1fb763c9d77214a9ff04af9148addc, type: 3}
+    m_FontSize: 128
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 128
+    m_Alignment: 3
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &1376972133
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376972130}
   m_CullTransparentMesh: 1
 --- !u!1 &1464711070 stripped
 GameObject:
@@ -3111,7 +3192,7 @@ GameObject:
   - component: {fileID: 1870876367}
   m_Layer: 5
   m_Name: pixel
-  m_TagString: Untagged
+  m_TagString: avoidNullException
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3130,6 +3211,7 @@ RectTransform:
   m_Children:
   - {fileID: 204483598}
   - {fileID: 1041219444}
+  - {fileID: 1376972131}
   m_Father: {fileID: 1965335146}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3189,7 +3271,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 153222936}
-        m_TargetAssemblyTypeName: optionsScript, Assembly-CSharp
+        m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
         m_MethodName: setSliderOptionValue
         m_Mode: 5
         m_Arguments:
