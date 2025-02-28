@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class CarController : MonoBehaviour
 {
@@ -43,13 +43,9 @@ public class CarController : MonoBehaviour
     public Material roadMaterial;
     public Material driftmaterial;
     public Rigidbody carRb;
-    private GameManager gameManager;
-
-    bool isDrifting;
 
     void Start()
     {
-        gameManager = GetComponent<GameManager>();
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
@@ -148,7 +144,15 @@ public class CarController : MonoBehaviour
 
     void Move()
     {
-        targetTorque = moveInput * maxAcceleration;
+        // targetTorque = moveInput * maxAcceleration;
+
+        if(Input.GetKey(KeyCode.Joystick1Button5) || Input.GetKey(KeyCode.W)) {
+            targetTorque = 2 * maxAcceleration;
+        } else if (Input.GetKey(KeyCode.Joystick1Button4) || Input.GetKey(KeyCode.S)) {
+            targetTorque = -2 * maxAcceleration;
+        } else {
+            targetTorque = 0.0f;
+        }
 
         if (IsOnGrass())
         {
@@ -167,7 +171,7 @@ public class CarController : MonoBehaviour
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
                 wheel.wheelCollider.motorTorque = 0f;
             }
-            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.Joystick1Button5) || Input.GetKey(KeyCode.Joystick1Button4))
             {
                 wheel.wheelCollider.motorTorque = targetTorque;
                 wheel.wheelCollider.brakeTorque = 0f;
@@ -181,7 +185,7 @@ public class CarController : MonoBehaviour
 
     void Decelerate()
     {
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.Joystick1Button5) && !Input.GetKey(KeyCode.Joystick1Button4)) // vertical == 0 ????
         {
             Vector3 velocity = carRb.linearVelocity;
             if (IsGrounded())
@@ -218,20 +222,16 @@ public class CarController : MonoBehaviour
 
     void HandleDrift()
     {
-        float speed = carRb.linearVelocity.magnitude * 3.6f;
-
         foreach (var wheel in wheels)
         {
             WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
 
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Joystick1Button0))
             {
                 sidewaysFriction.extremumSlip = 1.5f;
                 sidewaysFriction.asymptoteSlip = 2.0f;
                 sidewaysFriction.extremumValue = 0.5f;
                 sidewaysFriction.asymptoteValue = 0.75f;
-
-                isDrifting = true;
             }
             else
             {
@@ -239,21 +239,11 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteSlip = 0.5f;
                 sidewaysFriction.extremumValue = 1.0f;
                 sidewaysFriction.asymptoteValue = 1f;
-
-                isDrifting = false;
             }
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
-        if (isDrifting && steerInput != 0 && speed != 0 && Input.GetKey(KeyCode.W))
-        {
-
-            GameManager.instance.AddPoints();
-        }
-        else
-        {
-            GameManager.instance.StopAddingPoints();
-        } 
     }
+
     void Animatewheels()
     {
         foreach(var wheel in wheels) 
@@ -265,14 +255,16 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.rotation = rot;
         }
     }
+
     //bobbing effect
+
     void WheelEffects()
     {
         foreach(var wheel in wheels)
         {
             var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
             if (Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
-            {                     
+            {
                 trailRenderer.emitting = true;
                 wheel.smokeParticle.Emit(1);
                 if (IsWheelOnGrass(wheel))
