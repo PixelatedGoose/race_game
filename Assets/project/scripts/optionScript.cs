@@ -9,7 +9,6 @@ public class optionScript : MonoBehaviour
     void Start()
     {
         InitializeSliderValue("pixel");
-        // Add other sliders here if needed
     }
 
     public void setToggleOptionValue(string optionObjectName)
@@ -35,16 +34,15 @@ public class optionScript : MonoBehaviour
     public void setSliderOptionValue(string optionObjectName)
     {
         var optionSlider = GameObject.Find(optionObjectName).GetComponent<Slider>(); //etsi sliderin nimi
-
         PlayerPrefs.SetFloat(optionObjectName + "_value", optionSlider.value); //aseta sliderin value
-
-        PlayerPrefs.Save();
-        Debug.Log("muutettu: " + PlayerPrefs.GetFloat(optionObjectName + "_value"));
 
         if (optionObjectName == "pixel")
         {
             pixelCount.SetFloat("_pixelcount", PlayerPrefs.GetFloat("pixel_value") * 64);
         }
+
+        PlayerPrefs.Save();
+        Debug.Log("muutettu: " + PlayerPrefs.GetFloat(optionObjectName + "_value"));
     }
 
     private void InitializeSliderValue(string optionObjectName)
@@ -56,3 +54,5 @@ public class optionScript : MonoBehaviour
         }
     }
 }
+
+// TULEVAISUUDESSA EHKÄ SWITCH-CASE SYSTEEMI

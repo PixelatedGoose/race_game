@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class fumoFumo : MonoBehaviour
@@ -10,7 +11,10 @@ public class fumoFumo : MonoBehaviour
 
     void Start()
     {
-        fumo();
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            fumo();
+        }
     }
 
     void fumo()
