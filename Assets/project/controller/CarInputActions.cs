@@ -28,15 +28,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             ""id"": ""97479e29-f5a1-4824-9f72-d2b2ab657196"",
             ""actions"": [
                 {
-                    ""name"": ""Movefoward"",
-                    ""type"": ""Button"",
-                    ""id"": ""83916b19-3097-4a85-aa1a-4622e691e9df"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Brake"",
                     ""type"": ""Button"",
                     ""id"": ""74196728-f1ea-4fb4-9643-9b89d29e3a69"",
@@ -49,42 +40,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Drift"",
                     ""type"": ""Button"",
                     ""id"": ""6130a42d-db6f-4d59-a92f-4084f0915686"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""controllerturn"",
-                    ""type"": ""Value"",
-                    ""id"": ""e13f77f5-171c-4b1f-a6d0-38c2ae9d25ed"",
-                    ""expectedControlType"": ""Stick"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""movebackward"",
-                    ""type"": ""Button"",
-                    ""id"": ""e70a68fc-f41d-438b-8d7a-ddec74a64908"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""turnleft"",
-                    ""type"": ""Button"",
-                    ""id"": ""6ad1c380-31f6-4790-ab89-ea74853b1105"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""turnright"",
-                    ""type"": ""Button"",
-                    ""id"": ""deaa035b-1803-4874-89e5-ec5732973540"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -116,31 +71,36 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""811df9fc-dd41-4458-8d7e-de881038de65"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MoveForward"",
+                    ""type"": ""Button"",
+                    ""id"": ""4d031a12-e4e7-46e6-b0cd-1882b79939ff"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveBackward"",
+                    ""type"": ""Button"",
+                    ""id"": ""ceebff15-c619-4ce7-b3e2-6796a70bbc27"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""b75068b7-5010-4719-86aa-0af4de8229e1"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movefoward"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""661f4474-df22-4e68-b299-af48e8c66e0d"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movefoward"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""efc5654f-ab39-43f6-a3e3-dcb944f36d7d"",
@@ -187,56 +147,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""85126c79-ff45-465d-98ac-29d10c68d10a"",
-                    ""path"": ""<Gamepad>/leftStick"",
+                    ""id"": ""669c955c-5fb8-4504-a920-27050a636fcd"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""controllerturn"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d705de12-3bd8-48fd-bb03-4cdd2ed4f505"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""movebackward"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7c33332b-35cb-49cc-8f29-88e488718094"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""movebackward"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8b113dd4-bbfa-4d20-a565-07720a24e67a"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""turnleft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""055e93f2-ba3c-4ef4-93a0-bfdb78afe5f1"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""turnright"",
+                    ""action"": ""Drift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -316,6 +232,116 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""lights"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""20b0499c-ed92-44bf-9bbf-152f619212a3"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""b8f91d4d-fa59-4394-9a85-e5e91b80cdb8"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3ff39764-c919-42d2-a91e-1449ec3c4a31"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""1dd72391-cea1-4047-bf0f-47da3203b6b5"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ef43f0f5-b286-4080-b0b5-7b62997d08b1"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""3c30431f-2424-4d60-a6d4-543886542e8c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8f96008b-6176-4421-b754-a80b307bd979"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6fc425e-c926-4650-b8d3-981714083f7f"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de278431-1c8a-41ce-8407-aa32df7dc12a"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveBackward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""00fa6661-d7fd-40a0-8559-5cc057d880af"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveBackward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -336,16 +362,14 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
 }");
         // CarControls
         m_CarControls = asset.FindActionMap("CarControls", throwIfNotFound: true);
-        m_CarControls_Movefoward = m_CarControls.FindAction("Movefoward", throwIfNotFound: true);
         m_CarControls_Brake = m_CarControls.FindAction("Brake", throwIfNotFound: true);
         m_CarControls_Drift = m_CarControls.FindAction("Drift", throwIfNotFound: true);
-        m_CarControls_controllerturn = m_CarControls.FindAction("controllerturn", throwIfNotFound: true);
-        m_CarControls_movebackward = m_CarControls.FindAction("movebackward", throwIfNotFound: true);
-        m_CarControls_turnleft = m_CarControls.FindAction("turnleft", throwIfNotFound: true);
-        m_CarControls_turnright = m_CarControls.FindAction("turnright", throwIfNotFound: true);
         m_CarControls_turbo = m_CarControls.FindAction("turbo", throwIfNotFound: true);
         m_CarControls_underglow = m_CarControls.FindAction("underglow", throwIfNotFound: true);
         m_CarControls_lights = m_CarControls.FindAction("lights", throwIfNotFound: true);
+        m_CarControls_Move = m_CarControls.FindAction("Move", throwIfNotFound: true);
+        m_CarControls_MoveForward = m_CarControls.FindAction("MoveForward", throwIfNotFound: true);
+        m_CarControls_MoveBackward = m_CarControls.FindAction("MoveBackward", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -412,30 +436,26 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     // CarControls
     private readonly InputActionMap m_CarControls;
     private List<ICarControlsActions> m_CarControlsActionsCallbackInterfaces = new List<ICarControlsActions>();
-    private readonly InputAction m_CarControls_Movefoward;
     private readonly InputAction m_CarControls_Brake;
     private readonly InputAction m_CarControls_Drift;
-    private readonly InputAction m_CarControls_controllerturn;
-    private readonly InputAction m_CarControls_movebackward;
-    private readonly InputAction m_CarControls_turnleft;
-    private readonly InputAction m_CarControls_turnright;
     private readonly InputAction m_CarControls_turbo;
     private readonly InputAction m_CarControls_underglow;
     private readonly InputAction m_CarControls_lights;
+    private readonly InputAction m_CarControls_Move;
+    private readonly InputAction m_CarControls_MoveForward;
+    private readonly InputAction m_CarControls_MoveBackward;
     public struct CarControlsActions
     {
         private @CarInputActions m_Wrapper;
         public CarControlsActions(@CarInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movefoward => m_Wrapper.m_CarControls_Movefoward;
         public InputAction @Brake => m_Wrapper.m_CarControls_Brake;
         public InputAction @Drift => m_Wrapper.m_CarControls_Drift;
-        public InputAction @controllerturn => m_Wrapper.m_CarControls_controllerturn;
-        public InputAction @movebackward => m_Wrapper.m_CarControls_movebackward;
-        public InputAction @turnleft => m_Wrapper.m_CarControls_turnleft;
-        public InputAction @turnright => m_Wrapper.m_CarControls_turnright;
         public InputAction @turbo => m_Wrapper.m_CarControls_turbo;
         public InputAction @underglow => m_Wrapper.m_CarControls_underglow;
         public InputAction @lights => m_Wrapper.m_CarControls_lights;
+        public InputAction @Move => m_Wrapper.m_CarControls_Move;
+        public InputAction @MoveForward => m_Wrapper.m_CarControls_MoveForward;
+        public InputAction @MoveBackward => m_Wrapper.m_CarControls_MoveBackward;
         public InputActionMap Get() { return m_Wrapper.m_CarControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -445,27 +465,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_CarControlsActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_CarControlsActionsCallbackInterfaces.Add(instance);
-            @Movefoward.started += instance.OnMovefoward;
-            @Movefoward.performed += instance.OnMovefoward;
-            @Movefoward.canceled += instance.OnMovefoward;
             @Brake.started += instance.OnBrake;
             @Brake.performed += instance.OnBrake;
             @Brake.canceled += instance.OnBrake;
             @Drift.started += instance.OnDrift;
             @Drift.performed += instance.OnDrift;
             @Drift.canceled += instance.OnDrift;
-            @controllerturn.started += instance.OnControllerturn;
-            @controllerturn.performed += instance.OnControllerturn;
-            @controllerturn.canceled += instance.OnControllerturn;
-            @movebackward.started += instance.OnMovebackward;
-            @movebackward.performed += instance.OnMovebackward;
-            @movebackward.canceled += instance.OnMovebackward;
-            @turnleft.started += instance.OnTurnleft;
-            @turnleft.performed += instance.OnTurnleft;
-            @turnleft.canceled += instance.OnTurnleft;
-            @turnright.started += instance.OnTurnright;
-            @turnright.performed += instance.OnTurnright;
-            @turnright.canceled += instance.OnTurnright;
             @turbo.started += instance.OnTurbo;
             @turbo.performed += instance.OnTurbo;
             @turbo.canceled += instance.OnTurbo;
@@ -475,31 +480,25 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @lights.started += instance.OnLights;
             @lights.performed += instance.OnLights;
             @lights.canceled += instance.OnLights;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @MoveForward.started += instance.OnMoveForward;
+            @MoveForward.performed += instance.OnMoveForward;
+            @MoveForward.canceled += instance.OnMoveForward;
+            @MoveBackward.started += instance.OnMoveBackward;
+            @MoveBackward.performed += instance.OnMoveBackward;
+            @MoveBackward.canceled += instance.OnMoveBackward;
         }
 
         private void UnregisterCallbacks(ICarControlsActions instance)
         {
-            @Movefoward.started -= instance.OnMovefoward;
-            @Movefoward.performed -= instance.OnMovefoward;
-            @Movefoward.canceled -= instance.OnMovefoward;
             @Brake.started -= instance.OnBrake;
             @Brake.performed -= instance.OnBrake;
             @Brake.canceled -= instance.OnBrake;
             @Drift.started -= instance.OnDrift;
             @Drift.performed -= instance.OnDrift;
             @Drift.canceled -= instance.OnDrift;
-            @controllerturn.started -= instance.OnControllerturn;
-            @controllerturn.performed -= instance.OnControllerturn;
-            @controllerturn.canceled -= instance.OnControllerturn;
-            @movebackward.started -= instance.OnMovebackward;
-            @movebackward.performed -= instance.OnMovebackward;
-            @movebackward.canceled -= instance.OnMovebackward;
-            @turnleft.started -= instance.OnTurnleft;
-            @turnleft.performed -= instance.OnTurnleft;
-            @turnleft.canceled -= instance.OnTurnleft;
-            @turnright.started -= instance.OnTurnright;
-            @turnright.performed -= instance.OnTurnright;
-            @turnright.canceled -= instance.OnTurnright;
             @turbo.started -= instance.OnTurbo;
             @turbo.performed -= instance.OnTurbo;
             @turbo.canceled -= instance.OnTurbo;
@@ -509,6 +508,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @lights.started -= instance.OnLights;
             @lights.performed -= instance.OnLights;
             @lights.canceled -= instance.OnLights;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @MoveForward.started -= instance.OnMoveForward;
+            @MoveForward.performed -= instance.OnMoveForward;
+            @MoveForward.canceled -= instance.OnMoveForward;
+            @MoveBackward.started -= instance.OnMoveBackward;
+            @MoveBackward.performed -= instance.OnMoveBackward;
+            @MoveBackward.canceled -= instance.OnMoveBackward;
         }
 
         public void RemoveCallbacks(ICarControlsActions instance)
@@ -537,15 +545,13 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     }
     public interface ICarControlsActions
     {
-        void OnMovefoward(InputAction.CallbackContext context);
         void OnBrake(InputAction.CallbackContext context);
         void OnDrift(InputAction.CallbackContext context);
-        void OnControllerturn(InputAction.CallbackContext context);
-        void OnMovebackward(InputAction.CallbackContext context);
-        void OnTurnleft(InputAction.CallbackContext context);
-        void OnTurnright(InputAction.CallbackContext context);
         void OnTurbo(InputAction.CallbackContext context);
         void OnUnderglow(InputAction.CallbackContext context);
         void OnLights(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
+        void OnMoveForward(InputAction.CallbackContext context);
+        void OnMoveBackward(InputAction.CallbackContext context);
     }
 }

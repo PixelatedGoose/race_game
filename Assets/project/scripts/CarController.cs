@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class CarController : MonoBehaviour
 {
+    CarInputActions Controls;
+
     public enum Axel
     {
         Front,
@@ -44,11 +46,28 @@ public class CarController : MonoBehaviour
     public Material driftmaterial;
     public Rigidbody carRb;
 
+
+    void Awake()
+    {
+        Controls = new CarInputActions();
+        Controls.Enable();
+    }
+
     void Start()
     {
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
+    }
+
+    private void Onable()
+    {
+        Controls.Enable();
+    }
+
+    private void Disable()
+    {
+        Controls.Disable();
     }
 
     void Update()
@@ -88,8 +107,27 @@ public class CarController : MonoBehaviour
     
     void GetInputs()    
     {
-        moveInput = Input.GetAxis("Vertical");
-        steerInput = Input.GetAxis("Horizontal");
+         //moveInput = Input.GetAxis("Vertical");
+         //steerInput = Input.GetAxis("Horizontal");
+
+        Controls.CarControls.Move.performed += ctx => {
+            steerInput = ctx.ReadValue<Vector2>().x;
+        };
+
+        if(Controls.CarControls.MoveForward.IsPressed()) {
+            moveInput = Controls.CarControls.MoveForward.ReadValue<float>();
+        }
+
+        if(Controls.CarControls.MoveBackward.IsPressed()) {
+            moveInput = -Controls.CarControls.MoveBackward.ReadValue<float>();
+        }
+
+        if(!Controls.CarControls.MoveBackward.IsPressed() && !Controls.CarControls.MoveForward.IsPressed()) {
+            moveInput = 0.0f;
+        }
+        
+
+        Debug.Log(moveInput);
     }
 
     bool IsGrounded()
@@ -146,9 +184,9 @@ public class CarController : MonoBehaviour
     {
         // targetTorque = moveInput * maxAcceleration;
 
-        if(Input.GetKey(KeyCode.Joystick1Button5) || Input.GetKey(KeyCode.W)) {
+        if(moveInput > 0) {
             targetTorque = 2 * maxAcceleration;
-        } else if (Input.GetKey(KeyCode.Joystick1Button4) || Input.GetKey(KeyCode.S)) {
+        } else if (moveInput < 0) {
             targetTorque = -2 * maxAcceleration;
         } else {
             targetTorque = 0.0f;
@@ -171,7 +209,7 @@ public class CarController : MonoBehaviour
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
                 wheel.wheelCollider.motorTorque = 0f;
             }
-            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.Joystick1Button5) || Input.GetKey(KeyCode.Joystick1Button4))
+            else if (moveInput != 0)
             {
                 wheel.wheelCollider.motorTorque = targetTorque;
                 wheel.wheelCollider.brakeTorque = 0f;
@@ -185,7 +223,7 @@ public class CarController : MonoBehaviour
 
     void Decelerate()
     {
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.Joystick1Button5) && !Input.GetKey(KeyCode.Joystick1Button4)) // vertical == 0 ????
+        if (moveInput == 0)
         {
             Vector3 velocity = carRb.linearVelocity;
             if (IsGrounded())
@@ -226,20 +264,21 @@ public class CarController : MonoBehaviour
         {
             WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
 
-            if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Joystick1Button0))
-            {
+            Controls.CarControls.Drift.performed += ctx => {
                 sidewaysFriction.extremumSlip = 1.5f;
                 sidewaysFriction.asymptoteSlip = 2.0f;
                 sidewaysFriction.extremumValue = 0.5f;
                 sidewaysFriction.asymptoteValue = 0.75f;
-            }
-            else
-            {
+                
+            };
+
+            Controls.CarControls.Drift.canceled += ctx => {
                 sidewaysFriction.extremumSlip = 0.2f;
                 sidewaysFriction.asymptoteSlip = 0.5f;
                 sidewaysFriction.extremumValue = 1.0f;
                 sidewaysFriction.asymptoteValue = 1f;
-            }
+            };
+
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
     }
@@ -263,7 +302,7 @@ public class CarController : MonoBehaviour
         foreach(var wheel in wheels)
         {
             var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (Input.GetKey(KeyCode.Space) && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
+            if (Controls.CarControls.Drift.IsPressed() && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
             {
                 trailRenderer.emitting = true;
                 wheel.smokeParticle.Emit(1);
