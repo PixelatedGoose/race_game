@@ -45,6 +45,7 @@ public class CarController : MonoBehaviour
     public Material roadMaterial;
     public Material driftmaterial;
     public Rigidbody carRb;
+    bool isTurboActive = false;
 
 
     void Awake()
@@ -89,6 +90,7 @@ public class CarController : MonoBehaviour
         Applyturnsensitivity();
         OnGrass();
         ApplyGravity();
+        TURBE();
     }
 
     void OnGrass()
@@ -179,6 +181,11 @@ public class CarController : MonoBehaviour
         float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
         turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f);
     }
+    void TURBE()
+    {
+        isTurboActive = Controls.CarControls.turbo.IsPressed();
+    }
+
 
     void Move()
     {
@@ -199,7 +206,7 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            maxspeed = Mathf.Lerp(maxspeed, 100.0f, Time.deltaTime);
+            maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? 150.0f : 100.0f, Time.deltaTime);
         }
 
         foreach (var wheel in wheels)
@@ -331,4 +338,6 @@ public class CarController : MonoBehaviour
             }
         }
     }
+
+
 }
