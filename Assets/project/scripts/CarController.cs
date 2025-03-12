@@ -51,13 +51,16 @@ public class CarController : MonoBehaviour
     {
         Controls = new CarInputActions();
         Controls.Enable();
+
     }
+
 
     void Start()
     {
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
+        
     }
 
     private void Onable()
@@ -125,9 +128,6 @@ public class CarController : MonoBehaviour
         if(!Controls.CarControls.MoveBackward.IsPressed() && !Controls.CarControls.MoveForward.IsPressed()) {
             moveInput = 0.0f;
         }
-        
-
-        Debug.Log(moveInput);
     }
 
     bool IsGrounded()
@@ -204,7 +204,7 @@ public class CarController : MonoBehaviour
 
         foreach (var wheel in wheels)
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Controls.CarControls.Brake.IsPressed())
             {
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
                 wheel.wheelCollider.motorTorque = 0f;
@@ -260,27 +260,31 @@ public class CarController : MonoBehaviour
 
     void HandleDrift()
     {
-        foreach (var wheel in wheels)
-        {
-            WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-
-            Controls.CarControls.Drift.performed += ctx => {
+        Controls.CarControls.Drift.performed += ctx => {
+            GameManager.instance.AddPoints();
+            foreach (var wheel in wheels)
+            {
+                WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
                 sidewaysFriction.extremumSlip = 1.5f;
                 sidewaysFriction.asymptoteSlip = 2.0f;
                 sidewaysFriction.extremumValue = 0.5f;
                 sidewaysFriction.asymptoteValue = 0.75f;
-                
-            };
+                wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+            }
 
-            Controls.CarControls.Drift.canceled += ctx => {
+        };
+
+        Controls.CarControls.Drift.canceled += ctx => {
+            foreach (var wheel in wheels)
+            {
+                WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
                 sidewaysFriction.extremumSlip = 0.2f;
                 sidewaysFriction.asymptoteSlip = 0.5f;
                 sidewaysFriction.extremumValue = 1.0f;
                 sidewaysFriction.asymptoteValue = 1f;
-            };
-
-            wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-        }
+                wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+            }
+        };
     }
 
     void Animatewheels()
