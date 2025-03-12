@@ -12,7 +12,7 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Drift",
@@ -21,7 +21,7 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "turbo",
@@ -66,12 +66,21 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "MoveBackward",
                     "type": "Button",
                     "id": "ceebff15-c619-4ce7-b3e2-6796a70bbc27",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "respawn",
+                    "type": "Button",
+                    "id": "b027aafe-f84c-4b43-8bc2-06e5bdbe76f8",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -94,6 +103,17 @@
                     "name": "",
                     "id": "dae04b30-cfa5-4e55-a797-19e4cb4f8da3",
                     "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Brake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "93580299-f4f8-4701-a4b7-5bd990d464cf",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -318,6 +338,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "MoveBackward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8e38cb59-c886-470b-869b-d41be476b125",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "respawn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21716a2d-234f-45b2-af53-5fb428e96e97",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "respawn",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

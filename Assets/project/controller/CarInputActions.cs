@@ -34,7 +34,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Drift"",
@@ -43,7 +43,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""turbo"",
@@ -88,12 +88,21 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""MoveBackward"",
                     ""type"": ""Button"",
                     ""id"": ""ceebff15-c619-4ce7-b3e2-6796a70bbc27"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""respawn"",
+                    ""type"": ""Button"",
+                    ""id"": ""b027aafe-f84c-4b43-8bc2-06e5bdbe76f8"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -116,6 +125,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""dae04b30-cfa5-4e55-a797-19e4cb4f8da3"",
                     ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93580299-f4f8-4701-a4b7-5bd990d464cf"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -342,6 +362,28 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""MoveBackward"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e38cb59-c886-470b-869b-d41be476b125"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""respawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21716a2d-234f-45b2-af53-5fb428e96e97"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""respawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -370,6 +412,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_Move = m_CarControls.FindAction("Move", throwIfNotFound: true);
         m_CarControls_MoveForward = m_CarControls.FindAction("MoveForward", throwIfNotFound: true);
         m_CarControls_MoveBackward = m_CarControls.FindAction("MoveBackward", throwIfNotFound: true);
+        m_CarControls_respawn = m_CarControls.FindAction("respawn", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -444,6 +487,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_Move;
     private readonly InputAction m_CarControls_MoveForward;
     private readonly InputAction m_CarControls_MoveBackward;
+    private readonly InputAction m_CarControls_respawn;
     public struct CarControlsActions
     {
         private @CarInputActions m_Wrapper;
@@ -456,6 +500,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_CarControls_Move;
         public InputAction @MoveForward => m_Wrapper.m_CarControls_MoveForward;
         public InputAction @MoveBackward => m_Wrapper.m_CarControls_MoveBackward;
+        public InputAction @respawn => m_Wrapper.m_CarControls_respawn;
         public InputActionMap Get() { return m_Wrapper.m_CarControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -489,6 +534,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @MoveBackward.started += instance.OnMoveBackward;
             @MoveBackward.performed += instance.OnMoveBackward;
             @MoveBackward.canceled += instance.OnMoveBackward;
+            @respawn.started += instance.OnRespawn;
+            @respawn.performed += instance.OnRespawn;
+            @respawn.canceled += instance.OnRespawn;
         }
 
         private void UnregisterCallbacks(ICarControlsActions instance)
@@ -517,6 +565,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @MoveBackward.started -= instance.OnMoveBackward;
             @MoveBackward.performed -= instance.OnMoveBackward;
             @MoveBackward.canceled -= instance.OnMoveBackward;
+            @respawn.started -= instance.OnRespawn;
+            @respawn.performed -= instance.OnRespawn;
+            @respawn.canceled -= instance.OnRespawn;
         }
 
         public void RemoveCallbacks(ICarControlsActions instance)
@@ -553,5 +604,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnMoveForward(InputAction.CallbackContext context);
         void OnMoveBackward(InputAction.CallbackContext context);
+        void OnRespawn(InputAction.CallbackContext context);
     }
 }

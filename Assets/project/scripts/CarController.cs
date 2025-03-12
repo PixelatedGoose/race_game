@@ -206,6 +206,7 @@ public class CarController : MonoBehaviour
         {
             if (Controls.CarControls.Brake.IsPressed())
             {
+                Debug.Log("Brake pressed");
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
                 wheel.wheelCollider.motorTorque = 0f;
             }
@@ -275,6 +276,7 @@ public class CarController : MonoBehaviour
         };
 
         Controls.CarControls.Drift.canceled += ctx => {
+            GameManager.instance.StopAddingPoints();
             foreach (var wheel in wheels)
             {
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
@@ -297,6 +299,10 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rot;
         }
+        Controls.CarControls.Move.canceled+= ctx => {
+            steerInput = 0.0f;
+        };
+        
     }
 
     //bobbing effect
