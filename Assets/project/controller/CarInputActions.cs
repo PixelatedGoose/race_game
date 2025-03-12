@@ -107,6 +107,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""pausemenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""9be85f7e-8bba-451d-8a66-022ffb14a515"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -384,6 +393,28 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""respawn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9221556-f474-4820-8486-de9148715121"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""pausemenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e828acfd-2292-4e4c-a293-db0c23ba119c"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""pausemenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -413,6 +444,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_MoveForward = m_CarControls.FindAction("MoveForward", throwIfNotFound: true);
         m_CarControls_MoveBackward = m_CarControls.FindAction("MoveBackward", throwIfNotFound: true);
         m_CarControls_respawn = m_CarControls.FindAction("respawn", throwIfNotFound: true);
+        m_CarControls_pausemenu = m_CarControls.FindAction("pausemenu", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -488,6 +520,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_MoveForward;
     private readonly InputAction m_CarControls_MoveBackward;
     private readonly InputAction m_CarControls_respawn;
+    private readonly InputAction m_CarControls_pausemenu;
     public struct CarControlsActions
     {
         private @CarInputActions m_Wrapper;
@@ -501,6 +534,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         public InputAction @MoveForward => m_Wrapper.m_CarControls_MoveForward;
         public InputAction @MoveBackward => m_Wrapper.m_CarControls_MoveBackward;
         public InputAction @respawn => m_Wrapper.m_CarControls_respawn;
+        public InputAction @pausemenu => m_Wrapper.m_CarControls_pausemenu;
         public InputActionMap Get() { return m_Wrapper.m_CarControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -537,6 +571,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @respawn.started += instance.OnRespawn;
             @respawn.performed += instance.OnRespawn;
             @respawn.canceled += instance.OnRespawn;
+            @pausemenu.started += instance.OnPausemenu;
+            @pausemenu.performed += instance.OnPausemenu;
+            @pausemenu.canceled += instance.OnPausemenu;
         }
 
         private void UnregisterCallbacks(ICarControlsActions instance)
@@ -568,6 +605,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @respawn.started -= instance.OnRespawn;
             @respawn.performed -= instance.OnRespawn;
             @respawn.canceled -= instance.OnRespawn;
+            @pausemenu.started -= instance.OnPausemenu;
+            @pausemenu.performed -= instance.OnPausemenu;
+            @pausemenu.canceled -= instance.OnPausemenu;
         }
 
         public void RemoveCallbacks(ICarControlsActions instance)
@@ -605,5 +645,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         void OnMoveForward(InputAction.CallbackContext context);
         void OnMoveBackward(InputAction.CallbackContext context);
         void OnRespawn(InputAction.CallbackContext context);
+        void OnPausemenu(InputAction.CallbackContext context);
     }
 }

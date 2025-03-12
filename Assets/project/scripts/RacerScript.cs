@@ -2,9 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
+
+
+
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
+
+
+void Awake()
+    {
+        Controls = new CarInputActions();
+        Controls.Enable();
+
+    }
+
+    CarInputActions Controls;
+
+
+
+    private void Onable()
+    {
+        Controls.Enable();
+    }
+
+    private void Disable()
+    {
+        Controls.Disable();
+    }
+
+
     
     public float laptime;
     public float besttime;
@@ -86,7 +114,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void HandleReset()
     {
-        if (Input.GetKey(KeyCode.R)) // respawn to the last checkpoint
+        if (Controls.CarControls.respawn.triggered) // respawn to the last checkpoint
         {
             ResetPosition();
             resetPrompt.gameObject.SetActive(false);

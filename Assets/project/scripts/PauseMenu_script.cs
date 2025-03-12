@@ -2,14 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
+
+void Awake()
+    {
+        Controls = new CarInputActions();
+        Controls.Enable();
+
+    }
+
+    CarInputActions Controls;
+
+    private void Onable()
+    {
+        Controls.Enable();
+    }
+
+    private void Disable()
+    {
+        Controls.Disable();
+    }
+
     public GameObject[] pauseMenuObjects;
+
+
+
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Controls.CarControls.pausemenu.triggered)
         {
             if (pauseMenuObjects != null && pauseMenuObjects.Length > 0)
             {
