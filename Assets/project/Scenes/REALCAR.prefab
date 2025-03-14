@@ -3485,6 +3485,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: REALCAR
       objectReference: {fileID: 0}
+    - target: {fileID: 3621995110324072295, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_TagString
+      value: thisisacar
+      objectReference: {fileID: 0}
     - target: {fileID: 4447258588949571589, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_Pivot.x
       value: 0

@@ -10,6 +10,12 @@ public class CarSelection : MonoBehaviour
 
     private int index;
 
+    void Awake()
+    {
+        cars = GameObject.FindGameObjectsWithTag("thisisacar");
+        //ei tarvi enää manuaalisesti lisätä
+    }
+
     void Start()
     {
         index = PlayerPrefs.GetInt("CarIndex", 0); 
@@ -30,8 +36,6 @@ public class CarSelection : MonoBehaviour
     {
 
         right.interactable = index < cars.Length - 1;
-
- 
         left.interactable = index > 0;
     }
 
@@ -62,6 +66,7 @@ public class CarSelection : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadSceneAsync(2);
+
+        SceneManager.LoadSceneAsync(2); //load scene
     }
 }

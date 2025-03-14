@@ -15,18 +15,32 @@ public class GameManager : MonoBehaviour
     
     public TextMeshProUGUI Score;
 
+    public GameObject currentCar;
+
+    public bool isPaused = false;
+
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
+
+        /* GameObject[] cars = GameObject.FindGameObjectsWithTag("thisisacar");
+        foreach (GameObject car in cars)
+        {
+            if (car.activeInHierarchy)
+            {
+                currentCar = car;
+                break;
+            }
+        } */
     }
 
 
     public void AddPoints()
     {
-        if (!isAddingPoints)  
+        if (!isAddingPoints) //&& currentCar.activeInHierarchy)
         {
             StartCoroutine(IncrementScoreWithDelay());
         }

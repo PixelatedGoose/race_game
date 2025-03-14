@@ -49,10 +49,14 @@ void Awake()
                 if (isActive)
                 {
                     Time.timeScale = 1;
+                    GameManager.instance.isPaused = false;
+                    Debug.Log(GameManager.instance.isPaused);
                     LeanTween.moveLocalY(pauseMenuObjects[0], 460.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
                 }
                 else
                 {
+                    GameManager.instance.isPaused = true;
+                    Debug.Log("pause! :)");
                     Time.timeScale = 0;
                 }
             }
