@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+//ÄLÄ KÄYTÄ
+//LAITOIN TÄN PUSHIIN ETTÄ EI TUU JOTAI VITUN ERROREITA
+
 public class musicVolumeControl : MonoBehaviour
 {
     public AudioSource cirno;

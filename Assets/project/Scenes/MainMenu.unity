@@ -328,7 +328,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &153222935
 RectTransform:
   m_ObjectHideFlags: 0
@@ -365,7 +365,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
-  pixelSlider: {fileID: 1870876367}
 --- !u!1 &204483597
 GameObject:
   m_ObjectHideFlags: 0
@@ -1404,7 +1403,6 @@ MonoBehaviour:
   fullMenu: {fileID: 319257630}
   mapChangeButton: {fileID: 1501124970}
   chosenMap: 0
-  pixelSlider: {fileID: 1870876367}
 --- !u!108 &841104202 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 7530438695844709834, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
@@ -1738,8 +1736,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1967160182}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.75, y: 0}
-  m_AnchorMax: {x: 0.75, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1784,6 +1782,11 @@ CanvasRenderer:
 --- !u!108 &973326645 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 210715059323131502, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+  m_PrefabInstance: {fileID: 872674926}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1021053024 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1959587334024615407, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
   m_PrefabInstance: {fileID: 872674926}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1028913378
@@ -2214,7 +2217,48 @@ MonoBehaviour:
           m_StringArgument: optionTest
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1021053024}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1309687835}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2035075757}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
+--- !u!1 &1309687835 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7033992870915655817, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+  m_PrefabInstance: {fileID: 872674926}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1319731275 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 381436349141117568, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
@@ -2267,7 +2311,7 @@ RectTransform:
   m_Father: {fileID: 149591906}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.75, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2961,8 +3005,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -43, y: 0}
-  m_SizeDelta: {x: 897, y: 161}
+  m_AnchoredPosition: {x: -30, y: 0}
+  m_SizeDelta: {x: 1000, y: 161}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1719989886
 MonoBehaviour:
@@ -2997,7 +3041,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: thy end is now
+  m_Text: Enable car lights
 --- !u!222 &1719989887
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3569,6 +3613,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1992688949}
   m_CullTransparentMesh: 1
+--- !u!1 &2035075757 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1777024816306492282, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+  m_PrefabInstance: {fileID: 872674926}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2066291144
 GameObject:
   m_ObjectHideFlags: 0
