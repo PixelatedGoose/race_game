@@ -12,13 +12,23 @@ public class CarSelection : MonoBehaviour
 
     void Awake()
     {
+        if (GameManager.instance == null)
+        {
+            Debug.LogError("GameManager.instance is null");
+        }
+        else
+        {
+            Debug.Log("GameManager.instance is not null");
+            Debug.Log("Chosen Map: " + GameManager.instance.chosenMap);
+        }
+
         cars = GameObject.FindGameObjectsWithTag("thisisacar");
-        //ei tarvi enää manuaalisesti lisätä
     }
 
     void Start()
     {
-        index = PlayerPrefs.GetInt("CarIndex", 0); 
+        index = PlayerPrefs.GetInt("CarIndex", 0);
+        Debug.Log("Loaded CarIndex: " + index);
 
         foreach (GameObject car in cars)
         {
@@ -26,15 +36,18 @@ public class CarSelection : MonoBehaviour
         }
 
         // Activate the selected car
-        if (index >= 0 && index < cars.Length)
+        if (index >= 0 && index <= cars.Length)
         {
             cars[index].SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("Car index out of range: " + index);
         }
     }
 
     void Update()
     {
-
         right.interactable = index < cars.Length - 1;
         left.interactable = index > 0;
     }
@@ -45,9 +58,10 @@ public class CarSelection : MonoBehaviour
         {
             cars[index].SetActive(false);
             index++;
-            cars[index].SetActive(true); 
+            cars[index].SetActive(true);
             PlayerPrefs.SetInt("CarIndex", index);
             PlayerPrefs.Save();
+            Debug.Log("Saved CarIndex: " + index);
         }
     }
 
@@ -58,15 +72,28 @@ public class CarSelection : MonoBehaviour
             cars[index].SetActive(false);
             index--;
             cars[index].SetActive(true);
-
             PlayerPrefs.SetInt("CarIndex", index);
             PlayerPrefs.Save();
+            Debug.Log("Saved CarIndex: " + index);
         }
     }
 
     public void PlayGame()
     {
-
-        SceneManager.LoadSceneAsync(2); //load scene
+        if (GameManager.instance == null)
+        {
+            Debug.LogError("GameManager.instance is null! Cannot load scene.");
+        }
+        else
+        {
+            Debug.Log("Loading scene: " + GameManager.instance.chosenMap);
+            SceneManager.LoadSceneAsync(GameManager.instance.chosenMap);
+        }
     }
 }
+
+
+
+
+
+

@@ -15,24 +15,33 @@ public class mapLoad : MonoBehaviour
     private void Awake()
     {
         bool inScene = SceneManager.GetActiveScene().name == "test_mountain";
-        int carSelected = PlayerPrefs.GetInt("CarIndex"); 
+        index = PlayerPrefs.GetInt("CarIndex");
 
         cars = GameObject.FindGameObjectsWithTag("thisisacar"); //etsi autot tagin perusteella (pitäs olla aika ilmiselvää)
 
         foreach (GameObject car in cars)
         {
+            Debug.Log(cars[1]);
             car.SetActive(false);
         }
 
         if (inScene)
         {
             Debug.Log("in HELL");
-            
             Debug.Log(index);
-            if (index >= 0 && index < cars.Length)
+
+            if (index >= 0 && index <= cars.Length)
             {
                 cars[index].SetActive(true);
+                GameManager.instance.currentCar = cars[index];
+                Debug.Log("Loaded CarIndex: " + index);
             }
+            else
+            {
+                Debug.LogError("Car index out of range in mapLoad: " + index);
+            }
+
+            
 
             /* switch(carSelected) 
             {
