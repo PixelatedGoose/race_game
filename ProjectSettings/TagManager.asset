@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - avoidNullException
+  - checkpointTag
+  - thisisacar
+  - thisisasound
   layers:
   - Default
   - TransparentFX
