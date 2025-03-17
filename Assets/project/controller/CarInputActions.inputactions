@@ -94,6 +94,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "menusubmit",
+                    "type": "Button",
+                    "id": "083223b4-dcf8-4745-879f-aea59a382185",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "menucancel",
+                    "type": "Button",
+                    "id": "c513cf81-1afa-41d8-8baf-26c21fdad2bf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -393,32 +411,70 @@
                     "action": "pausemenu",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "UI",
-            "id": "cba4e3e5-1754-4347-b03e-2bf9c33b1cd4",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "c5e08b52-2171-4625-a8db-ae28a757ebca",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "8ec52d14-a452-40db-8b71-0e5330e817d0",
-                    "path": "",
+                    "id": "07b30940-332e-40b1-addf-0e3dab324f65",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "menusubmit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53eaf567-679f-4ba6-8b41-0c75c3757690",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menusubmit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d9a7aa8-1cd7-4209-b625-15a8c75be51f",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menusubmit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "03e97b75-9de3-424f-9818-ab616675551b",
+                    "path": "<Mouse>/backButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menucancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d2f2baac-4b0e-41c8-b7f0-2573ff6f0ab1",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menucancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a170d9a0-2a2c-40fa-9493-d2287782c6b1",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menucancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

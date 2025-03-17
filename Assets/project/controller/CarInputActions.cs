@@ -180,6 +180,24 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""menusubmit"",
+                    ""type"": ""Button"",
+                    ""id"": ""083223b4-dcf8-4745-879f-aea59a382185"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""menucancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""c513cf81-1afa-41d8-8baf-26c21fdad2bf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -479,32 +497,70 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""pausemenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""UI"",
-            ""id"": ""cba4e3e5-1754-4347-b03e-2bf9c33b1cd4"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
-                    ""id"": ""c5e08b52-2171-4625-a8db-ae28a757ebca"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""8ec52d14-a452-40db-8b71-0e5330e817d0"",
-                    ""path"": """",
+                    ""id"": ""07b30940-332e-40b1-addf-0e3dab324f65"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""menusubmit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53eaf567-679f-4ba6-8b41-0c75c3757690"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menusubmit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d9a7aa8-1cd7-4209-b625-15a8c75be51f"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menusubmit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03e97b75-9de3-424f-9818-ab616675551b"",
+                    ""path"": ""<Mouse>/backButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menucancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2f2baac-4b0e-41c8-b7f0-2573ff6f0ab1"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menucancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a170d9a0-2a2c-40fa-9493-d2287782c6b1"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menucancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -537,15 +593,13 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_MoveBackward = m_CarControls.FindAction("MoveBackward", throwIfNotFound: true);
         m_CarControls_respawn = m_CarControls.FindAction("respawn", throwIfNotFound: true);
         m_CarControls_pausemenu = m_CarControls.FindAction("pausemenu", throwIfNotFound: true);
-        // UI
-        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
+        m_CarControls_menusubmit = m_CarControls.FindAction("menusubmit", throwIfNotFound: true);
+        m_CarControls_menucancel = m_CarControls.FindAction("menucancel", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
     {
         UnityEngine.Debug.Assert(!m_CarControls.enabled, "This will cause a leak and performance issues, CarInputActions.CarControls.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, CarInputActions.UI.Disable() has not been called.");
     }
 
     /// <summary>
@@ -631,6 +685,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_MoveBackward;
     private readonly InputAction m_CarControls_respawn;
     private readonly InputAction m_CarControls_pausemenu;
+    private readonly InputAction m_CarControls_menusubmit;
+    private readonly InputAction m_CarControls_menucancel;
     /// <summary>
     /// Provides access to input actions defined in input action map "CarControls".
     /// </summary>
@@ -682,6 +738,14 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CarControls/pausemenu".
         /// </summary>
         public InputAction @pausemenu => m_Wrapper.m_CarControls_pausemenu;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/menusubmit".
+        /// </summary>
+        public InputAction @menusubmit => m_Wrapper.m_CarControls_menusubmit;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/menucancel".
+        /// </summary>
+        public InputAction @menucancel => m_Wrapper.m_CarControls_menucancel;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -738,6 +802,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @pausemenu.started += instance.OnPausemenu;
             @pausemenu.performed += instance.OnPausemenu;
             @pausemenu.canceled += instance.OnPausemenu;
+            @menusubmit.started += instance.OnMenusubmit;
+            @menusubmit.performed += instance.OnMenusubmit;
+            @menusubmit.canceled += instance.OnMenusubmit;
+            @menucancel.started += instance.OnMenucancel;
+            @menucancel.performed += instance.OnMenucancel;
+            @menucancel.canceled += instance.OnMenucancel;
         }
 
         /// <summary>
@@ -779,6 +849,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @pausemenu.started -= instance.OnPausemenu;
             @pausemenu.performed -= instance.OnPausemenu;
             @pausemenu.canceled -= instance.OnPausemenu;
+            @menusubmit.started -= instance.OnMenusubmit;
+            @menusubmit.performed -= instance.OnMenusubmit;
+            @menusubmit.canceled -= instance.OnMenusubmit;
+            @menucancel.started -= instance.OnMenucancel;
+            @menucancel.performed -= instance.OnMenucancel;
+            @menucancel.canceled -= instance.OnMenucancel;
         }
 
         /// <summary>
@@ -812,102 +888,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="CarControlsActions" /> instance referencing this action map.
     /// </summary>
     public CarControlsActions @CarControls => new CarControlsActions(this);
-
-    // UI
-    private readonly InputActionMap m_UI;
-    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
-    private readonly InputAction m_UI_Newaction;
-    /// <summary>
-    /// Provides access to input actions defined in input action map "UI".
-    /// </summary>
-    public struct UIActions
-    {
-        private @CarInputActions m_Wrapper;
-
-        /// <summary>
-        /// Construct a new instance of the input action map wrapper class.
-        /// </summary>
-        public UIActions(@CarInputActions wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "UI/Newaction".
-        /// </summary>
-        public InputAction @Newaction => m_Wrapper.m_UI_Newaction;
-        /// <summary>
-        /// Provides access to the underlying input action map instance.
-        /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_UI; }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-        public void Enable() { Get().Enable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-        public void Disable() { Get().Disable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-        public bool enabled => Get().enabled;
-        /// <summary>
-        /// Implicitly converts an <see ref="UIActions" /> to an <see ref="InputActionMap" /> instance.
-        /// </summary>
-        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
-        /// <summary>
-        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <param name="instance">Callback instance.</param>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-        /// </remarks>
-        /// <seealso cref="UIActions" />
-        public void AddCallbacks(IUIActions instance)
-        {
-            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        /// <summary>
-        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <remarks>
-        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-        /// </remarks>
-        /// <seealso cref="UIActions" />
-        private void UnregisterCallbacks(IUIActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIActions.UnregisterCallbacks(IUIActions)" />.
-        /// </summary>
-        /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
-        public void RemoveCallbacks(IUIActions instance)
-        {
-            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        /// <summary>
-        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
-        /// </summary>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-        /// </remarks>
-        /// <seealso cref="UIActions.AddCallbacks(IUIActions)" />
-        /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
-        /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
-        public void SetCallbacks(IUIActions instance)
-        {
-            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    /// <summary>
-    /// Provides a new <see cref="UIActions" /> instance referencing this action map.
-    /// </summary>
-    public UIActions @UI => new UIActions(this);
     private int m_CarControlsSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -998,20 +978,19 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPausemenu(InputAction.CallbackContext context);
-    }
-    /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
-    /// </summary>
-    /// <seealso cref="UIActions.AddCallbacks(IUIActions)" />
-    /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
-    public interface IUIActions
-    {
         /// <summary>
-        /// Method invoked when associated input action "New action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "menusubmit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnMenusubmit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "menucancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMenucancel(InputAction.CallbackContext context);
     }
 }
