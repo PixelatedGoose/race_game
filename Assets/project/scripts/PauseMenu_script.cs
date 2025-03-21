@@ -56,7 +56,6 @@ void Awake()
                 else
                 {
                     GameManager.instance.isPaused = true;
-                    Debug.Log("pause! :)");
                     Time.timeScale = 0;
                 }
             }

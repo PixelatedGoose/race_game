@@ -52,16 +52,6 @@ public class CarController : MonoBehaviour
     {
         Controls = new CarInputActions();
         Controls.Enable();
-
-    }
-
-
-    void Start()
-    {
-        if (carRb == null)
-            carRb = GetComponent<Rigidbody>();
-        carRb.centerOfMass = _centerofMass;
-        
     }
 
     private void Onable()
@@ -72,6 +62,22 @@ public class CarController : MonoBehaviour
     private void Disable()
     {
         Controls.Disable();
+    }
+
+    void Start()
+    {
+        if (carRb == null)
+            carRb = GetComponent<Rigidbody>();
+        carRb.centerOfMass = _centerofMass;
+        
+        if (!carRb.gameObject.activeSelf)
+        {
+            Disable();
+        }
+        if (wheels == null || wheels.Count == 0)
+        {
+            Debug.LogError("wheels missing, important error");
+        }
     }
 
     void Update()
@@ -90,7 +96,7 @@ public class CarController : MonoBehaviour
         Applyturnsensitivity();
         OnGrass();
         ApplyGravity();
-        TURBE();
+        TURBE(); //don't fix the TURBE
     }
 
     void OnGrass()
@@ -102,10 +108,12 @@ public class CarController : MonoBehaviour
             if (IsOnGrass())
             {
                 trailRenderer.material = grassMaterial;
+                GameManager.instance.scoreAddWT = 0.08f;
             }
             else
             {
                 trailRenderer.material = roadMaterial;
+                GameManager.instance.scoreAddWT = 0.01f;
             }
         }
     }   
@@ -338,6 +346,4 @@ public class CarController : MonoBehaviour
             }
         }
     }
-
-
 }

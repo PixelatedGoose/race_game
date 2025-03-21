@@ -10,7 +10,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] optionScript OptionScript;
     public GameObject fullMenu;
     public GameObject mapChangeButton;
-    public int chosenMap;
 
     private void Awake()
     {
@@ -31,7 +30,7 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        chosenMap = 1;
+        GameManager.instance.chosenMap = 1;
         LeanTween.moveLocalY(fullMenu, 0.0f, 2.2f).setEase(LeanTweenType.easeOutBounce);
     }
 
@@ -39,13 +38,13 @@ public class MainMenu : MonoBehaviour
     {
         if (toggle != null)
         {
-            chosenMap = toggle.isOn ? 2 : 1; //false = 1, true = 2
+            GameManager.instance.chosenMap = toggle.isOn ? 2 : 1; //false = 1, true = 2
         }
     }
 
     public void Playgame()
     {
-        SceneManager.LoadSceneAsync(chosenMap);
+        SceneManager.LoadSceneAsync(3); //menee ny carselectioniin suoraan
     }
 
     public void QuitGame()
