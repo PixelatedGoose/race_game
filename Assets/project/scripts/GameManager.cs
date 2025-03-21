@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 
         carIndex = PlayerPrefs.GetInt("CarIndex");
         currentCar = carIndex >= 0 && carIndex < carListGM.Length ? carListGM[carIndex] : carListGM[0];
-    
+
         sceneSelected = SceneManager.GetActiveScene().name;
 
         if (instance == null)
@@ -53,31 +53,32 @@ public class GameManager : MonoBehaviour
             instance = this;
             // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
         }
-        Debug.Log(instance);
-
     }
     
     void Start()
-    {
-        foreach (GameObject car in carListGM)
+    {   
+        if (sceneSelected == "test_mountain")
         {
-            if (car.activeInHierarchy)
+            foreach (GameObject car in carListGM)
             {
-                Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
-                //toi määrittelee mikä on se oikea auto
-                Score = GameObject.Find("Score").GetComponent<TextMeshProUGUI>();
-                //so nanoka?
-            }
-            else
-            {
-                Debug.Log("Thy end is now! Die! Crush! Prepare thyself! Judgement!");
-                Destroy(car);
-                //tää TAPPAA kaikki ne muut että se ei vittuile se unity lol
+                if (car.activeInHierarchy)
+                {
+                    Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
+                    //toi määrittelee mikä on se oikea auto
+                    Score = GameObject.Find("Score").GetComponent<TextMeshProUGUI>();
+                    //so nanoka?
+                }
+                else
+                {
+                    Debug.Log("Thy end is now! Die! Crush! Prepare thyself! Judgement!");
+                    Destroy(car);
+                    //tää TAPPAA kaikki ne muut että se ei vittuile se unity lol
+                }
             }
         }
 
-        Debug.Log("after defining:" + PlayerPrefs.GetInt("CarIndex")); //debug
-        Debug.Log("after defining CURRENTCAR IS:" + currentCar); //debug
+        /* Debug.Log("after defining:" + PlayerPrefs.GetInt("CarIndex")); //debug
+        Debug.Log("after defining CURRENTCAR IS:" + currentCar); //debug */
     }
 
 
@@ -92,7 +93,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("YOU SHOULD KILL YOURSELF... NOW!");
+            //Debug.LogWarning("YOU SHOULD KILL YOURSELF... NOW!");
         }
     }
 

@@ -20,10 +20,10 @@ public class additionalCarController : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
         // car.MovePosition(new Vector3(car_positionrotation[0], car_positionrotation[1], car_positionrotation[2]));
-        car_positionrotation[4] += 0.2f;
+        car_positionrotation[4] += 1.0f;
         car.MoveRotation(Quaternion.Euler(0, car_positionrotation[4], 0));
     }
 }

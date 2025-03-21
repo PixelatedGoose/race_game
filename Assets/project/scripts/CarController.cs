@@ -74,6 +74,10 @@ public class CarController : MonoBehaviour
         {
             Disable();
         }
+        if (wheels == null || wheels.Count == 0)
+        {
+            Debug.LogError("wheels missing, important error");
+        }
     }
 
     void Update()
@@ -342,6 +346,4 @@ public class CarController : MonoBehaviour
             }
         }
     }
-
-
 }
