@@ -2,53 +2,97 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+//HUOM. ÄLÄ POISTA KÄYTÖSTÄ MUITA AUTOJA HIERARKIASSA
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject mapChangeButton;
     public static GameManager instance;
 
+    [Header("score systeemi")]
     private int score;
+
     public float scoreAddWT = 0.01f; //WT = wait time
 
     private bool isAddingPoints = false;
     
     public TextMeshProUGUI Score;
 
-    public GameObject currentCar;
-
+    [Header("menut")]
     public bool isPaused = false;
 
     public int chosenMap = 1;
-    
+
+    public GameObject mapChangeButton;
+
+    [Header("car selection")]
+    public GameObject currentCar;
+    public GameObject[] carListGM;
+    public int carIndex;
+
+    [Header("scene asetukset")]
+    public string sceneSelected;
+
     void Awake()
     {
+        carListGM = new GameObject[] 
+        { 
+            GameObject.Find("REALCAR_x"), 
+            GameObject.Find("REALCAR"), 
+            GameObject.Find("REALCAR_y")
+        };
+
+        carIndex = PlayerPrefs.GetInt("CarIndex");
+        currentCar = carIndex >= 0 && carIndex < carListGM.Length ? carListGM[carIndex] : carListGM[0];
+    
+        sceneSelected = SceneManager.GetActiveScene().name;
+
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
         }
-        // //else
-        // {
-        //     Destroy(gameObject);
-        // }
-    }
+        Debug.Log(instance);
 
+    }
+    
     void Start()
     {
-        if (instance == null)
+        foreach (GameObject car in carListGM)
         {
-            instance = this;
+            if (car.activeInHierarchy)
+            {
+                Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
+                //toi määrittelee mikä on se oikea auto
+                Score = GameObject.Find("Score").GetComponent<TextMeshProUGUI>();
+                //so nanoka?
+            }
+            else
+            {
+                Debug.Log("Thy end is now! Die! Crush! Prepare thyself! Judgement!");
+                Destroy(car);
+                //tää TAPPAA kaikki ne muut että se ei vittuile se unity lol
+            }
         }
+
+        Debug.Log("after defining:" + PlayerPrefs.GetInt("CarIndex")); //debug
+        Debug.Log("after defining CURRENTCAR IS:" + currentCar); //debug
     }
 
 
 
     public void AddPoints()
     {
-        if (!isAddingPoints && currentCar.activeInHierarchy)
+        Debug.Log("AddPoints executing");
+        if (!isAddingPoints && currentCar.activeSelf && instance != null)
         {
+            Debug.Log("adding points...");
             StartCoroutine(IncrementScoreWithDelay());
+        }
+        else
+        {
+            Debug.LogWarning("YOU SHOULD KILL YOURSELF... NOW!");
         }
     }
 
@@ -60,7 +104,7 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(scoreAddWT);   
             score += 1;   
-            Score.text = "Points: " + score.ToString();               
+            Score.text = "Score: " + score.ToString();               
         }
     }
 

@@ -6,58 +6,41 @@ using UnityEngine.SceneManagement;
 public class mapLoad : MonoBehaviour
 {
     //fuck this shit im out
-
-    //mapLoad, CarController, GameManager, CarSelection ON KESKEN, ÄLÄ KOSKE
     
     public GameObject[] cars;
-    private int index;
 
-    private void Awake()
+    void Awake()
     {
-        bool inScene = SceneManager.GetActiveScene().name == "test_mountain";
-        index = PlayerPrefs.GetInt("CarIndex");
-
-        cars = GameObject.FindGameObjectsWithTag("thisisacar"); //etsi autot tagin perusteella (pitäs olla aika ilmiselvää)
+        //etsi autot järjestyksessä (pitäs olla aika ilmiselvää)
+        cars = new GameObject[] 
+        {
+            GameObject.Find("REALCAR_x"), 
+            GameObject.Find("REALCAR"), 
+            GameObject.Find("REALCAR_y") 
+        };
 
         foreach (GameObject car in cars)
         {
-            Debug.Log(cars[1]);
             car.SetActive(false);
         }
 
-        if (inScene)
-        {
+        /* if (GameManager.instance.sceneSelected == "test_mountain")
+        { */
             Debug.Log("in HELL");
-            Debug.Log(index);
 
-            if (index >= 0 && index <= cars.Length)
+            if (GameManager.instance.carIndex >= 0 && GameManager.instance.carIndex <= cars.Length)
             {
-                cars[index].SetActive(true);
-                GameManager.instance.currentCar = cars[index];
-                Debug.Log("Loaded CarIndex: " + index);
+                cars[GameManager.instance.carIndex].SetActive(true);
+
+                /* Debug.Log("FINAL:" + PlayerPrefs.GetInt("CarIndex")); //debug
+                Debug.Log("FINAL CURRENTCAR IS:" + GameManager.instance.currentCar); //debug */
+
+                Debug.Log("Loaded CarIndex: " + GameManager.instance.carIndex);
             }
             else
             {
-                Debug.LogError("Car index out of range in mapLoad: " + index);
+                Debug.LogError("Car index out of range (mapLoad): " + GameManager.instance.carIndex);
             }
-
-            
-
-            /* switch(carSelected) 
-            {
-                case 1:
-                    Debug.Log("1. I already have an activation code.");
-                    break;
-                case 2:
-                    Debug.Log("mdfasiodoi OLET AUTOMEKAANIKKO NUMERO KAKSI");
-                    break;
-                case 3:
-                    Debug.Log("tämä on kolomas");
-                    break;
-                default:
-                    Debug.Log("De Fault - fuck off copilot, Leo is gay");
-                    break;
-            } */
-        }
+        /* } */
     }
 }

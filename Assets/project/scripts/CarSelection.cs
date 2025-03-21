@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class CarSelection : MonoBehaviour
 {
@@ -22,7 +23,12 @@ public class CarSelection : MonoBehaviour
             Debug.Log("Chosen Map: " + GameManager.instance.chosenMap);
         }
 
-        cars = GameObject.FindGameObjectsWithTag("thisisacar");
+        cars = new GameObject[] 
+        { 
+            GameObject.Find("REALCAR_x"), 
+            GameObject.Find("REALCAR"), 
+            GameObject.Find("REALCAR_y") 
+        };
     }
 
     void Start()

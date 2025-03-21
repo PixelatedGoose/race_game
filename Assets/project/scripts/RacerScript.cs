@@ -79,7 +79,7 @@ void Awake()
     void Start()
     {
         InitializeRace(); //tekee asiat kun peli alkaa
-        test(); 
+        // test();
     }
 
     void Update()
