@@ -46,12 +46,23 @@ public class CarController : MonoBehaviour
     public Material driftmaterial;
     public Rigidbody carRb;
     bool isTurboActive = false;
+    private float activedrift = 0.0f;
 
 
     void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
+
+    }
+
+
+    void Start()
+    {
+        if (carRb == null)
+            carRb = GetComponent<Rigidbody>();
+        carRb.centerOfMass = _centerofMass;
+        
     }
 
     private void Onable()
@@ -64,20 +75,14 @@ public class CarController : MonoBehaviour
         Controls.Disable();
     }
 
-    void Start()
+
+    public float GetSpeed()
     {
-        if (carRb == null)
-            carRb = GetComponent<Rigidbody>();
-        carRb.centerOfMass = _centerofMass;
-        
-        if (!carRb.gameObject.activeSelf)
-        {
-            Disable();
-        }
-        if (wheels == null || wheels.Count == 0)
-        {
-            Debug.LogError("wheels missing, important error");
-        }
+        return carRb.linearVelocity.magnitude * 3.6f;
+    }
+    public float GetMaxSpeed()
+    {
+         return maxspeed;
     }
 
     void Update()
@@ -96,7 +101,8 @@ public class CarController : MonoBehaviour
         Applyturnsensitivity();
         OnGrass();
         ApplyGravity();
-        TURBE(); //don't fix the TURBE
+        TURBE();
+        test();
     }
 
     void OnGrass()
@@ -177,7 +183,7 @@ public class CarController : MonoBehaviour
 
     void ApplySpeedLimit()
     {
-        float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
+        float speed = carRb.linearVelocity.magnitude * 3.6f; 
         if (speed > maxspeed)
         {
             carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
@@ -186,7 +192,7 @@ public class CarController : MonoBehaviour
 
     void Applyturnsensitivity()
     {
-        float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert m/s to km/h
+        float speed = carRb.linearVelocity.magnitude * 3.6f;
         turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f);
     }
     void TURBE()
@@ -221,7 +227,7 @@ public class CarController : MonoBehaviour
         {
             if (Controls.CarControls.Brake.IsPressed())
             {
-                Debug.Log("Brake pressed");
+                GameManager.instance.StopAddingPoints();
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
                 wheel.wheelCollider.motorTorque = 0f;
             }
@@ -265,7 +271,6 @@ public class CarController : MonoBehaviour
             }
         }
     }
-
     void ApplyGravity()
     {
         if (!IsGrounded())
@@ -277,7 +282,13 @@ public class CarController : MonoBehaviour
     void HandleDrift()
     {
         Controls.CarControls.Drift.performed += ctx => {
-            GameManager.instance.AddPoints();
+            if (activedrift > 0)
+            {
+                return;
+            }
+            activedrift++;
+            print(activedrift);
+           
             foreach (var wheel in wheels)
             {
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
@@ -287,10 +298,15 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteValue = 0.75f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
+            if( carRb.linearVelocity.magnitude > 1.0f)  
+            {
+                Controls.CarControls.Move.performed += OnMovePerformed;
+            };
 
         };
 
         Controls.CarControls.Drift.canceled += ctx => {
+            if (activedrift > 0) activedrift--;
             GameManager.instance.StopAddingPoints();
             foreach (var wheel in wheels)
             {
@@ -301,9 +317,13 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteValue = 1f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
+            Controls.CarControls.Move.performed -= OnMovePerformed;
         };
     }
-
+    private void OnMovePerformed(InputAction.CallbackContext ctx)
+    {
+        GameManager.instance.AddPoints();
+    }
     void Animatewheels()
     {
         foreach(var wheel in wheels) 
@@ -343,6 +363,16 @@ public class CarController : MonoBehaviour
             else
             {
                 trailRenderer.emitting = false;
+            }
+        }
+    }
+    void test()
+    {
+        foreach (var wheel in wheels)
+        {
+            if (carRb.linearVelocity.magnitude > 10.0f)
+            {
+                print("fuck this");
             }
         }
     }
