@@ -64,6 +64,21 @@ public class musicControl : MonoBehaviour
                 cirno.volume = Mathf.MoveTowards(cirno.volume, 1.0f, 1.0f * Time.deltaTime);
             }
         }
+
+        if (GameManager.instance.isPaused == true)
+        {
+            foreach (GameObject musicTrack in musicList)
+            {
+                musicTrack.GetComponent<AudioSource>().Pause();
+            }
+        }
+        else if (GameManager.instance.isPaused == false && cirno.isPlaying == false)
+        {
+            foreach (GameObject musicTrack in musicList)
+            {
+                musicTrack.GetComponent<AudioSource>().Play();
+            }
+        }
     }
 
     void OnEnable()

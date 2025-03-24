@@ -113,10 +113,10 @@ public class GameManager : MonoBehaviour
             Debug.Log("adding points...");
             StartCoroutine(IncrementScoreWithDelay());
         }
-        else
+        /* else
         {
             Debug.LogWarning("YOU SHOULD KILL YOURSELF... NOW!");
-        }
+        } */
     }
 
     private IEnumerator IncrementScoreWithDelay()

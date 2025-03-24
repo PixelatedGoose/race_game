@@ -288,9 +288,11 @@ public class CarController : MonoBehaviour
             }
             activedrift++;
             print(activedrift);
-           
+
             foreach (var wheel in wheels)
             {
+                if (wheel.wheelCollider == null) continue; // Null check to avoid accessing destroyed WheelCollider
+
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
                 sidewaysFriction.extremumSlip = 1.5f;
                 sidewaysFriction.asymptoteSlip = 2.0f;
@@ -298,18 +300,20 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteValue = 0.75f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
-            if( carRb.linearVelocity.magnitude > 1.0f)  
+            if (carRb.linearVelocity.magnitude > 1.0f)
             {
                 Controls.CarControls.Move.performed += OnMovePerformed;
-            };
-
+            }
         };
 
         Controls.CarControls.Drift.canceled += ctx => {
             if (activedrift > 0) activedrift--;
             GameManager.instance.StopAddingPoints();
+
             foreach (var wheel in wheels)
             {
+                if (wheel.wheelCollider == null) continue; // Null check to avoid accessing destroyed WheelCollider
+
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
                 sidewaysFriction.extremumSlip = 0.2f;
                 sidewaysFriction.asymptoteSlip = 0.5f;
@@ -320,6 +324,7 @@ public class CarController : MonoBehaviour
             Controls.CarControls.Move.performed -= OnMovePerformed;
         };
     }
+    
     private void OnMovePerformed(InputAction.CallbackContext ctx)
     {
         GameManager.instance.AddPoints();
