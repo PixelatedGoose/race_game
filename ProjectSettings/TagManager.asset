@@ -8,6 +8,9 @@ TagManager:
   - checkpointTag
   - thisisacar
   - thisisasound
+  - soundFX
+  - soundFXonClick
+  - soundFXbutton
   layers:
   - Default
   - TransparentFX

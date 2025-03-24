@@ -72,6 +72,7 @@ void Awake()
         {
             obj.SetActive(false);
         }
+        GameManager.instance.isPaused = false;
         Time.timeScale = 1;
     }
 
