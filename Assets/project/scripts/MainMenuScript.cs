@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] optionScript OptionScript;
     public GameObject fullMenu;
-    public GameObject mapChangeButton;
+    public Toggle mapChangeButton;
 
     private void Awake()
     {
@@ -26,20 +26,30 @@ public class MainMenu : MonoBehaviour
 
         // var optionSlider = GameObject.Find("pixel").GetComponent<UnityEngine.UI.Slider>();
         // optionSlider.value = OptionScript.pixelCount.GetFloat("_pixelcount");
+
+        mapChangeButton = GameObject.Find("setMapVariant").GetComponent<Toggle>();
     }
 
     private void Start()
     {
-        GameManager.instance.chosenMap = 1;
         LeanTween.moveLocalY(fullMenu, 0.0f, 2.2f).setEase(LeanTweenType.easeOutBounce);
+
+        if (GameManager.instance.chosenMap == 1)
+        {
+            mapChangeButton.isOn = false;
+        }
+        else if (GameManager.instance.chosenMap == 2)
+        {
+            mapChangeButton.isOn = true;
+        }
     }
 
-    public void ChangeMap(Toggle toggle)
+    public void mapSelectedChange()
     {
-        if (toggle != null)
-        {
-            GameManager.instance.chosenMap = toggle.isOn ? 2 : 1; //false = 1, true = 2
-        }
+        Debug.Log("YOU INSIGNIFICANT FUCK!");
+        GameManager.instance.chosenMap = mapChangeButton.isOn ? 2 : 1; //false = 1, true = 2
+        PlayerPrefs.SetInt("chosenMap", GameManager.instance.chosenMap);
+        PlayerPrefs.Save();
     }
 
     public void Playgame()

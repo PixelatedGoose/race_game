@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class additionalCarController : MonoBehaviour
 {
-    public GameObject speedMeter;
     public Rigidbody car;
 
     private float[] car_positionrotation = new float[6];
