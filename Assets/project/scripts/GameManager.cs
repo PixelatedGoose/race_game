@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
 //HUOM. ÄLÄ POISTA KÄYTÖSTÄ MUITA AUTOJA HIERARKIASSA
 
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     private bool isAddingPoints = false;
     
     public TextMeshProUGUI Score;
+    public float scoreamount = 0;
 
     [Header("menut")]
     public bool isPaused = false;
@@ -132,5 +134,10 @@ public class GameManager : MonoBehaviour
     public void StopAddingPoints()
     {
         isAddingPoints = false;
+    }
+
+    public void UpdateScoreAmount()
+    {
+        scoreamount = score;
     }
 }
