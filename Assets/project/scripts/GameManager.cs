@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     [Header("score systeemi")]
     private int score;
+    private int savedScore;
 
     public float scoreAddWT = 0.01f; //WT = wait time
 
@@ -101,6 +102,8 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+        savedScore = PlayerPrefs.GetInt("Score", 0);
+        Debug.Log("retrieved score" + score);
     }
 
 
@@ -113,11 +116,16 @@ public class GameManager : MonoBehaviour
             Debug.Log("adding points...");
             StartCoroutine(IncrementScoreWithDelay());
         }
-        /* else
-        {
-            Debug.LogWarning("YOU SHOULD KILL YOURSELF... NOW!");
-        } */
     }
+
+    public void OnScoreChanged()
+    {
+        PlayerPrefs.SetInt("Score", score);
+        PlayerPrefs.Save();
+        Debug.Log("Score saved: " + score);
+    }
+
+
 
     private IEnumerator IncrementScoreWithDelay()
     {
@@ -127,7 +135,8 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(scoreAddWT);   
             score += 1;   
-            Score.text = "Score: " + score.ToString();               
+            Score.text = "Score: " + score.ToString();
+            OnScoreChanged();               
         }
     }
 

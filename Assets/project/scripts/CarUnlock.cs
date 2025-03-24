@@ -1,9 +1,8 @@
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class CarUnlock : MonoBehaviour
 {
     public List<GameObject> carsl;
     public Dictionary<GameObject, int> carPointRequirements;
@@ -12,38 +11,72 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     void Start()
     {
-        print("your scorepoints: " + GameManager.instance.scoreamount);
-        carsl = new List<GameObject>
-        {
-            GameObject.Find("REALCAR_x"),
-            GameObject.Find("REALCAR"),
-            GameObject.Find("REALCAR_y")
-        };
+        // Initialize cars list
+        carsl = new List<GameObject>();
+        
+        // Find cars and validate they exist
+        GameObject car1 = GameObject.Find("REALCAR_x");
+        GameObject car2 = GameObject.Find("REALCAR");
+        GameObject car3 = GameObject.Find("REALCAR_y");
 
-        carPointRequirements = new Dictionary<GameObject, int>
+        if (car1 != null && car2 != null && car3 != null)
         {
-            { carsl[0], 10 }, 
-            { carsl[1], 20 }, 
-            { carsl[2], 30000 }  
-        };
+            carsl.Add(car1);
+            carsl.Add(car2);
+            carsl.Add(car3);
+            
+            // Initialize requirements only if cars are found
+            carPointRequirements = new Dictionary<GameObject, int>
+            {
+                { carsl[0], 10 },
+                { carsl[1], 20 },
+                { carsl[2], 30000 }
+            };
+
+            // Initial unlock check
+            UnlockCar();
+        }
+        else
+        {
+            Debug.LogError("One or more cars not found in the scene!");
+        }
+
+        // Disable the button
+        if (button != null)
+        {
+            button.interactable = false;
+        }
     }
 
-    public void unlockcar()
+    public void UnlockCar()
     {
-        Neededpoints = Mathf.FloorToInt(GameManager.instance.scoreamount);
+        if (GameManager.instance != null)
         {
+            Neededpoints = Mathf.FloorToInt(GameManager.instance.scoreamount);
+            bool anyCarUnlocked = false;
+
             foreach (var car in carsl)
             {
                 if (Neededpoints >= carPointRequirements[car])
                 {
                     car.SetActive(true);
+                    anyCarUnlocked = true;
                 }
                 else
                 {
                     car.SetActive(false);
                 }
             }
-            button.interactable = false;
+
+            // Ensure the button remains disabled
+            if (button != null)
+            {
+                button.interactable = false;
+            }
+        }
+        else
+        {
+            Debug.LogError("GameManager instance not found!");
         }
     }
 }

@@ -291,7 +291,7 @@ public class CarController : MonoBehaviour
 
             foreach (var wheel in wheels)
             {
-                if (wheel.wheelCollider == null) continue; // Null check to avoid accessing destroyed WheelCollider
+                if (wheel.wheelCollider == null) continue;
 
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
                 sidewaysFriction.extremumSlip = 1.5f;
@@ -312,7 +312,7 @@ public class CarController : MonoBehaviour
 
             foreach (var wheel in wheels)
             {
-                if (wheel.wheelCollider == null) continue; // Null check to avoid accessing destroyed WheelCollider
+                if (wheel.wheelCollider == null) continue;
 
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
                 sidewaysFriction.extremumSlip = 0.2f;
@@ -324,6 +324,8 @@ public class CarController : MonoBehaviour
             Controls.CarControls.Move.performed -= OnMovePerformed;
         };
     }
+
+    
     
     private void OnMovePerformed(InputAction.CallbackContext ctx)
     {
