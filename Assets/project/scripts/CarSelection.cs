@@ -13,16 +13,6 @@ public class CarSelection : MonoBehaviour
 
     void Awake()
     {
-        if (GameManager.instance == null)
-        {
-            Debug.LogError("GameManager.instance is null");
-        }
-        else
-        {
-            Debug.Log("GameManager.instance is not null");
-            Debug.Log("Chosen Map: " + GameManager.instance.chosenMap);
-        }
-
         cars = new GameObject[] 
         { 
             GameObject.Find("REALCAR_x"), 
@@ -33,6 +23,16 @@ public class CarSelection : MonoBehaviour
 
     void Start()
     {
+        if (GameManager.instance == null)
+        {
+            Debug.LogError("GameManager.instance is null");
+        }
+        else
+        {
+            Debug.Log("GameManager.instance is not null");
+            Debug.Log("Chosen Map: " + GameManager.instance.chosenMap);
+        }
+        
         index = PlayerPrefs.GetInt("CarIndex", 0);
         Debug.Log("Loaded CarIndex: " + index);
 
@@ -92,14 +92,8 @@ public class CarSelection : MonoBehaviour
         }
         else
         {
-            Debug.Log("Loading scene: " + GameManager.instance.chosenMap);
-            SceneManager.LoadSceneAsync(GameManager.instance.chosenMap);
+            Debug.Log("Loading scene: " + PlayerPrefs.GetInt("chosenMap", 1));
+            SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap", 1));
         }
     }
 }
-
-
-
-
-
-

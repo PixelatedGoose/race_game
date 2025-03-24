@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     [Header("car selection")]
     public GameObject currentCar;
-    public GameObject[] carListGM;
+    public GameObject[] cars;
     public int carIndex;
 
     [Header("scene asetukset")]
@@ -36,7 +36,15 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        carListGM = new GameObject[] 
+        if (instance == null)
+        {
+            Debug.Log("Pasia, olet tehnyt sen!");
+            instance = this;
+            // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
+        }
+
+        //etsi autot järjestyksessä (pitäs olla aika ilmiselvää)
+        cars = new GameObject[] 
         { 
             GameObject.Find("REALCAR_x"), 
             GameObject.Find("REALCAR"), 
@@ -44,22 +52,37 @@ public class GameManager : MonoBehaviour
         };
 
         carIndex = PlayerPrefs.GetInt("CarIndex");
-        currentCar = carIndex >= 0 && carIndex < carListGM.Length ? carListGM[carIndex] : carListGM[0];
+        currentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
+        chosenMap = PlayerPrefs.GetInt("chosenMap");
 
         sceneSelected = SceneManager.GetActiveScene().name;
 
-        if (instance == null)
+        if (sceneSelected == "test_mountain" || sceneSelected == "test_mountain_night")
         {
-            instance = this;
-            // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
+            foreach (GameObject car in cars)
+            {
+                car.SetActive(false);
+            }
         }
     }
     
     void Start()
     {   
-        if (sceneSelected == "test_mountain")
+        if (sceneSelected == "test_mountain" || sceneSelected == "test_mountain_night")
         {
-            foreach (GameObject car in carListGM)
+            Debug.Log("in HELL");
+
+            if (carIndex >= 0 && carIndex <= cars.Length)
+            {
+                cars[carIndex].SetActive(true);
+                Debug.Log("Loaded CarIndex: " + carIndex);
+            }
+            else
+            {
+                Debug.LogError("Car index out of range: " + carIndex);
+            }
+
+            foreach (GameObject car in cars)
             {
                 if (car.activeInHierarchy)
                 {
@@ -76,9 +99,6 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-
-        /* Debug.Log("after defining:" + PlayerPrefs.GetInt("CarIndex")); //debug
-        Debug.Log("after defining CURRENTCAR IS:" + currentCar); //debug */
     }
 
 
@@ -93,7 +113,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //Debug.LogWarning("YOU SHOULD KILL YOURSELF... NOW!");
+            Debug.LogWarning("YOU SHOULD KILL YOURSELF... NOW!");
         }
     }
 
@@ -112,13 +132,5 @@ public class GameManager : MonoBehaviour
     public void StopAddingPoints()
     {
         isAddingPoints = false;
-    }
-
-    public void ChangeMap(Toggle toggle)
-    {
-        if (toggle != null)
-        {
-            chosenMap = toggle.isOn ? 2 : 1; //false = 1, true = 2
-        }
     }
 }
