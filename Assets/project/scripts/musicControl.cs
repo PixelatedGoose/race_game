@@ -7,27 +7,6 @@ public class musicControl : MonoBehaviour
     public AudioSource cirno;
     public AudioSource cirnodrift;
 
-    //drifting control setup
-    void Awake()
-    {
-        Controls = new CarInputActions();
-        Controls.Enable();
-    }
-
-    CarInputActions Controls;
-
-    /* private void Onable()
-    {
-        Controls.Enable();
-    }
-
-    private void Disable()
-    {
-        Controls.Disable();
-    } */
-
-
-
     //find the cirnos
     void Start()
     {
@@ -42,17 +21,13 @@ public class musicControl : MonoBehaviour
         }
     }
 
-
-
-    private bool isDrifting = false;
-
     void Update()
     {
-        if (isDrifting)
+        if (GameManager.instance.isAddingPoints)
         {
-            if (cirnodrift.volume <= 1.0f)
+            if (cirnodrift.volume <= 0.5f)
             {
-                cirnodrift.volume = Mathf.MoveTowards(cirnodrift.volume, 1.0f, 1.0f * Time.deltaTime);
+                cirnodrift.volume = Mathf.MoveTowards(cirnodrift.volume, 0.6f, 1.0f * Time.deltaTime);
                 cirno.volume = Mathf.MoveTowards(cirno.volume, 0.0f, 1.0f * Time.deltaTime);
             }
         }
@@ -61,7 +36,7 @@ public class musicControl : MonoBehaviour
             if (cirnodrift.volume > 0.0f)
             {
                 cirnodrift.volume = Mathf.MoveTowards(cirnodrift.volume, 0.0f, 1.0f * Time.deltaTime);
-                cirno.volume = Mathf.MoveTowards(cirno.volume, 1.0f, 1.0f * Time.deltaTime);
+                cirno.volume = Mathf.MoveTowards(cirno.volume, 0.5f, 1.0f * Time.deltaTime);
             }
         }
 
@@ -76,30 +51,8 @@ public class musicControl : MonoBehaviour
         {
             foreach (GameObject musicTrack in musicList)
             {
-                musicTrack.GetComponent<AudioSource>().Play();
+                musicTrack.GetComponent<AudioSource>().UnPause();
             }
         }
-    }
-
-    void OnEnable()
-    {
-        Controls.CarControls.Drift.started += OnDriftStarted;
-        Controls.CarControls.Drift.canceled += OnDriftCanceled;
-    }
-
-    void OnDisable()
-    {
-        Controls.CarControls.Drift.started -= OnDriftStarted;
-        Controls.CarControls.Drift.canceled -= OnDriftCanceled;
-    }
-
-    private void OnDriftStarted(InputAction.CallbackContext context)
-    {
-        isDrifting = true;
-    }
-
-    private void OnDriftCanceled(InputAction.CallbackContext context)
-    {
-        isDrifting = false;
     }
 }

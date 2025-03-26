@@ -35,6 +35,7 @@ void Awake()
     {
         if (Controls.CarControls.pausemenu.triggered)
         {
+            LeanTween.cancel(pauseMenuObjects[0]);
             if (pauseMenuObjects != null && pauseMenuObjects.Length > 0)
             {
                 bool isActive = pauseMenuObjects[0].activeSelf;
@@ -42,21 +43,20 @@ void Awake()
                 {
                     obj.SetActive(!isActive);
                 }
-                LeanTween.cancel(pauseMenuObjects[0]);
-                LeanTween.moveLocalY(pauseMenuObjects[0], 460.0f, 0.0f).setEaseInOutCirc().setIgnoreTimeScale(true);
-                LeanTween.moveLocalY(pauseMenuObjects[0], 0.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
 
                 if (isActive)
                 {
                     Time.timeScale = 1;
                     GameManager.instance.isPaused = false;
                     Debug.Log(GameManager.instance.isPaused);
-                    LeanTween.moveLocalY(pauseMenuObjects[0], 460.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
                 }
                 else
                 {
                     GameManager.instance.isPaused = true;
+                    pauseMenuObjects[0].transform.localPosition = new Vector3(0.0f, 470.0f, 0.0f);
                     Time.timeScale = 0;
+
+                    LeanTween.moveLocalY(pauseMenuObjects[0], 0.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
                 }
             }
             else
