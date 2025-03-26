@@ -7,7 +7,7 @@ using UnityEngine.SocialPlatforms.Impl;
 
 //HUOM. ÄLÄ POISTA KÄYTÖSTÄ MUITA AUTOJA HIERARKIASSA
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance;
 
@@ -43,7 +43,11 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Pasia, olet tehnyt sen!");
             instance = this;
-            // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
+             DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
+        }
+        else
+        {
+            Destroy(gameObject);
         }
 
         //etsi autot järjestyksessä (pitäs olla aika ilmiselvää)
@@ -68,7 +72,27 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
+
+
+    public void LoadData(GameData data)
+    {
+        if (data != null)
+        {
+            score = data.scored;
+            Debug.Log("Loaded score: " + score);
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        if (data != null)
+        {
+            data.scored += this.score;
+            Debug.Log("Saved score: " + data.scored);
+            Score.text = "Record: " + score.ToString("F2");
+        }
+    }
+
     void Start()
     {   
         if (sceneSelected == "test_mountain" || sceneSelected == "test_mountain_night")
@@ -102,8 +126,6 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        savedScore = PlayerPrefs.GetInt("Score", 0);
-        Debug.Log("retrieved score" + score);
     }
 
 
@@ -117,16 +139,6 @@ public class GameManager : MonoBehaviour
             StartCoroutine(IncrementScoreWithDelay());
         }
     }
-
-    public void OnScoreChanged()
-    {
-        PlayerPrefs.SetInt("Score", score);
-        PlayerPrefs.Save();
-        Debug.Log("Score saved: " + score);
-    }
-
-
-
     private IEnumerator IncrementScoreWithDelay()
     {
         isAddingPoints = true;   
@@ -135,18 +147,12 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(scoreAddWT);   
             score += 1;   
-            Score.text = "Score: " + score.ToString();
-            OnScoreChanged();               
+            Score.text = "Score: " + score.ToString();               
         }
     }
 
     public void StopAddingPoints()
     {
         isAddingPoints = false;
-    }
-
-    public void UpdateScoreAmount()
-    {
-        scoreamount = score;
     }
 }

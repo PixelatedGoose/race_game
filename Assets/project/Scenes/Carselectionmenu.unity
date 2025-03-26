@@ -738,7 +738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carsl: []
-  Neededpoints: 2000
+  scoreamount: 0
   button: {fileID: 148388788}
 --- !u!1 &1131961206
 GameObject:
@@ -149873,6 +149873,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1650282642}
+  - component: {fileID: 1650282643}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -149896,6 +149897,19 @@ Transform:
   - {fileID: 1374702198}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1650282643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650282641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd2c1aa66f217e4793e6d6357757e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filename: data.game
 --- !u!1 &1694553038
 GameObject:
   m_ObjectHideFlags: 0

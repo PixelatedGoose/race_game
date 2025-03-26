@@ -5,78 +5,95 @@ using System.Collections.Generic;
 public class CarUnlock : MonoBehaviour
 {
     public List<GameObject> carsl;
-    public Dictionary<GameObject, int> carPointRequirements;
-    public int Neededpoints;
+    private Dictionary<GameObject, int> carPointRequirements;
+    public int scoreamount = 10;
     public Button button;
+    private HashSet<GameObject> unlockedCars = new HashSet<GameObject>();
+
+    void Awake()
+    {
+        carsl = new List<GameObject>
+        {
+            GameObject.Find("REALCAR_x"),
+            GameObject.Find("REALCAR"),
+            GameObject.Find("REALCAR_y")
+        };
+    }
+
+    public void LoadData(GameData data)
+    {
+        if (data != null)
+        {
+            Debug.Log($"Loading data: scored = {data.scored}");
+            this.scoreamount = data.scored; // Update scoreamount with the loaded data
+        }
+        else
+        {
+            Debug.LogError("GameData is null!");
+        }
+    }
 
     void Start()
     {
-        // Initialize cars list
-        carsl = new List<GameObject>();
-        
-        // Find cars and validate they exist
-        GameObject car1 = GameObject.Find("REALCAR_x");
-        GameObject car2 = GameObject.Find("REALCAR");
-        GameObject car3 = GameObject.Find("REALCAR_y");
-
-        if (car1 != null && car2 != null && car3 != null)
+        if (carsl.Count == 3 && carsl[0] != null && carsl[1] != null && carsl[2] != null)
         {
-            carsl.Add(car1);
-            carsl.Add(car2);
-            carsl.Add(car3);
-            
-            // Initialize requirements only if cars are found
             carPointRequirements = new Dictionary<GameObject, int>
             {
-                { carsl[0], 10 },
-                { carsl[1], 20 },
+                { carsl[0], 0 },
+                { carsl[1], 98734 },
                 { carsl[2], 30000 }
             };
-
-            // Initial unlock check
-            UnlockCar();
         }
         else
         {
             Debug.LogError("One or more cars not found in the scene!");
         }
-
-        // Disable the button
-        if (button != null)
-        {
-            button.interactable = false;
-        }
     }
 
+    void Update()
+    {
+        UnlockCar();
+        unlockedcars();
+    }
     public void UnlockCar()
     {
-        if (GameManager.instance != null)
+        if (GameManager.instance == null)
         {
-            Neededpoints = Mathf.FloorToInt(GameManager.instance.scoreamount);
-            bool anyCarUnlocked = false;
-
-            foreach (var car in carsl)
+            Debug.LogError("GameManager instance is null!");
+            return;
+        }
+        Debug.Log($"Current scoreamount: {scoreamount}");
+        foreach (var car in carsl)
+        {
+            if (car.activeInHierarchy)
             {
-                if (Neededpoints >= carPointRequirements[car])
+                if (!unlockedCars.Contains(car) && scoreamount >= carPointRequirements[car])
                 {
+                    button.interactable = true;
+                    unlockedCars.Add(car);
+                    Debug.Log($"Car {car.name} unlocked!");
                     car.SetActive(true);
-                    anyCarUnlocked = true;
                 }
-                else
+                else if (scoreamount < carPointRequirements[car])
                 {
-                    car.SetActive(false);
+                    button.interactable = false;
+                    Debug.Log($"Not enough points for {car.name}. You need {carPointRequirements[car] - scoreamount} more points.");
                 }
-            }
-
-            // Ensure the button remains disabled
-            if (button != null)
-            {
-                button.interactable = false;
             }
         }
-        else
+    }
+    
+    public void unlockedcars()
+    {
+        foreach (var car in carsl) 
         {
-            Debug.LogError("GameManager instance not found!");
+            if (car.activeInHierarchy) 
+            {
+                if (unlockedCars.Contains(car))
+                {
+                    button.interactable = true;
+                }
+            }
         }
     }
 }
