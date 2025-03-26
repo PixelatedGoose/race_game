@@ -4,14 +4,11 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 
-
-
-
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
+    public GameObject winMenu; // Reference to the Win Menu
 
-
-void Awake()
+    void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
@@ -19,8 +16,6 @@ void Awake()
     }
 
     CarInputActions Controls;
-
-
 
     private void Onable()
     {
@@ -167,41 +162,44 @@ void Awake()
     void Handlestart()
     {
         if (startTimer == false)
-            {
-                StartNewLap();
-            }
+        {
+            StartNewLap();
+        }
 
-            bool allCheckpointsPassed = true;
-            for (int i = 0; i < checkpointStates.Length; i++)
+        bool allCheckpointsPassed = true;
+        for (int i = 0; i < checkpointStates.Length; i++)
+        {
+            if (!checkpointStates[i])
             {
-                if (!checkpointStates[i])
-                {
-                    allCheckpointsPassed = false;
-                    break;
-                }
+                allCheckpointsPassed = false;
+                break;
             }
+        }
 
         if (allCheckpointsPassed)
         {
             currentLap++;
             Debug.Log("Current Lap: " + currentLap);
             LapCounter.text = "" + currentLap + "/" + totalLaps;
-            if (besttime == 0 || laptime < besttime)
-            {
-                besttime = laptime;
-            }
-            Btime.text = "Record: " + besttime.ToString("F2");
-                
+
             if (currentLap > totalLaps)
             {
                 raceFinished = true;
                 startTimer = false;
                 Debug.Log("Race Finished!");
+
+                // Update best time after the race is finished
+                if (besttime == 0 || laptime < besttime)
+                {
+                    besttime = laptime;
+                }
+                Btime.text = "Record: " + besttime.ToString("F2");
+
                 ResetRace();
             }
             else
             {
-                laptime = 0;
+                // Reset checkpoints for the next lap
                 for (int i = 0; i < checkpointStates.Length; i++)
                 {
                     checkpointStates[i] = false;
@@ -219,7 +217,7 @@ void Awake()
             {
                 Debug.Log("Checkpoint " + (i + 1) + " reached");
                 checkpointStates[i] = true;
-                respawnPoint = checkpoints[i]; // Set respawn point to the current checkpoint
+                respawnPoint = checkpoints[i];
                 break;
             }
         }
@@ -247,16 +245,33 @@ void Awake()
     void ResetRace()
     {
         currentLap = 1;
-        laptime = 0;
+        laptime = 0; // Reset the timer here
         startTimer = false;
         raceFinished = false;
         respawnPoint = startFinishLine;
+
         for (int i = 0; i < checkpointStates.Length; i++)
         {
             checkpointStates[i] = false;
         }
+
         LapCounter.text = "" + currentLap + "/" + totalLaps;
         Debug.Log("Race Reset");
+
+        // Show the Win Menu
+        winMenu.SetActive(true);
+    }
+
+    public void RestartRace()
+    {
+        winMenu.SetActive(false); // Hide the Win Menu
+        InitializeRace(); // Reinitialize the race
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Quitting Game...");
+        Application.Quit(); // Quit the application
     }
 
     void test()
