@@ -306,8 +306,16 @@ public class CarController : MonoBehaviour
             }
         };
 
-        Controls.CarControls.Drift.canceled += ctx => {
-            if (activedrift > 0) activedrift--;
+         Controls.CarControls.Drift.canceled += ctx => {
+            if (activedrift > 0)
+            {
+                activedrift--;
+                if (carRb.linearVelocity.magnitude * 3.6 < 20.0f)
+                {
+                    GameManager.instance.StopAddingPoints();
+
+                }
+            }
             GameManager.instance.StopAddingPoints();
 
             foreach (var wheel in wheels)
