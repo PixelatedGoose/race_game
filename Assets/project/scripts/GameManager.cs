@@ -13,11 +13,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [Header("score systeemi")]
     private int score;
-    private int savedScore;
 
     public float scoreAddWT = 0.01f; //WT = wait time
 
-    private bool isAddingPoints = false;
+    public bool isAddingPoints = false;
     
     public TextMeshProUGUI Score;
     public float scoreamount = 0;
@@ -36,14 +35,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [Header("scene asetukset")]
     public string sceneSelected;
+    [Header("auto")]
+    public float carSpeed;
 
-    void Awake()
+    void OnEnable()
     {
         if (instance == null)
         {
             Debug.Log("Pasia, olet tehnyt sen!");
             instance = this;
-             DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
+            // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
         }
         else
         {
@@ -70,33 +71,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             {
                 car.SetActive(false);
             }
-        }
-    }
 
-
-    public void LoadData(GameData data)
-    {
-        if (data != null)
-        {
-            score = data.scored;
-            Debug.Log("Loaded score: " + score);
-        }
-    }
-
-    public void SaveData(ref GameData data)
-    {
-        if (data != null)
-        {
-            data.scored += this.score;
-            Debug.Log("Saved score: " + data.scored);
-            Score.text = "Record: " + score.ToString("F2");
-        }
-    }
-
-    void Start()
-    {   
-        if (sceneSelected == "test_mountain" || sceneSelected == "test_mountain_night")
-        {
             Debug.Log("in HELL");
 
             if (carIndex >= 0 && carIndex <= cars.Length)
@@ -128,6 +103,23 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    public void LoadData(GameData data)
+    {
+        if (data != null)
+        {
+            Debug.Log("Loaded score: " + score);
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        if (data != null)
+        {
+            data.scored += this.score;
+            Debug.Log("Saved score: " + data.scored);
+        }       
+    }
+
 
 
     public void AddPoints()
@@ -139,6 +131,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             StartCoroutine(IncrementScoreWithDelay());
         }
     }
+    
     private IEnumerator IncrementScoreWithDelay()
     {
         isAddingPoints = true;   

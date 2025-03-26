@@ -7,7 +7,6 @@ public class soundFXControl : MonoBehaviour
 {
     CarInputActions Controls;
     private GameObject[] soundList;
-    private GameObject[] soundClickListPRE;
     public GameObject[] soundClickList;
     public GameObject[] soundButtonsList;
     public GameObject[] soundSlidersList;
@@ -23,9 +22,12 @@ public class soundFXControl : MonoBehaviour
     {
         //eti äänet tässä
         soundList = GameObject.FindGameObjectsWithTag("soundFX");
+        soundList = soundList.OrderBy(a => a.name).ToArray();
 
-        soundClickListPRE = GameObject.FindGameObjectsWithTag("soundFXonClick"); //koska array on vitun paska
-        soundClickList = soundClickListPRE.OrderBy(a => a.name).ToArray();
+        soundClickList = GameObject.FindGameObjectsWithTag("soundFXonClick"); //koska array on vitun paska
+        soundClickList = soundClickList.OrderBy(a => a.name).ToArray();
+
+        soundList[1].GetComponent<AudioSource>().Play();
 
         //hell
         //REFACTOROIN TÄN MYÖHEMMIN REGARDS LA CREATURA
@@ -89,13 +91,53 @@ public class soundFXControl : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.instance.isPaused == false)
+        if (Controls.CarControls.pausemenu.triggered)
         {
-            soundList[0].GetComponent<AudioSource>().volume = 0.0f;
+            if (GameManager.instance.isPaused == false)
+            {
+                soundList[2].GetComponent<AudioSource>().volume = 0.0f;
+                foreach (GameObject sound in soundList)
+                {
+                    if (sound.GetComponent<AudioSource>().name != "pausedTrack")
+                    {
+                        sound.GetComponent<AudioSource>().UnPause();
+                    }
+                }
+            }
+            else if (GameManager.instance.isPaused == true)
+            {
+                soundList[2].GetComponent<AudioSource>().volume = 1.0f;
+                foreach (GameObject sound in soundList)
+                {
+                    if (sound.GetComponent<AudioSource>().name != "pausedTrack")
+                    {
+                        sound.GetComponent<AudioSource>().Pause();
+                    }
+                }
+            }
         }
-        else if (GameManager.instance.isPaused == true)
+    }
+
+    void FixedUpdate()
+    {
+        if (Mathf.Floor(GameManager.instance.carSpeed) == 0)
         {
-            soundList[0].GetComponent<AudioSource>().volume = 1.0f;
+            Debug.Log("HJTRSGOIERGERNFEWAKJFNWAGIUERAGESRJGÖOERBFDJHESERWBJHGFDRGVERGTERNJG");
+            soundList[1].GetComponent<AudioSource>().volume = 0.0f;
         }
+        
+        if (GameManager.instance.carSpeed > 0) //kesken
+        {
+            soundList[1].GetComponent<AudioSource>().pitch = GameManager.instance.carSpeed / 40;
+            soundList[1].GetComponent<AudioSource>().volume = GameManager.instance.carSpeed / 80;
+        }
+    }
+
+    public static float Floor(float aValue, int aDigits) //aValue = pyöristettävä, aDigits = desimaalit - jotta voi pyöristää tasan 0.7:ään
+    {
+        float m = Mathf.Pow(10,aDigits);
+        aValue *= m;
+        aValue = Mathf.Floor(aValue);
+        return aValue / m;
     }
 }

@@ -78,6 +78,7 @@ public class CarController : MonoBehaviour
 
     public float GetSpeed()
     {
+        GameManager.instance.carSpeed = carRb.linearVelocity.magnitude * 3.6f;
         return carRb.linearVelocity.magnitude * 3.6f;
     }
     public float GetMaxSpeed()
@@ -287,7 +288,7 @@ public class CarController : MonoBehaviour
                 return;
             }
             activedrift++;
-            print(activedrift);
+            //print(activedrift);
 
             foreach (var wheel in wheels)
             {
