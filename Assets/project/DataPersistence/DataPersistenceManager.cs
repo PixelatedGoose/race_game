@@ -7,7 +7,7 @@ public class DatapersistenceManager : MonoBehaviour
 
     [Header("File Storage Config")]
     [SerializeField] private string filename;
-
+    [SerializeField] private bool useEncryption;
 
     private GameData gameData;
 
@@ -30,7 +30,7 @@ public class DatapersistenceManager : MonoBehaviour
 
     private void Start()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, filename);
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, filename, useEncryption);
         this.dataPersistenceObjects =  FindAllDataPersistenceObjects();
         LoadGame();
     }
