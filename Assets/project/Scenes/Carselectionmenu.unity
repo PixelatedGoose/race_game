@@ -149584,6 +149584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreAddWT: 0.01
+  isAddingPoints: 0
   Score: {fileID: 0}
   scoreamount: 0
   isPaused: 0
@@ -149593,6 +149594,7 @@ MonoBehaviour:
   cars: []
   carIndex: 0
   sceneSelected: 
+  carSpeed: 0
 --- !u!1 &1459888038
 GameObject:
   m_ObjectHideFlags: 0
@@ -149910,6 +149912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filename: data.game
+  useEncryption: 1
 --- !u!1 &1694553038
 GameObject:
   m_ObjectHideFlags: 0
