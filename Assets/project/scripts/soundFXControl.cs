@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class soundFXControl : MonoBehaviour
 {
     CarInputActions Controls;
-    private GameObject[] soundList;
+    public GameObject[] soundList;
     public GameObject[] soundClickList;
     public GameObject[] soundButtonsList;
     public GameObject[] soundSlidersList;
