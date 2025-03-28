@@ -9,15 +9,15 @@ public class FileDataHandler
 {
     private string DataDirPath = "";
     private string DataFileName = "";
-    private bool useEncryption = false;
-    private readonly string encryptionCodeWord = "Apache-1!";
+    // private bool useEncryption = false;
+    // private readonly string encryptionCodeWord = "Apache-1!";
 
 
     public FileDataHandler(string DataDirPath, string DataFileName, bool useEncryption)
     {
         this.DataDirPath = DataDirPath;
         this.DataFileName = DataFileName;
-        this.useEncryption = useEncryption;
+        // this.useEncryption = useEncryption;
     }
 
     public GameData Load()
@@ -37,10 +37,10 @@ public class FileDataHandler
                     }
                 }
 
-                if (useEncryption)
-                {
-                    dataToLoad = EncryptDecrypt(dataToLoad);
-                }
+                // if (useEncryption)
+                // {
+                //     dataToLoad = EncryptDecrypt(dataToLoad);
+                // }
 
                 loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
 
@@ -64,10 +64,10 @@ public class FileDataHandler
 
             string dataToStore = JsonUtility.ToJson(data, true);
 
-            if (useEncryption)
-            {
-                dataToStore = EncryptDecrypt(dataToStore);
-            }
+            // if (useEncryption)
+            // {
+            //     dataToStore = EncryptDecrypt(dataToStore);
+            // }
 
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
             {
@@ -88,13 +88,13 @@ public class FileDataHandler
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    private string EncryptDecrypt(string data)
-    {
-        string modifiedData = "";
-        for (int i = 0; i < data.Length; i++)
-        {
-            modifiedData += (char) (data[i] ^ encryptionCodeWord[i % encryptionCodeWord.Length]); 
-        }
-        return modifiedData;
-    }
+    // private string EncryptDecrypt(string data)
+    // {
+    //     string modifiedData = "";
+    //     for (int i = 0; i < data.Length; i++)
+    //     {
+    //         modifiedData += (char) (data[i] ^ encryptionCodeWord[i % encryptionCodeWord.Length]); 
+    //     }
+    //     return modifiedData;
+    // }
 }

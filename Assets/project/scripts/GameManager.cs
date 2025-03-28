@@ -124,10 +124,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void AddPoints()
     {
-        Debug.Log("AddPoints executing");
         if (!isAddingPoints && currentCar.activeSelf && instance != null)
         {
-            Debug.Log("adding points...");
             StartCoroutine(IncrementScoreWithDelay());
         }
     }

@@ -47,6 +47,7 @@ public class CarController : MonoBehaviour
     public Rigidbody carRb;
     bool isTurboActive = false;
     private float activedrift = 0.0f;
+    public float turbemeter;
 
 
     void Awake()
@@ -81,6 +82,7 @@ public class CarController : MonoBehaviour
         GameManager.instance.carSpeed = carRb.linearVelocity.magnitude * 3.6f;
         return carRb.linearVelocity.magnitude * 3.6f;
     }
+
     public float GetMaxSpeed()
     {
          return maxspeed;
@@ -92,6 +94,7 @@ public class CarController : MonoBehaviour
         Animatewheels();
         WheelEffects();
     }
+
     void FixedUpdate()
     {
         Move();
@@ -103,7 +106,7 @@ public class CarController : MonoBehaviour
         OnGrass();
         ApplyGravity();
         TURBE();
-        test();
+        TURBEmeter();
     }
 
     void OnGrass()
@@ -196,7 +199,8 @@ public class CarController : MonoBehaviour
         float speed = carRb.linearVelocity.magnitude * 3.6f;
         turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f);
     }
-    void TURBE()
+
+    public void TURBE()
     {
         isTurboActive = Controls.CarControls.turbo.IsPressed();
     }
@@ -219,6 +223,7 @@ public class CarController : MonoBehaviour
             targetTorque *= grassSpeedMultiplier;
             maxspeed = Mathf.Lerp(maxspeed, 50.0f, Time.deltaTime);
         }
+
         else
         {
             maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? 150.0f : 100.0f, Time.deltaTime);
@@ -272,6 +277,7 @@ public class CarController : MonoBehaviour
             }
         }
     }
+
     void ApplyGravity()
     {
         if (!IsGrounded())
@@ -340,6 +346,7 @@ public class CarController : MonoBehaviour
     {
         GameManager.instance.AddPoints();
     }
+
     void Animatewheels()
     {
         foreach(var wheel in wheels) 
@@ -358,6 +365,9 @@ public class CarController : MonoBehaviour
 
     //bobbing effect
 
+    /// <summary>
+    /// does wheel effects
+    /// </summary>
     void WheelEffects()
     {
         foreach(var wheel in wheels)
@@ -382,14 +392,16 @@ public class CarController : MonoBehaviour
             }
         }
     }
-    void test()
+    void TURBEmeter()
     {
-        foreach (var wheel in wheels)
+        if(isTurboActive)
         {
-            if (carRb.linearVelocity.magnitude > 10.0f)
-            {
-                print("fuck this");
-            }
+            turbemeter -= 0.25f * Time.deltaTime;
         }
+        if (turbemeter == 0.0f)
+        {
+            isTurboActive = false;
+        }
+
     }
 }

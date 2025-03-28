@@ -11890,6 +11890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3aaffe1920b7294f86390a9398176ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundList: []
   soundClickList: []
   soundButtonsList:
   - {fileID: 1361322170}
@@ -12736,7 +12737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filename: data.game
-  useEncryption: 1
+  useEncryption: 0
 --- !u!114 &1576113502
 MonoBehaviour:
   m_ObjectHideFlags: 0
