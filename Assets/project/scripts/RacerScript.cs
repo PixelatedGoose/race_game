@@ -58,7 +58,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         if (data != null)
         {
-            Debug.Log("Loaded Best Time: " + data.besttime);
             this.besttime = data.besttime;
             Btime.text = "Record: " + besttime.ToString("F2");
         }

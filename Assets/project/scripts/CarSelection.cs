@@ -97,5 +97,8 @@ public class CarSelection : MonoBehaviour
         }
     }
 
-    
+    public void back()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
 }
