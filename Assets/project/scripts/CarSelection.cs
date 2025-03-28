@@ -69,7 +69,6 @@ public class CarSelection : MonoBehaviour
             cars[index].SetActive(true);
             PlayerPrefs.SetInt("CarIndex", index);
             PlayerPrefs.Save();
-            Debug.Log("Saved CarIndex: " + index);
         }
     }
 
@@ -82,7 +81,6 @@ public class CarSelection : MonoBehaviour
             cars[index].SetActive(true);
             PlayerPrefs.SetInt("CarIndex", index);
             PlayerPrefs.Save();
-            Debug.Log("Saved CarIndex: " + index);
         }
     }
 

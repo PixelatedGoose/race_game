@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         if (instance == null)
         {
-            Debug.Log("Pasia, olet tehnyt sen!");
+            //Debug.Log("Pasia, olet tehnyt sen!");
             instance = this;
             // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
         }
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         if (data != null)
         {
-            Debug.Log("Loaded score: " + score);
+            return;
         }
     }
 
@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         if (data != null)
         {
             data.scored += this.score;
-            Debug.Log("Saved score: " + data.scored);
         }       
     }
 

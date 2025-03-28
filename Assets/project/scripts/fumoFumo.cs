@@ -43,10 +43,10 @@ public class fumoFumo : MonoBehaviour
         {
             fumoImage.GetComponent<RawImage>().texture = texture1;
         }
-        else
-        {
-            Debug.LogError("ei löytyny kuvaa tai polkua siihe");
-        }
+        // else
+        // {
+        //     Debug.LogError("ei löytyny kuvaa tai polkua siihe");
+        // }
     }
 
     void LateUpdate()

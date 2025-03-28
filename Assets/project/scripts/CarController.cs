@@ -317,7 +317,7 @@ public class CarController : MonoBehaviour
             if (activedrift > 0)
             {
                 activedrift--;
-                if (carRb.linearVelocity.magnitude * 3.6 < 20.0f)
+                if (GameManager.instance.carSpeed < 20)
                 {
                     GameManager.instance.StopAddingPoints();
 
@@ -392,16 +392,17 @@ public class CarController : MonoBehaviour
             }
         }
     }
+    
     void TURBEmeter()
     {
-        if(isTurboActive)
+        while (isTurboActive && turbemeter > 0)
         {
             turbemeter -= 0.25f * Time.deltaTime;
+            if (turbemeter <= 0.0f)
+            {
+                turbemeter = 0.0f;
+                isTurboActive = false;
+            }
         }
-        if (turbemeter == 0.0f)
-        {
-            isTurboActive = false;
-        }
-
     }
 }
