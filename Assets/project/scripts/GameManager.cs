@@ -72,12 +72,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 car.SetActive(false);
             }
 
-            Debug.Log("in HELL");
-
             if (carIndex >= 0 && carIndex <= cars.Length)
             {
                 cars[carIndex].SetActive(true);
-                Debug.Log("Loaded CarIndex: " + carIndex);
             }
             else
             {
@@ -95,7 +92,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 }
                 else
                 {
-                    Debug.Log("Thy end is now! Die! Crush! Prepare thyself! Judgement!");
                     Destroy(car);
                     //tää TAPPAA kaikki ne muut että se ei vittuile se unity lol
                 }
