@@ -13,6 +13,7 @@ public class optionScript : MonoBehaviour
         InitializeSliderValue("pixel");
         pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
         pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * 64).ToString();
+        //muuttujiihin arvot getcomponenteista
     }
 
     public void setToggleOptionValue(string optionObjectName)

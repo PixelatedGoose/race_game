@@ -122,7 +122,6 @@ public class soundFXControl : MonoBehaviour
     {
         if (Mathf.Floor(GameManager.instance.carSpeed) == 0)
         {
-            Debug.Log("HJTRSGOIERGERNFEWAKJFNWAGIUERAGESRJGÖOERBFDJHESERWBJHGFDRGVERGTERNJG");
             soundList[1].GetComponent<AudioSource>().volume = 0.0f;
         }
         

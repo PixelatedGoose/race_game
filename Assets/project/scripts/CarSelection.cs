@@ -16,6 +16,7 @@ public class CarSelection : MonoBehaviour
         cars = new GameObject[] 
         { 
             GameObject.Find("REALCAR_x"), 
+            
             GameObject.Find("REALCAR"), 
             GameObject.Find("REALCAR_y") 
         };
@@ -97,4 +98,6 @@ public class CarSelection : MonoBehaviour
             SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap", 1));
         }
     }
+
+    
 }

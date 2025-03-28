@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class CarUnlock : MonoBehaviour
+public class CarUnlock : MonoBehaviour, IDataPersistence
 {
     public List<GameObject> carsl;
     private Dictionary<GameObject, int> carPointRequirements;
-    public int scoreamount = 10;
+    public int scoreamount;
     public Button button;
     private HashSet<GameObject> unlockedCars = new HashSet<GameObject>();
 
@@ -24,13 +24,18 @@ public class CarUnlock : MonoBehaviour
     {
         if (data != null)
         {
+            this.scoreamount = data.scored; 
             Debug.Log($"Loading data: scored = {data.scored}");
-            this.scoreamount = data.scored; // Update scoreamount with the loaded data
         }
         else
         {
             Debug.LogError("GameData is null!");
         }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        return;        
     }
 
     void Start()
@@ -62,7 +67,6 @@ public class CarUnlock : MonoBehaviour
             Debug.LogError("GameManager instance is null!");
             return;
         }
-        Debug.Log($"Current scoreamount: {scoreamount}");
         foreach (var car in carsl)
         {
             if (car.activeInHierarchy)
@@ -71,18 +75,16 @@ public class CarUnlock : MonoBehaviour
                 {
                     button.interactable = true;
                     unlockedCars.Add(car);
-                    Debug.Log($"Car {car.name} unlocked!");
                     car.SetActive(true);
                 }
                 else if (scoreamount < carPointRequirements[car])
                 {
                     button.interactable = false;
-                    Debug.Log($"Not enough points for {car.name}. You need {carPointRequirements[car] - scoreamount} more points.");
                 }
             }
         }
     }
-    
+
     public void unlockedcars()
     {
         foreach (var car in carsl) 
