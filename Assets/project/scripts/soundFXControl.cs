@@ -131,12 +131,4 @@ public class soundFXControl : MonoBehaviour
             soundList[1].GetComponent<AudioSource>().volume = GameManager.instance.carSpeed / 80;
         }
     }
-
-    public static float Floor(float aValue, int aDigits) //aValue = pyöristettävä, aDigits = desimaalit - jotta voi pyöristää tasan 0.7:ään
-    {
-        float m = Mathf.Pow(10,aDigits);
-        aValue *= m;
-        aValue = Mathf.Floor(aValue);
-        return aValue / m;
-    }
 }

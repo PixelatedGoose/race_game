@@ -49,10 +49,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
                 { carsl[2], 30000 }
             };
         }
-        else
-        {
-            Debug.LogError("One or more cars not found in the scene!");
-        }
     }
 
     void Update()

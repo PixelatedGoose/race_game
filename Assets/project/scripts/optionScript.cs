@@ -30,7 +30,7 @@ public class optionScript : MonoBehaviour
         }
 
         PlayerPrefs.Save(); //tallennus
-        Debug.Log("muutettu: " + PlayerPrefs.GetInt(optionObjectName + "_value"));
+        //Debug.Log("muutettu: " + PlayerPrefs.GetInt(optionObjectName + "_value"));
         // Debug.Log("NAME" + optionObjectName);
         // optionObjectName on sama ku gameobjectin nimi hierarkiassa
         // tol voi tarkistaa et ootko laittanu sen oikein

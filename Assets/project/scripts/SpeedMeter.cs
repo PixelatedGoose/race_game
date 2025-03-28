@@ -14,7 +14,7 @@ public class SpeedMeter : MonoBehaviour
     private float speed;
 
     [Header("UI")] //kiitos leo's leikkimaa, very cool
-    public Text speedLabel;
+    public Text speedLabel;//Leo our favourite gremlin
     public RectTransform arrow;
 
     private void Awake()

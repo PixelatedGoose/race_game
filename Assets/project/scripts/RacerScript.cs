@@ -132,7 +132,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        Debug.Log("Reset");
     }
 
     void inactivity()
@@ -179,14 +178,13 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (allCheckpointsPassed)
         {
             currentLap++;
-            Debug.Log("Current Lap: " + currentLap);
             LapCounter.text = "" + currentLap + "/" + totalLaps;
 
             if (currentLap > totalLaps)
             {
                 raceFinished = true;
                 startTimer = false;
-                Debug.Log("Race Finished!");
+                
 
                 // Update best time after the race is finished
                 if (besttime == 0 || laptime < besttime)
@@ -215,7 +213,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             if (other.transform == checkpoints[i])
             {
-                Debug.Log("Checkpoint " + (i + 1) + " reached");
                 checkpointStates[i] = true;
                 respawnPoint = checkpoints[i];
                 break;
