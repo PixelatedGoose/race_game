@@ -63,4 +63,10 @@ public class optionScript : MonoBehaviour
     }
 }
 
-// TULEVAISUUDESSA EHKÄ SWITCH-CASE SYSTEEMI
+// --OPTIMISAATIO--
+// poista GameObject.Find rivit functioneista, siirrä starttiin
+// tee uudet option detectionit (jotta ei tarvitte tehä jokasta niinku 'if (optionObjectName == vitunpaska)...'
+
+// huomio että tää koodi on myös PERSEESTÄ ja suosittelen VITUN vahvasti, että teet sen switch case systeemin vaan yhelle funktiolle
+
+// vois pyöriä monen funktion avulla, mutta kaiken pitäs keskittyä yhteen funktioon, joka käyttää switch-case statementtia
