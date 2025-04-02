@@ -13,7 +13,6 @@ public class optionScript : MonoBehaviour
         InitializeSliderValue("pixel");
         pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
         pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * 64).ToString();
-        //muuttujiihin arvot getcomponenteista
     }
 
     public void setToggleOptionValue(string optionObjectName)
@@ -30,7 +29,7 @@ public class optionScript : MonoBehaviour
         }
 
         PlayerPrefs.Save(); //tallennus
-        //Debug.Log("muutettu: " + PlayerPrefs.GetInt(optionObjectName + "_value"));
+        Debug.Log("muutettu: " + PlayerPrefs.GetInt(optionObjectName + "_value"));
         // Debug.Log("NAME" + optionObjectName);
         // optionObjectName on sama ku gameobjectin nimi hierarkiassa
         // tol voi tarkistaa et ootko laittanu sen oikein
@@ -44,8 +43,6 @@ public class optionScript : MonoBehaviour
         if (optionObjectName == "pixel")
         {
             pixelCount.SetFloat("_pixelcount", PlayerPrefs.GetFloat("pixel_value") * 64);
-
-            pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
             pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * 64).ToString();
         }
 
