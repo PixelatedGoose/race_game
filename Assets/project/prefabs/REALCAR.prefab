@@ -897,13 +897,13 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 31
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1081,8 +1081,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3858289546254729268}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.37, y: 0.37, z: 0.37}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 0.43, y: 0.43, z: 0.43}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1134056817950293566}
@@ -1092,7 +1092,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 10, y: 0}
-  m_SizeDelta: {x: 400, y: 303}
+  m_SizeDelta: {x: 710, y: 476}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &5667552593696543886
 CanvasRenderer:
@@ -1122,7 +1122,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: d65d475621d2cbc4595acdbd695526e1, type: 3}
+  m_Texture: {fileID: 2800000, guid: bce13f848ce7f98419822ff9eeeb860a, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1174,7 +1174,7 @@ RectTransform:
   m_GameObject: {fileID: 4282694534723208909}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.37, y: 1.37, z: 1.37}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1434577430981235888}
@@ -1969,8 +1969,8 @@ RectTransform:
   m_GameObject: {fileID: 5534426663591249520}
   m_LocalRotation: {x: -0.0003912851, y: 0.08393002, z: 0.000032956854, w: 0.9964716}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.9, y: 2, z: 2}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 819518683167365451}
   m_Father: {fileID: 1434577430981235888}
@@ -2639,6 +2639,8 @@ MonoBehaviour:
   turbeMax: 100
   turbeReduce: 20
   turbeRegen: 15
+  isRegenerating: 0
+  turbeRegenCoroutineAmount: 0
 --- !u!114 &5318218194112899866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3291,7 +3293,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
