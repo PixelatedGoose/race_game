@@ -13,7 +13,7 @@ public class AdditionalColorChanger : MonoBehaviour
     private float t = 0.0f;
     private float colorTime = 0.0f;
 
-    private void Update()
+    private void FixedUpdate()
     {
         t = Mathf.PingPong(Time.time / duration, 1.0f);
 

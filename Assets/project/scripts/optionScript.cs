@@ -13,7 +13,6 @@ public class optionScript : MonoBehaviour
         InitializeSliderValue("pixel");
         pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
         pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * 64).ToString();
-        //muuttujiihin arvot getcomponenteista
     }
 
     public void setToggleOptionValue(string optionObjectName)
@@ -30,7 +29,7 @@ public class optionScript : MonoBehaviour
         }
 
         PlayerPrefs.Save(); //tallennus
-        //Debug.Log("muutettu: " + PlayerPrefs.GetInt(optionObjectName + "_value"));
+        Debug.Log("muutettu: " + PlayerPrefs.GetInt(optionObjectName + "_value"));
         // Debug.Log("NAME" + optionObjectName);
         // optionObjectName on sama ku gameobjectin nimi hierarkiassa
         // tol voi tarkistaa et ootko laittanu sen oikein
@@ -44,8 +43,6 @@ public class optionScript : MonoBehaviour
         if (optionObjectName == "pixel")
         {
             pixelCount.SetFloat("_pixelcount", PlayerPrefs.GetFloat("pixel_value") * 64);
-
-            pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
             pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * 64).ToString();
         }
 
@@ -63,4 +60,10 @@ public class optionScript : MonoBehaviour
     }
 }
 
-// TULEVAISUUDESSA EHKÄ SWITCH-CASE SYSTEEMI
+// --OPTIMISAATIO--
+// poista GameObject.Find rivit functioneista, siirrä starttiin
+// tee uudet option detectionit (jotta ei tarvitte tehä jokasta niinku 'if (optionObjectName == vitunpaska)...'
+
+// huomio että tää koodi on myös PERSEESTÄ ja suosittelen VITUN vahvasti, että teet sen switch case systeemin vaan yhelle funktiolle
+
+// vois pyöriä monen funktion avulla, mutta kaiken pitäs keskittyä yhteen funktioon, joka käyttää switch-case statementtia
