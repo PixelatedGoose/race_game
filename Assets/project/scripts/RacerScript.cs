@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
-    public GameObject winMenu; // Reference to the Win Menu
+    public GameObject winMenu;
 
     void Awake()
     {
@@ -52,6 +53,10 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private Vector3 lastPosition;
 
     private Transform respawnPoint;
+
+    public GameObject Car1Hud;
+    public GameObject Car2Hud;
+    public GameObject Car3Hud;
 
 
     public void LoadData(GameData data)
@@ -240,6 +245,14 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void ResetRace()
     {
+        Debug.Log("ResetRace called");
+
+        if (winMenu == null) Debug.Log("winMenu is null");
+        if (startFinishLine == null) Debug.Log("startFinishLine is null");
+        if (Car1Hud == null) Debug.Log("Car1Hud is null");
+        if (Car2Hud == null) Debug.Log("Car2Hud is null");
+        if (Car3Hud == null) Debug.Log("Car3Hud is null");
+
         currentLap = 1;
         laptime = 0; // Reset the timer here
         startTimer = false;
@@ -254,20 +267,36 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         LapCounter.text = "" + currentLap + "/" + totalLaps;
         Debug.Log("Race Reset");
 
-        // Show the Win Menu
-        winMenu.SetActive(true);
+        if (winMenu != null)
+            winMenu.SetActive(true);
+
+        if (startFinishLine != null)
+            startFinishLine.gameObject.SetActive(false);
+
+        if (Car1Hud != null)
+            Car1Hud.SetActive(false);
+
+        if (Car2Hud != null)
+            Car2Hud.SetActive(false);
+
+        if (Car3Hud != null)
+            Car3Hud.SetActive(false);
     }
 
     public void RestartRace()
     {
-        winMenu.SetActive(false); // Hide the Win Menu
-        InitializeRace(); // Reinitialize the race
+        winMenu.SetActive(false);
+        startFinishLine.gameObject.SetActive(true);
+        Car1Hud.SetActive(true);
+        Car2Hud.SetActive(true);   
+        Car3Hud.SetActive(true);
+        InitializeRace();
     }
 
     public void QuitGame()
     {
         Debug.Log("Quitting Game...");
-        Application.Quit(); // Quit the application
+        Application.Quit();
     }
 
     void test()
