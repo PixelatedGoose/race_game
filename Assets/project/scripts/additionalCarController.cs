@@ -1,28 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.UI;
 
 public class additionalCarController : MonoBehaviour
 {
+    CarInputActions Controls;
     public Rigidbody car;
-
     private float[] car_positionrotation = new float[6];
+    private float carRotationSpeed = 1.0f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        car_positionrotation = new float[] {356.0f, -46.0f, 817.0f, 0, 0, 0};
+        Controls = new CarInputActions();
+        Controls.Enable();
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        car_positionrotation = new float[] {car.position.x, car.position.y, car.position.z, 0, 0, 0};
+    }
+
     private void FixedUpdate()
     {
-        // car.MovePosition(new Vector3(car_positionrotation[0], car_positionrotation[1], car_positionrotation[2]));
-        car_positionrotation[4] += 1.0f;
+        //car.MovePosition(new Vector3(car_positionrotation[0], car_positionrotation[1], car_positionrotation[2]));
+        car_positionrotation[4] += carRotationSpeed;
         car.MoveRotation(Quaternion.Euler(0, car_positionrotation[4], 0));
+
+        if (car_positionrotation[4] >= 360.0f) //jotta peli ei crashaa 415 päivän jälkeen
+        {
+            car_positionrotation[4] = 0.0f;
+        }
     }
 }

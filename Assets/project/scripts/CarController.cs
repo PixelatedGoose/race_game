@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class CarController : MonoBehaviour
 {
@@ -29,11 +29,9 @@ public class CarController : MonoBehaviour
     public float maxAcceleration = 300.0f;
     public float brakeAcceleration = 3.0f;
     public float turnSensitivty = 1.0f;
-    public float maxsteerAngle = 30.0f;
     public float deceleration = 1.0f; 
     public float maxspeed = 100.0f;
     public float gravityMultiplier = 1.5f; 
-    public float accelerationRate = 5.0f;
     public float grassSpeedMultiplier = 0.5f;
     public List<Wheel> wheels; 
     float moveInput;
@@ -47,23 +45,29 @@ public class CarController : MonoBehaviour
     public Rigidbody carRb;
     bool isTurboActive = false;
     private float activedrift = 0.0f;
-    public float turbemeter;
+
+    [Header("turbe asetukset")]
+    public Image turbeMeter;
+    public float turbeAmount = 100.0f, turbeMax = 100.0f;
+    public float turbeReduce;
+    public float turbeRegen;
+
+    public bool isRegenerating = false;
+    public int turbeRegenCoroutineAmount = 0;
+
 
 
     void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
-
     }
-
 
     void Start()
     {
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
-        
     }
 
     private void Onable()
@@ -200,11 +204,10 @@ public class CarController : MonoBehaviour
         turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f);
     }
 
-    public void TURBE()
+    void TURBE()
     {
-        isTurboActive = Controls.CarControls.turbo.IsPressed();
+        isTurboActive = Controls.CarControls.turbo.IsPressed() && turbeAmount > 0;
     }
-
 
     void Move()
     {
@@ -313,7 +316,7 @@ public class CarController : MonoBehaviour
             }
         };
 
-         Controls.CarControls.Drift.canceled += ctx => {
+        Controls.CarControls.Drift.canceled += ctx => {
             if (activedrift > 0)
             {
                 activedrift--;
@@ -393,16 +396,108 @@ public class CarController : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// käytetään TURBEmeterin päivittämiseen joka frame
+    /// </summary>
     void TURBEmeter()
     {
-        while (isTurboActive && turbemeter > 0)
+        if (isTurboActive && turbeAmount != 0) //jos käytät turboa ja sitä o jäljellä
         {
-            turbemeter -= 0.25f * Time.deltaTime;
-            if (turbemeter <= 0.0f)
+            Debug.Log("turbe aktiivisena");
+
+            if (turbeRegenCoroutineAmount > 0)
             {
-                turbemeter = 0.0f;
-                isTurboActive = false;
+                turbeRegenCoroutines("stop");
             }
+            isRegenerating = false;
+            turbeRegenCoroutineAmount = 0;
+
+            turbeAmount -= turbeReduce * Time.deltaTime;
+        }
+        else if (!isTurboActive && turbeAmount < turbeMax) //jos et käytä turboa ja se ei oo täynnä
+        {
+            Debug.Log("turbe epäaktiivisena");
+
+            if (turbeRegenCoroutineAmount == 0 && isRegenerating == false)
+            {
+                Debug.Log("aloitin vitun paska perse");
+                turbeRegenCoroutines("start");
+                turbeRegenCoroutineAmount += 1;
+            }
+        }
+
+        if (turbeAmount < 0)
+        {
+            turbeAmount = 0;
+        }
+        if (turbeAmount > turbeMax)
+        {
+            Debug.Log("liikaa turboa; laitetaan maksimiin");
+            //Debug.Log("I bought a property in Egypt, and what they do is they give you the property");
+            turbeAmount = turbeMax;
+
+            turbeRegenCoroutines("stop");
+            isRegenerating = false;
+            turbeRegenCoroutineAmount = 0;
+        }
+
+        turbeMeter.fillAmount = turbeAmount / turbeMax;
+    }
+
+    /// <summary>
+    /// käytetään TURBEn regeneroimiseen
+    /// ...koska fuck C#
+    /// </summary>
+    private IEnumerator turbeRegenerate()
+    {
+        Debug.Log("PASS 1; started regen coroutine");
+        yield return new WaitForSecondsRealtime(2.0f);
+        isRegenerating = true;
+
+        if (isRegenerating && turbeRegenCoroutineAmount == 1)
+        {
+            Debug.Log("PASS 2; Now dawns thy reckoning");
+
+            while (isRegenerating && turbeRegenCoroutineAmount == 1)
+            {
+                Debug.Log("PASS 3; regenerating");
+                yield return StartCoroutine(RegenerateTurbeAmount());
+            }
+        }
+        else
+        {
+            Debug.Log("stopped regen coroutine");
+            yield break;
+
+            //scriptin ei pitäs päästä tähä tilanteeseen missään vaiheessa, mutta se on täällä varmuuden vuoksi
+        }
+    }
+
+    private IEnumerator RegenerateTurbeAmount()
+    {
+        turbeAmount += turbeRegen * Time.deltaTime;
+        yield return null; // Wait for the next frame
+    }
+
+    /// <summary>
+    /// aloita tai pysäytä TURBEn regenerointi coroutine
+    /// </summary>
+    /// <param name="option">start / stop</param>
+    private void turbeRegenCoroutines(string option)
+    {
+        switch(option)
+        {
+            case "start":
+                StartCoroutine("turbeRegenerate");
+                Debug.Log("coroutine lisätty");
+
+                break;
+
+            case "stop":
+                StopCoroutine("turbeRegenerate");
+                Debug.Log("coroutine poistettu");
+
+                break;
         }
     }
 }

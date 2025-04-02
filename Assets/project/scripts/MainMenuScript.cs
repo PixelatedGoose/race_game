@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,7 +8,7 @@ public class MainMenu : MonoBehaviour
     public GameObject fullMenu;
     public Toggle mapChangeButton;
 
-    private void Awake()
+    void Awake()
     {
         //PlayerPrefs.DeleteAll(); //VAIN DEBUGAAMISTA VARTEN
         if (PlayerPrefs.HasKey("pixel_value"))
@@ -24,13 +21,11 @@ public class MainMenu : MonoBehaviour
             Debug.Log("pixel_value ei löydetty; arvo on nyt 256");
         }
 
-        // var optionSlider = GameObject.Find("pixel").GetComponent<UnityEngine.UI.Slider>();
-        // optionSlider.value = OptionScript.pixelCount.GetFloat("_pixelcount");
-
         mapChangeButton = GameObject.Find("setMapVariant").GetComponent<Toggle>();
+        fullMenu = GameObject.Find("menuCanvas");
     }
 
-    private void Start()
+    void Start()
     {
         LeanTween.moveLocalY(fullMenu, 0.0f, 2.2f).setEase(LeanTweenType.easeOutBounce);
 

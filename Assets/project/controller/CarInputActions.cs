@@ -198,6 +198,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""backcam"",
+                    ""type"": ""Button"",
+                    ""id"": ""4715b76c-7bee-4754-b997-e5abbf6fcc85"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -563,6 +572,28 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""menucancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""913b8bc1-b8d1-4ef3-b488-10a96823eaea"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""backcam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""12267ecb-a4ff-46d1-91b8-fa3ba1cc9d76"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""backcam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -595,6 +626,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_pausemenu = m_CarControls.FindAction("pausemenu", throwIfNotFound: true);
         m_CarControls_menusubmit = m_CarControls.FindAction("menusubmit", throwIfNotFound: true);
         m_CarControls_menucancel = m_CarControls.FindAction("menucancel", throwIfNotFound: true);
+        m_CarControls_backcam = m_CarControls.FindAction("backcam", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -687,6 +719,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_pausemenu;
     private readonly InputAction m_CarControls_menusubmit;
     private readonly InputAction m_CarControls_menucancel;
+    private readonly InputAction m_CarControls_backcam;
     /// <summary>
     /// Provides access to input actions defined in input action map "CarControls".
     /// </summary>
@@ -746,6 +779,10 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CarControls/menucancel".
         /// </summary>
         public InputAction @menucancel => m_Wrapper.m_CarControls_menucancel;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/backcam".
+        /// </summary>
+        public InputAction @backcam => m_Wrapper.m_CarControls_backcam;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -808,6 +845,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @menucancel.started += instance.OnMenucancel;
             @menucancel.performed += instance.OnMenucancel;
             @menucancel.canceled += instance.OnMenucancel;
+            @backcam.started += instance.OnBackcam;
+            @backcam.performed += instance.OnBackcam;
+            @backcam.canceled += instance.OnBackcam;
         }
 
         /// <summary>
@@ -855,6 +895,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @menucancel.started -= instance.OnMenucancel;
             @menucancel.performed -= instance.OnMenucancel;
             @menucancel.canceled -= instance.OnMenucancel;
+            @backcam.started -= instance.OnBackcam;
+            @backcam.performed -= instance.OnBackcam;
+            @backcam.canceled -= instance.OnBackcam;
         }
 
         /// <summary>
@@ -992,5 +1035,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMenucancel(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "backcam" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBackcam(InputAction.CallbackContext context);
     }
 }
