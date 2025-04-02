@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class optionScript : MonoBehaviour
 {

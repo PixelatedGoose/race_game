@@ -1,5 +1,3 @@
-using System;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,6 +19,7 @@ public class fumoFumo : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "MainMenu" || SceneManager.GetActiveScene().name == "test_mountain" || SceneManager.GetActiveScene().name == "test_mountain_night")
         {
+            fumoRandomizer(UnityEngine.Random.Range(1, 6));
             fumo();
         }
     }
@@ -32,6 +31,7 @@ public class fumoFumo : MonoBehaviour
             randomNumber = UnityEngine.Random.Range((int)57.5f, (int)498.5f);
             fumoImage.transform.position = new Vector3(1092.0f, randomNumber, default);
             fumo();
+            fumoRandomizer(UnityEngine.Random.Range(1, 6));
         }).setIgnoreTimeScale(true);
     }
 

@@ -1,11 +1,9 @@
-using System;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class CameraFollow : MonoBehaviour
 {
-    public float  moveSmoothness;
-    public float  rotSmoothness;
+    public float moveSmoothness;
+    public float rotSmoothness;
 
 
     public Vector3 moveOffset; 
@@ -49,8 +47,7 @@ public class CameraFollow : MonoBehaviour
     void HandleRotation()
     {
         var direction = carTarget.position - transform.position;
-        var rotation =  new Quaternion();
-        rotation = Quaternion.LookRotation(direction + rotOffset, Vector3.up);
+        var rotation = Quaternion.LookRotation(direction + rotOffset, Vector3.up);
         transform.rotation = rotation;
     }
     void CameraFovChanger()

@@ -2,36 +2,26 @@ using UnityEngine;
 
 public class backCameraState : MonoBehaviour
 {
-
+    CarInputActions Controls;
+    
     public GameObject backViewImage;
     public GameObject backViewCamera;
+    bool backCamera = false;
 
-    bool backCamera;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        backCamera = false;
+        Controls = new CarInputActions();
+        Controls.Enable();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.B))
+        if (Controls.CarControls.backcam.triggered)
         {
             LeanTween.cancel(backViewImage);
-
-            if(backCamera == false)
-            {
-                backCamera = true;
-                LeanTween.moveLocalY(backViewImage, -164.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
-            }
-
-            else
-            {
-                backCamera = false;
-                LeanTween.moveLocalY(backViewImage, 0.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
-            }
+            LeanTween.moveLocalY(backViewImage, backCamera ? 0.0f : -164.0f, 0.4f).setEase(LeanTweenType.easeInOutCirc);
+            //backcameran mukaan: jos tosi, laita 0.0f; jos epätosi, laita -164.0f
+            backCamera = !backCamera;
         }
     }
 }

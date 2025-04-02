@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
-using Unity.VisualScripting;
-using NUnit.Framework.Internal;
-using UnityEngine.Rendering;
-using System.Linq;
 
 public class CarController : MonoBehaviour
 {

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AdditionalColorChanger : MonoBehaviour
@@ -32,15 +30,15 @@ public class AdditionalColorChanger : MonoBehaviour
         {
             colorTime += 0.01f;
             
-            if (colorTime < 1.0f)
+            if (colorTime < 0.6f)
             {
                 pointLight.color = Color.red;
             }
-            else if (colorTime < 2.0f)
+            else if (colorTime < 1.2f)
             {
                 pointLight.color = Color.green;
             }
-            else if (colorTime < 3.0f)
+            else if (colorTime < 1.8f)
             {
                 pointLight.color = Color.blue;
             }
