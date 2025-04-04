@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public bool isAddingPoints = false;
     
-    public TextMeshProUGUI Score;
+    public Text Score;
     public float scoreamount = 0;
 
     [Header("menut")]
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 {
                     Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
                     //toi määrittelee mikä on se oikea auto
-                    Score = GameObject.Find("Score").GetComponent<TextMeshProUGUI>();
+                    Score = GameObject.Find("Score").GetComponent<Text>();
                     //so nanoka?
                 }
                 else

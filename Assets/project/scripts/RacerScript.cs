@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
@@ -30,10 +31,10 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public float besttime;
     private bool startTimer = false;
 
-    public TextMeshProUGUI Ltime;
-    public TextMeshProUGUI Btime;
-    public TextMeshProUGUI LapCounter;
-    public TextMeshProUGUI resetPrompt;
+    public Text Ltime;
+    public Text Btime;
+    public Text LapCounter;
+    public Text resetPrompt;
 
     public Transform startFinishLine;
     public Transform[] checkpoints;
