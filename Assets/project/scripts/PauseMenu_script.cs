@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
 
-void Awake()
+    void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
@@ -38,16 +38,17 @@ void Awake()
                 foreach (GameObject obj in pauseMenuObjects)
                 {
                     obj.SetActive(!isActive);
+                    GameManager.instance.isPaused = !isActive;
                 }
 
                 if (isActive)
                 {
                     Time.timeScale = 1;
-                    GameManager.instance.isPaused = false;
+                    //GameManager.instance.isPaused = false;
                 }
                 else
                 {
-                    GameManager.instance.isPaused = true;
+                    //GameManager.instance.isPaused = true;
                     pauseMenuObjects[0].transform.localPosition = new Vector3(0.0f, 470.0f, 0.0f);
                     Time.timeScale = 0;
 
