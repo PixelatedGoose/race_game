@@ -115,6 +115,18 @@ public class soundFXControl : MonoBehaviour
                 }
             }
         }
+        
+        else if (GameManager.instance.isPaused == false)
+        {
+            soundList[2].GetComponent<AudioSource>().volume = 0.0f;
+            foreach (GameObject sound in soundList)
+            {
+                if (sound.GetComponent<AudioSource>().name != "pausedTrack")
+                {
+                    sound.GetComponent<AudioSource>().UnPause();
+                }
+            }
+        }
     }
 
     void FixedUpdate()
