@@ -61,6 +61,8 @@ public class CarController : MonoBehaviour
     {
         Controls = new CarInputActions();
         Controls.Enable();
+
+        turbeMeter = GameObject.Find("turbeFull").GetComponent<Image>();
     }
 
     void Start()
