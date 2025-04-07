@@ -1244,11 +1244,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718c68663d4dc28408fcc839dde75394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winMenu: {fileID: 0}
+  winMenu: {fileID: 3168483669016942917, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
+  Car1Hud: {fileID: 777392002364676048, guid: 80000b9bacd37a44bb37538db943bd1e, type: 3}
   laptime: 0
   besttime: 0
-  Ltime: {fileID: 0}
-  Btime: {fileID: 0}
+  LtimeTexts: []
+  BtimeTexts: []
   LapCounter: {fileID: 0}
   resetPrompt: {fileID: 0}
   startFinishLine: {fileID: 0}
@@ -1270,6 +1271,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  raceFinished: 0
 --- !u!114 &8957915437899560415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1282,9 +1284,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab64f29baee327542850c47bc690945a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: 0
   scoreAddWT: 0.01
   isAddingPoints: 0
-  Score: {fileID: 0}
+  ScoreTexts: []
   scoreamount: 0
   isPaused: 0
   chosenMap: 1
