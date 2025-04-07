@@ -1,9 +1,10 @@
+// Project: Capsule Creator
+// Created by: Joonas "Joonas" Kallio
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 
 public class secret : MonoBehaviour
 {
