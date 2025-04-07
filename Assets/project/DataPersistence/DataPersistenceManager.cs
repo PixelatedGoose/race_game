@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.SceneManagement;
 public class DatapersistenceManager : MonoBehaviour
 {
 
     [Header("File Storage Config")]
     [SerializeField] private string filename;
-    [SerializeField] private bool useEncryption;
+    //[SerializeField] private bool useEncryption;
 
     private GameData gameData;
 
@@ -29,7 +30,7 @@ public class DatapersistenceManager : MonoBehaviour
 
     private void Start()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, filename, useEncryption);
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, filename);
         this.dataPersistenceObjects =  FindAllDataPersistenceObjects();
         LoadGame();
     }
@@ -43,6 +44,7 @@ public class DatapersistenceManager : MonoBehaviour
     public void LoadGame()
     {
 
+        print(SceneManager.GetActiveScene().name);
         this.gameData = dataHandler.Load();
         if (this.gameData == null)
         {

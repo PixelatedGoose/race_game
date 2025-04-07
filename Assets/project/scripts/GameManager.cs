@@ -1,11 +1,8 @@
 using UnityEngine;
 using System.Collections;
-using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using UnityEngine.InputSystem;
-using Unity.VisualScripting;
+
 
 
 //HUOM. ÄLÄ POISTA KÄYTÖSTÄ MUITA AUTOJA HIERARKIASSA
@@ -23,7 +20,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     // Use an array or list to handle multiple Text components
     public Text[] ScoreTexts; // Array to hold multiple Text components
-    public Text Score; // Single Text component for the score display
     public float scoreamount = 0;
 
     [Header("menut")]
@@ -92,7 +88,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 {
                     Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
                     //toi määrittelee mikä on se oikea auto
-                    Score = GameObject.Find("Score").GetComponent<Text>();
+                    ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
                     //so nanoka?
                 }
                 else
@@ -146,7 +142,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             yield return new WaitForSeconds(scoreAddWT);   
             score += 1;   
 
-            // Update all Text components in the array
+           
             foreach (Text scoreText in ScoreTexts)
             {
                 scoreText.text = "Score: " + score.ToString();
