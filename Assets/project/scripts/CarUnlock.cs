@@ -66,7 +66,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             {
                 { carsl[0], 0 },
                 { carsl[1], 98734 },
-                { carsl[2], 22000 }
+                { carsl[2], 2000 }
             };
         }
         UpdateScoreRequirementText();

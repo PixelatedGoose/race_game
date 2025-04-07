@@ -17,12 +17,16 @@ public class SpeedMeter : MonoBehaviour
     public Text speedLabel;//Leo our favourite gremlin
     public RectTransform arrow;
 
-    private void Awake()
+    private void Start()
     {
         if (speedLabel == null)
         {
             Debug.LogWarning("speedLabel EI OLE VITTU OLEMASSA");
         }
+
+        target = GameManager.instance.currentCar.GetComponentInChildren<Rigidbody>();
+        Debug.Log(target);
+        Debug.Log("HUOM. jos target ei löydy (eli siitä tulee NullReferenceException), tää on paskana");
     }
 
     private void Update()

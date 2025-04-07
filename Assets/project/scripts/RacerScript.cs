@@ -5,14 +5,6 @@ using UnityEngine.UI;
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
     public GameObject winMenu; // Reference to the Win Menu
-
-    void Awake()
-    {
-        Controls = new CarInputActions();
-        Controls.Enable();
-
-    }
-
     CarInputActions Controls;
 
     private void Onable()
@@ -67,6 +59,17 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     }
 
 
+
+    void Awake()
+    {
+        Controls = new CarInputActions();
+        Controls.Enable();
+
+        Ltime = GameObject.Find("LapTime").GetComponent<Text>();
+        Btime = GameObject.Find("BestTime").GetComponent<Text>();
+        LapCounter = GameObject.Find("Laps").GetComponent<Text>();
+        resetPrompt = GameObject.Find("Reset_prompt").GetComponent<Text>();
+    }
 
     void Start()
     {
