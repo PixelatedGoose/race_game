@@ -7,6 +7,8 @@ using System.Collections;
 
 public class CarController : MonoBehaviour
 {
+    #pragma warning disable CS0618
+    
     CarInputActions Controls;
 
     public enum Axel
@@ -103,6 +105,13 @@ public class CarController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Stop drifting if the race is finished
+        RacerScript racerScript = FindObjectOfType<RacerScript>();
+        if (racerScript != null && racerScript.raceFinished && activedrift > 0)
+        {
+            StopDrifting();
+        }
+
         Move();
         Steer();
         HandleDrift();
@@ -294,12 +303,18 @@ public class CarController : MonoBehaviour
     void HandleDrift()
     {
         Controls.CarControls.Drift.performed += ctx => {
+            // Check if the race is finished
+            RacerScript racerScript = FindObjectOfType<RacerScript>();
+            if (racerScript != null && racerScript.raceFinished)
+            {
+                return; // Do not allow drifting points if the race is finished
+            }
+
             if (activedrift > 0)
             {
                 return;
             }
             activedrift++;
-            //print(activedrift);
 
             foreach (var wheel in wheels)
             {
@@ -312,40 +327,45 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteValue = 0.75f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
+
             if (carRb.linearVelocity.magnitude > 1.0f)
             {
-                Controls.CarControls.Move.performed += OnMovePerformed;
+                GameManager.instance.AddPoints(); // Add points only when drifting starts
             }
         };
 
         Controls.CarControls.Drift.canceled += ctx => {
-            if (activedrift > 0)
-            {
-                activedrift--;
-                if (GameManager.instance.carSpeed < 20)
-                {
-                    GameManager.instance.StopAddingPoints();
-
-                }
-            }
-            GameManager.instance.StopAddingPoints();
-
-            foreach (var wheel in wheels)
-            {
-                if (wheel.wheelCollider == null) continue;
-
-                WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-                sidewaysFriction.extremumSlip = 0.2f;
-                sidewaysFriction.asymptoteSlip = 0.5f;
-                sidewaysFriction.extremumValue = 1.0f;
-                sidewaysFriction.asymptoteValue = 1f;
-                wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-            }
-            Controls.CarControls.Move.performed -= OnMovePerformed;
+            StopDrifting();
         };
     }
 
-    
+    void StopDrifting()
+    {
+        activedrift = 0;
+
+        // Stop adding points if the race is finished
+        RacerScript racerScript = FindObjectOfType<RacerScript>();
+        if (racerScript != null && racerScript.raceFinished)
+        {
+            GameManager.instance.StopAddingPoints();
+            return;
+        }
+
+        GameManager.instance.StopAddingPoints(); // Stop adding points when drifting ends
+
+        foreach (var wheel in wheels)
+        {
+            if (wheel.wheelCollider == null) continue;
+
+            WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+            sidewaysFriction.extremumSlip = 0.2f;
+            sidewaysFriction.asymptoteSlip = 0.5f;
+            sidewaysFriction.extremumValue = 1.0f;
+            sidewaysFriction.asymptoteValue = 1f;
+            wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+        }
+        Controls.CarControls.Move.performed -= OnMovePerformed;
+    }
     
     private void OnMovePerformed(InputAction.CallbackContext ctx)
     {

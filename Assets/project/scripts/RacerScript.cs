@@ -1,30 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
-    public GameObject winMenu; // Reference to the Win Menu
+    public GameObject winMenu;
+    public GameObject Car1Hud;
+
     CarInputActions Controls;
 
-    private void Onable()
-    {
-        Controls.Enable();
-    }
-
-    private void Disable()
-    {
-        Controls.Disable();
-    }
-
-
-    
     public float laptime;
     public float besttime;
     private bool startTimer = false;
 
-    public Text Ltime;
-    public Text Btime;
+    public List<Text> LtimeTexts; // List for Ltime elements
+    public List<Text> BtimeTexts; // List for Btime elements
     public Text LapCounter;
     public Text resetPrompt;
 
@@ -35,7 +30,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     private int currentLap = 1;
     private int totalLaps = 3;
-    private bool raceFinished = false;
+    public bool raceFinished = false;
 
     private float inactivityTimer = 0f;
     private float inactivityThreshold = 8f;
@@ -43,13 +38,15 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     private Transform respawnPoint;
 
-
     public void LoadData(GameData data)
     {
         if (data != null)
         {
             this.besttime = data.besttime;
-            Btime.text = "Record: " + besttime.ToString("F2");
+            foreach (var btimeText in BtimeTexts)
+            {
+                btimeText.text = "Record: " + besttime.ToString("F2");
+            }
         }
     }
 
@@ -58,38 +55,40 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         data.besttime = this.besttime;
     }
 
-
-
     void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
+    }
 
-        Ltime = GameObject.Find("LapTime").GetComponent<Text>();
-        Btime = GameObject.Find("BestTime").GetComponent<Text>();
-        LapCounter = GameObject.Find("Laps").GetComponent<Text>();
-        resetPrompt = GameObject.Find("Reset_prompt").GetComponent<Text>();
+    private void OnEnable()
+    {
+        Controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        Controls.Disable();
     }
 
     void Start()
     {
-        InitializeRace(); //tekee asiat kun peli alkaa
-        // test();
+        InitializeRace();
     }
 
     void Update()
     {
         if (raceFinished) return;
 
-        HandleReset(); //spawn ja reset toiminnot
-        inactivity(); // inactivity timer
+        HandleReset();
+        Inactivity();
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "StartFinish")
         {
-            Handlestart();
+            HandleStart();
         }
         else
         {
@@ -99,7 +98,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void InitializeRace()
     {
-        LapCounter.text = "" + currentLap + "/" + totalLaps;
+        LapCounter.text = $"{currentLap}/{totalLaps}";
         resetPrompt.gameObject.SetActive(false);
         lastPosition = transform.position;
         respawnPoint = startFinishLine;
@@ -109,18 +108,21 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void HandleReset()
     {
-        if (Controls.CarControls.respawn.triggered) // respawn to the last checkpoint
+        if (Controls.CarControls.respawn.triggered)
         {
             ResetPosition();
             resetPrompt.gameObject.SetActive(false);
         }
 
-        Ltime.text = "" + laptime.ToString("F2");
+        foreach (var ltimeText in LtimeTexts)
+        {
+            ltimeText.text = laptime.ToString("F2");
+        }
 
         if (transform.position.y < -1)
         {
             ResetPosition();
-            ResetCarstate();
+            ResetCarState();
         }
     }
 
@@ -134,11 +136,16 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         rb.angularVelocity = Vector3.zero;
     }
 
-    void inactivity()
+    void Inactivity()
     {
         if (startTimer)
         {
             laptime += Time.deltaTime;
+
+            foreach (var ltimeText in LtimeTexts)
+            {
+                ltimeText.text = laptime.ToString("F2");
+            }
         }
 
         if (transform.position == lastPosition)
@@ -152,15 +159,15 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         else
         {
             inactivityTimer = 0f;
-            resetPrompt.gameObject.SetActive(false); //piilota timer
+            resetPrompt.gameObject.SetActive(false);
         }
 
         lastPosition = transform.position;
     }
-    
-    void Handlestart()
+
+    void HandleStart()
     {
-        if (startTimer == false)
+        if (!startTimer)
         {
             StartNewLap();
         }
@@ -178,26 +185,27 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (allCheckpointsPassed)
         {
             currentLap++;
-            LapCounter.text = "" + currentLap + "/" + totalLaps;
+            LapCounter.text = $"{currentLap}/{totalLaps}";
 
             if (currentLap > totalLaps)
             {
                 raceFinished = true;
                 startTimer = false;
-                
 
-                // Update best time after the race is finished
                 if (besttime == 0 || laptime < besttime)
                 {
                     besttime = laptime;
                 }
-                Btime.text = "Record: " + besttime.ToString("F2");
+
+                foreach (var btimeText in BtimeTexts)
+                {
+                    btimeText.text = "Record: " + besttime.ToString("F2");
+                }
 
                 ResetRace();
             }
             else
             {
-                // Reset checkpoints for the next lap
                 for (int i = 0; i < checkpointStates.Length; i++)
                 {
                     checkpointStates[i] = false;
@@ -220,9 +228,10 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
     }
 
-    void ResetCarstate()
+    void ResetCarState()
     {
-        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.linearVelocity = Vector3.zero;
         transform.rotation = Quaternion.Euler(0, 0, 0);
         startTimer = false;
         laptime = 0;
@@ -234,17 +243,18 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         laptime = 0;
         for (int i = 0; i < checkpointStates.Length; i++)
         {
-            checkpointStates[i] = false; // Reset all checkpoints
+            checkpointStates[i] = false;
         }
-        respawnPoint = startFinishLine; // Set respawn point to finish line
+        respawnPoint = startFinishLine;
     }
 
     void ResetRace()
     {
         currentLap = 1;
-        laptime = 0; // Reset the timer here
+        laptime = 0;
         startTimer = false;
-        raceFinished = false;
+        raceFinished = true; // Mark the race as finished when resetting
+
         respawnPoint = startFinishLine;
 
         for (int i = 0; i < checkpointStates.Length; i++)
@@ -252,27 +262,38 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             checkpointStates[i] = false;
         }
 
-        LapCounter.text = "" + currentLap + "/" + totalLaps;
-        Debug.Log("Race Reset");
+        LapCounter.text = $"{currentLap}/{totalLaps}";
 
-        // Show the Win Menu
-        winMenu.SetActive(true);
+        if (winMenu != null)
+        {
+            winMenu.SetActive(true); // Activate the win screen
+            raceFinished = true; // Ensure the race is marked as finished
+        }
+
+        if (startFinishLine != null)
+            startFinishLine.gameObject.SetActive(false);
+
+        if (Car1Hud != null)
+            Car1Hud.SetActive(false);
     }
 
     public void RestartRace()
     {
-        winMenu.SetActive(false); // Hide the Win Menu
-        InitializeRace(); // Reinitialize the race
+        if (winMenu != null)
+            winMenu.SetActive(false);
+
+        if (startFinishLine != null)
+            startFinishLine.gameObject.SetActive(true);
+
+        if (Car1Hud != null)
+            Car1Hud.SetActive(true);
+
+        InitializeRace();
     }
 
     public void QuitGame()
     {
         Debug.Log("Quitting Game...");
-        Application.Quit(); // Quit the application
-    }
-
-    void test()
-    {
-        print(besttime);
+        Application.Quit();
     }
 }

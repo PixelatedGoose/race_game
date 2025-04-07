@@ -3,6 +3,10 @@ using System.Collections;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using UnityEngine.InputSystem;
+using Unity.VisualScripting;
+
 
 //HUOM. ÄLÄ POISTA KÄYTÖSTÄ MUITA AUTOJA HIERARKIASSA
 
@@ -11,13 +15,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public static GameManager instance;
 
     [Header("score systeemi")]
-    private int score;
+    public int score;
 
     public float scoreAddWT = 0.01f; //WT = wait time
 
     public bool isAddingPoints = false;
-    
-    public Text Score;
+
+    // Use an array or list to handle multiple Text components
+    public Text[] ScoreTexts; // Array to hold multiple Text components
+    public Text Score; // Single Text component for the score display
     public float scoreamount = 0;
 
     [Header("menut")]
@@ -118,6 +124,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void AddPoints()
     {
+        // Check if the race is finished before adding points
+        RacerScript racerScript = FindObjectOfType<RacerScript>();
+        if (racerScript != null && racerScript.raceFinished)
+        {
+            return; // Stop adding points if the race is finished
+        }
+
         if (!isAddingPoints && currentCar.activeSelf && instance != null)
         {
             StartCoroutine(IncrementScoreWithDelay());
@@ -132,7 +145,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             yield return new WaitForSeconds(scoreAddWT);   
             score += 1;   
-            Score.text = "Score: " + score.ToString();               
+
+            // Update all Text components in the array
+            foreach (Text scoreText in ScoreTexts)
+            {
+                scoreText.text = "Score: " + score.ToString();
+            }               
         }
     }
 
