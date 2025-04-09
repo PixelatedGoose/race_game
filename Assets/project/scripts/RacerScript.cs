@@ -2,24 +2,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Linq;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
+    // Public variables
+    public RankManager rankManager;
     public GameObject winMenu;
     public GameObject Car1Hud;
 
     CarInputActions Controls;
 
     public float laptime;
+    public float Rank;
     public float besttime;
     private bool startTimer = false;
 
-    public List<Text> LtimeTexts; // List for Ltime elements
-    public List<Text> BtimeTexts; // List for Btime elements
+    // Lists
+    public List<Text> LtimeTexts;
+    public List<Text> BtimeTexts;
+
+    // Text UI elements
+    public Text rankText;
     public Text LapCounter;
     public Text resetPrompt;
 
+    // Other variables
     public Transform startFinishLine;
     public Transform[] checkpoints;
 
@@ -39,21 +46,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         if (data != null)
         {
-            string currentSceneName = SceneManager.GetActiveScene().name;
-            var sceneBestTime = data.bestTimesByMap
-                .FirstOrDefault(scene => scene.sceneName.ToLower() == currentSceneName.ToLower());
-
-            if (sceneBestTime != null)
-            {
-                besttime = sceneBestTime.bestTime;
-                Debug.Log($"Loaded best time for scene {currentSceneName}: {besttime}");
-            }
-            else
-            {
-                Debug.LogWarning($"No best time found for scene {currentSceneName}. Defaulting to 0.");
-                besttime = 0;
-            }
-
+            this.besttime = data.besttime;
             foreach (var btimeText in BtimeTexts)
             {
                 btimeText.text = "Record: " + besttime.ToString("F2");
@@ -63,17 +56,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        if (besttime > 0)
-        {
-            string currentSceneName = SceneManager.GetActiveScene().name;
-            DatapersistenceManager.instance.UpdateBestTime(currentSceneName, besttime);
-            Debug.Log($"Saved best time for scene {currentSceneName}: {besttime}");
-        }
-        else
-        {
-            Debug.LogWarning("Best time is 0. Nothing to save.");
-        }
+        data.besttime = this.besttime;
     }
+
     void Awake()
     {
         Controls = new CarInputActions();
@@ -101,6 +86,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
         HandleReset();
         Inactivity();
+        Ranking(); // Continuously update the rank
     }
 
     void OnTriggerEnter(Collider other)
@@ -214,7 +200,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
                 if (besttime == 0 || laptime < besttime)
                 {
                     besttime = laptime;
-                    DatapersistenceManager.instance.UpdateBestTime(SceneManager.GetActiveScene().name, besttime);
                 }
 
                 foreach (var btimeText in BtimeTexts)
@@ -273,7 +258,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         currentLap = 1;
         laptime = 0;
         startTimer = false;
-        raceFinished = true; // Mark the race as finished when resetting
+        raceFinished = true;
 
         respawnPoint = startFinishLine;
 
@@ -286,7 +271,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
         if (winMenu != null)
         {
-            winMenu.SetActive(true);
+            winMenu.SetActive(true); 
             raceFinished = true; 
         }
 
@@ -308,16 +293,30 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (Car1Hud != null)
             Car1Hud.SetActive(true);
 
-        string currentSceneName = GameManager.instance.sceneSelected;
-        DatapersistenceManager.instance.UpdateBestTime(currentSceneName, besttime);
         InitializeRace();
+        Ranking();
+    }
+
+    public void Ranking()
+    {
+        if (GameManager.instance != null && laptime > 0)
+        {
+            float score = GameManager.instance.score;
+            Rank = score / laptime;
+
+            string assignedRank = rankManager != null ? rankManager.GetRank(Rank) : "N/A";
+
+            rankText.text = $"Rank: {assignedRank} ({Rank:F2})";
+        }
+        else
+        {
+            rankText.text = "Rank: N/A";
+        }
     }
 
     public void QuitGame()
     {
-        
         Debug.Log("Quitting Game...");
         Application.Quit();
-        DatapersistenceManager.instance.SaveGame();
     }
 }
