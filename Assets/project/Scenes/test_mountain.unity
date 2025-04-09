@@ -9248,11 +9248,11 @@ PrefabInstance:
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: LapCounter
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1934002312}
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: resetPrompt
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1134234028}
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: BtimeTexts.Array.size
       value: 2
@@ -9268,7 +9268,7 @@ PrefabInstance:
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'BtimeTexts.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 925486555}
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'BtimeTexts.Array.data[1]'
       value: 
@@ -9276,7 +9276,7 @@ PrefabInstance:
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'LtimeTexts.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1683855836}
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'LtimeTexts.Array.data[1]'
       value: 
@@ -10684,6 +10684,17 @@ Texture2D:
     offset: 0
     size: 0
     path: 
+--- !u!114 &925486555 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 268753197575402147, guid: 80000b9bacd37a44bb37538db943bd1e, type: 3}
+  m_PrefabInstance: {fileID: 642033378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &928311334
 GameObject:
   m_ObjectHideFlags: 0
@@ -16478,6 +16489,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1667306216}
   m_CullTransparentMesh: 1
+--- !u!114 &1683855836 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3298034603130193222, guid: 80000b9bacd37a44bb37538db943bd1e, type: 3}
+  m_PrefabInstance: {fileID: 642033378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1689552089
 GameObject:
   m_ObjectHideFlags: 0
