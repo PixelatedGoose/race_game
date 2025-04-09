@@ -31,7 +31,8 @@ public class CarController : MonoBehaviour
     public float maxAcceleration = 300.0f;
     public float brakeAcceleration = 3.0f;
     public float turnSensitivty = 1.0f;
-    public float deceleration = 1.0f; 
+    public float deceleration = 1.0f;
+    [Min (100.0f)] 
     public float maxspeed = 100.0f;
     public float gravityMultiplier = 1.5f; 
     public float grassSpeedMultiplier = 0.5f;
