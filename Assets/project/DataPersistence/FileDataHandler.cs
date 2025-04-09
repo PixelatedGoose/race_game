@@ -133,11 +133,6 @@ public class FileDataHandler
 
             string dataToStore = JsonUtility.ToJson(data, true);
 
-            // if (useEncryption)
-            // {
-            //     dataToStore = EncryptDecrypt(dataToStore);
-            // }
-
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
             {
                 using(StreamWriter writer = new StreamWriter(stream))
