@@ -120,11 +120,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void AddPoints()
     {
-        // Check if the race is finished before adding points
+        
         RacerScript racerScript = FindObjectOfType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished)
         {
-            return; // Stop adding points if the race is finished
+            return; 
         }
 
         if (!isAddingPoints && currentCar.activeSelf && instance != null)

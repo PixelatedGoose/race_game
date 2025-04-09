@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
@@ -38,7 +39,21 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         if (data != null)
         {
-            this.besttime = data.besttime;
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            var sceneBestTime = data.bestTimesByMap
+                .FirstOrDefault(scene => scene.sceneName.ToLower() == currentSceneName.ToLower());
+
+            if (sceneBestTime != null)
+            {
+                besttime = sceneBestTime.bestTime;
+                Debug.Log($"Loaded best time for scene {currentSceneName}: {besttime}");
+            }
+            else
+            {
+                Debug.LogWarning($"No best time found for scene {currentSceneName}. Defaulting to 0.");
+                besttime = 0;
+            }
+
             foreach (var btimeText in BtimeTexts)
             {
                 btimeText.text = "Record: " + besttime.ToString("F2");
@@ -48,9 +63,17 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        data.besttime = this.besttime;
+        if (besttime > 0)
+        {
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            DatapersistenceManager.instance.UpdateBestTime(currentSceneName, besttime);
+            Debug.Log($"Saved best time for scene {currentSceneName}: {besttime}");
+        }
+        else
+        {
+            Debug.LogWarning("Best time is 0. Nothing to save.");
+        }
     }
-
     void Awake()
     {
         Controls = new CarInputActions();
@@ -191,6 +214,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
                 if (besttime == 0 || laptime < besttime)
                 {
                     besttime = laptime;
+                    DatapersistenceManager.instance.UpdateBestTime(SceneManager.GetActiveScene().name, besttime);
                 }
 
                 foreach (var btimeText in BtimeTexts)
@@ -262,8 +286,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
         if (winMenu != null)
         {
-            winMenu.SetActive(true); // Activate the win screen
-            raceFinished = true; // Ensure the race is marked as finished
+            winMenu.SetActive(true);
+            raceFinished = true; 
         }
 
         if (startFinishLine != null)
@@ -284,12 +308,16 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (Car1Hud != null)
             Car1Hud.SetActive(true);
 
+        string currentSceneName = GameManager.instance.sceneSelected;
+        DatapersistenceManager.instance.UpdateBestTime(currentSceneName, besttime);
         InitializeRace();
     }
 
     public void QuitGame()
     {
+        
         Debug.Log("Quitting Game...");
         Application.Quit();
+        DatapersistenceManager.instance.SaveGame();
     }
 }
