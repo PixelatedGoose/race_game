@@ -19,7 +19,7 @@ public class fumoFumo : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "MainMenu" || SceneManager.GetActiveScene().name == "test_mountain" || SceneManager.GetActiveScene().name == "test_mountain_night")
         {
-            fumoRandomizer(UnityEngine.Random.Range(1, 6));
+            fumoRandomizer(Random.Range(1, 6));
             fumo();
         }
     }
@@ -28,10 +28,10 @@ public class fumoFumo : MonoBehaviour
     {
         LeanTween.moveLocalX(fumoImage, -546.0f, 2.5f).setOnComplete(() =>
         {
-            randomNumber = UnityEngine.Random.Range((int)57.5f, (int)498.5f);
+            randomNumber = Random.Range((int)57.5f, (int)498.5f);
             fumoImage.transform.position = new Vector3(1092.0f, randomNumber, default);
             fumo();
-            fumoRandomizer(UnityEngine.Random.Range(1, 6));
+            fumoRandomizer(Random.Range(1, 6));
         }).setIgnoreTimeScale(true);
     }
 

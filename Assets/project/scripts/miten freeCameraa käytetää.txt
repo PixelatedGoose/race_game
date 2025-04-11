@@ -1,0 +1,6 @@
+IJKL - liikkuminen
+nuolinäppäimet - kääntäminen
+(vasemman puolen) shift/ctrl - ylös/alas
+1 - resettaa sijainti
+2 - resettaa kääntyminen
+7/8/9 - vaiha mappia

@@ -8959,12 +8959,20 @@ PrefabInstance:
       value: -887.6
       objectReference: {fileID: 0}
     - target: {fileID: 1037492458037048038, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1037492458037048038, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_TagString
       value: MainCamera
       objectReference: {fileID: 0}
     - target: {fileID: 2177387022637776804, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_Name
       value: cars
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177387022637776804, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: Btime
@@ -9161,6 +9169,10 @@ PrefabInstance:
     - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: turbeMeter
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5747626557450960259, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5747626557450960259, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_TagString
@@ -9425,6 +9437,10 @@ PrefabInstance:
     - target: {fileID: 7597923117647628032, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7785283931211661684, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7785283931211661684, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_TagString
@@ -38236,7 +38252,7 @@ TerrainCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_TerrainData: {fileID: 15600000, guid: cf61274819e422244a979383468e1b4c, type: 2}
-  m_EnableTreeColliders: 1
+  m_EnableTreeColliders: 0
 --- !u!218 &2010603583
 Terrain:
   m_ObjectHideFlags: 0
@@ -40179,13 +40195,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2110599959642576015, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 11.375
+      objectReference: {fileID: 0}
     - target: {fileID: 3168483669016942917, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
       propertyPath: m_Name
       value: WinCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 3168483669016942917, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5878287807227757894, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
       propertyPath: m_Pivot.x
@@ -40270,6 +40290,10 @@ PrefabInstance:
     - target: {fileID: 8068530348388685209, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -240.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589684733183145613, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 11.375
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

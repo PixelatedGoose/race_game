@@ -23,6 +23,8 @@ public class MainMenu : MonoBehaviour
 
         mapChangeButton = GameObject.Find("setMapVariant").GetComponent<Toggle>();
         fullMenu = GameObject.Find("menuCanvas");
+        OptionScript = GameObject.Find("Optionspanel").GetComponent<optionScript>();
+        GameObject.Find("Optionspanel").SetActive(false);
     }
 
     void Start()
