@@ -18,7 +18,7 @@ public class soundFXControlMM : MonoBehaviour
 
 
         //hell
-        //REFACTOROIN TÄN MYÖHEMMIN REGARDS LA CREATURA
+        //paska koodi
 
         foreach (GameObject soundButton in soundButtonsList) //jokaselle niistä (jotta niitä voidaan käyttää)
         {

@@ -29,7 +29,7 @@ public class soundFXControl : MonoBehaviour
         soundList[1].GetComponent<AudioSource>().Play();
 
         //hell
-        //REFACTOROIN TÄN MYÖHEMMIN REGARDS LA CREATURA
+        //paska koodi
 
 
 

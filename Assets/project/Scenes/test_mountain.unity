@@ -2603,6 +2603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c587f60c2692f0488af124d023f80bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Optionspanel: {fileID: 1812030354}
   pauseMenuObjects:
   - {fileID: 694849203}
 --- !u!114 &298066519

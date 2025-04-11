@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class CarStats
@@ -19,6 +20,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     private Dictionary<GameObject, int> carPointRequirements;
     public int scoreamount;
     public Button button;
+    private Button left, right;
     private HashSet<GameObject> unlockedCars = new HashSet<GameObject>();
 
     // UI Elements
@@ -38,13 +40,18 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             GameObject.Find("REALCAR"),
             GameObject.Find("REALCAR_y")
         };
+
+        left = GameObject.Find("left").GetComponent<Button>();
+        left.onClick.AddListener(UnlockCar);
+        right = GameObject.Find("right").GetComponent<Button>();
+        right.onClick.AddListener(UnlockCar);
     }
 
     public void LoadData(GameData data)
     {
         if (data != null)
         {
-            this.scoreamount = data.scored; 
+            scoreamount = data.scored; 
             Debug.Log($"Loading data: scored = {data.scored}");
         }
         else
@@ -60,6 +67,12 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
 
     void Start()
     {
+        if (GameManager.instance == null)
+        {
+            Debug.LogError("GameManager instance is null!");
+            return;
+        }
+
         if (carsl.Count == 3 && carsl[0] != null && carsl[1] != null && carsl[2] != null)
         {
             carPointRequirements = new Dictionary<GameObject, int>
@@ -69,24 +82,15 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
                 { carsl[2], 2000 }
             };
         }
-        UpdateScoreRequirementText();
     }
 
     void Update()
     {
-        UnlockCar();
-        unlockedcars();
-        UpdateScoreRequirementText();
         CurrentScoreText.text = "Your Score: " + scoreamount.ToString();
     }
 
     public void UnlockCar()
     {
-        if (GameManager.instance == null)
-        {
-            Debug.LogError("GameManager instance is null!");
-            return;
-        }
         foreach (var car in carsl)
         {
             if (car.activeInHierarchy)
@@ -101,26 +105,14 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
                 {
                     button.interactable = false;
                 }
-            }
-        }
-    }
 
-    public void unlockedcars()
-    {
-        foreach (var car in carsl) 
-        {
-            if (car.activeInHierarchy) 
-            {
                 if (unlockedCars.Contains(car))
                 {
                     button.interactable = true;
                 }
             }
         }
-    }
 
-    private void UpdateScoreRequirementText()
-    {
         for (int i = 0; i < carsl.Count; i++)
         {
             if (carsl[i].activeInHierarchy)
@@ -162,7 +154,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
         if (index >= 0 && index < carsl.Count)
         {
             activeCarIndex = index;
-            UpdateScoreRequirementText(); 
         }
         else
         {

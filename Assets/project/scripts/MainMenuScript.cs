@@ -41,7 +41,6 @@ public class MainMenu : MonoBehaviour
 
     public void mapSelectedChange()
     {
-        //Debug.Log("YOU INSIGNIFICANT FUCK!");
         GameManager.instance.chosenMap = mapChangeButton.isOn ? 2 : 1; //false = 1, true = 2
         PlayerPrefs.SetInt("chosenMap", GameManager.instance.chosenMap);
         PlayerPrefs.Save();
