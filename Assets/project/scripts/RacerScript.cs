@@ -119,10 +119,25 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             HandleStart();
         }
+        else if (other.gameObject.CompareTag("RespawnTrigger")) // Check for the respawn trigger
+        {
+            RespawnAtLastCheckpoint();
+        }
         else
         {
             HandleCheck(other);
         }
+    }
+
+    void RespawnAtLastCheckpoint()
+    {
+        Debug.Log("Respawning at the last checkpoint...");
+        transform.position = respawnPoint != null ? respawnPoint.position : startFinishLine.position;
+        transform.rotation = respawnPoint != null ? respawnPoint.rotation : startFinishLine.rotation;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     void InitializeRace()
