@@ -1223,6 +1223,9 @@ MonoBehaviour:
   roadMaterial: {fileID: 2100000, guid: 2078d9428218af54fa6eaa4ae7fdbaa1, type: 2}
   driftmaterial: {fileID: 2100000, guid: 2078d9428218af54fa6eaa4ae7fdbaa1, type: 2}
   carRb: {fileID: 0}
+  Turbesped: 150
+  basespeed: 100
+  grassmaxspeed: 50
   turbeMeter: {fileID: 0}
   turbeAmount: 100
   turbeMax: 100
@@ -1248,8 +1251,12 @@ MonoBehaviour:
   laptime: 0
   Rank: 0
   besttime: 0
-  LtimeTexts: []
-  BtimeTexts: []
+  LtimeTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  BtimeTexts:
+  - {fileID: 0}
+  - {fileID: 0}
   rankText: {fileID: 0}
   LapCounter: {fileID: 0}
   resetPrompt: {fileID: 0}
