@@ -11,6 +11,7 @@ TagManager:
   - soundFX
   - soundFXonClick
   - soundFXbutton
+  - RespawnTrigger
   layers:
   - Default
   - TransparentFX
