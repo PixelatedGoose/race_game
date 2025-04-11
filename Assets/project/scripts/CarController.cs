@@ -9,7 +9,7 @@ public class CarController : MonoBehaviour
 {
     //#pragma warning disable CS0618
     
-    CarInputActions CarControls;
+    CarInputActions Controls;
 
     public enum Axel
     {
@@ -27,7 +27,7 @@ public class CarController : MonoBehaviour
         public ParticleSystem smokeParticle;
         public Axel axel;
     }
-
+    [Header("Auton asetukset")]
     public float maxAcceleration = 300.0f;
     public float brakeAcceleration = 3.0f;
     public float turnSensitivty = 1.0f;
@@ -48,6 +48,9 @@ public class CarController : MonoBehaviour
     public Rigidbody carRb;
     bool isTurboActive = false;
     private float activedrift = 0.0f;
+    public float Turbesped = 150.0f;
+    public float basespeed = 100.0f;
+    public float grassmaxspeed = 50.0f;
 
     [Header("turbe asetukset")]
     public Image turbeMeter;
@@ -62,8 +65,8 @@ public class CarController : MonoBehaviour
 
     void Awake()
     {
-        CarControls = new CarInputActions();
-        CarControls.Enable();
+        Controls = new CarInputActions();
+        Controls.Enable();
 
         turbeMeter = GameObject.Find("turbeFull").GetComponent<Image>();
     }
@@ -77,12 +80,12 @@ public class CarController : MonoBehaviour
 
     private void OnEnable()
     {
-        CarControls.Enable();
+        Controls.Enable();
     }
 
     private void OnDisable()
     {
-        CarControls.Disable();
+        Controls.Disable();
     }
 
 
@@ -149,19 +152,19 @@ public class CarController : MonoBehaviour
          //moveInput = Input.GetAxis("Vertical");
          //steerInput = Input.GetAxis("Horizontal");
 
-        CarControls.CarControls.Move.performed += ctx => {
+        Controls.CarControls.Move.performed += ctx => {
             steerInput = ctx.ReadValue<Vector2>().x;
         };
 
-        if(CarControls.CarControls.MoveForward.IsPressed()) {
-            moveInput = CarControls.CarControls.MoveForward.ReadValue<float>();
+        if(Controls.CarControls.MoveForward.IsPressed()) {
+            moveInput = Controls.CarControls.MoveForward.ReadValue<float>();
         }
 
-        if(CarControls.CarControls.MoveBackward.IsPressed()) {
-            moveInput = -CarControls.CarControls.MoveBackward.ReadValue<float>();
+        if(Controls.CarControls.MoveBackward.IsPressed()) {
+            moveInput = -Controls.CarControls.MoveBackward.ReadValue<float>();
         }
 
-        if(!CarControls.CarControls.MoveBackward.IsPressed() && !CarControls.CarControls.MoveForward.IsPressed()) {
+        if(!Controls.CarControls.MoveBackward.IsPressed() && !Controls.CarControls.MoveForward.IsPressed()) {
             moveInput = 0.0f;
         }
     }
@@ -213,12 +216,12 @@ public class CarController : MonoBehaviour
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f;
-        turnSensitivty = speed > 60.0f ? 10.0f : (speed > 40.0f ? 10.0f : 35.0f);
+        turnSensitivty = speed > 40.0f ? 10.0f : 35.0f;
     }
 
     void TURBE()
     {
-        isTurboActive = CarControls.CarControls.turbo.IsPressed() && turbeAmount > 0;
+        isTurboActive = Controls.CarControls.turbo.IsPressed() && turbeAmount > 0;
     }
 
     void Move()
@@ -231,22 +234,23 @@ public class CarController : MonoBehaviour
             targetTorque = -2 * maxAcceleration;
         } else {
             targetTorque = 0.0f;
-        }
+        };
+        maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? Turbesped : basespeed, Time.deltaTime);
 
         if (IsOnGrass())
         {
             targetTorque *= grassSpeedMultiplier;
-            maxspeed = Mathf.Lerp(maxspeed, 50.0f, Time.deltaTime);
-        }
-
-        else
-        {
-            maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? 150.0f : 100.0f, Time.deltaTime);
+            maxspeed = Mathf.Lerp(maxspeed, grassmaxspeed, Time.deltaTime);
+            if (GameManager.instance.carSpeed < 50.0f)
+            {
+                maxspeed = 50.0f;
+            }
+            
         }
 
         foreach (var wheel in wheels)
         {
-            if (CarControls.CarControls.Brake.IsPressed())
+            if (Controls.CarControls.Brake.IsPressed())
             {
                 GameManager.instance.StopAddingPoints();
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
@@ -303,7 +307,7 @@ public class CarController : MonoBehaviour
 
     void HandleDrift()
     {
-        CarControls.CarControls.Drift.performed += ctx => {
+        Controls.CarControls.Drift.performed += ctx => {
             // Check if the race is finished
             RacerScript racerScript = FindAnyObjectByType<RacerScript>();
             if (racerScript != null && racerScript.raceFinished)
@@ -335,7 +339,7 @@ public class CarController : MonoBehaviour
             }
         };
 
-        CarControls.CarControls.Drift.canceled += ctx => {
+        Controls.CarControls.Drift.canceled += ctx => {
             StopDrifting();
         };
     }
@@ -365,7 +369,7 @@ public class CarController : MonoBehaviour
             sidewaysFriction.asymptoteValue = 1f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
-        CarControls.CarControls.Move.performed -= OnMovePerformed;
+        Controls.CarControls.Move.performed -= OnMovePerformed;
     }
     
     private void OnMovePerformed(InputAction.CallbackContext ctx)
@@ -383,12 +387,10 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rot;
         }
-        CarControls.CarControls.Move.canceled+= ctx => {
+        Controls.CarControls.Move.canceled+= ctx => {
             steerInput = 0.0f;
-        };
-        
+        };   
     }
-
     //bobbing effect
 
     /// <summary>
@@ -399,7 +401,7 @@ public class CarController : MonoBehaviour
         foreach(var wheel in wheels)
         {
             var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (CarControls.CarControls.Drift.IsPressed() && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
+            if (Controls.CarControls.Drift.IsPressed() && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
             {
                 trailRenderer.emitting = true;
                 wheel.smokeParticle.Emit(1);

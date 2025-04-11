@@ -9021,7 +9021,7 @@ PrefabInstance:
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'BtimeTexts.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 925486555}
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'BtimeTexts.Array.data[1]'
       value: 
@@ -9029,7 +9029,7 @@ PrefabInstance:
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'LtimeTexts.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1683855836}
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'LtimeTexts.Array.data[1]'
       value: 
@@ -9487,21 +9487,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1134234028}
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
-      propertyPath: BtimeTexts.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
-      propertyPath: LtimeTexts.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: checkpoints.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'BtimeTexts.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 925486555}
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'BtimeTexts.Array.data[1]'
       value: 
@@ -9509,7 +9501,7 @@ PrefabInstance:
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'LtimeTexts.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1683855836}
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'LtimeTexts.Array.data[1]'
       value: 
