@@ -5451,6 +5451,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: cars
       objectReference: {fileID: 0}
+    - target: {fileID: 2177387022637776804, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: Btime
       value: 
@@ -8810,7 +8814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3168483669016942917, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5878287807227757894, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
       propertyPath: m_Pivot.x

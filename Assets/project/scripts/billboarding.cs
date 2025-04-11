@@ -3,8 +3,12 @@ public class billboarding : MonoBehaviour
 {
     private float minScale = 0.3f; // Minimum scale factor
     private float maxScale = 0.6f; // Maximum scale factor
-    void Start()
+    private Camera bbCamera; // Reference to the main camera
+
+    /* void Start()
     {
+        bbCamera = GameObject.Find("Camera").GetComponent<Camera>(); // Find the camera in the scene
+        
         // Generate a random scale factor between minScale and maxScale
         float randomScale = Random.Range(minScale, maxScale);
         // Apply the random scale uniformly
@@ -19,7 +23,14 @@ public class billboarding : MonoBehaviour
     }
     void Update()
     {
-        // Keep the tree facing the camera on the Y-axis
-        transform.rotation = Quaternion.Euler(0f, Camera.main.transform.rotation.eulerAngles.y, 0f);
-    }
+        if (bbCamera != null)
+        {
+            // Keep the tree facing the camera on the Y-axis
+            transform.rotation = Quaternion.Euler(0f, bbCamera.transform.rotation.eulerAngles.y, 0f);
+        }
+        else
+        {
+            enabled = false; // Disable the script if the camera is not found
+        }
+    } */
 }

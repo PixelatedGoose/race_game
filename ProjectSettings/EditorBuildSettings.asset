@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/project/Scenes/Carselectionmenu.unity
     guid: afc6d98342131454da1b0dd62998ccc2
+  - enabled: 1
+    path: Assets/project/Scenes/haukipudas.unity
+    guid: 05737f1c449c0ec44815ec509bc53956
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

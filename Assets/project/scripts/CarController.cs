@@ -9,7 +9,7 @@ public class CarController : MonoBehaviour
 {
     //#pragma warning disable CS0618
     
-    CarInputActions Controls;
+    CarInputActions CarControls;
 
     public enum Axel
     {
@@ -62,8 +62,8 @@ public class CarController : MonoBehaviour
 
     void Awake()
     {
-        Controls = new CarInputActions();
-        Controls.Enable();
+        CarControls = new CarInputActions();
+        CarControls.Enable();
 
         turbeMeter = GameObject.Find("turbeFull").GetComponent<Image>();
     }
@@ -77,12 +77,12 @@ public class CarController : MonoBehaviour
 
     private void OnEnable()
     {
-        Controls.Enable();
+        CarControls.Enable();
     }
 
     private void OnDisable()
     {
-        Controls.Disable();
+        CarControls.Disable();
     }
 
 
@@ -149,19 +149,19 @@ public class CarController : MonoBehaviour
          //moveInput = Input.GetAxis("Vertical");
          //steerInput = Input.GetAxis("Horizontal");
 
-        Controls.CarControls.Move.performed += ctx => {
+        CarControls.CarControls.Move.performed += ctx => {
             steerInput = ctx.ReadValue<Vector2>().x;
         };
 
-        if(Controls.CarControls.MoveForward.IsPressed()) {
-            moveInput = Controls.CarControls.MoveForward.ReadValue<float>();
+        if(CarControls.CarControls.MoveForward.IsPressed()) {
+            moveInput = CarControls.CarControls.MoveForward.ReadValue<float>();
         }
 
-        if(Controls.CarControls.MoveBackward.IsPressed()) {
-            moveInput = -Controls.CarControls.MoveBackward.ReadValue<float>();
+        if(CarControls.CarControls.MoveBackward.IsPressed()) {
+            moveInput = -CarControls.CarControls.MoveBackward.ReadValue<float>();
         }
 
-        if(!Controls.CarControls.MoveBackward.IsPressed() && !Controls.CarControls.MoveForward.IsPressed()) {
+        if(!CarControls.CarControls.MoveBackward.IsPressed() && !CarControls.CarControls.MoveForward.IsPressed()) {
             moveInput = 0.0f;
         }
     }
@@ -218,7 +218,7 @@ public class CarController : MonoBehaviour
 
     void TURBE()
     {
-        isTurboActive = Controls.CarControls.turbo.IsPressed() && turbeAmount > 0;
+        isTurboActive = CarControls.CarControls.turbo.IsPressed() && turbeAmount > 0;
     }
 
     void Move()
@@ -246,7 +246,7 @@ public class CarController : MonoBehaviour
 
         foreach (var wheel in wheels)
         {
-            if (Controls.CarControls.Brake.IsPressed())
+            if (CarControls.CarControls.Brake.IsPressed())
             {
                 GameManager.instance.StopAddingPoints();
                 wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
@@ -303,7 +303,7 @@ public class CarController : MonoBehaviour
 
     void HandleDrift()
     {
-        Controls.CarControls.Drift.performed += ctx => {
+        CarControls.CarControls.Drift.performed += ctx => {
             // Check if the race is finished
             RacerScript racerScript = FindAnyObjectByType<RacerScript>();
             if (racerScript != null && racerScript.raceFinished)
@@ -335,7 +335,7 @@ public class CarController : MonoBehaviour
             }
         };
 
-        Controls.CarControls.Drift.canceled += ctx => {
+        CarControls.CarControls.Drift.canceled += ctx => {
             StopDrifting();
         };
     }
@@ -365,7 +365,7 @@ public class CarController : MonoBehaviour
             sidewaysFriction.asymptoteValue = 1f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
-        Controls.CarControls.Move.performed -= OnMovePerformed;
+        CarControls.CarControls.Move.performed -= OnMovePerformed;
     }
     
     private void OnMovePerformed(InputAction.CallbackContext ctx)
@@ -383,7 +383,7 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rot;
         }
-        Controls.CarControls.Move.canceled+= ctx => {
+        CarControls.CarControls.Move.canceled+= ctx => {
             steerInput = 0.0f;
         };
         
@@ -399,7 +399,7 @@ public class CarController : MonoBehaviour
         foreach(var wheel in wheels)
         {
             var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (Controls.CarControls.Drift.IsPressed() && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
+            if (CarControls.CarControls.Drift.IsPressed() && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
             {
                 trailRenderer.emitting = true;
                 wheel.smokeParticle.Emit(1);
