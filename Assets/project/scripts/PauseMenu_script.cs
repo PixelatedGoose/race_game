@@ -3,12 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    public GameObject Optionspanel;
+    private bool optionsOpen = false;
 
     void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
-
     }
 
     CarInputActions Controls;
@@ -24,12 +25,12 @@ public class PauseMenu : MonoBehaviour
     }
 
     public GameObject[] pauseMenuObjects;
-
-
-
+    
     void Update()
     {
-        if (Controls.CarControls.pausemenu.triggered)
+        optionsOpen = Optionspanel.activeSelf;
+
+        if (Controls.CarControls.pausemenu.triggered && optionsOpen == false)
         {
             LeanTween.cancel(pauseMenuObjects[0]);
             if (pauseMenuObjects != null && pauseMenuObjects.Length > 0)

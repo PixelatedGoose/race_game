@@ -11040,6 +11040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c587f60c2692f0488af124d023f80bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Optionspanel: {fileID: 343339807}
   pauseMenuObjects:
   - {fileID: 2011600653}
 --- !u!114 &1793973468
@@ -12054,6 +12055,60 @@ MonoBehaviour:
   carIndex: 0
   sceneSelected: 
   carSpeed: 0
+--- !u!1 &1951634582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1951634583}
+  - component: {fileID: 1951634584}
+  m_Layer: 0
+  m_Name: RankManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1951634583
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951634582}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2008078270}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1951634584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951634582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f2203647f032c42a3f7c9b077a9ae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rankThresholds:
+  - minValue: 0
+    maxValue: 20
+    rankName: bronze
+  - minValue: 20.001
+    maxValue: 50
+    rankName: silver
+  - minValue: 50.001
+    maxValue: 1e+13
+    rankName: gold
 --- !u!114 &1990981866 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1971982075954201020, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
@@ -12096,6 +12151,7 @@ Transform:
   m_Children:
   - {fileID: 1549479875}
   - {fileID: 1929552224}
+  - {fileID: 1951634583}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2010850560
