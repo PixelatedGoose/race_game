@@ -53,7 +53,12 @@ public class fumoFumo : MonoBehaviour
     {
         if (Controls.CarControls.pausemenu.triggered && GameManager.instance.isPaused == true)
         {
-            fumoRandomizer(UnityEngine.Random.Range(1, 6));
+            fumoRandomizer(Random.Range(1, 6));
         }
+    }
+
+    private void OnDisable()
+    {
+        Controls.Disable();
     }
 }

@@ -1117,7 +1117,6 @@ GameObject:
   - component: {fileID: 7679516397410859708}
   - component: {fileID: 6116647207104193425}
   - component: {fileID: 5318218194112899866}
-  - component: {fileID: 8957915437899560415}
   m_Layer: 0
   m_Name: car
   m_TagString: Untagged
@@ -1274,31 +1273,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   raceFinished: 0
---- !u!114 &8957915437899560415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7099390124016199010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab64f29baee327542850c47bc690945a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 0
-  scoreAddWT: 0.01
-  isAddingPoints: 0
-  ScoreTexts: []
-  scoreamount: 0
-  isPaused: 0
-  chosenMap: 1
-  mapChangeButton: {fileID: 0}
-  currentCar: {fileID: 0}
-  cars: []
-  carIndex: 0
-  sceneSelected: 
-  carSpeed: 0
 --- !u!1 &7332370191183488306
 GameObject:
   m_ObjectHideFlags: 0
