@@ -7,7 +7,7 @@ using System.Collections;
 
 public class CarController : MonoBehaviour
 {
-    #pragma warning disable CS0618
+    //#pragma warning disable CS0618
     
     CarInputActions Controls;
 
@@ -75,12 +75,12 @@ public class CarController : MonoBehaviour
         carRb.centerOfMass = _centerofMass;
     }
 
-    private void Onable()
+    private void OnEnable()
     {
         Controls.Enable();
     }
 
-    private void Disable()
+    private void OnDisable()
     {
         Controls.Disable();
     }
@@ -107,7 +107,7 @@ public class CarController : MonoBehaviour
     void FixedUpdate()
     {
         // Stop drifting if the race is finished
-        RacerScript racerScript = FindObjectOfType<RacerScript>();
+        RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished && activedrift > 0)
         {
             StopDrifting();
@@ -305,7 +305,7 @@ public class CarController : MonoBehaviour
     {
         Controls.CarControls.Drift.performed += ctx => {
             // Check if the race is finished
-            RacerScript racerScript = FindObjectOfType<RacerScript>();
+            RacerScript racerScript = FindAnyObjectByType<RacerScript>();
             if (racerScript != null && racerScript.raceFinished)
             {
                 return; // Do not allow drifting points if the race is finished
@@ -345,7 +345,7 @@ public class CarController : MonoBehaviour
         activedrift = 0;
 
         // Stop adding points if the race is finished
-        RacerScript racerScript = FindObjectOfType<RacerScript>();
+        RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished)
         {
             GameManager.instance.StopAddingPoints();

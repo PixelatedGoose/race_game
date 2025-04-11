@@ -29,4 +29,9 @@ public class additionalCarController : MonoBehaviour
             car_positionrotation[4] = 0.0f;
         }
     }
+
+    private void OnDisable()
+    {
+        Controls.Disable();
+    }
 }

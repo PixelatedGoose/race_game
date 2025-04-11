@@ -14,12 +14,12 @@ public class PauseMenu : MonoBehaviour
 
     CarInputActions Controls;
 
-    private void Onable()
+    private void OnEnable()
     {
         Controls.Enable();
     }
 
-    private void Disable()
+    private void OnDisable()
     {
         Controls.Disable();
     }

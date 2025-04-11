@@ -120,8 +120,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void AddPoints()
     {
-        
-        RacerScript racerScript = FindObjectOfType<RacerScript>();
+        RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished)
         {
             return; 
