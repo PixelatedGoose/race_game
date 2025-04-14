@@ -10,6 +10,7 @@ public class mapSelection : MonoBehaviour
     public GameObject[] msObjectsList;
     private float schizophrenia;
     private RawImage loadImage;
+    private AudioSource loadingLoop;
 
     void Awake()
     {
@@ -17,6 +18,7 @@ public class mapSelection : MonoBehaviour
         msObjects = GameObject.Find("mapSelectionObj");
         loadImage = GameObject.Find("loadImage").GetComponent<RawImage>();
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
+        loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
     }
 
     public void Back()
@@ -49,6 +51,7 @@ public class mapSelection : MonoBehaviour
 
     private IEnumerator MapButtonFunc()
     {
+        loadingLoop.Play();
         PlayerPrefs.Save();
         GameManager.instance.chosenMap = PlayerPrefs.GetInt("chosenMap");
 
