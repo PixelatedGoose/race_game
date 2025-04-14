@@ -30,7 +30,10 @@ public class CarController : MonoBehaviour
     [Header("Auton asetukset")]
     public float maxAcceleration = 300.0f;
     public float brakeAcceleration = 3.0f;
+    [Header("turn asetukset")]
     public float turnSensitivty = 1.0f;
+    public float turnSensitivtyAtHighSpeed = 1.0f;
+    public float turnSensitivtyAtLowSpeed = 1.0f;
     public float deceleration = 1.0f;
     [Min (100.0f)] 
     public float maxspeed = 100.0f;
@@ -216,7 +219,7 @@ public class CarController : MonoBehaviour
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f;
-        turnSensitivty = speed > 40.0f ? 10.0f : 35.0f;
+        turnSensitivty = speed > 40.0f ? turnSensitivtyAtHighSpeed : turnSensitivtyAtLowSpeed;
     }
 
     void TURBE()
@@ -240,7 +243,7 @@ public class CarController : MonoBehaviour
         if (IsOnGrass())
         {
             targetTorque *= grassSpeedMultiplier;
-            maxspeed = Mathf.Lerp(maxspeed, grassmaxspeed, Time.deltaTime);
+            maxspeed = Mathf.Lerp(maxspeed, grassSpeedMultiplier, Time.deltaTime);
             if (GameManager.instance.carSpeed < 50.0f)
             {
                 maxspeed = 50.0f;
@@ -333,10 +336,11 @@ public class CarController : MonoBehaviour
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
 
-            if (carRb.linearVelocity.magnitude > 1.0f)
-            {
-                GameManager.instance.AddPoints(); // Add points only when drifting starts
-            }
+                if (GameManager.instance.carSpeed > 20.0f )
+                {
+            
+                    GameManager.instance.AddPoints();
+                }
         };
 
         Controls.CarControls.Drift.canceled += ctx => {
@@ -350,7 +354,7 @@ public class CarController : MonoBehaviour
 
         // Stop adding points if the race is finished
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-        if (racerScript != null && racerScript.raceFinished)
+        if (racerScript != null && racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
         {
             GameManager.instance.StopAddingPoints();
             return;

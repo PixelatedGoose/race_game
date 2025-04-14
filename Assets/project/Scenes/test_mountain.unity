@@ -8899,8 +8899,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 214236493772096704, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
-      propertyPath: turbeMeter
-      value: 
+      propertyPath: turnSensitivtyAtLowSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 214236493772096704, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: turnSensitivtyAtHighSpeed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 581020992986432808, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8997,7 +9001,7 @@ PrefabInstance:
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: LapCounter
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1934002312}
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: rankManager
       value: 
@@ -9005,7 +9009,7 @@ PrefabInstance:
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: resetPrompt
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1134234028}
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: BtimeTexts.Array.size
       value: 2
@@ -9167,8 +9171,44 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: maxspeed
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: Turbesped
+      value: 170
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: basespeed
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: turbeMeter
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: deceleration
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: grassmaxspeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: turnSensitivty
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: maxAcceleration
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: turnSensitivtyatLowSpeed
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: turnSensitivtyatHighSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5747626557450960259, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_IsActive
@@ -9339,8 +9379,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6959773831173666642, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
-      propertyPath: turbeMeter
-      value: 
+      propertyPath: maxspeed
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959773831173666642, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: Turbesped
+      value: 190
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959773831173666642, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: basespeed
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959773831173666642, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: turnSensitivtyAtLowSpeed
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959773831173666642, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: turnSensitivtyAtHighSpeed
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7029066597081461917, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40197,7 +40253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3168483669016942917, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5878287807227757894, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
       propertyPath: m_Pivot.x
