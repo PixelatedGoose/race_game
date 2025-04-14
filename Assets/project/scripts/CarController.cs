@@ -118,7 +118,7 @@ public class CarController : MonoBehaviour
         {
             StopDrifting();
         }
-
+        ApplyGravity();
         Move();
         Steer();
         HandleDrift();
@@ -126,7 +126,7 @@ public class CarController : MonoBehaviour
         ApplySpeedLimit();
         Applyturnsensitivity();
         OnGrass();
-        ApplyGravity();
+      
         TURBE();
         TURBEmeter();
     }
@@ -304,7 +304,8 @@ public class CarController : MonoBehaviour
     {
         if (!IsGrounded())
         {
-            carRb.AddForce(Vector3.down * gravityMultiplier, ForceMode.Acceleration);
+            
+            carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
         }
     }
 
