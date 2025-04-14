@@ -10,6 +10,9 @@ public class CarSelection : MonoBehaviour
 
     private int index;
 
+    public GameObject csObjects;
+    public GameObject msObjects;
+
     void Awake()
     {
         cars = new GameObject[] 
@@ -22,6 +25,8 @@ public class CarSelection : MonoBehaviour
 
     void Start()
     {
+        msObjects.SetActive(false);
+        
         if (GameManager.instance == null)
         {
             Debug.LogError("GameManager.instance is null");
@@ -81,17 +86,10 @@ public class CarSelection : MonoBehaviour
         }
     }
 
-    public void PlayGame()
+    public void ActivateMapSelection()
     {
-        if (GameManager.instance == null)
-        {
-            Debug.LogError("GameManager.instance is null! Cannot load scene.");
-        }
-        else
-        {
-            Debug.Log("Loading scene: " + PlayerPrefs.GetInt("chosenMap", 1));
-            SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap", 1));
-        }
+        csObjects.SetActive(false);
+        msObjects.SetActive(true);
     }
 
     public void back()
