@@ -8899,6 +8899,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 214236493772096704, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: deceleration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 214236493772096704, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: turnSensitivtyAtLowSpeed
       value: 5
       objectReference: {fileID: 0}
@@ -9203,8 +9207,16 @@ PrefabInstance:
       value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: turnSensitivtyAtLowSpeed
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: turnSensitivtyatLowSpeed
       value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: turnSensitivtyAtHighSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4854701137866050469, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: turnSensitivtyatHighSpeed
