@@ -87,9 +87,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 if (car.activeInHierarchy)
                 {
                     Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
-                    //toi määrittelee mikä on se oikea auto
                     ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
-                    //so nanoka?
                 }
                 else
                 {

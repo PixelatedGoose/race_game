@@ -6,7 +6,6 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] optionScript OptionScript;
     public GameObject fullMenu;
-    public Toggle mapChangeButton;
 
     void Awake()
     {
@@ -21,7 +20,6 @@ public class MainMenu : MonoBehaviour
             Debug.Log("pixel_value ei löydetty; arvo on nyt 256");
         }
 
-        mapChangeButton = GameObject.Find("setMapVariant").GetComponent<Toggle>();
         fullMenu = GameObject.Find("menuCanvas");
         OptionScript = GameObject.Find("Optionspanel").GetComponent<optionScript>();
         GameObject.Find("Optionspanel").SetActive(false);
@@ -29,23 +27,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        LeanTween.moveLocalY(fullMenu, 0.0f, 2.2f).setEase(LeanTweenType.easeOutBounce);
-
-        if (GameManager.instance.chosenMap == 1)
-        {
-            mapChangeButton.isOn = false;
-        }
-        else if (GameManager.instance.chosenMap == 2)
-        {
-            mapChangeButton.isOn = true;
-        }
-    }
-
-    public void mapSelectedChange()
-    {
-        GameManager.instance.chosenMap = mapChangeButton.isOn ? 2 : 1; //false = 1, true = 2
-        PlayerPrefs.SetInt("chosenMap", GameManager.instance.chosenMap);
-        PlayerPrefs.Save();
+        LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
     }
 
     public void Playgame()

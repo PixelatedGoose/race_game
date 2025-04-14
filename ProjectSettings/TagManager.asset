@@ -12,6 +12,7 @@ TagManager:
   - soundFXonClick
   - soundFXbutton
   - RespawnTrigger
+  - msObj
   layers:
   - Default
   - TransparentFX

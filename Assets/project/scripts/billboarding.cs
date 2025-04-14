@@ -5,7 +5,7 @@ public class billboarding : MonoBehaviour
     private float maxScale = 0.6f; // Maximum scale factor
     private Camera bbCamera; // Reference to the main camera
 
-    /* void Start()
+    void Start()
     {
         bbCamera = GameObject.Find("Camera").GetComponent<Camera>(); // Find the camera in the scene
         
@@ -32,5 +32,5 @@ public class billboarding : MonoBehaviour
         {
             enabled = false; // Disable the script if the camera is not found
         }
-    } */
+    }
 }

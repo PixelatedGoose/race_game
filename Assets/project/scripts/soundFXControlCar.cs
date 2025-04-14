@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class soundFXControl : MonoBehaviour
+public class soundFXControlCar : MonoBehaviour
 {
     CarInputActions Controls;
     public GameObject[] soundList;
@@ -25,8 +25,6 @@ public class soundFXControl : MonoBehaviour
 
         soundClickList = GameObject.FindGameObjectsWithTag("soundFXonClick"); //koska array on vitun paska
         soundClickList = soundClickList.OrderBy(a => a.name).ToArray();
-
-        soundList[1].GetComponent<AudioSource>().Play();
 
         //hell
         //paska koodi
@@ -86,60 +84,5 @@ public class soundFXControl : MonoBehaviour
     private void OnDisable()
     {
         Controls.Disable();
-    }
-
-    void Update()
-    {
-        if (Controls.CarControls.pausemenu.triggered)
-        {
-            if (GameManager.instance.isPaused == false)
-            {
-                soundList[2].GetComponent<AudioSource>().volume = 0.0f;
-                foreach (GameObject sound in soundList)
-                {
-                    if (sound.GetComponent<AudioSource>().name != "pausedTrack")
-                    {
-                        sound.GetComponent<AudioSource>().UnPause();
-                    }
-                }
-            }
-            else if (GameManager.instance.isPaused == true)
-            {
-                soundList[2].GetComponent<AudioSource>().volume = 1.0f;
-                foreach (GameObject sound in soundList)
-                {
-                    if (sound.GetComponent<AudioSource>().name != "pausedTrack")
-                    {
-                        sound.GetComponent<AudioSource>().Pause();
-                    }
-                }
-            }
-        }
-        
-        else if (GameManager.instance.isPaused == false)
-        {
-            soundList[2].GetComponent<AudioSource>().volume = 0.0f;
-            foreach (GameObject sound in soundList)
-            {
-                if (sound.GetComponent<AudioSource>().name != "pausedTrack")
-                {
-                    sound.GetComponent<AudioSource>().UnPause();
-                }
-            }
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (Mathf.Floor(GameManager.instance.carSpeed) == 0)
-        {
-            soundList[1].GetComponent<AudioSource>().volume = 0.0f;
-        }
-        
-        if (GameManager.instance.carSpeed > 0) //kesken
-        {
-            soundList[1].GetComponent<AudioSource>().pitch = GameManager.instance.carSpeed / 40;
-            soundList[1].GetComponent<AudioSource>().volume = GameManager.instance.carSpeed / 80;
-        }
     }
 }
