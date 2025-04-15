@@ -34,4 +34,10 @@ public class additionalCarController : MonoBehaviour
     {
         Controls.Disable();
     }
+
+    private void OnDestroy()
+    {
+        Controls.Disable();
+        //Controls.Dispose();
+    }
 }

@@ -24,6 +24,12 @@ public class PauseMenu : MonoBehaviour
         Controls.Disable();
     }
 
+    private void OnDestroy()
+    {
+        Controls.Disable();
+        //Controls.Dispose();
+    }
+
     public GameObject[] pauseMenuObjects;
     
     void Update()

@@ -91,6 +91,12 @@ public class CarController : MonoBehaviour
         Controls.Disable();
     }
 
+    private void OnDestroy()
+    {
+        Controls.Disable();
+        Controls.Dispose();
+    }
+
 
     public float GetSpeed()
     {

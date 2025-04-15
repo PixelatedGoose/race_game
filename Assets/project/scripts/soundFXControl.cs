@@ -88,6 +88,12 @@ public class soundFXControl : MonoBehaviour
         Controls.Disable();
     }
 
+    private void OnDestroy()
+    {
+        Controls.Disable();
+        //Controls.Dispose();
+    }
+
     void Update()
     {
         if (Controls.CarControls.pausemenu.triggered)

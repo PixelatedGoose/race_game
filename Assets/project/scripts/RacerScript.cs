@@ -99,6 +99,12 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Controls.Disable();
     }
 
+    private void OnDestroy()
+    {
+        Controls.Disable();
+        Controls.Dispose();
+    }
+
     void Start()
     {
         InitializeRace();

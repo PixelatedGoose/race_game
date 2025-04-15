@@ -13542,7 +13542,7 @@ MonoBehaviour:
     maxValue: 50
     rankName: silver
   - minValue: 50.001
-    maxValue: 1e+13
+    maxValue: 80
     rankName: gold
 --- !u!4 &1363139960
 Transform:

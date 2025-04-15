@@ -2,6 +2,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Unity.VisualScripting.FullSerializer;
 
 public class mapSelection : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class mapSelection : MonoBehaviour
     private float schizophrenia;
     private RawImage loadImage;
     private AudioSource loadingLoop;
+    private GameObject[] maps;
+    private RectTransform mapRectTransform;
 
     void Awake()
     {
@@ -19,14 +22,38 @@ public class mapSelection : MonoBehaviour
         loadImage = GameObject.Find("loadImage").GetComponent<RawImage>();
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
+
+        maps = new GameObject[]
+        {
+            GameObject.Find("mountainDay"),
+            GameObject.Find("mountainNight"),
+            GameObject.Find("shoreDay")
+        };
+
+        MapFallAnimResetPos();
     }
 
     public void Back()
     {
+        MapFallAnimResetPos();
         csObjects.SetActive(true);
         msObjects.SetActive(false);
     }
 
+    private void MapFallAnimResetPos()
+    {
+        foreach (GameObject map in maps)
+        {
+            LeanTween.cancel(map);
+            mapRectTransform = map.GetComponent<RectTransform>();
+            mapRectTransform.anchoredPosition = new Vector2(mapRectTransform.anchoredPosition.x, 230.0f);
+        }
+    }
+
+    /// <summary>
+    /// käytetään mapin valintaan. ottaa mapin PlayerPrefsistä
+    /// </summary>
+    /// <param name="selecta">mappi, jonka haluat ladata</param>
     public void MapButtonPress(int selecta)
     {
         switch (selecta)
@@ -49,6 +76,12 @@ public class mapSelection : MonoBehaviour
         }
     }
 
+    //helpottaa asioit ja se on coroutine jo valmiiksi
+    public void MapFallAnim()
+    {
+        StartCoroutine(MapFallAnimFunc());
+    }
+
     private IEnumerator MapButtonFunc()
     {
         loadingLoop.Play();
@@ -65,6 +98,24 @@ public class mapSelection : MonoBehaviour
         Debug.Log("you will now wait for: " + schizophrenia + "seconds");
         yield return new WaitForSeconds(schizophrenia);
 
+        //en tiiä onko performance riski ottaa chosenMap GameManagerista
         SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap"));
+    }
+
+    private IEnumerator MapFallAnimFunc()
+    {
+        foreach (GameObject mapImg in maps)
+        {
+            RectTransform rectTransform = mapImg.GetComponent<RectTransform>();
+
+            //LeanTween.value on ainoa tapa muuttaa Rect Transformin y:tä
+            LeanTween.value(mapImg, rectTransform.anchoredPosition.y, (int)-60.0f, 0.5f)
+            .setEase(LeanTweenType.easeInOutExpo)
+            .setOnUpdate((float val) =>
+            {
+                rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, val);
+            });
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 }

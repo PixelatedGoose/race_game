@@ -85,4 +85,10 @@ public class soundFXControlCar : MonoBehaviour
     {
         Controls.Disable();
     }
+
+    private void OnDestroy()
+    {
+        Controls.Disable();
+        //Controls.Dispose();
+    }
 }
