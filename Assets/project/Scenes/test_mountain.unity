@@ -9403,6 +9403,10 @@ PrefabInstance:
       value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 6959773831173666642, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: driftMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959773831173666642, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: turnSensitivtyAtLowSpeed
       value: 24
       objectReference: {fileID: 0}

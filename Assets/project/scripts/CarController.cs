@@ -54,6 +54,8 @@ public class CarController : MonoBehaviour
     public float Turbesped = 150.0f;
     public float basespeed = 100.0f;
     public float grassmaxspeed = 50.0f;
+    [Header("Drift asetukset")]
+    public float driftMultiplier = 1.0f; 
 
     [Header("turbe asetukset")]
     public Image turbeMeter;
@@ -131,8 +133,8 @@ public class CarController : MonoBehaviour
         Decelerate();
         ApplySpeedLimit();
         Applyturnsensitivity();
+        //AdjustWheelFriction();
         OnGrass();
-      
         TURBE();
         TURBEmeter();
     }
@@ -225,8 +227,28 @@ public class CarController : MonoBehaviour
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f;
-        turnSensitivty = speed > 40.0f ? turnSensitivtyAtHighSpeed : turnSensitivtyAtLowSpeed;
+        turnSensitivty = Mathf.Lerp(turnSensitivtyAtHighSpeed, turnSensitivtyAtLowSpeed, Mathf.Clamp01(speed / maxspeed));
     }
+    // void AdjustWheelFriction()
+    // {
+    //     float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert to km/h
+    //     float gripFactor = Mathf.Clamp(1.0f + (speed / maxspeed), 1.0f, 1.75f); // Increase grip as speed increases
+
+    //     foreach (var wheel in wheels)
+    //     {
+    //         if (wheel.wheelCollider == null) continue;
+
+    //         WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
+    //         forwardFriction.extremumValue = gripFactor;
+    //         forwardFriction.asymptoteValue = gripFactor * 0.75f;
+    //         wheel.wheelCollider.forwardFriction = forwardFriction;
+
+    //         WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+    //         sidewaysFriction.extremumValue = gripFactor;
+    //         sidewaysFriction.asymptoteValue = gripFactor * 0.75f;
+    //         wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+    //     }
+    // }
 
     void TURBE()
     {
@@ -290,7 +312,6 @@ public class CarController : MonoBehaviour
             {
                 velocity = Vector3.zero;
             }
-            carRb.linearVelocity = velocity;
         }
     }
 
@@ -314,15 +335,13 @@ public class CarController : MonoBehaviour
             carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
         }
     }
-
     void HandleDrift()
     {
         Controls.CarControls.Drift.performed += ctx => {
-            // Check if the race is finished
             RacerScript racerScript = FindAnyObjectByType<RacerScript>();
             if (racerScript != null && racerScript.raceFinished)
             {
-                return; // Do not allow drifting points if the race is finished
+                return;
             }
 
             if (activedrift > 0)
@@ -331,23 +350,26 @@ public class CarController : MonoBehaviour
             }
             activedrift++;
 
+            float speed = carRb.linearVelocity.magnitude * 3.6f;
+            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f); 
+            float driftMultiplier = 1.0f; 
+
             foreach (var wheel in wheels)
             {
                 if (wheel.wheelCollider == null) continue;
 
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-                sidewaysFriction.extremumSlip = 1.5f;
-                sidewaysFriction.asymptoteSlip = 2.0f;
-                sidewaysFriction.extremumValue = 0.5f;
-                sidewaysFriction.asymptoteValue = 0.75f;
+                sidewaysFriction.extremumSlip = 1.5f * speedFactor * driftMultiplier;
+                sidewaysFriction.asymptoteSlip = 2.0f * speedFactor * driftMultiplier;
+                sidewaysFriction.extremumValue = 0.5f / (speedFactor * driftMultiplier);
+                sidewaysFriction.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
 
-                if (GameManager.instance.carSpeed > 20.0f )
-                {
-            
-                    GameManager.instance.AddPoints();
-                }
+            if (speed > 20.0f) 
+            {
+                GameManager.instance.AddPoints();
+            }
         };
 
         Controls.CarControls.Drift.canceled += ctx => {
@@ -367,7 +389,7 @@ public class CarController : MonoBehaviour
             return;
         }
 
-        GameManager.instance.StopAddingPoints(); // Stop adding points when drifting ends
+        GameManager.instance.StopAddingPoints(); 
 
         foreach (var wheel in wheels)
         {
