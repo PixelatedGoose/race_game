@@ -51,11 +51,9 @@ public class PauseMenu : MonoBehaviour
                 if (isActive)
                 {
                     Time.timeScale = 1;
-                    //GameManager.instance.isPaused = false;
                 }
                 else
                 {
-                    //GameManager.instance.isPaused = true;
                     pauseMenuObjects[0].transform.localPosition = new Vector3(0.0f, 470.0f, 0.0f);
                     Time.timeScale = 0;
 

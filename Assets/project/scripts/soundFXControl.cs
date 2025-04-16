@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class soundFXControl : MonoBehaviour
@@ -98,37 +99,35 @@ public class soundFXControl : MonoBehaviour
     {
         if (Controls.CarControls.pausemenu.triggered)
         {
-            if (GameManager.instance.isPaused == false)
+            PauseStateHandler();
+        }
+    }
+
+    public void PauseStateHandler()
+    {
+        if (GameManager.instance.isPaused == true)
+        {
+            Debug.Log("joo ok oot pausessa");
+            soundList[2].GetComponent<AudioSource>().volume = 1.0f;
+            foreach (GameObject sound in soundList)
             {
-                soundList[2].GetComponent<AudioSource>().volume = 0.0f;
-                foreach (GameObject sound in soundList)
+                if (sound.GetComponent<AudioSource>().name != "pausedTrack")
                 {
-                    if (sound.GetComponent<AudioSource>().name != "pausedTrack")
-                    {
-                        sound.GetComponent<AudioSource>().UnPause();
-                    }
-                }
-            }
-            else if (GameManager.instance.isPaused == true)
-            {
-                soundList[2].GetComponent<AudioSource>().volume = 1.0f;
-                foreach (GameObject sound in soundList)
-                {
-                    if (sound.GetComponent<AudioSource>().name != "pausedTrack")
-                    {
-                        sound.GetComponent<AudioSource>().Pause();
-                    }
+                    Debug.Log(sound + " pysäytetty");
+                    sound.GetComponent<AudioSource>().Pause();
                 }
             }
         }
         
         else if (GameManager.instance.isPaused == false)
         {
+            Debug.Log("joo ok et oo pausessa");
             soundList[2].GetComponent<AudioSource>().volume = 0.0f;
             foreach (GameObject sound in soundList)
             {
                 if (sound.GetComponent<AudioSource>().name != "pausedTrack")
                 {
+                    Debug.Log(sound + " ei pysäytetty");
                     sound.GetComponent<AudioSource>().UnPause();
                 }
             }

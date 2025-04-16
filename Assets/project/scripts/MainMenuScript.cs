@@ -6,9 +6,12 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] optionScript OptionScript;
     public GameObject fullMenu;
+    private AudioSource menuMusic;
 
     void Awake()
     {
+        menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
+        
         //PlayerPrefs.DeleteAll(); //VAIN DEBUGAAMISTA VARTEN
         if (PlayerPrefs.HasKey("pixel_value"))
         {
@@ -28,6 +31,7 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
+        menuMusic.Play();
     }
 
     public void Playgame()

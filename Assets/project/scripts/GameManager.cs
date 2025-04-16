@@ -27,8 +27,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public int chosenMap = 1;
 
-    public GameObject mapChangeButton;
-
     [Header("car selection")]
     public GameObject currentCar;
     public GameObject[] cars;
@@ -70,6 +68,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             foreach (GameObject car in cars)
             {
+                //jotta se löytää ne; inaktiivisesta gameobjectista ei pysty löytää mitää
+                ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
                 car.SetActive(false);
             }
 
@@ -87,7 +87,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 if (car.activeInHierarchy)
                 {
                     Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
-                    ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
                 }
                 else
                 {
