@@ -133,8 +133,8 @@ public class CarController : MonoBehaviour
         Decelerate();
         ApplySpeedLimit();
         Applyturnsensitivity();
+        //AdjustWheelFriction();
         OnGrass();
-      
         TURBE();
         TURBEmeter();
     }
@@ -227,8 +227,28 @@ public class CarController : MonoBehaviour
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f;
-        turnSensitivty = speed > 40.0f ? turnSensitivtyAtHighSpeed : turnSensitivtyAtLowSpeed;
+        turnSensitivty = Mathf.Lerp(turnSensitivtyAtHighSpeed, turnSensitivtyAtLowSpeed, Mathf.Clamp01(speed / maxspeed));
     }
+    // void AdjustWheelFriction()
+    // {
+    //     float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert to km/h
+    //     float gripFactor = Mathf.Clamp(1.0f + (speed / maxspeed), 1.0f, 1.75f); // Increase grip as speed increases
+
+    //     foreach (var wheel in wheels)
+    //     {
+    //         if (wheel.wheelCollider == null) continue;
+
+    //         WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
+    //         forwardFriction.extremumValue = gripFactor;
+    //         forwardFriction.asymptoteValue = gripFactor * 0.75f;
+    //         wheel.wheelCollider.forwardFriction = forwardFriction;
+
+    //         WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+    //         sidewaysFriction.extremumValue = gripFactor;
+    //         sidewaysFriction.asymptoteValue = gripFactor * 0.75f;
+    //         wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+    //     }
+    // }
 
     void TURBE()
     {
@@ -292,7 +312,6 @@ public class CarController : MonoBehaviour
             {
                 velocity = Vector3.zero;
             }
-            carRb.linearVelocity = velocity;
         }
     }
 
@@ -332,7 +351,7 @@ public class CarController : MonoBehaviour
             activedrift++;
 
             float speed = carRb.linearVelocity.magnitude * 3.6f;
-            float speedFactor = Mathf.Clamp(speed / 100.0f, 0.5f, 2.0f); 
+            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f); 
             float driftMultiplier = 1.0f; 
 
             foreach (var wheel in wheels)
@@ -370,7 +389,7 @@ public class CarController : MonoBehaviour
             return;
         }
 
-        GameManager.instance.StopAddingPoints(); // Stop adding points when drifting ends
+        GameManager.instance.StopAddingPoints(); 
 
         foreach (var wheel in wheels)
         {
