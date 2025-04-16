@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEngine.LightTransport;
 
 [System.Serializable]
 public class CarStats
@@ -53,11 +51,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
         if (data != null)
         {
             scoreamount = data.scored; 
-            Debug.Log($"Loading data: scored = {data.scored}");
-        }
-        else
-        {
-            Debug.LogError("GameData is null!");
         }
     }
 
@@ -70,7 +63,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     {
         if (GameManager.instance == null)
         {
-            Debug.LogError("GameManager instance is null!");
             return;
         }
 
@@ -83,6 +75,9 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
                 { carsl[2], 2000 }
             };
         }
+
+        // Update stats for the currently active car at the start
+        UpdateCarStats();
     }
 
     void Update()
@@ -123,6 +118,21 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             }
         }
 
+        // Update stats after unlocking a car
+        UpdateCarStats();
+    }
+
+    public void SetActiveCarIndex(int index)
+    {
+        if (index >= 0 && index < carsl.Count)
+        {
+            activeCarIndex = index;
+            UpdateCarStats(); // Update stats when the active car index changes
+        }
+    }
+
+    private void UpdateCarStats()
+    {
         if (activeCarIndex >= 0 && activeCarIndex < carsl.Count)
         {
             GameObject activeCar = carsl[activeCarIndex];
@@ -147,18 +157,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
         else
         {
             scoreText.text = "Invalid car selection!";
-        }
-    }
-
-    public void SetActiveCarIndex(int index)
-    {
-        if (index >= 0 && index < carsl.Count)
-        {
-            activeCarIndex = index;
-        }
-        else
-        {
-            Debug.LogError("Invalid car index!");
         }
     }
 }
