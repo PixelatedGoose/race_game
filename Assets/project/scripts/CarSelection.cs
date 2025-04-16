@@ -13,8 +13,12 @@ public class CarSelection : MonoBehaviour
     public GameObject csObjects;
     public GameObject msObjects;
 
+    private AudioSource menuMusic;
+
     void Awake()
     {
+        menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
+
         cars = new GameObject[] 
         { 
             GameObject.Find("REALCAR_x"),
@@ -54,6 +58,8 @@ public class CarSelection : MonoBehaviour
         {
             Debug.LogError("Car index out of range: " + index);
         }
+
+        menuMusic.Play();
     }
 
     void Update()
