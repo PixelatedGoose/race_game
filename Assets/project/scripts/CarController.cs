@@ -227,32 +227,17 @@ public class CarController : MonoBehaviour
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f;
-        turnSensitivty = Mathf.Lerp(turnSensitivtyAtHighSpeed, turnSensitivtyAtLowSpeed, Mathf.Clamp01(speed / maxspeed));
+        turnSensitivty = Mathf.Lerp(turnSensitivtyAtLowSpeed, turnSensitivtyAtHighSpeed, Mathf.Clamp01(speed / maxspeed));
     }
-    // void AdjustWheelFriction()
-    // {
-    //     float speed = carRb.linearVelocity.magnitude * 3.6f; // Convert to km/h
-    //     float gripFactor = Mathf.Clamp(1.0f + (speed / maxspeed), 1.0f, 1.75f); // Increase grip as speed increases
-
-    //     foreach (var wheel in wheels)
-    //     {
-    //         if (wheel.wheelCollider == null) continue;
-
-    //         WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
-    //         forwardFriction.extremumValue = gripFactor;
-    //         forwardFriction.asymptoteValue = gripFactor * 0.75f;
-    //         wheel.wheelCollider.forwardFriction = forwardFriction;
-
-    //         WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-    //         sidewaysFriction.extremumValue = gripFactor;
-    //         sidewaysFriction.asymptoteValue = gripFactor * 0.75f;
-    //         wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-    //     }
-    // }
 
     void TURBE()
     {
         isTurboActive = Controls.CarControls.turbo.IsPressed() && turbeAmount > 0;
+        if (isTurboActive)
+        {
+            carRb.AddForce(transform.forward * 50f, ForceMode.Acceleration);
+            targetTorque *= 1.5f;
+        }
     }
 
     void Move()
