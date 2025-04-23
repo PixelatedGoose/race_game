@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         sceneSelected = SceneManager.GetActiveScene().name;
 
-        if (sceneSelected == "test_mountain" || sceneSelected == "test_mountain_night" || sceneSelected == "haukipudas")
+        if (sceneSelected == "test_mountain" || sceneSelected == "test_mountain_night" || sceneSelected == "haukipudas" || sceneSelected == "AItest" || sceneSelected == "ai_haukipudas")
         {
             foreach (GameObject car in cars)
             {
