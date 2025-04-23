@@ -6,19 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/project/Scenes/MainMenu.unity
+    path: Assets/Scenes/MainMenu.unity
     guid: 48296d617a9774b4da53a19ae1f5292b
   - enabled: 1
-    path: Assets/project/Scenes/test_mountain.unity
-    guid: 0912648409e70c146b7d053d0c2c0453
+    path: Assets/Scenes/test_mountain.unity
+    guid: f46309ae4967b0447af2cebde5299248
   - enabled: 1
-    path: Assets/project/Scenes/test_mountain_night.unity
+    path: Assets/Scenes/test_mountain_night.unity
     guid: a6b6b11d5bcc29a4288f5cf1d9219f4a
   - enabled: 1
-    path: Assets/project/Scenes/Carselectionmenu.unity
+    path: Assets/Scenes/Carselectionmenu.unity
     guid: afc6d98342131454da1b0dd62998ccc2
   - enabled: 1
-    path: Assets/project/Scenes/haukipudas.unity
+    path: Assets/Scenes/haukipudas.unity
     guid: 05737f1c449c0ec44815ec509bc53956
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
