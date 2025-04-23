@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 
 
-//HUOM. ÄLÄ POISTA KÄYTÖSTÄ MUITA AUTOJA HIERARKIASSA
-
 public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance;
@@ -36,6 +34,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public string sceneSelected;
     [Header("auto")]
     public float carSpeed;
+    public bool turbeActive = false;
 
     void OnEnable()
     {
