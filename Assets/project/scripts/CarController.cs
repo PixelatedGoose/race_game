@@ -462,6 +462,7 @@ public class CarController : MonoBehaviour
         if (isTurboActive && turbeAmount != 0) //jos käytät turboa ja sitä o jäljellä
         {
             Debug.Log("turbe aktiivisena");
+            GameManager.instance.turbeActive = true;
 
             if (turbeRegenCoroutineAmount > 0)
             {
@@ -475,10 +476,10 @@ public class CarController : MonoBehaviour
         else if (!isTurboActive && turbeAmount < turbeMax) //jos et käytä turboa ja se ei oo täynnä
         {
             Debug.Log("turbe epäaktiivisena");
+            GameManager.instance.turbeActive = false;
 
             if (turbeRegenCoroutineAmount == 0 && isRegenerating == false)
             {
-                Debug.Log("aloitin vitun paska perse");
                 turbeRegenCoroutines("start");
                 turbeRegenCoroutineAmount += 1;
             }
@@ -508,17 +509,13 @@ public class CarController : MonoBehaviour
     /// </summary>
     private IEnumerator turbeRegenerate()
     {
-        Debug.Log("PASS 1; started regen coroutine");
         yield return new WaitForSecondsRealtime(2.0f);
         isRegenerating = true;
 
         if (isRegenerating && turbeRegenCoroutineAmount == 1)
         {
-            Debug.Log("PASS 2; Now dawns thy reckoning");
-
             while (isRegenerating && turbeRegenCoroutineAmount == 1)
             {
-                Debug.Log("PASS 3; regenerating");
                 yield return StartCoroutine(RegenerateTurbeAmount());
             }
         }
