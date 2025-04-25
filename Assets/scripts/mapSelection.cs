@@ -11,6 +11,8 @@ public class mapSelection : MonoBehaviour
     public GameObject[] msObjectsList;
     private float schizophrenia;
     private RawImage loadImage;
+    private Text loadText_text;
+    private GameObject loadObjects;
     private AudioSource loadingLoop;
     private GameObject[] maps;
     private RectTransform mapRectTransform;
@@ -20,6 +22,8 @@ public class mapSelection : MonoBehaviour
         csObjects = GameObject.Find("carSelectionObj");
         msObjects = GameObject.Find("mapSelectionObj");
         loadImage = GameObject.Find("loadImage").GetComponent<RawImage>();
+        loadText_text = GameObject.Find("loadText").GetComponent<Text>();
+        loadObjects = GameObject.Find("loadObjects");
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
 
@@ -88,8 +92,8 @@ public class mapSelection : MonoBehaviour
         PlayerPrefs.Save();
         GameManager.instance.chosenMap = PlayerPrefs.GetInt("chosenMap");
 
-        schizophrenia = Random.Range(1.0f, 4.0f);
-        LeanTween.moveLocalY(loadImage.gameObject, 0, 0.8f).setEase(LeanTweenType.easeInOutCubic);
+        schizophrenia = Random.Range(2.0f, 5.0f);
+        LeanTween.moveLocalY(loadObjects.gameObject, 0, 0.8f).setEase(LeanTweenType.easeInOutCubic);
         foreach (GameObject theobject in msObjectsList)
         {
             LeanTween.moveLocalY(theobject, theobject.transform.position.y + 451, 0.8f).setEase(LeanTweenType.easeInOutCubic);
