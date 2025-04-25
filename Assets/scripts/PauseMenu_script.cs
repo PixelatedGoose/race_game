@@ -82,4 +82,10 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadSceneAsync(0);
     }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap"));
+        Time.timeScale = 1;
+    }
 }
