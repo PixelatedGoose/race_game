@@ -7,7 +7,8 @@ public class loadText_data
     public string[] general;
     public string[] uncommon;
     public string[] rare;
-    public string[] legendary;
+    public string[] obscure;
+    public string[] special;
 }
 
 public class loading : MonoBehaviour
@@ -31,7 +32,7 @@ public class loading : MonoBehaviour
 
         if (chance <= 2) //2%
         {
-            loadTextRarity = "legendary";
+            loadTextRarity = "obscure";
         }
         else if (chance <= 8) //6%
         {
@@ -45,6 +46,9 @@ public class loading : MonoBehaviour
         {
             loadTextRarity = "general";
         }
+
+        //lisää tähän erillinen mahollisuus special teksteille
+        //overwritaa mahollisuuet käyttämällä .json filen lukua ja kirjotusta (kirjotuksen tarvii aarren special tekstiä varten)
 
         switch (loadTextRarity)
         {
@@ -63,9 +67,9 @@ public class loading : MonoBehaviour
                 loadText_text.text = textData.rare[Random.Range(0, textData.rare.Length)];
 
                 break;
-            case "legendary":
-                Debug.Log("LEGENDARY");
-                loadText_text.text = textData.legendary[Random.Range(0, textData.legendary.Length)];
+            case "obscure":
+                Debug.Log("OBSCURE");
+                loadText_text.text = textData.obscure[Random.Range(0, textData.obscure.Length)];
 
                 break;
         }
