@@ -47,6 +47,9 @@ public class loading : MonoBehaviour
             loadTextRarity = "general";
         }
 
+        //lisää tähän erillinen mahollisuus special teksteille
+        //overwritaa mahollisuuet käyttämällä .json filen lukua ja kirjotusta (kirjotuksen tarvii aarren special tekstiä varten)
+
         switch (loadTextRarity)
         {
             case "general":
