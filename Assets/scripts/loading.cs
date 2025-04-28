@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class loadText_data
@@ -14,17 +15,21 @@ public class loadText_data
 public class loading : MonoBehaviour
 {
     public Text loadText_text;
+    public TextAsset loadTexts;
+    public loadText_data textData;
 
+    void OnEnable()
+    {
+        loadTexts = Resources.Load<TextAsset>("loading/loadTexts");
+        textData = JsonUtility.FromJson<loadText_data>(loadTexts.text);
+    }
     void Start()
     {
         loadingTexts();
     }
 
-    void loadingTexts()
+    public void loadingTexts()
     {
-        TextAsset loadTexts = Resources.Load<TextAsset>("loading/loadTexts");
-        loadText_data textData = JsonUtility.FromJson<loadText_data>(loadTexts.text);
-
         Random.InitState(System.DateTime.Now.Millisecond);
         int chance = Random.Range(1, 101);
 
@@ -74,4 +79,29 @@ public class loading : MonoBehaviour
                 break;
         }
     }
+
+    /* public void specialLoadingTexts()
+    {
+        TextAsset specialTextChancesFile = Resources.Load<TextAsset>("loading/specialTextChances");
+        Dictionary<string, float> specialChances = JsonUtility.FromJson<Dictionary<string, float>>(specialTextChancesFile.text);
+
+        Random.InitState(System.DateTime.Now.Millisecond);
+
+        foreach (string text in textData.special)
+        {
+            int textIndex = System.Array.IndexOf(textData.special, text);
+            Debug.Log(textIndex);
+
+            if (specialChances.TryGetValue(text, out float value))
+            {
+                float sChance = Random.Range(1, 101f);
+
+                if (sChance <= value)
+                {
+                    Debug.Log("special message chance achieved");
+                    loadText_text.text = textData.special[textIndex];
+                }
+            }
+        }
+    } */
 }

@@ -2,7 +2,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using Unity.VisualScripting.FullSerializer;
 
 public class mapSelection : MonoBehaviour
 {
@@ -10,8 +9,6 @@ public class mapSelection : MonoBehaviour
     public GameObject msObjects;
     public GameObject[] msObjectsList;
     private float schizophrenia;
-    private RawImage loadImage;
-    private Text loadText_text;
     private GameObject loadObjects;
     private AudioSource loadingLoop;
     private GameObject[] maps;
@@ -21,8 +18,6 @@ public class mapSelection : MonoBehaviour
     {
         csObjects = GameObject.Find("carSelectionObj");
         msObjects = GameObject.Find("mapSelectionObj");
-        loadImage = GameObject.Find("loadImage").GetComponent<RawImage>();
-        loadText_text = GameObject.Find("loadText").GetComponent<Text>();
         loadObjects = GameObject.Find("loadObjects");
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
@@ -92,7 +87,7 @@ public class mapSelection : MonoBehaviour
         PlayerPrefs.Save();
         GameManager.instance.chosenMap = PlayerPrefs.GetInt("chosenMap");
 
-        schizophrenia = Random.Range(2.0f, 5.0f);
+        schizophrenia = Random.Range(5.0f, 8.0f);
         LeanTween.moveLocalY(loadObjects.gameObject, 0, 0.8f).setEase(LeanTweenType.easeInOutCubic);
         foreach (GameObject theobject in msObjectsList)
         {
