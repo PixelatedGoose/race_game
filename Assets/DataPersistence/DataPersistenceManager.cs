@@ -99,8 +99,7 @@ public class DatapersistenceManager : MonoBehaviour
         }
     }
     private void OnApplicationQuit()
-    {
-       
+    { 
         SaveGame();
     }
 

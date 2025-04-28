@@ -160,7 +160,7 @@ public class AICarController : MonoBehaviour
         {
             if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
             {
-                if (hit.collider.CompareTag("Grass"))
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Grass"))
                     return true;
             }
         }
