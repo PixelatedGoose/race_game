@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 [System.Serializable]
 public class loadText_data
@@ -12,11 +11,23 @@ public class loadText_data
     public string[] special;
 }
 
+[System.Serializable]
+public class specialTextChances
+{
+    public float error;
+    public float play1;
+    public float play2;
+    public float play3;
+    public float chance;
+    public float shit;
+}
+
 public class loading : MonoBehaviour
 {
     public Text loadText_text;
     public TextAsset loadTexts;
     public loadText_data textData;
+    public int index = -1;
 
     void OnEnable()
     {
@@ -25,7 +36,8 @@ public class loading : MonoBehaviour
     }
     void Start()
     {
-        loadingTexts();
+        /* loadingTexts(); */
+        specialLoadingTexts();
     }
 
     public void loadingTexts()
@@ -80,28 +92,34 @@ public class loading : MonoBehaviour
         }
     }
 
-    /* public void specialLoadingTexts()
+    public void specialLoadingTexts()
     {
         TextAsset specialTextChancesFile = Resources.Load<TextAsset>("loading/specialTextChances");
-        Dictionary<string, float> specialChances = JsonUtility.FromJson<Dictionary<string, float>>(specialTextChancesFile.text);
+        specialTextChances specialChances = JsonUtility.FromJson<specialTextChances>(specialTextChancesFile.text);
 
         Random.InitState(System.DateTime.Now.Millisecond);
 
-        foreach (string text in textData.special)
+        var fields = typeof(specialTextChances).GetFields();
+        foreach (var field in fields)
         {
-            int textIndex = System.Array.IndexOf(textData.special, text);
-            Debug.Log(textIndex);
+            index += 1;
 
-            if (specialChances.TryGetValue(text, out float value))
+            string key = field.Name;
+            float value = (float)field.GetValue(specialChances);
+
+            Debug.Log($"Key: {key}, Value: {value}");
+
+            float sChance = Random.Range(value * 1000, 100000);
+            if (sChance <= value * 1000)
             {
-                float sChance = Random.Range(1, 101f);
-
-                if (sChance <= value)
-                {
-                    Debug.Log("special message chance achieved");
-                    loadText_text.text = textData.special[textIndex];
-                }
+                loadText_text.text = textData.special[index];
+                Debug.Log(key);
+                break;
+            }
+            else
+            {
+                Debug.Log("fuck off");
             }
         }
-    } */
+    }
 }
