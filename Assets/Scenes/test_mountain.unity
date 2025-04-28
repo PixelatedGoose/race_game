@@ -5483,7 +5483,7 @@ PrefabInstance:
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: Car1Hud
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1486761065}
     - target: {fileID: 2293941396014156875, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: winMenu
       value: 
@@ -5823,7 +5823,7 @@ PrefabInstance:
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: Car1Hud
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1486761065}
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: winMenu
       value: 
@@ -8734,6 +8734,11 @@ Transform:
   - {fileID: 905091233}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1486761065 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 777392002364676048, guid: 80000b9bacd37a44bb37538db943bd1e, type: 3}
+  m_PrefabInstance: {fileID: 642033378}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1488663492
 PrefabInstance:
   m_ObjectHideFlags: 0

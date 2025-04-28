@@ -4,66 +4,58 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject Optionspanel;
-    private bool optionsOpen = false;
+    public GameObject[] pauseMenuObjects;
+
+    private bool optionsOpen => Optionspanel != null && Optionspanel.activeSelf;
+    private CarInputActions Controls;
+    private RacerScript racerScript;
 
     void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
+        racerScript = FindFirstObjectByType<RacerScript>();
+
+        if (pauseMenuObjects == null || pauseMenuObjects.Length == 0)
+            Debug.LogWarning("PauseMenuObjects array is not assigned or empty.");
+        if (Optionspanel == null)
+            Debug.LogWarning("Optionspanel is not assigned.");
     }
 
-    CarInputActions Controls;
+    private void OnEnable() => Controls.Enable();
+    private void OnDisable() => Controls.Disable();
+    private void OnDestroy() => Controls.Disable();
 
-    private void OnEnable()
-    {
-        Controls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        Controls.Disable();
-    }
-
-    private void OnDestroy()
-    {
-        Controls.Disable();
-        //Controls.Dispose();
-    }
-
-    public GameObject[] pauseMenuObjects;
-    
     void Update()
     {
-        optionsOpen = Optionspanel.activeSelf;
-
-        if (Controls.CarControls.pausemenu.triggered && optionsOpen == false)
+        if (Controls.CarControls.pausemenu.triggered && !optionsOpen && racerScript != null && !racerScript.raceFinished)
         {
-            LeanTween.cancel(pauseMenuObjects[0]);
-            if (pauseMenuObjects != null && pauseMenuObjects.Length > 0)
-            {
-                bool isActive = pauseMenuObjects[0].activeSelf;
-                foreach (GameObject obj in pauseMenuObjects)
-                {
-                    obj.SetActive(!isActive);
-                    GameManager.instance.isPaused = !isActive;
-                }
+            TogglePauseMenu();
+        }
+    }
 
-                if (isActive)
-                {
-                    Time.timeScale = 1;
-                }
-                else
-                {
-                    pauseMenuObjects[0].transform.localPosition = new Vector3(0.0f, 470.0f, 0.0f);
-                    Time.timeScale = 0;
+    private void TogglePauseMenu()
+    {
+        if (pauseMenuObjects == null || pauseMenuObjects.Length == 0) return;
 
-                    LeanTween.moveLocalY(pauseMenuObjects[0], 0.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
-                }
-            }
-            else
-            {
-                Debug.LogError("PauseMenuObjects array is not assigned or empty.");
-            }
+        LeanTween.cancel(pauseMenuObjects[0]);
+        bool isActive = pauseMenuObjects[0].activeSelf;
+
+        foreach (GameObject obj in pauseMenuObjects)
+        {
+            obj.SetActive(!isActive);
+        }
+        GameManager.instance.isPaused = !isActive;
+
+        if (isActive)
+        {
+            Time.timeScale = 1;
+        }
+        else
+        {
+            pauseMenuObjects[0].transform.localPosition = new Vector3(0.0f, 470.0f, 0.0f);
+            Time.timeScale = 0;
+            LeanTween.moveLocalY(pauseMenuObjects[0], 0.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
         }
     }
 
@@ -82,10 +74,10 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadSceneAsync(0);
     }
-
     public void RestartGame()
     {
-        SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap"));
         Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 }

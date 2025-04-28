@@ -316,7 +316,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
         if (winMenu != null)
         {
-            winMenu.SetActive(true); 
+            winMenu.SetActive(true);
             raceFinished = true; 
         }
 
@@ -363,5 +363,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         Debug.Log("Quitting Game...");
         Application.Quit();
+        if (!raceFinished)
+        {
+            
+        }
     }
 }
