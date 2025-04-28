@@ -26,7 +26,7 @@ public class musicControl : MonoBehaviour
     {
         if (GameManager.instance.turbeActive)
         {
-            if (cirnoturbo.volume <= 0.500f)
+            if (cirnoturbo.volume <= 0.390f)
             {
                 cirnoturbo.volume = Mathf.MoveTowards(cirnoturbo.volume, 0.5f, 1.0f * Time.deltaTime);
                 cirnodrift.volume = Mathf.MoveTowards(cirnodrift.volume, 0.0f, 1.0f * Time.deltaTime);
@@ -37,7 +37,7 @@ public class musicControl : MonoBehaviour
         {
             if (GameManager.instance.isAddingPoints)
             {
-                if (cirnodrift.volume <= 0.500f)
+                if (cirnodrift.volume <= 0.390f)
                 {
                     cirnodrift.volume = Mathf.MoveTowards(cirnodrift.volume, 0.5f, 1.0f * Time.deltaTime);
                     cirno.volume = Mathf.MoveTowards(cirno.volume, 0.0f, 1.0f * Time.deltaTime);
