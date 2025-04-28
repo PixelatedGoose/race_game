@@ -235,7 +235,7 @@ public class CarController : MonoBehaviour
         isTurboActive = Controls.CarControls.turbo.IsPressed() && turbeAmount > 0;
         if (isTurboActive)
         {
-            carRb.AddForce(transform.forward * 50f, ForceMode.Acceleration);
+            carRb.AddForce(transform.forward * 5000f, ForceMode.Acceleration);
             targetTorque *= 1.5f;
         }
     }
@@ -297,6 +297,7 @@ public class CarController : MonoBehaviour
             {
                 velocity = Vector3.zero;
             }
+        carRb.linearVelocity = velocity;
         }
     }
 

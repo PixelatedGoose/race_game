@@ -145,6 +145,7 @@ public class FileDataHandler
             Debug.Log("Error occured when trying to save data to file:" + fullPath + "\n" + e);
         }
     }
+}
 
     /// <summary>
     /// XOR encryptio että ette pääse vaihtaa teiden tuloksia tai mitään siel safe filesta
@@ -160,4 +161,4 @@ public class FileDataHandler
     //     }
     //     return modifiedData;
     // }
-}
+
