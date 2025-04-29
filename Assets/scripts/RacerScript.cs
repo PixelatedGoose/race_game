@@ -3,12 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
     // Public variables
     public RankManager rankManager;
-    public GameObject winMenu;
+    public GameObject winMenu; 
     public GameObject Car1Hud;
 
     CarInputActions Controls;
@@ -318,7 +319,10 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             winMenu.SetActive(true);
             raceFinished = true; 
+            DatapersistenceManager.instance.SaveGame();
+            print("data saved");
         }
+ 
 
         if (startFinishLine != null)
             startFinishLine.gameObject.SetActive(false);
@@ -367,5 +371,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             
         }
+    }
+     void BackToMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
     }
 }

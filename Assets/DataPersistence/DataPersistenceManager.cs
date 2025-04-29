@@ -98,10 +98,6 @@ public class DatapersistenceManager : MonoBehaviour
             gameData.bestTimesByMap.Add(new SceneBestTime(sceneName, time));
         }
     }
-    private void OnApplicationQuit()
-    { 
-        SaveGame();
-    }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
     {
