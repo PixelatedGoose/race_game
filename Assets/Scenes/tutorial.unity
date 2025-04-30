@@ -870,7 +870,7 @@ GameObject:
   - component: {fileID: 761618023}
   - component: {fileID: 761618022}
   m_Layer: 0
-  m_Name: ground
+  m_Name: groundd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1484,13 +1484,6 @@ MonoBehaviour:
   cars: []
   carIndex: 0
   sceneSelected: 
-  maps:
-  - test_mountain
-  - test_mountain_night
-  - haukipudas
-  - AItest
-  - ai_haukipudas
-  - tutorial
   carSpeed: 0
   turbeActive: 0
 --- !u!1001 &1469159140
