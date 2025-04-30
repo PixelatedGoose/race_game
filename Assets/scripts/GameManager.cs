@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         carIndex = PlayerPrefs.GetInt("CarIndex");
         if (sceneSelected == "tutorial")
         {
-            currentCar = GameObject.Find("REALCAR_testDriver");
+            currentCar = GameObject.Find("REALCAR");
         }
         else
         {
