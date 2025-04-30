@@ -17,7 +17,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public float laptime;
     public float Rank;
     public float besttime;
+    public bool racestarted = false; // <-- Add this
     private bool startTimer = false;
+    private Waitbeforestart Waitbeforestart;
 
     // Lists
     public List<Text> LtimeTexts;
@@ -108,11 +110,12 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     void Start()
     {
         InitializeRace();
+        racestarted = false; // Ensure race doesn't start until countdown is done
     }
 
     void Update()
     {
-        if (raceFinished) return;
+        if (!racestarted || raceFinished) return; // Only run race logic if started
 
         HandleReset();
         Inactivity();
@@ -360,6 +363,12 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             rankText.text = "Rank: N/A";
         }
+    }
+
+    public void StartRace() // <-- Call this from Waitbeforestart
+    {
+        racestarted = true;
+        startTimer = true;
     }
 
     public void QuitGame()
