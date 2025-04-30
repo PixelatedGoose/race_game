@@ -11,7 +11,9 @@ public class Waitbeforestart : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(ShowS1AfterDelay());
+        //me sory leobold s
+        if (GameManager.instance.sceneSelected != "tutorial")
+            StartCoroutine(ShowS1AfterDelay());
     }
 
     IEnumerator ShowS1AfterDelay()
