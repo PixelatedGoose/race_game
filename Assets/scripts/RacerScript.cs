@@ -59,7 +59,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             }
             else
             {
-                Debug.LogWarning($"No best time found for scene {currentSceneName}. Defaulting to 0.");
                 besttime = 0;
             }
 
@@ -76,7 +75,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             string currentSceneName = SceneManager.GetActiveScene().name;
             DatapersistenceManager.instance.UpdateBestTime(currentSceneName, besttime);
-            Debug.Log($"Saved best time for scene {currentSceneName}: {besttime}");
+            
         }
         else
         {

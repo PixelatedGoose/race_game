@@ -27,6 +27,7 @@ public class CarController : MonoBehaviour
         public ParticleSystem smokeParticle;
         public Axel axel;
     }
+
     [Header("Auton asetukset")]
     public float maxAcceleration = 300.0f;
     public float brakeAcceleration = 3.0f;
@@ -67,7 +68,6 @@ public class CarController : MonoBehaviour
     public int turbeRegenCoroutineAmount = 0;
 
 
-
     void Awake()
     {
         Controls = new CarInputActions();
@@ -99,7 +99,6 @@ public class CarController : MonoBehaviour
         Controls.Dispose();
     }
 
-
     public float GetSpeed()
     {
         GameManager.instance.carSpeed = carRb.linearVelocity.magnitude * 3.6f;
@@ -115,11 +114,11 @@ public class CarController : MonoBehaviour
     {
         GetInputs();
         Animatewheels();
-        WheelEffects();
     }
 
     void FixedUpdate()
     {
+        
         // Stop drifting if the race is finished
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished && activedrift > 0)
@@ -156,6 +155,16 @@ public class CarController : MonoBehaviour
                 GameManager.instance.scoreAddWT = 0.01f;
             }
         }
+    }
+
+    private bool IsOnSteepSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1.5f))
+        {
+            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            return slopeAngle > 30.0f;
+        }
+        return false;
     }   
     
     void GetInputs()    
@@ -227,6 +236,7 @@ public class CarController : MonoBehaviour
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f;
+        
         turnSensitivty = Mathf.Lerp(turnSensitivtyAtLowSpeed, turnSensitivtyAtHighSpeed, Mathf.Clamp01(speed / maxspeed));
     }
 
@@ -235,24 +245,65 @@ public class CarController : MonoBehaviour
         isTurboActive = Controls.CarControls.turbo.IsPressed() && turbeAmount > 0;
         if (isTurboActive)
         {
-            carRb.AddForce(transform.forward * 5000f, ForceMode.Acceleration);
+            carRb.AddForce(transform.forward * 50f, ForceMode.Acceleration);
             targetTorque *= 1.5f;
         }
     }
 
     void Move()
     {
-        // targetTorque = moveInput * maxAcceleration;
+        HandeSteepSlope();
+        UpdateTargetTorgue();
+        AdjustSpeedForGrass();
+        foreach (var wheel in wheels)
+        {
+            if (Controls.CarControls.Brake.IsPressed())
+            {
+                Brakes(wheel);
+            }
+            else
+            {
+                MotorTorgue(wheel);
+            }
+        }
+    }
 
+    private void HandeSteepSlope()
+    {
+        if (IsOnSteepSlope())
+        {
+            targetTorque *= 0.5f;
+            carRb.linearVelocity = Vector3.ClampMagnitude(carRb.linearVelocity, maxspeed / 3.6f);
+        }
+    }
+
+    private void UpdateTargetTorgue()
+    {
         if(moveInput > 0) {
-            targetTorque = 2 * maxAcceleration;
+            targetTorque = 1 * maxAcceleration;
         } else if (moveInput < 0) {
-            targetTorque = -2 * maxAcceleration;
+            targetTorque = -1 * maxAcceleration;
         } else {
             targetTorque = 0.0f;
         };
         maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? Turbesped : basespeed, Time.deltaTime);
+    }
 
+    private void Brakes(Wheel wheel)
+    {
+        GameManager.instance.StopAddingPoints();
+        wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
+        wheel.wheelCollider.motorTorque = 0f;
+    }
+
+    private void MotorTorgue(Wheel wheel)
+    {
+        wheel.wheelCollider.motorTorque = targetTorque;
+        wheel.wheelCollider.brakeTorque = 0f;
+    }
+
+    private void AdjustSpeedForGrass()
+    {
         if (IsOnGrass())
         {
             targetTorque *= grassSpeedMultiplier;
@@ -260,26 +311,6 @@ public class CarController : MonoBehaviour
             if (GameManager.instance.carSpeed < 50.0f)
             {
                 maxspeed = 50.0f;
-            }
-            
-        }
-
-        foreach (var wheel in wheels)
-        {
-            if (Controls.CarControls.Brake.IsPressed())
-            {
-                GameManager.instance.StopAddingPoints();
-                wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
-                wheel.wheelCollider.motorTorque = 0f;
-            }
-            else if (moveInput != 0)
-            {
-                wheel.wheelCollider.motorTorque = targetTorque;
-                wheel.wheelCollider.brakeTorque = 0f;
-            }
-            else
-            {
-                wheel.wheelCollider.motorTorque = wheel.wheelCollider.brakeTorque = 0f;
             }
         }
     }
@@ -289,10 +320,9 @@ public class CarController : MonoBehaviour
         if (moveInput == 0)
         {
             Vector3 velocity = carRb.linearVelocity;
-            if (IsGrounded())
-            {
-                velocity -= velocity.normalized * deceleration * Time.deltaTime;
-            }
+
+            velocity -= velocity.normalized * deceleration * 2.0f *  Time.deltaTime;
+            
             if (velocity.magnitude < 0.1f) 
             {
                 velocity = Vector3.zero;
@@ -315,21 +345,13 @@ public class CarController : MonoBehaviour
 
     void ApplyGravity()
     {
-        if (!IsGrounded())
-        {
-            
-            carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
-        }
+        carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
     }
+
     void HandleDrift()
     {
         Controls.CarControls.Drift.performed += ctx => {
             RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-            if (racerScript != null && racerScript.raceFinished)
-            {
-                return;
-            }
-
             if (activedrift > 0)
             {
                 return;
@@ -356,27 +378,25 @@ public class CarController : MonoBehaviour
             {
                 GameManager.instance.AddPoints();
             }
-        };
 
+            WheelEffects(true);
+        };
         Controls.CarControls.Drift.canceled += ctx => {
             StopDrifting();
-        };
+            WheelEffects(false);
+        };        
     }
 
     void StopDrifting()
     {
         activedrift = 0;
-
-        // Stop adding points if the race is finished
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
         {
             GameManager.instance.StopAddingPoints();
             return;
         }
-
         GameManager.instance.StopAddingPoints(); 
-
         foreach (var wheel in wheels)
         {
             if (wheel.wheelCollider == null) continue;
@@ -390,7 +410,7 @@ public class CarController : MonoBehaviour
         }
         Controls.CarControls.Move.performed -= OnMovePerformed;
     }
-    
+
     private void OnMovePerformed(InputAction.CallbackContext ctx)
     {
         GameManager.instance.AddPoints();
@@ -415,27 +435,24 @@ public class CarController : MonoBehaviour
     /// <summary>
     /// does wheel effects
     /// </summary>
-    void WheelEffects()
+    void WheelEffects(bool enable)
     {
-        foreach(var wheel in wheels)
+        foreach (var wheel in wheels)
         {
-            var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (Controls.CarControls.Drift.IsPressed() && wheel.axel == Axel.Rear && wheel.wheelCollider.isGrounded && carRb.linearVelocity.magnitude >= 10.0f)
+            if (wheel.axel == Axel.Rear) 
             {
-                trailRenderer.emitting = true;
-                wheel.smokeParticle.Emit(1);
-                if (IsWheelOnGrass(wheel))
+                var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
+                if (trailRenderer != null)
                 {
-                    trailRenderer.material = grassMaterial;
+                    trailRenderer.emitting = enable;
                 }
-                else
+                if (wheel.smokeParticle != null)
                 {
-                    trailRenderer.material = driftmaterial;
+                    if (enable)
+                        wheel.smokeParticle.Play();
+                    else
+                        wheel.smokeParticle.Stop();
                 }
-            }
-            else
-            {
-                trailRenderer.emitting = false;
             }
         }
     }
@@ -447,7 +464,6 @@ public class CarController : MonoBehaviour
     {
         if (isTurboActive && turbeAmount != 0) //jos käytät turboa ja sitä o jäljellä
         {
-            Debug.Log("turbe aktiivisena");
             GameManager.instance.turbeActive = true;
 
             if (turbeRegenCoroutineAmount > 0)
@@ -461,7 +477,7 @@ public class CarController : MonoBehaviour
         }
         else if (!isTurboActive && turbeAmount < turbeMax) //jos et käytä turboa ja se ei oo täynnä
         {
-            Debug.Log("turbe epäaktiivisena");
+            
             GameManager.instance.turbeActive = false;
 
             if (turbeRegenCoroutineAmount == 0 && isRegenerating == false)
@@ -477,7 +493,6 @@ public class CarController : MonoBehaviour
         }
         if (turbeAmount > turbeMax)
         {
-            Debug.Log("liikaa turboa; laitetaan maksimiin");
             //Debug.Log("I bought a property in Egypt, and what they do is they give you the property");
             turbeAmount = turbeMax;
 
@@ -509,7 +524,6 @@ public class CarController : MonoBehaviour
         {
             Debug.Log("stopped regen coroutine");
             yield break;
-
             //scriptin ei pitäs päästä tähä tilanteeseen missään vaiheessa, mutta se on täällä varmuuden vuoksi
         }
     }
@@ -530,14 +544,10 @@ public class CarController : MonoBehaviour
         {
             case "start":
                 StartCoroutine("turbeRegenerate");
-                Debug.Log("coroutine lisätty");
-
                 break;
 
             case "stop":
                 StopCoroutine("turbeRegenerate");
-                Debug.Log("coroutine poistettu");
-
                 break;
         }
     }
