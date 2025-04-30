@@ -73,6 +73,7 @@
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.InputSystem.Interactions;
 
 public class FileDataHandler
 {
@@ -92,10 +93,11 @@ public class FileDataHandler
         string fullPath = Path.Combine(DataDirPath, DataFileName);
         GameData loadedData = null;
         
-        if (File.Exists(fullPath))
         {
+            Debug.Log("Loading data from: " + fullPath);
             try
             {
+                
                 string dataToLoad = "";
                 using (FileStream stream = new FileStream(fullPath, FileMode.Open))
                 {

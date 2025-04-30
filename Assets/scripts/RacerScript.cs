@@ -19,7 +19,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public float besttime;
     public bool racestarted = false; // <-- Add this
     private bool startTimer = false;
-    private Waitbeforestart Waitbeforestart;
+    private Waitbeforestart waitBeforeStart;
 
     // Lists
     public List<Text> LtimeTexts;
