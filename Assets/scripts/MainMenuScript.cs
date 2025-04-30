@@ -37,6 +37,7 @@ public class MainMenu : MonoBehaviour
     public void Playgame()
     {
         SceneManager.LoadSceneAsync(3); //menee ny carselectioniin suoraan
+        DatapersistenceManager.instance.LoadGame(); //ottaa pelidatan save filesta
     }
 
     public void QuitGame()
