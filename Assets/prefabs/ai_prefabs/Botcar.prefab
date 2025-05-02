@@ -110,7 +110,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599572813706185082}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.37511224, z: -0, w: 0.92697936}
+  m_LocalRotation: {x: 0, y: -0.37510818, z: 0, w: 0.92698103}
   m_LocalPosition: {x: 291.65, y: 1.07, z: 238.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -947,16 +947,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path: {fileID: 0}
   waypointThreshold: 5
-  bezierCurveResolution: 10
-  angleThreshold: 20
+  bezierCurveResolution: 4
+  angleThreshold: 14
   maxAcceleration: 300
-  brakeAcceleration: 15
-  turnSensitivity: 30
-  maxSpeed: 100
+  maxSpeed: 75
+  leftTurnRadius: 40
+  rightTurnRadius: 40
+  turnSensitivity: 20
   gravityMultiplier: 2
-  grassSpeedMultiplier: 0.5
-  cornerSlowdownPercentage: 70
-  cornerAngleThreshold: 35
+  grassSpeedMultiplier: 1.33
+  slowdownFactor: 1.2
+  cornerAngleThreshold: 25
+  detectionRadius: 25
+  curveTolerance: 5
+  showDebugGizmos: 1
+  showDetectionSphere: 0
+  showFarthestPointLine: 0
+  showClosestPointLine: 0
+  showToleranceSphere: 0
+  showTurnSensitivityArcs: 0
+  enableDebugLogs: 1
+  showAvoidanceBuffer: 1
   wheels:
   - wheelModel: {fileID: 2414469833424566486}
     wheelCollider: {fileID: 7935146798096052683}
@@ -979,6 +990,13 @@ MonoBehaviour:
     smokeParticle: {fileID: 5403779631587330431}
     axel: 1
   carRb: {fileID: 5446521475156399261}
+  playerCar: {fileID: 0}
+  avoidanceBuffer: 6
+  avoidanceLateralOffset: 3
+  carName: AI Car
+  assignedMaxSpeed: 0
+  assignedTurnSensitivity: 0
+  currentPlacement: 1
 --- !u!1 &3909613612338946281
 GameObject:
   m_ObjectHideFlags: 0

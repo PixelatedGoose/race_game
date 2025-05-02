@@ -14,7 +14,7 @@ public class AICarController : MonoBehaviour
     private const float NODE_GIZMO_RADIUS = 0.5f;
     private static readonly Vector3 DEFAULT_CENTER_OF_MASS = new Vector3(0, -0.3f, 0);
 
-    // --- Serialized Fields ---
+    // --- Path Following ---
     [Header("Path Following Settings")]
     [Tooltip("The parent object containing all path waypoints as children.")]
     public Transform path;
@@ -25,12 +25,14 @@ public class AICarController : MonoBehaviour
     [Tooltip("Angle threshold for switching between straight lines and curves.")]
     [SerializeField] private float angleThreshold = 35.0f;
 
+    // --- Car Movement ---
     [Header("Car Movement Settings")]
     [Tooltip("Maximum acceleration applied to the car.")]
     [SerializeField] private float maxAcceleration = 300.0f;
     [Tooltip("Braking acceleration.")]
     [SerializeField] private float maxSpeed = 100.0f;
 
+    // --- Steering ---
     [Header("Steering Settings")]
     [Tooltip("Left turn radius (how far the front left wheel can rotate).")]
     [SerializeField] private float leftTurnRadius = 10.0f;
@@ -39,24 +41,44 @@ public class AICarController : MonoBehaviour
     [Tooltip("Current turn sensitivity.")]
     [SerializeField] private float turnSensitivity = 30.0f;
 
+    // --- Physics ---
     [Header("Physics Settings")]
     [Tooltip("Multiplier for gravity force.")]
     [SerializeField] private float gravityMultiplier = 1.5f;
     [Tooltip("Speed multiplier when on grass.")]
     [SerializeField] private float grassSpeedMultiplier = 0.5f;
 
+    // --- Corner Slowdown ---
     [Header("Corner Slowdown Settings")]
     [Tooltip("Minimum slowdown factor (0-1).")]
     [SerializeField] private float slowdownFactor = 0.2f;
     [Tooltip("Angle threshold for sharp corners.")]
     [SerializeField] private float cornerAngleThreshold = 60.0f;
 
+    // --- Turn Detection ---
     [Header("Turn Detection Settings")]
     [Tooltip("Radius of the detection sphere for upcoming turns.")]
     [SerializeField] private float detectionRadius = 7.0f;
     [Tooltip("Tolerance for deviation from the Bezier curve.")]
     [SerializeField] private float curveTolerance = 2.0f;
 
+    // --- Avoidance ---
+    [Header("Avoidance Settings")]
+    [Tooltip("Extra buffer distance added to the safe radius for avoidance checks.")]
+    [SerializeField] private float avoidanceBuffer = 2.0f;
+    [Tooltip("How far to offset laterally when dodging another car.")]
+    [SerializeField] private float avoidanceLateralOffset = 2.0f;
+
+    // --- Waypoint Debug ---
+    [Header("Waypoint Debug Settings")]
+    [Tooltip("Show a horizontal (local X axis) line at each waypoint.")]
+    [SerializeField] private bool showWaypointHorizontalLine = false;
+    [Tooltip("Length of the horizontal line at each waypoint.")]
+    [SerializeField] private float waypointLineLength = 5.0f;
+    [Tooltip("Width of the horizontal line at each waypoint.")]
+    [SerializeField] private float waypointLineWidth = 0.1f;
+
+    // --- Debug ---
     [Header("Debug Settings")]
     [Tooltip("Show debug gizmos in the scene view.")]
     [SerializeField] private bool showDebugGizmos = true;
@@ -67,18 +89,34 @@ public class AICarController : MonoBehaviour
     [Tooltip("Show the closest point debug line.")]
     [SerializeField] private bool showClosestPointLine = true;
     [Tooltip("Show the curve tolerance sphere.")]
-    [SerializeField] private bool showToleranceSphere = true; // NEW
+    [SerializeField] private bool showToleranceSphere = true;
     [Tooltip("Show min/max turn sensitivity arcs.")]
-    [SerializeField] private bool showTurnSensitivityArcs = true; // NEW
+    [SerializeField] private bool showTurnSensitivityArcs = true;
     [Tooltip("Enable debug logs in the console.")]
     [SerializeField] private bool enableDebugLogs = false;
+    [Tooltip("Show the avoidance buffer radius as a magenta wire sphere.")]
+    [SerializeField] private bool showAvoidanceBuffer = true;
 
+    // --- References ---
+    [Header("References")]
     [Tooltip("List of wheels used by the car.")]
     [SerializeField] private List<CarController.Wheel> wheels;
     [Tooltip("Rigidbody component of the car.")]
     [SerializeField] private Rigidbody carRb;
+    [Tooltip("Reference to the player car.")]
+    [SerializeField] private CarController playerCar;
 
     // --- Private State ---
+    private float playerCarWidth = 2.0f; // fallback default
+    private float playerCarLength = 4.0f; // fallback default
+    private List<Transform> waypoints;
+    private int currentWaypointIndex = 0;
+    private List<Vector3> bezierCurvePoints = new List<Vector3>();
+    private bool isFollowingBezierCurve = false;
+    private Collider carCollider;
+    private float carWidth = 2.0f; // fallback default
+    private float carLength = 4.0f; // fallback default
+    private float avoidanceOffset = 0f;
     private float moveInput;
     private float steerInput;
     private float targetTorque;
@@ -88,15 +126,21 @@ public class AICarController : MonoBehaviour
     private float boostTimer = 0f;
     private const float maxBoostDuration = 2f;
 
-    private List<Transform> waypoints;
-    private int currentWaypointIndex = 0;
-    private List<Vector3> bezierCurvePoints = new List<Vector3>();
-    private bool isFollowingBezierCurve = false;
+    // --- Public Properties ---
+    public List<Transform> WaypointsPublic => waypoints;
+    public int CurrentWaypointIndex => currentWaypointIndex;
+    public float CarWidth => carWidth;
+    public float CarLength => carLength;
 
-    [HideInInspector] public string carName = "AI Car";
-    [HideInInspector] public float assignedMaxSpeed;
-    [HideInInspector] public float assignedTurnSensitivity;
-    [HideInInspector] public int currentPlacement = 1;
+    // --- Static ---
+    [HideInInspector] public string carName = "AI Car"; //gets replaced at runtime
+    [HideInInspector] public float assignedMaxSpeed;  //WIP - will be set by AIManager
+    [HideInInspector] public float assignedTurnSensitivity; //WIP - will be set by AIManager
+    [HideInInspector] public int currentPlacement = 1; //updates at runtime
+    public static List<AICarController> AllAICars = new List<AICarController>();
+
+    private void OnEnable() => AllAICars.Add(this);
+    private void OnDisable() => AllAICars.Remove(this);
 
     private void Start()
     {
@@ -120,6 +164,40 @@ public class AICarController : MonoBehaviour
 
         carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
         UpdateBezierCurve();
+
+        carCollider = GetComponent<Collider>();
+        if (carCollider != null)
+        {
+            carWidth = carCollider.bounds.size.x;
+            carLength = carCollider.bounds.size.z;
+        }
+
+        // Find the player car if not assigned
+        if (playerCar == null)
+            playerCar = FindFirstObjectByType<CarController>();
+        if (playerCar != null && playerCar.carRb != null)
+        {
+            var playerCollider = playerCar.GetComponent<Collider>();
+            if (playerCollider != null) {
+                playerCarWidth = playerCollider.bounds.size.x;
+                playerCarLength = playerCollider.bounds.size.z;
+            }
+        }
+
+        // Find the player car from GameManager
+        if (playerCar == null)
+        {
+            var gm = GameManager.instance;
+            if (gm != null && gm.currentCar != null)
+            {
+                playerCar = gm.currentCar.GetComponent<CarController>();
+                var playerCollider = gm.currentCar.GetComponent<Collider>();
+                if (playerCollider != null) {
+                    playerCarWidth = playerCollider.bounds.size.x;
+                    playerCarLength = playerCollider.bounds.size.z;
+                }
+            }
+        }
     }
 
     private void LogDebug(string message)
@@ -134,6 +212,7 @@ public class AICarController : MonoBehaviour
 
         CheckUpcomingTurn();
         EnforceMaxSpeed();
+        AvoidOtherCars();
         MoveAlongPath();
         SteerTowardsPath();
         ApplyGravity();
@@ -251,7 +330,7 @@ public class AICarController : MonoBehaviour
     {
         List<Vector3> curvePoints = new List<Vector3>();
 
-        // Use a higher resolution for better accuracy
+        // Using a high resolution may cause issues with navigation
         int resolution = Mathf.CeilToInt(bezierCurveResolution * points.Count * 2); // Double the resolution
         for (float t = 0; t <= 1; t += 1.0f / resolution)
         {
@@ -269,7 +348,7 @@ public class AICarController : MonoBehaviour
 
     Vector3 CalculateBezierPoint(List<Vector3> points, float t)
     {
-        // Recursive De Casteljau's algorithm for multi-point Bezier curves
+        // Recursive De Casteljau's algorithm for multi-point Bezier curves. given by copilot
         if (points.Count == 1)
             return points[0];
 
@@ -325,7 +404,7 @@ public class AICarController : MonoBehaviour
 
         if (distanceToNode < waypointThreshold)
         {
-            // Stop boosting if we've reached the boost end node
+            // Stop boosting if reached the boost end node
             if (isBoosting && currentWaypointIndex == boostEndWaypointIndex)
             {
                 isBoosting = false;
@@ -362,7 +441,7 @@ public class AICarController : MonoBehaviour
         float speedLimit = maxSpeed;
         if (isBoosting)
         {
-            speedLimit = (maxSpeed * boostMultiplier) + 20f; // Add flat +20 for immediate effect
+            speedLimit = (maxSpeed * boostMultiplier) + 20f; // Add flat +20
             targetTorque *= boostMultiplier;
         }
 
@@ -379,12 +458,17 @@ public class AICarController : MonoBehaviour
     {
         if (bezierCurvePoints.Count == 0) return;
 
-        // Steer towards the next point in the Bezier curve
+        // Steer towards the next point in the Bezier curve, with avoidance offset
         Vector3 targetPoint = bezierCurvePoints[0];
+
+        // Apply lateral offset in local space
+        Vector3 localTarget = transform.InverseTransformPoint(targetPoint);
+        localTarget.x += avoidanceOffset;
+        targetPoint = transform.TransformPoint(localTarget);
+
         Vector3 directionToTarget = targetPoint - transform.position;
         Vector3 localDirection = transform.InverseTransformDirection(directionToTarget.normalized);
 
-        // Apply a dead zone for very small steering adjustments
         steerInput = Mathf.Abs(localDirection.x) > STEERING_DEAD_ZONE ? Mathf.Clamp(localDirection.x, -1.0f, 1.0f) : 0.0f;
         steerInput = Mathf.Lerp(steerInput, Mathf.Clamp(localDirection.x, -1.0f, 1.0f), 0.1f);
 
@@ -393,7 +477,7 @@ public class AICarController : MonoBehaviour
             if (wheel.axel == CarController.Axel.Front)
             {
                 float steerAngle = steerInput * turnSensitivity;
-                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, steerAngle, STEERING_LERP); // increasing the float makes the car not overshoot constantly
+                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, steerAngle, STEERING_LERP);
             }
         }
     }
@@ -537,7 +621,92 @@ public class AICarController : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
+    private void AvoidOtherCars()
+    {
+        avoidanceOffset = 0f; // Reset each frame
+
+        float mySafeRadius = Mathf.Max(this.CarWidth, this.CarLength) * 0.5f;
+
+        foreach (var other in AllAICars)
+        {
+            if (other == this) continue;
+
+            Vector3 toOther = other.transform.position - transform.position;
+            float distance = toOther.magnitude;
+            float otherSafeRadius = Mathf.Max(other.CarWidth, other.CarLength) * 0.5f;
+            float minSafeDistance = mySafeRadius + otherSafeRadius + avoidanceBuffer;
+
+            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toOther.normalized) > 0.5f)
+            {
+                Vector3 myFuturePos = transform.position + carRb.linearVelocity * 0.5f;
+                Vector3 otherFuturePos = other.transform.position + other.carRb.linearVelocity * 0.5f;
+                float futureDist = (myFuturePos - otherFuturePos).magnitude;
+
+                if (futureDist < minSafeDistance)
+                {
+                    float steerDirection = Vector3.Cross(transform.forward, toOther).y > 0 ? -1f : 1f;
+                    avoidanceOffset += steerDirection * avoidanceLateralOffset;
+
+                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > other.carRb.linearVelocity.magnitude)
+                        moveInput = 0.7f;
+                }
+            }
+        }
+
+        // --- Player car avoidance ---
+        if (playerCar != null && playerCar.carRb != null && playerCar != this)
+        {
+            Vector3 toPlayer = playerCar.transform.position - transform.position;
+            float distance = toPlayer.magnitude;
+            float playerSafeRadius = Mathf.Max(playerCarWidth, playerCarLength) * 0.5f;
+            float minSafeDistance = mySafeRadius + playerSafeRadius + avoidanceBuffer;
+
+            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toPlayer.normalized) > 0.5f)
+            {
+                Vector3 myFuturePos = transform.position + carRb.linearVelocity * 0.5f;
+                Vector3 playerFuturePos = playerCar.transform.position + playerCar.carRb.linearVelocity * 0.5f;
+                float futureDist = (myFuturePos - playerFuturePos).magnitude;
+
+                if (futureDist < minSafeDistance)
+                {
+                    float steerDirection = Vector3.Cross(transform.forward, toPlayer).y > 0 ? -1f : 1f;
+                    avoidanceOffset += steerDirection * avoidanceLateralOffset;
+
+                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > playerCar.carRb.linearVelocity.magnitude)
+                        moveInput = 0.7f;
+                }
+            }
+        }
+    }
+
+    Vector3 FindClosestPointOnCurve(Vector3 nodePosition)
+    {
+        Vector3 closestPoint = bezierCurvePoints[0];
+        float closestDistance = Vector3.Distance(nodePosition, closestPoint);
+
+        foreach (var point in bezierCurvePoints)
+        {
+            float distance = Vector3.Distance(nodePosition, point);
+            if (distance < closestDistance)
+            {
+                closestPoint = point;
+                closestDistance = distance;
+            }
+        }
+
+        return closestPoint;
+    }
+
+    void EnforceMaxSpeed()
+    {
+        float speedLimit = maxSpeed;
+        if (isBoosting)
+            speedLimit = (maxSpeed * boostMultiplier) + 20f; // Add flat +20 for immediate effect
+
+        ApplySpeedLimit(speedLimit);
+    }
+
+#if UNITY_EDITOR // every visual debugging tool
     private void OnDrawGizmos()
     {
         if (!showDebugGizmos || waypoints == null || waypoints.Count == 0 || currentWaypointIndex >= waypoints.Count) return;
@@ -566,6 +735,38 @@ public class AICarController : MonoBehaviour
             }
 
             Gizmos.DrawSphere(waypoints[i].position, NODE_GIZMO_RADIUS);
+
+            // Draw a horizontal line (with path direction) at each waypoint
+            if (showWaypointHorizontalLine)
+            {
+                Transform wp = waypoints[i];
+                Vector3 center = wp.position;
+
+                // Use direction to next waypoint for orientation
+                Vector3 dir;
+                if (i < waypoints.Count - 1)
+                    dir = (waypoints[i + 1].position - wp.position).normalized;
+                else
+                    dir = (waypoints[0].position - wp.position).normalized;
+
+                // Get a vector perpendicular to the path direction (horizontal, in XZ plane)
+                Vector3 up = Vector3.up;
+                Vector3 right = Vector3.Cross(up, dir).normalized;
+
+                Vector3 start = center - right * (waypointLineLength * 0.5f);
+                Vector3 end = center + right * (waypointLineLength * 0.5f);
+
+                // Draw a thicker line using Handles if available
+#if UNITY_EDITOR
+                Color prevColor = Handles.color;
+                Handles.color = Color.white;
+                Handles.DrawAAPolyLine(waypointLineWidth, new Vector3[] { start, end });
+                Handles.color = prevColor;
+#else
+                Gizmos.color = Color.white;
+                Gizmos.DrawLine(start, end);
+#endif
+            }
 
             // Draw a line from the node to the closest point on the curve
             if (bezierCurvePoints.Count > 0 && showClosestPointLine)
@@ -615,37 +816,50 @@ public class AICarController : MonoBehaviour
 
         // Draw a label above the car in the Scene view with placement and name
         Handles.Label(transform.position + Vector3.up * 2.5f, $"{currentPlacement}. {carName}");
-    }
-#endif
 
-    Vector3 FindClosestPointOnCurve(Vector3 nodePosition)
-    {
-        Vector3 closestPoint = bezierCurvePoints[0];
-        float closestDistance = Vector3.Distance(nodePosition, closestPoint);
-
-        foreach (var point in bezierCurvePoints)
+        // Visualize avoidance detection
+        Gizmos.color = Color.yellow;
+        float maxAvoidRadius = 0f;
+        foreach (var other in AllAICars)
         {
-            float distance = Vector3.Distance(nodePosition, point);
-            if (distance < closestDistance)
+            if (other == this) continue;
+            float minSafeDistance = (this.CarWidth + other.CarWidth) * 0.5f + 2.0f;
+            if (minSafeDistance > maxAvoidRadius) maxAvoidRadius = minSafeDistance;
+
+            Vector3 toOther = other.transform.position - transform.position;
+            float distance = toOther.magnitude;
+            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toOther.normalized) > 0.5f)
             {
-                closestPoint = point;
-                closestDistance = distance;
+                // Draw a line to the car being avoided
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(transform.position + Vector3.up * 0.5f, other.transform.position + Vector3.up * 0.5f);
+            }
+        }
+        // Draw the largest avoidance radius for this car
+        Gizmos.color = new Color(1f, 1f, 0f, 0.2f);
+        Gizmos.DrawWireSphere(transform.position, maxAvoidRadius);
+
+        // Visualize player avoidance
+        if (playerCar != null && playerCar != this)
+        {
+            float minSafeDistance = (this.CarWidth + playerCarWidth) * 0.5f + 2.0f;
+            Vector3 toPlayer = playerCar.transform.position - transform.position;
+            float distance = toPlayer.magnitude;
+            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toPlayer.normalized) > 0.5f)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(transform.position + Vector3.up * 0.5f, playerCar.transform.position + Vector3.up * 0.5f);
             }
         }
 
-        return closestPoint;
+        // Visualize avoidance buffer as a magenta wire sphere
+        if (showAvoidanceBuffer)
+        {
+            float mySafeRadius = Mathf.Max(this.CarWidth, this.CarLength) * 0.5f;
+            float bufferRadius = mySafeRadius + avoidanceBuffer;
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(transform.position, bufferRadius);
+        }
     }
-
-
-    void EnforceMaxSpeed()
-    {
-        float speedLimit = maxSpeed;
-        if (isBoosting)
-            speedLimit = (maxSpeed * boostMultiplier) + 20f; // Add flat +20 for immediate effect
-
-        ApplySpeedLimit(speedLimit);
-    }
-
-    public List<Transform> WaypointsPublic => waypoints;
-    public int CurrentWaypointIndex => currentWaypointIndex;
+#endif
 }
