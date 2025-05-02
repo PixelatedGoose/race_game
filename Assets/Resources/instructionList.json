@@ -1,19 +1,20 @@
 {
     "intro": [
-        {
-            "id": 0,
-            "text": "blah blah whoever wrote this is a fucking MORON"
-        },
-        {
-            "id": 1,
-            "text": "so uhh in this game you gotta drive a car"
-        }
+        "Hello. Welcome to AmisDrift. (PRESS ENTER TO ADVANCE TEXT)",
+        "This tutorial is meant to guide you through the base mechanics of the game.",
+        "You've been given a test driver car for the purpose of this map."
     ],
 
     "driving": [
-        {
-            "id": 0,
-            "text": "this ain't the mothafuckin' Ritz Carlton, get yo ass moving"
-        }
+        "Use WASD to control your car.",
+        "W and S move forward and backward, and A and D steer your car left and right.",
+        "Each car in-game has different statistics, so your car may not be as fast as this one.",
+        ""
+    ],
+
+    "driving_2": [
+        "Now let's learn about terrain.",
+        "Driving on a road is preferred.",
+        "Driving on grass slows down your car."
     ]
 }
