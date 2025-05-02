@@ -27,7 +27,8 @@ public class soundFXControl : MonoBehaviour
         soundClickList = GameObject.FindGameObjectsWithTag("soundFXonClick"); //koska array on vitun paska
         soundClickList = soundClickList.OrderBy(a => a.name).ToArray();
 
-        soundList[1].GetComponent<AudioSource>().Play();
+        if (GameManager.instance.sceneSelected != "tutorial")
+            soundList[1].GetComponent<AudioSource>().Play();
 
         //hell
         //paska koodi
@@ -134,7 +135,7 @@ public class soundFXControl : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    /* void FixedUpdate()
     {
         if (Mathf.Floor(GameManager.instance.carSpeed) == 0)
         {
@@ -146,5 +147,5 @@ public class soundFXControl : MonoBehaviour
             soundList[1].GetComponent<AudioSource>().pitch = GameManager.instance.carSpeed / 40;
             soundList[1].GetComponent<AudioSource>().volume = GameManager.instance.carSpeed / 80;
         }
-    }
+    } */
 }
