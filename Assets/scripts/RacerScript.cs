@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.SocialPlatforms.Impl;
+using System.Collections;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
@@ -45,6 +46,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private Vector3 lastPosition;
 
     private Transform respawnPoint;
+    private CarController carController;
 
     public void LoadData(GameData data)
     {
@@ -89,6 +91,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         Controls = new CarInputActions();
         Controls.Enable();
+        carController = GetComponent<CarController>();
     }
 
     private void OnEnable()
@@ -147,6 +150,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
     }
 
     void InitializeRace()
@@ -185,8 +189,32 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         transform.rotation = respawnPoint != null ? respawnPoint.rotation : startFinishLine.rotation;
 
         Rigidbody rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;//stop the car
         rb.angularVelocity = Vector3.zero;
+        
+        StartCoroutine(TurnDownCarsValues());
+
+    }
+
+    IEnumerator TurnDownCarsValues()
+    {
+        carController.isTurnedDown = true;
+
+        float BasicMaxAcceleration = carController.maxAcceleration;
+        float BasicBaseSpeed = carController.basespeed;
+        float BasicTargetTorque = carController.targetTorque;
+
+        carController.maxAcceleration = 0;
+        carController.basespeed = 0;
+        carController.targetTorque = 0;
+        GameManager.instance.turbeActive = false;
+
+        yield return new WaitForSeconds(0.5f);
+
+        carController.maxAcceleration = BasicMaxAcceleration;
+        carController.basespeed = BasicBaseSpeed;
+        carController.targetTorque = BasicTargetTorque;
+        carController.isTurnedDown = false;
     }
 
     void Inactivity()
