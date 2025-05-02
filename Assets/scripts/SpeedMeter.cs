@@ -24,7 +24,8 @@ public class SpeedMeter : MonoBehaviour
             Debug.LogWarning("speedLabel EI OLE VITTU OLEMASSA");
         }
 
-        target = GameManager.instance.currentCar.GetComponentInChildren<Rigidbody>();
+        //target = GameManager.instance.currentCar.GetComponentInChildren<Rigidbody>();
+        //jos rikki, laita inspectorissa ^^^^^^^^^^^^^^^^
         Debug.Log(target);
         Debug.Log("HUOM. jos target ei löydy (eli siitä tulee NullReferenceException), tää on paskana");
     }

@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
+using System;
 
 
 
@@ -32,6 +34,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     [Header("scene asetukset")]
     public string sceneSelected;
+    private string[] maps = new string[]
+    {
+        "test_mountain",
+        "test_mountain_night",
+        "haukipudas",
+        "AItest",
+        "ai_haukipudas",
+        "tutorial"
+    };
+    
     [Header("auto")]
     public float carSpeed;
     public bool turbeActive = false;
@@ -57,41 +69,57 @@ public class GameManager : MonoBehaviour, IDataPersistence
             GameObject.Find("REALCAR_y")
         };
 
-        carIndex = PlayerPrefs.GetInt("CarIndex");
-        currentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
-        chosenMap = PlayerPrefs.GetInt("chosenMap");
-
         sceneSelected = SceneManager.GetActiveScene().name;
 
-        if (sceneSelected == "test_mountain" || sceneSelected == "test_mountain_night" || sceneSelected == "haukipudas" || sceneSelected == "AItest" || sceneSelected == "ai_haukipudas")
+        carIndex = PlayerPrefs.GetInt("CarIndex");
+        if (sceneSelected == "tutorial")
         {
-            foreach (GameObject car in cars)
-            {
-                //jotta se löytää ne; inaktiivisesta gameobjectista ei pysty löytää mitää
-                ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
-                car.SetActive(false);
-            }
+            currentCar = GameObject.Find("REALCAR");
+        }
+        else
+        {
+            currentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
+        }
+        chosenMap = PlayerPrefs.GetInt("chosenMap");
 
-            if (carIndex >= 0 && carIndex <= cars.Length)
+        if (maps.Contains(sceneSelected))
+        {
+            if (sceneSelected != "tutorial")
             {
-                cars[carIndex].SetActive(true);
-            }
-            else
-            {
-                Debug.LogError("Car index out of range: " + carIndex);
-            }
-
-            foreach (GameObject car in cars)
-            {
-                if (car.activeInHierarchy)
+                foreach (GameObject car in cars)
                 {
-                    Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
+                    //jotta se löytää ne; inaktiivisesta gameobjectista ei pysty löytää mitää
+                    ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
+                    car.SetActive(false);
+                }
+
+                if (carIndex >= 0 && carIndex <= cars.Length)
+                {
+                    cars[carIndex].SetActive(true);
                 }
                 else
                 {
-                    Destroy(car);
-                    //tää TAPPAA kaikki ne muut että se ei vittuile se unity lol
+                    Debug.LogError("Car index out of range: " + carIndex);
                 }
+
+                foreach (GameObject car in cars)
+                {
+                    if (car.activeInHierarchy)
+                    {
+                        Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
+                    }
+                    else
+                    {
+                        Destroy(car);
+                        //tää TAPPAA kaikki ne muut että se ei vittuile se unity lol
+                    }
+                }
+            }
+
+            else
+            {
+                Debug.Log("TUTORIAL");
+                ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
             }
         }
     }

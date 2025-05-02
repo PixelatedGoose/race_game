@@ -11,7 +11,22 @@ public class Waitbeforestart : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(ShowS1AfterDelay());
+        if (GameManager.instance.sceneSelected != "tutorial")
+        {
+            StartCoroutine(ShowS1AfterDelay());
+        }
+        else
+        {
+            StartCoroutine(NoCountdown());
+        }
+    }
+
+    //tutorial map ei tykänny alottaa kisaa ilman delayta jostai syystä
+    IEnumerator NoCountdown()
+    {
+        yield return new WaitForSecondsRealtime(0f);
+
+        racerScript.StartRace(); // Start the race!
     }
 
     IEnumerator ShowS1AfterDelay()
