@@ -6,6 +6,20 @@ public class optionScript : MonoBehaviour
     public Material pixelCount; // Assign this in the Inspector
     private Text pixelCountLabel;
 
+    void OnEnable()
+    {
+        //PlayerPrefs.DeleteAll(); //VAIN DEBUGAAMISTA VARTEN
+        if (PlayerPrefs.HasKey("pixel_value"))
+        {
+            Debug.Log("pixel_value löydetty; ei muuteta");
+        }
+        else
+        {
+            pixelCount.SetFloat("_pixelcount", 256);
+            Debug.Log("pixel_value ei löydetty; arvo on nyt 256");
+        }
+    }
+
     void Start()
     {
         InitializeSliderValue("pixel");

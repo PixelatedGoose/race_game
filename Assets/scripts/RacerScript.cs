@@ -3,12 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
     // Public variables
     public RankManager rankManager;
-    public GameObject winMenu;
+    public GameObject winMenu; 
     public GameObject Car1Hud;
 
     CarInputActions Controls;
@@ -16,7 +17,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public float laptime;
     public float Rank;
     public float besttime;
+    public bool racestarted = false; // <-- Add this
     private bool startTimer = false;
+    private Waitbeforestart waitBeforeStart;
 
     // Lists
     public List<Text> LtimeTexts;
@@ -58,7 +61,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             }
             else
             {
-                Debug.LogWarning($"No best time found for scene {currentSceneName}. Defaulting to 0.");
                 besttime = 0;
             }
 
@@ -75,7 +77,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             string currentSceneName = SceneManager.GetActiveScene().name;
             DatapersistenceManager.instance.UpdateBestTime(currentSceneName, besttime);
-            Debug.Log($"Saved best time for scene {currentSceneName}: {besttime}");
+            
         }
         else
         {
@@ -108,11 +110,12 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     void Start()
     {
         InitializeRace();
+        racestarted = false; // Ensure race doesn't start until countdown is done
     }
 
     void Update()
     {
-        if (raceFinished) return;
+        if (!racestarted || raceFinished) return; // Only run race logic if started
 
         HandleReset();
         Inactivity();
@@ -316,9 +319,12 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
         if (winMenu != null)
         {
-            winMenu.SetActive(true); 
+            winMenu.SetActive(true);
             raceFinished = true; 
+            DatapersistenceManager.instance.SaveGame();
+            print("data saved");
         }
+ 
 
         if (startFinishLine != null)
             startFinishLine.gameObject.SetActive(false);
@@ -359,9 +365,23 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
     }
 
+    public void StartRace() // <-- Call this from Waitbeforestart
+    {
+        racestarted = true;
+        startTimer = true;
+    }
+
     public void QuitGame()
     {
         Debug.Log("Quitting Game...");
         Application.Quit();
+        if (!raceFinished)
+        {
+            
+        }
+    }
+     void BackToMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
     }
 }

@@ -73,6 +73,7 @@
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.InputSystem.Interactions;
 
 public class FileDataHandler
 {
@@ -92,10 +93,11 @@ public class FileDataHandler
         string fullPath = Path.Combine(DataDirPath, DataFileName);
         GameData loadedData = null;
         
-        if (File.Exists(fullPath))
         {
+            Debug.Log("Loading data from: " + fullPath);
             try
             {
+                
                 string dataToLoad = "";
                 using (FileStream stream = new FileStream(fullPath, FileMode.Open))
                 {
@@ -145,6 +147,7 @@ public class FileDataHandler
             Debug.Log("Error occured when trying to save data to file:" + fullPath + "\n" + e);
         }
     }
+}
 
     /// <summary>
     /// XOR encryptio että ette pääse vaihtaa teiden tuloksia tai mitään siel safe filesta
@@ -160,4 +163,4 @@ public class FileDataHandler
     //     }
     //     return modifiedData;
     // }
-}
+

@@ -82,11 +82,21 @@ public class AICarController : MonoBehaviour
     private float moveInput;
     private float steerInput;
     private float targetTorque;
+    private bool isBoosting = false;
+    private float boostMultiplier = 1.25f;
+    private int boostEndWaypointIndex = -1;
+    private float boostTimer = 0f;
+    private const float maxBoostDuration = 2f;
 
     private List<Transform> waypoints;
     private int currentWaypointIndex = 0;
     private List<Vector3> bezierCurvePoints = new List<Vector3>();
     private bool isFollowingBezierCurve = false;
+
+    [HideInInspector] public string carName = "AI Car";
+    [HideInInspector] public float assignedMaxSpeed;
+    [HideInInspector] public float assignedTurnSensitivity;
+    [HideInInspector] public int currentPlacement = 1;
 
     private void Start()
     {
@@ -128,6 +138,7 @@ public class AICarController : MonoBehaviour
         SteerTowardsPath();
         ApplyGravity();
         AnimateWheels();
+        HandleBoostTimer();
     }
 
     private void ApplyGravity()
@@ -160,7 +171,7 @@ public class AICarController : MonoBehaviour
         {
             if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
             {
-                if (hit.collider.CompareTag("Grass"))
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Grass"))
                     return true;
             }
         }
@@ -234,7 +245,6 @@ public class AICarController : MonoBehaviour
         // Update the current node index to the node after the curve
         currentWaypointIndex = index;
         isFollowingBezierCurve = true; // Enter Bezier curve mode
-        LogDebug($"Bezier curve generated with {curveNodes.Count} nodes. Current node index: {currentWaypointIndex}");
     }
 
     List<Vector3> GenerateMultiPointBezierCurve(List<Vector3> points)
@@ -315,7 +325,17 @@ public class AICarController : MonoBehaviour
 
         if (distanceToNode < waypointThreshold)
         {
+            // Stop boosting if we've reached the boost end node
+            if (isBoosting && currentWaypointIndex == boostEndWaypointIndex)
+            {
+                isBoosting = false;
+                boostEndWaypointIndex = -1;
+                boostTimer = 0f;
+                LogDebug($"{carName} boost ended at node {currentWaypointIndex}.");
+            }
+
             currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
+            TryBoostOnStraight();
             UpdateBezierCurve();
             return;
         }
@@ -338,13 +358,21 @@ public class AICarController : MonoBehaviour
             targetTorque *= grassSpeedMultiplier;
         }
 
+        // Apply boost if active
+        float speedLimit = maxSpeed;
+        if (isBoosting)
+        {
+            speedLimit = (maxSpeed * boostMultiplier) + 20f; // Add flat +20 for immediate effect
+            targetTorque *= boostMultiplier;
+        }
+
         foreach (var wheel in wheels)
         {
             wheel.wheelCollider.motorTorque = targetTorque;
             wheel.wheelCollider.brakeTorque = 0f;
         }
 
-        ApplySpeedLimit(maxSpeed);
+        ApplySpeedLimit(speedLimit);
     }
 
     void SteerTowardsPath()
@@ -416,9 +444,6 @@ public class AICarController : MonoBehaviour
                 float targetSpeed = Mathf.Lerp(maxSpeed * 0.3f, maxSpeed, 1.0f - slowdownFactor);
 
                 ApplySpeedLimit(targetSpeed);
-                LogDebug($"Upcoming turn detected. Max angle: {maxAngle}, Slowdown factor: {slowdownFactor}, Target speed: {targetSpeed}");
-            }
-            else
             {
                 // Restore max speed if no sharp turn is detected
                 ApplySpeedLimit(maxSpeed);
@@ -429,6 +454,7 @@ public class AICarController : MonoBehaviour
             // No points within detection radius, restore max speed
             ApplySpeedLimit(maxSpeed);
         }
+    }
     }
 
     private void AdjustTurningForUpcomingTurn(float closestDistance)
@@ -446,11 +472,73 @@ public class AICarController : MonoBehaviour
 
         // Clamp the turning sensitivity to ensure it stays within the defined range
         turnSensitivity = Mathf.Clamp(turnSensitivity, leftTurnRadius, rightTurnRadius);
-
-        LogDebug($"Adjusting turning rate. Closest distance: {closestDistance}, Turn sensitivity: {turnSensitivity}");
     }
 
-    void OnDrawGizmos()
+    private void TryBoostOnStraight()
+    {
+        isBoosting = false;
+        boostEndWaypointIndex = -1;
+
+        if (waypoints.Count < 4) return;
+
+        int idx0 = currentWaypointIndex % waypoints.Count;
+        int idx1 = (currentWaypointIndex + 1) % waypoints.Count;
+        int idx2 = (currentWaypointIndex + 2) % waypoints.Count;
+        int idx3 = (currentWaypointIndex + 3) % waypoints.Count;
+
+        Vector3 p0 = waypoints[idx0].position;
+        Vector3 p1 = waypoints[idx1].position;
+        Vector3 p2 = waypoints[idx2].position;
+        Vector3 p3 = waypoints[idx3].position;
+
+        float angle1 = Vector3.Angle((p1 - p0).normalized, (p2 - p1).normalized);
+        float angle2 = Vector3.Angle((p2 - p1).normalized, (p3 - p2).normalized);
+
+        float threshold = 6f;
+
+        if (angle1 <= threshold && angle2 <= threshold)
+        {
+            if (Random.value < 0.4f)
+            {
+                isBoosting = true;
+                boostEndWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
+                boostTimer = maxBoostDuration; // Start the timer
+                LogDebug($"BOOST ACTIVATED! {carName} will boost from node {currentWaypointIndex} to {boostEndWaypointIndex}. Angles: {angle1:F2}, {angle2:F2}");
+
+                // --- Instant velocity boost ---
+                Vector3 flatForward = transform.forward;
+                flatForward.y = 0f;
+                flatForward.Normalize();
+                carRb.linearVelocity += flatForward * 20f;
+            }
+            else
+            {
+                LogDebug($"{carName} found a straight section but did not boost this time. Angles: {angle1:F2}, {angle2:F2}");
+            }
+        }
+        else
+        {
+            LogDebug($"{carName} did not find a straight section for boost. Angles: {angle1:F2}, {angle2:F2}");
+        }
+    }
+
+    private void HandleBoostTimer()
+    {
+        if (isBoosting)
+        {
+            boostTimer -= Time.fixedDeltaTime;
+            if (boostTimer <= 0f)
+            {
+                isBoosting = false;
+                boostEndWaypointIndex = -1;
+                boostTimer = 0f;
+                LogDebug($"{carName} boost ended due to timeout.");
+            }
+        }
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
     {
         if (!showDebugGizmos || waypoints == null || waypoints.Count == 0 || currentWaypointIndex >= waypoints.Count) return;
 
@@ -525,20 +613,10 @@ public class AICarController : MonoBehaviour
             }
         }
 
-#if UNITY_EDITOR
-        // Draw the activation range for the next node
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(waypoints[currentWaypointIndex].position, Vector3.up, waypointThreshold);
-
-        // Draw arcs for left and right turn radius (toggleable)
-        if (showTurnSensitivityArcs)
-        {
-            Handles.color = Color.yellow;
-            Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, rightTurnRadius, 5.0f); // Right turn radius (right)
-            Handles.DrawWireArc(transform.position, Vector3.up, transform.forward, -leftTurnRadius, 5.0f); // Left turn radius (left)
-        }
-#endif
+        // Draw a label above the car in the Scene view with placement and name
+        Handles.Label(transform.position + Vector3.up * 2.5f, $"{currentPlacement}. {carName}");
     }
+#endif
 
     Vector3 FindClosestPointOnCurve(Vector3 nodePosition)
     {
@@ -561,6 +639,13 @@ public class AICarController : MonoBehaviour
 
     void EnforceMaxSpeed()
     {
-        ApplySpeedLimit(maxSpeed);
+        float speedLimit = maxSpeed;
+        if (isBoosting)
+            speedLimit = (maxSpeed * boostMultiplier) + 20f; // Add flat +20 for immediate effect
+
+        ApplySpeedLimit(speedLimit);
     }
+
+    public List<Transform> WaypointsPublic => waypoints;
+    public int CurrentWaypointIndex => currentWaypointIndex;
 }
