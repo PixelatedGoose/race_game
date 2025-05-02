@@ -56,7 +56,8 @@ public class CarController : MonoBehaviour
     public float basespeed = 100.0f;
     public float grassmaxspeed = 50.0f;
     [Header("Drift asetukset")]
-    public float driftMultiplier = 1.0f; 
+    public float driftMultiplier = 1.0f;
+    public bool isTurnedDown = false; 
 
     [Header("turbe asetukset")]
     public Image turbeMeter;
@@ -90,7 +91,7 @@ public class CarController : MonoBehaviour
 
     private void OnDisable()
     {
-        Controls.Disable();
+        Controls.Disable(); 
     }
 
     private void OnDestroy()
@@ -242,6 +243,11 @@ public class CarController : MonoBehaviour
 
     void TURBE()
     {
+        if (isTurnedDown)
+        {
+            isTurboActive = false;
+            return;
+        }
         isTurboActive = Controls.CarControls.turbo.IsPressed() && turbeAmount > 0;
         if (isTurboActive)
         {
@@ -408,7 +414,7 @@ public class CarController : MonoBehaviour
             sidewaysFriction.asymptoteValue = 1f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
-        Controls.CarControls.Move.performed -= OnMovePerformed;
+        
     }
 
     private void OnMovePerformed(InputAction.CallbackContext ctx)
