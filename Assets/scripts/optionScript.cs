@@ -1,81 +1,102 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class optionScript : MonoBehaviour
 {
-    public Material pixelCount; // Assign this in the Inspector
+    public Material pixelCount; 
     private Text pixelCountLabel;
+    private Dictionary<string, Slider> sliders = new Dictionary<string, Slider>();
+    private Dictionary<string, Toggle> toggles = new Dictionary<string, Toggle>();
+
+    private const float DefaultPixelValue = 256f;
+    private const float PixelMultiplier = 64f;
+    private const float DefaultVolume = 0.5f; 
 
     void OnEnable()
     {
-        //PlayerPrefs.DeleteAll(); //VAIN DEBUGAAMISTA VARTEN
-        if (PlayerPrefs.HasKey("pixel_value"))
+        if (!PlayerPrefs.HasKey("pixel_value"))
         {
-            Debug.Log("pixel_value löydetty; ei muuteta");
+            pixelCount.SetFloat("_pixelcount", DefaultPixelValue);
+            Debug.Log("pixel_value not found; set to default: " + DefaultPixelValue);
         }
-        else
+
+        if (!PlayerPrefs.HasKey("volume"))
         {
-            pixelCount.SetFloat("_pixelcount", 256);
-            Debug.Log("pixel_value ei löydetty; arvo on nyt 256");
+            PlayerPrefs.SetFloat("volume", DefaultVolume);
+            Debug.Log("volume not found; set to default: " + DefaultVolume);
         }
     }
 
     void Start()
     {
-        InitializeSliderValue("pixel");
+        CacheUIElements();
+        InitializeSliderValues();
+        UpdatePixelCountLabel();
+    }
+
+    private void CacheUIElements()
+    {
+        sliders["pixel"] = GameObject.Find("pixel").GetComponent<Slider>();
+        sliders["volume"] = GameObject.Find("volumeSlider").GetComponent<Slider>(); // Cache volume slider
+        
         pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
-        pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * 64).ToString();
+
+        
+        sliders["volume"].onValueChanged.AddListener(UpdateVolume);
     }
 
-    public void setToggleOptionValue(string optionObjectName)
+    private void InitializeSliderValues()
     {
-        var optionToggle = GameObject.Find(optionObjectName).GetComponent<UnityEngine.UI.Toggle>(); //etsi togglen nimi
-
-        if (optionToggle.isOn)
+        foreach (var slider in sliders)
         {
-            PlayerPrefs.SetInt(optionObjectName + "_value", 1);
-        }
-        else
-        {
-            PlayerPrefs.SetInt(optionObjectName + "_value", 0);
+            if (PlayerPrefs.HasKey(slider.Key + "_value"))
+            {
+                slider.Value.value = PlayerPrefs.GetFloat(slider.Key + "_value");
+            }
         }
 
-        PlayerPrefs.Save(); //tallennus
-        Debug.Log("muutettu: " + PlayerPrefs.GetInt(optionObjectName + "_value"));
-        // Debug.Log("NAME" + optionObjectName);
-        // optionObjectName on sama ku gameobjectin nimi hierarkiassa
-        // tol voi tarkistaa et ootko laittanu sen oikein
+        // Initialize volume slider
+        if (sliders.ContainsKey("volume"))
+        {
+            sliders["volume"].value = PlayerPrefs.GetFloat("volume");
+        }
     }
 
-    public void setSliderOptionValue(string optionObjectName)
+    public void UpdateTogglePreference(string toggleName)
     {
-        var optionSlider = GameObject.Find(optionObjectName).GetComponent<UnityEngine.UI.Slider>(); //etsi sliderin nimi
-        PlayerPrefs.SetFloat(optionObjectName + "_value", optionSlider.value); //aseta sliderin value
-
-        if (optionObjectName == "pixel")
+        if (toggles.TryGetValue(toggleName, out var toggle))
         {
-            pixelCount.SetFloat("_pixelcount", PlayerPrefs.GetFloat("pixel_value") * 64);
-            pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * 64).ToString();
+            PlayerPrefs.SetInt(toggleName + "_value", toggle.isOn ? 1 : 0);
+            PlayerPrefs.Save();
+            Debug.Log($"Updated {toggleName}_value to {toggle.isOn}");
         }
+    }
 
+    public void UpdateSliderPreference(string sliderName)
+    {
+        if (sliders.TryGetValue(sliderName, out var slider))
+        {
+            PlayerPrefs.SetFloat(sliderName + "_value", slider.value);
+            if (sliderName == "pixel")
+            {
+                pixelCount.SetFloat("_pixelcount", slider.value * PixelMultiplier);
+                UpdatePixelCountLabel();
+            }
+            PlayerPrefs.Save();
+        }
+    }
+
+    private void UpdatePixelCountLabel()
+    {
+        pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * PixelMultiplier).ToString();
+    }
+
+    private void UpdateVolume(float value)
+    {
+        PlayerPrefs.SetFloat("volume", value);
         PlayerPrefs.Save();
-        Debug.Log("muutettu: " + PlayerPrefs.GetFloat(optionObjectName + "_value"));
-    }
-
-    private void InitializeSliderValue(string optionObjectName)
-    {
-        var optionSlider = GameObject.Find(optionObjectName).GetComponent<UnityEngine.UI.Slider>();
-        if (PlayerPrefs.HasKey(optionObjectName + "_value"))
-        {
-            optionSlider.value = PlayerPrefs.GetFloat(optionObjectName + "_value");
-        }
+        AudioListener.volume = value; 
+        Debug.Log($"Volume updated to {value}");
     }
 }
-
-// --OPTIMISAATIO--
-// poista GameObject.Find rivit functioneista, siirrä starttiin
-// tee uudet option detectionit (jotta ei tarvitte tehä jokasta niinku 'if (optionObjectName == vitunpaska)...'
-
-// huomio että tää koodi on myös PERSEESTÄ ja suosittelen VITUN vahvasti, että teet sen switch case systeemin vaan yhelle funktiolle
-
-// vois pyöriä monen funktion avulla, mutta kaiken pitäs keskittyä yhteen funktioon, joka käyttää switch-case statementtia
