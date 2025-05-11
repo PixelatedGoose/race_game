@@ -118,7 +118,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
             else
             {
-                Debug.Log("TUTORIAL");
                 ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
             }
         }

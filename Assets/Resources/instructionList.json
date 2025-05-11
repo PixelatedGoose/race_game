@@ -1,20 +1,49 @@
 {
     "intro": [
-        "Hello. Welcome to AmisDrift. (PRESS ENTER TO ADVANCE TEXT)",
-        "This tutorial is meant to guide you through the base mechanics of the game.",
-        "You've been given a test driver car for the purpose of this map."
+        "Hello, and welcome to AmisDrift! (PRESS ENTER TO ADVANCE TEXT)",
+        "This tutorial is meant to guide you through the mechanics of the game.",
+        "You've been given a driver-in-training car for the purpose of this map."
     ],
 
     "driving": [
         "Use WASD to control your car.",
         "W and S move forward and backward, and A and D steer your car left and right.",
-        "Each car in-game has different statistics, so your car may not be as fast as this one.",
-        ""
+        "Pressing (left) Shift starts braking.",
+        "This works differently from going backwards and is also much quicker.",
+        "Go ahead and clear this course to get a feel for the controls.",
+        "Great!"
     ],
 
     "driving_2": [
         "Now let's learn about terrain.",
-        "Driving on a road is preferred.",
-        "Driving on grass slows down your car."
+        "Driving on a road is preferred, as driving on grass slows you down.",
+        "See the difference here...",
+        "Any body of water will instantly respawn you at the nearest checkpoint.",
+        "Avoid the grass; try to pass this part without touching it.",
+        "Great!",
+        "Nice work, even if you did touch the grass."
+    ],
+
+    "controls": [
+        "There are more controls that I'll let you know about.",
+        "Pressing L toggles long lights.",
+        "Pressing C toggles the underlight.",
+        "You can pause the game with ESC, in case it wasn't obvious.",
+        "We aren't required to test you with those controls, so we'll move on now.",
+        "The most important aspect is up next."
+    ],
+
+    "drifting": [
+        "To drift, hold SPACE while moving.",
+        "Go ahead.",
+        "Nice job! We had to measure your time on that, by the way.",
+        "You did pretty good.",
+        "You did alright.",
+        "You did... okay, I guess.",
+        "You could've done better.",
+        "Based on it, you shouldn't be driving, but I'll let this one slide.",
+        "It's important to be fast, but it's also important to get score.",
+        "Score is accumulated only from ACTUAL drifting.",
+        "Your time and score determine your rank, given at the end of the map."
     ]
 }

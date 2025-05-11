@@ -36,7 +36,8 @@ public class loading : MonoBehaviour
     }
     void Start()
     {
-        /* loadingTexts(); */
+        // pitäs toimia
+        loadingTexts();
         specialLoadingTexts();
     }
 
