@@ -25,7 +25,8 @@ public class mapSelection : MonoBehaviour
         {
             GameObject.Find("mountainDay"),
             GameObject.Find("mountainNight"),
-            GameObject.Find("shoreDay")
+            GameObject.Find("shoreDay"),
+            GameObject.Find("aihaukipudasbutton")
         };
 
         MapFallAnimResetPos();
@@ -68,6 +69,11 @@ public class mapSelection : MonoBehaviour
                 break;
             case 4:
                 PlayerPrefs.SetInt("chosenMap", 4);
+                StartCoroutine(MapButtonFunc());
+                
+                break;
+            case 6:
+                PlayerPrefs.SetInt("chosenMap", 6);
                 StartCoroutine(MapButtonFunc());
                 
                 break;

@@ -72,7 +72,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             carPointRequirements = new Dictionary<GameObject, int>
             {
                 { carsl[0], 0 },
-                { carsl[1], 98734 },
+                { carsl[1], 2 }, //98734
                 { carsl[2], 2000 },
                 { carsl[3], 1 }
             };

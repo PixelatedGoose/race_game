@@ -87,7 +87,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
     }
 
-    void Awake()
+    void Awake() //voi olla ongelmallinen!!!
     {
         Controls = new CarInputActions();
         Controls.Enable();
@@ -97,6 +97,18 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private void OnEnable()
     {
         Controls.Enable();
+        
+        GameObject[] checkpointObjects = GameObject.FindGameObjectsWithTag("checkpointTag");
+        List<Transform> checkpointsToMove = new List<Transform>();
+
+        foreach (GameObject checkpoint in checkpointObjects)
+        {
+            Transform checkpointTransform;
+            checkpointTransform = checkpoint.GetComponent<Transform>();
+
+            checkpointsToMove.Add(checkpointTransform);
+        }
+        checkpoints = checkpointsToMove.ToArray();
     }
 
     private void OnDisable()
