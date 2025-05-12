@@ -38,12 +38,11 @@ public class optionScript : MonoBehaviour
     private void CacheUIElements()
     {
         sliders["pixel"] = GameObject.Find("pixel").GetComponent<Slider>();
-        sliders["volume"] = GameObject.Find("volumeSlider").GetComponent<Slider>(); // Cache volume slider
+        //sliders["volume"] = GameObject.Find("volumeSlider").GetComponent<Slider>(); // Cache volume slider
         
         pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
-
         
-        sliders["volume"].onValueChanged.AddListener(UpdateVolume);
+        //sliders["volume"].onValueChanged.AddListener(UpdateVolume);
     }
 
     private void InitializeSliderValues()
@@ -57,10 +56,10 @@ public class optionScript : MonoBehaviour
         }
 
         // Initialize volume slider
-        if (sliders.ContainsKey("volume"))
+/*         if (sliders.ContainsKey("volume"))
         {
             sliders["volume"].value = PlayerPrefs.GetFloat("volume");
-        }
+        } */
     }
 
     public void UpdateTogglePreference(string toggleName)

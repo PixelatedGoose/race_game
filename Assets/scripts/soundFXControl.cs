@@ -96,7 +96,7 @@ public class soundFXControl : MonoBehaviour
         //Controls.Dispose();
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (Controls.CarControls.pausemenu.triggered)
         {
@@ -119,7 +119,6 @@ public class soundFXControl : MonoBehaviour
                 }
             }
         }
-        
         else if (GameManager.instance.isPaused == false)
         {
             Debug.Log("joo ok et oo pausessa");

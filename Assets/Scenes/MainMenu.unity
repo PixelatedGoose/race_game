@@ -3092,7 +3092,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1667327343}
         m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
-        m_MethodName: setToggleOptionValue
+        m_MethodName: UpdateTogglePreference
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5471,7 +5471,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1667327343}
         m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
-        m_MethodName: setSliderOptionValue
+        m_MethodName: UpdateSliderPreference
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
