@@ -108,7 +108,7 @@ public class loading : MonoBehaviour
             string key = field.Name;
             float value = (float)field.GetValue(specialChances);
 
-            Debug.Log($"Key: {key}, Value: {value}");
+            //Debug.Log($"Key: {key}, Value: {value}");
 
             float sChance = Random.Range(value * 1000, 100000);
             if (sChance <= value * 1000)
