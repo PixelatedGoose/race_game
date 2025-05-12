@@ -74,7 +74,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
                 { carsl[0], 0 },
                 { carsl[1], 98734 },
                 { carsl[2], 2000 },
-                { carsl[3], 1000000 }
+                { carsl[3], 1 }
             };
         }
 

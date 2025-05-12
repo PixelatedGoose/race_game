@@ -5482,9 +5482,29 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 969066633128343536, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: go
+      value: 
+      objectReference: {fileID: 1886697768}
+    - target: {fileID: 969066633128343536, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: s1
+      value: 
+      objectReference: {fileID: 1342301316}
+    - target: {fileID: 969066633128343536, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: s2
+      value: 
+      objectReference: {fileID: 325126149}
+    - target: {fileID: 969066633128343536, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: s3
+      value: 
+      objectReference: {fileID: 2061659569}
+    - target: {fileID: 969066633128343536, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 969066633128343536, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: racerScript
+      value: 
+      objectReference: {fileID: 807914919}
     - target: {fileID: 2177387022637776804, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: m_Name
       value: cars
