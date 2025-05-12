@@ -24,8 +24,7 @@ public class SpeedMeter : MonoBehaviour
             Debug.LogWarning("speedLabel EI OLE VITTU OLEMASSA");
         }
 
-        //target = GameManager.instance.currentCar.GetComponentInChildren<Rigidbody>();
-        //jos rikki, laita inspectorissa ^^^^^^^^^^^^^^^^
+        target = GameManager.instance.currentCar.GetComponentInChildren<Rigidbody>();
     }
 
     private void Update()

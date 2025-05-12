@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Waitbeforestart : MonoBehaviour
 {
@@ -11,6 +12,15 @@ public class Waitbeforestart : MonoBehaviour
 
     void Start()
     {
+        s1 = GameObject.Find("s1");
+        s2 = GameObject.Find("s2");
+        s3 = GameObject.Find("s3");
+        go = GameObject.Find("go");
+        
+        s2.SetActive(false);
+        s1.SetActive(false);
+        go.SetActive(false);
+
         if (GameManager.instance.sceneSelected != "tutorial")
         {
             StartCoroutine(ShowS1AfterDelay());
@@ -33,7 +43,6 @@ public class Waitbeforestart : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        s3.SetActive(true);
         yield return new WaitForSecondsRealtime(1.5f);
         s3.SetActive(false);
 
