@@ -8,13 +8,12 @@ public class PauseMenu : MonoBehaviour
 
     private bool optionsOpen => Optionspanel != null && Optionspanel.activeSelf;
     private CarInputActions Controls;
-    private RacerScript racerScript;
+    public RacerScript racerScript;
 
     void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
-        racerScript = FindFirstObjectByType<RacerScript>();
 
         if (pauseMenuObjects == null || pauseMenuObjects.Length == 0)
             Debug.LogWarning("PauseMenuObjects array is not assigned or empty.");
@@ -26,9 +25,14 @@ public class PauseMenu : MonoBehaviour
     private void OnDisable() => Controls.Disable();
     private void OnDestroy() => Controls.Disable();
 
+    void Start()
+    {
+        racerScript = FindFirstObjectByType<RacerScript>();
+    }
+
     void Update()
     {
-        if (Controls.CarControls.pausemenu.triggered && !optionsOpen && racerScript != null && !racerScript.raceFinished)
+        if (Controls.CarControls.pausemenu.triggered && !optionsOpen && !racerScript.raceFinished)
         {
             TogglePauseMenu();
         }
