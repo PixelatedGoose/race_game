@@ -17,7 +17,10 @@ public class MainMenu : MonoBehaviour
         "kenen vitun idea oli tämä paskainen paska",
         "Joonas Kallio! Joonas Kallio! Joonas Kallio!",
         "jdfgkhfkdgjjghubbjlreghwefwovjergubroewöwefwG",
-        "Tämä on esimerkki viestistä, joka voi näkyä"
+        "Tämä on esimerkki viestistä, joka voi näkyä",
+        "Vuoden peli 1997",
+        "Uusi tutkimus: alkoholi on vaarallista auton sisällä",
+        "Nyt puhutaan asiaa. Aivan pelkkää faktaa. Mitä vittua"
     };
 
     void Awake()

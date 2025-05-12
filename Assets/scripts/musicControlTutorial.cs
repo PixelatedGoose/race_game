@@ -10,16 +10,16 @@ public class musicControlTutorial : MonoBehaviour
 
     void Start()
     {
-        musicList = GameObject.FindGameObjectsWithTag("thisisasound");
-        GetTrackVariants();
+        musicList = GameObject.FindGameObjectsWithTag("musicTrack");
+        TrackVariants();
 
         foreach (GameObject musicTrack in musicList)
         {
-            /* musicTrack.GetComponent<AudioSource>().Play(); */
+            musicTrack.GetComponent<AudioSource>().Play();
         }
     }
 
-    void GetTrackVariants()
+    void TrackVariants(bool set = false)
     {
         string clipName = mainTrack.clip.name;
 
@@ -32,21 +32,40 @@ public class musicControlTutorial : MonoBehaviour
             .Where(a => a.name.StartsWith(prefix))
             .ToList();
 
-        Debug.Log($"Found {variants.Count} variants for prefix {prefix}");
+        if (variants.Count == 0)
+        {
+            Debug.LogWarning("no variants found; ignore if intended");
+        }
+        else
+        {
+            Debug.Log($"Found {variants.Count} variants for prefix {prefix}");
+        }
+
+        if (set == true)
+        {
+            driftTrack = variants[0].GetComponent<AudioSource>();
+            turboTrack = variants[1].GetComponent<AudioSource>();
+        }
+        else
+        {
+            Debug.Log("assuming track has no variants; removing", mainTrack);
+            driftTrack = null;
+            turboTrack = null;
+        }
     }
 
     void ChangeTrack(string selectedAudio)
     {
         mainTrack = GameObject.Find(selectedAudio).GetComponent<AudioSource>();
-        GetTrackVariants();
+        TrackVariants(true);
     }
-    
-    // part 1:
-        // ChangeTrack("1_intro_MAINloop")
-    // part 2:
-        // ChangeTrack("2_driving_MAINloop")
 
-    // jne...
+    public void MusicSections(string trackName) //lisään myöhemmi oikeet fade outit ja transitionit
+    {
+        mainTrack.Stop();
+        ChangeTrack(trackName);
+        mainTrack.Play();
+    }
 
     void Update()
     {
@@ -62,28 +81,30 @@ public class musicControlTutorial : MonoBehaviour
         }
         else
         {
-            if (GameManager.instance.isAddingPoints)
-            {
-                if (driftTrack.volume <= 0.390f)
+            if (driftTrack != null)
+                if (GameManager.instance.isAddingPoints)
                 {
-                    driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.5f, 1.0f * Time.deltaTime);
-                    mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.0f, 1.0f * Time.deltaTime);
+                    if (driftTrack.volume <= 0.390f)
+                    {
+                        driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.5f, 1.0f * Time.deltaTime);
+                        mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.0f, 1.0f * Time.deltaTime);
+                    }
                 }
-            }
-            else
-            {
-                if (driftTrack.volume > 0.000f)
+                else
                 {
-                    driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.0f, 1.0f * Time.deltaTime);
+                    if (driftTrack.volume > 0.000f)
+                    {
+                        driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.0f, 1.0f * Time.deltaTime);
+                        mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.5f, 1.0f * Time.deltaTime);
+                    }
+                }
+            
+            if (turboTrack != null)
+                if (turboTrack.volume > 0.000f)
+                {
+                    turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.0f, 1.0f * Time.deltaTime);
                     mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.5f, 1.0f * Time.deltaTime);
                 }
-            }
-            
-            if (turboTrack.volume > 0.000f)
-            {
-                turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.0f, 1.0f * Time.deltaTime);
-                mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.5f, 1.0f * Time.deltaTime);
-            }
         }
 
 

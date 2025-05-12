@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 24296903}
   m_Layer: 0
   m_Name: 6_drifting_MAINloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -218,7 +218,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 9f21d771e6fc26340934f93ba0f5a078, type: 3}
   m_Resource: {fileID: 8300000, guid: 9f21d771e6fc26340934f93ba0f5a078, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -713,7 +713,7 @@ GameObject:
   - component: {fileID: 227889438}
   m_Layer: 0
   m_Name: 2_moving_MAINloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -746,7 +746,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 726b7be7154ef4c469f51591beffaa83, type: 3}
   m_Resource: {fileID: 8300000, guid: 726b7be7154ef4c469f51591beffaa83, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -842,7 +842,7 @@ GameObject:
   - component: {fileID: 312581406}
   m_Layer: 0
   m_Name: 1_intro_MAINloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -874,7 +874,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ecdeecb3fd11f81419497941df39cebf, type: 3}
   m_Resource: {fileID: 8300000, guid: ecdeecb3fd11f81419497941df39cebf, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
@@ -1034,7 +1034,7 @@ GameObject:
   - component: {fileID: 435064807}
   m_Layer: 0
   m_Name: 7_turbe_DRIFTloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1067,7 +1067,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: a041bdf31c2de904b9ca73ef8d9ebcba, type: 3}
   m_Resource: {fileID: 8300000, guid: a041bdf31c2de904b9ca73ef8d9ebcba, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1775,7 +1775,7 @@ GameObject:
   - component: {fileID: 793869117}
   m_Layer: 0
   m_Name: 3_steering_MAINloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1808,7 +1808,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 24308a0a735908e4ba72fd25e195c9a4, type: 3}
   m_Resource: {fileID: 8300000, guid: 24308a0a735908e4ba72fd25e195c9a4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1993,7 +1993,7 @@ GameObject:
   - component: {fileID: 995718402}
   m_Layer: 0
   m_Name: 4_controls_MAINloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2026,7 +2026,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 47a86ffaa3fb3c747a32f6981298dd6f, type: 3}
   m_Resource: {fileID: 8300000, guid: 47a86ffaa3fb3c747a32f6981298dd6f, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2122,7 +2122,7 @@ GameObject:
   - component: {fileID: 999125049}
   m_Layer: 0
   m_Name: 7_turbe_TURBOloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2155,7 +2155,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: ec24d8a905825034e9ad02107f81cba6, type: 3}
   m_Resource: {fileID: 8300000, guid: ec24d8a905825034e9ad02107f81cba6, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2556,7 +2556,7 @@ GameObject:
   - component: {fileID: 1362000150}
   m_Layer: 0
   m_Name: 6_drifting_DRIFTloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2589,7 +2589,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: b5d15b6d5dcf1ce4a869e7237d2a5ebe, type: 3}
   m_Resource: {fileID: 8300000, guid: b5d15b6d5dcf1ce4a869e7237d2a5ebe, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3023,7 +3023,7 @@ GameObject:
   - component: {fileID: 1445288328}
   m_Layer: 0
   m_Name: 5_beforedrift_MAINloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3056,7 +3056,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: b84813d1d8dfeb74bb352ecd8b5fa781, type: 3}
   m_Resource: {fileID: 8300000, guid: b84813d1d8dfeb74bb352ecd8b5fa781, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3844,7 +3844,7 @@ GameObject:
   - component: {fileID: 1727802899}
   m_Layer: 0
   m_Name: 7_turbe_MAINloop
-  m_TagString: thisisasound
+  m_TagString: musicTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3877,7 +3877,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 6045987581afd0044903872718a9d773, type: 3}
   m_Resource: {fileID: 8300000, guid: 6045987581afd0044903872718a9d773, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0

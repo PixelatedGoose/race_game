@@ -13,6 +13,7 @@ TagManager:
   - soundFXbutton
   - RespawnTrigger
   - msObj
+  - musicTrack
   layers:
   - Default
   - TransparentFX
