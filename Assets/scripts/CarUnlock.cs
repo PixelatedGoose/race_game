@@ -37,7 +37,8 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
         {
             GameObject.Find("REALCAR_x"),
             GameObject.Find("REALCAR"),
-            GameObject.Find("REALCAR_y")
+            GameObject.Find("REALCAR_y"),
+            GameObject.Find("Lada")
         };
 
         left = GameObject.Find("left").GetComponent<Button>();
@@ -66,13 +67,14 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             return;
         }
 
-        if (carsl.Count == 3 && carsl[0] != null && carsl[1] != null && carsl[2] != null)
+        if (carsl.Count == 4 && carsl[0] != null && carsl[1] != null && carsl[2] != null && carsl[3] != null)
         {
             carPointRequirements = new Dictionary<GameObject, int>
             {
                 { carsl[0], 0 },
                 { carsl[1], 98734 },
-                { carsl[2], 2000 }
+                { carsl[2], 2000 },
+                { carsl[3], 1000000 }
             };
         }
 
