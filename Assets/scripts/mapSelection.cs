@@ -44,7 +44,7 @@ public class mapSelection : MonoBehaviour
         {
             LeanTween.cancel(map);
             mapRectTransform = map.GetComponent<RectTransform>();
-            mapRectTransform.anchoredPosition = new Vector2(mapRectTransform.anchoredPosition.x, 230.0f);
+            mapRectTransform.anchoredPosition = new Vector2(mapRectTransform.anchoredPosition.x, 280.0f);
         }
     }
 
@@ -87,7 +87,7 @@ public class mapSelection : MonoBehaviour
         GameManager.instance.chosenMap = PlayerPrefs.GetInt("chosenMap");
 
         schizophrenia = Random.Range(5.0f, 8.0f);
-        LeanTween.moveLocalY(loadObjects.gameObject, 0, 0.8f).setEase(LeanTweenType.easeInOutCubic);
+        LeanTween.moveLocalY(loadObjects.gameObject, -0.5f, 0.8f).setEase(LeanTweenType.easeInOutCubic);
         foreach (GameObject theobject in msObjectsList)
         {
             LeanTween.moveLocalY(theobject, theobject.transform.position.y + 451, 0.8f).setEase(LeanTweenType.easeInOutCubic);

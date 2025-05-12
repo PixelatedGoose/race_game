@@ -1,2 +1,18 @@
 fileFormatVersion: 2
 guid: 718c68663d4dc28408fcc839dde75394
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - rankManager: {instanceID: 0}
+  - winMenu: {fileID: 3168483669016942917, guid: 3b32f2a184da1b242ac59148fe522b09, type: 3}
+  - Car1Hud: {instanceID: 0}
+  - rankText: {instanceID: 0}
+  - LapCounter: {instanceID: 0}
+  - resetPrompt: {instanceID: 0}
+  - startFinishLine: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
