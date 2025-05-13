@@ -15,7 +15,7 @@ public class fumoFumo : MonoBehaviour
         Controls.Enable();
     }
 
-    void Start()
+    /* void Start()
     {
         if (SceneManager.GetActiveScene().name == "MainMenu" || SceneManager.GetActiveScene().name == "test_mountain" || SceneManager.GetActiveScene().name == "test_mountain_night")
         {
@@ -55,7 +55,7 @@ public class fumoFumo : MonoBehaviour
         {
             fumoRandomizer(Random.Range(1, 6));
         }
-    }
+    } */
 
     private void OnDisable()
     {

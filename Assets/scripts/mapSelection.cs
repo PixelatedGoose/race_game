@@ -92,7 +92,7 @@ public class mapSelection : MonoBehaviour
         PlayerPrefs.Save();
         GameManager.instance.chosenMap = PlayerPrefs.GetInt("chosenMap");
 
-        schizophrenia = Random.Range(5.0f, 8.0f);
+        schizophrenia = Random.Range(3.5f, 6.5f);
         LeanTween.moveLocalY(loadObjects.gameObject, -0.5f, 0.8f).setEase(LeanTweenType.easeInOutCubic);
         foreach (GameObject theobject in msObjectsList)
         {
