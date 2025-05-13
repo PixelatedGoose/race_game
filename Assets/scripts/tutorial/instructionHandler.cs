@@ -10,6 +10,8 @@ public class instructionListClass
     public string[] driving_2;
     public string[] controls;
     public string[] drifting;
+    public string[] turbe;
+    public string[] final;
 }
 
 public class instructionHandler : MonoBehaviour
@@ -187,6 +189,10 @@ public class instructionHandler : MonoBehaviour
                 return instructionListData.controls;
             case "drifting":
                 return instructionListData.drifting;
+            case "turbe":
+                return instructionListData.turbe;
+            case "final":
+                return instructionListData.final;
             default:
                 Debug.LogError($"Category '{category}' not found");
                 return null;

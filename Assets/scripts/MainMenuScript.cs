@@ -14,13 +14,16 @@ public class MainMenu : MonoBehaviour
     public string[] headlines = new string[]
     {
         "voi vitun paska saatana perkele mitä vittua",
-        "kenen vitun idea oli tämä paskainen paska",
+        "kenen vitun idea oli tää paskanen paska",
         "Joonas Kallio! Joonas Kallio! Joonas Kallio!",
         "jdfgkhfkdgjjghubbjlreghwefwovjergubroewöwefwG",
-        "Tämä on esimerkki viestistä, joka voi näkyä",
+        "Tämä on esimerkki viestistä, joka voi näkyä. Iso pässi.",
         "Vuoden peli 1997",
         "Uusi tutkimus: alkoholi on vaarallista auton sisällä",
-        "Nyt puhutaan asiaa. Aivan pelkkää faktaa. Mitä vittua"
+        "Nyt puhutaan asiaa. Aivan pelkkää faktaa. Mitä vittua",
+        "Ootko kuullu semmosesta kaverista ku Kari?",
+        "kolmen tähen kaveri arvosteli; ei kiinnosta paskaakaa",
+        "vittu sun kanssa. kyllä red bull on parempaa ku nocco"
     };
 
     void Awake()

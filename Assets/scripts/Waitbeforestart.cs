@@ -28,6 +28,7 @@ public class Waitbeforestart : MonoBehaviour
         else
         {
             StartCoroutine(NoCountdown());
+            s3.SetActive(false);
         }
     }
 
