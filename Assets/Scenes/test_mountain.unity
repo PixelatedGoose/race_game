@@ -30498,7 +30498,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: c450302445b534e4bae7096b517211bd, type: 3}
   m_Resource: {fileID: 8300000, guid: c450302445b534e4bae7096b517211bd, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.39
+  m_Volume: 0.34
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -31398,6 +31398,34 @@ PrefabInstance:
     - target: {fileID: 6628541172485080053, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171322008420671982, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171322008420671982, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171322008420671982, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1485102025}
+    - target: {fileID: 7171322008420671982, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171322008420671982, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PauseStateHandler
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171322008420671982, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: soundFXControl, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171322008420671982, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7304203648146845540, guid: 57d5e117b0513914986a867fd88fcc82, type: 3}
       propertyPath: m_AnchorMax.x
