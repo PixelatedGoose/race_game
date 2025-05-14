@@ -10,6 +10,8 @@ public class instructionListClass
     public string[] driving_2;
     public string[] controls;
     public string[] drifting;
+    public string[] turbe;
+    public string[] final;
 }
 
 public class instructionHandler : MonoBehaviour
@@ -17,6 +19,7 @@ public class instructionHandler : MonoBehaviour
     private int index = -1;
     private GameObject instructionBox;
     public Text instructionText;
+    private bool boxOpen = false;
 
     public TextAsset instructionListJSON;
     public instructionListClass instructionListData;
@@ -57,7 +60,15 @@ public class instructionHandler : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            ShowNextInstructionInCategory("intro", false, 1);
+            switch (boxOpen)
+            {
+                case true:
+                    ShowNextInstructionInCategory("intro", false, 0);
+                    break;
+                case false:
+                    Debug.Log("no voi vittu");
+                    break;
+            }
         }
     }
 
@@ -73,6 +84,7 @@ public class instructionHandler : MonoBehaviour
         {
             case 0:
                 Debug.Log("stays open instruction: " + instructText);
+                boxOpen = true;
                 instructionText.text = instructText;
 
                 instructSounds[1].Play();
@@ -83,6 +95,7 @@ public class instructionHandler : MonoBehaviour
                 instructionText.text = instructText;
 
                 LeanTween.scaleX(instructionBox, 1.0f, 0.5f).setEaseOutCubic();
+                boxOpen = true;
                 instructSounds[1].Play();
 
                 break;
@@ -90,11 +103,13 @@ public class instructionHandler : MonoBehaviour
                 Debug.Log("close instruction: " + instructText);
 
                 LeanTween.scaleX(instructionBox, 0.0f, 0.5f).setEaseOutCubic();
+                boxOpen = false;
                 instructSounds[0].Play();
 
                 break;
             case 3:
                 Debug.Log("stays closed instruction: " + instructText);
+                boxOpen = false;
 
                 break;
         }
@@ -187,6 +202,10 @@ public class instructionHandler : MonoBehaviour
                 return instructionListData.controls;
             case "drifting":
                 return instructionListData.drifting;
+            case "turbe":
+                return instructionListData.turbe;
+            case "final":
+                return instructionListData.final;
             default:
                 Debug.LogError($"Category '{category}' not found");
                 return null;

@@ -1,21 +1,17 @@
 {
     "intro": [
         "Hello, and welcome to AmisDrift! (PRESS ENTER TO ADVANCE TEXT)",
-        "This tutorial is meant to guide you through the mechanics of the game.",
-        "You've been given a driver-in-training car for the purpose of this map."
+        "This tutorial will guide you through the mechanics of the game."
     ],
 
     "driving": [
         "Use WASD to control your car.",
-        "W and S move forward and backward, and A and D steer your car left and right.",
-        "Pressing (left) Shift starts braking.",
-        "This works differently from going backwards and is also much quicker.",
+        "Holding (left) Shift enables the handbrake.",
         "Go ahead and clear this course to get a feel for the controls.",
         "Great!"
     ],
 
     "driving_2": [
-        "Now let's learn about terrain.",
         "Driving on a road is preferred, as driving on grass slows you down.",
         "See the difference here...",
         "Any body of water will instantly respawn you at the nearest checkpoint.",
@@ -25,25 +21,36 @@
     ],
 
     "controls": [
-        "There are more controls that I'll let you know about.",
         "Pressing L toggles long lights.",
         "Pressing C toggles the underlight.",
         "You can pause the game with ESC, in case it wasn't obvious.",
-        "We aren't required to test you with those controls, so we'll move on now.",
-        "The most important aspect is up next."
+        "We'll teach you the most important thing now."
     ],
 
     "drifting": [
         "To drift, hold SPACE while moving.",
-        "Go ahead.",
         "Nice job! We had to measure your time on that, by the way.",
         "You did pretty good.",
         "You did alright.",
         "You did... okay, I guess.",
         "You could've done better.",
         "Based on it, you shouldn't be driving, but I'll let this one slide.",
-        "It's important to be fast, but it's also important to get score.",
-        "Score is accumulated only from ACTUAL drifting.",
-        "Your time and score determine your rank, given at the end of the map."
+        "You should've noticed that you accumulated some score from it.",
+        "Your time and score determine your rank, given at the end of the map.",
+        "You'll unlock more cars as you gain better ranks on maps."
+    ],
+
+    "turbe": [
+        "You're able to use your turbo by holding (left) CTRL.",
+        "We only have a limited supply of it per car; the amount is on the bottom left.",
+        "The supply regenerates after letting it rest for a while.",
+        "placeholder 1"
+    ],
+
+    "final": [
+        "placeholder for intro",
+        "placeholder for other yapping 1",
+        "placeholder for other yapping 2",
+        "ok now go do clear"
     ]
 }

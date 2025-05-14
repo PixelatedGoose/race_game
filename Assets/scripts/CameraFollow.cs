@@ -22,6 +22,7 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         Cam = GetComponent<Camera>();
+        Debug.Log(Cam);
         carController = carTarget.GetComponent<CarController>();
     }
 
