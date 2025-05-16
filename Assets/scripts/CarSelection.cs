@@ -51,13 +51,15 @@ public class CarSelection : MonoBehaviour
         }
 
         // Activate the selected car
-        if (index >= 0 && index <= cars.Length)
+        if (index >= 0 && index < cars.Length)
         {
             cars[index].SetActive(true);
         }
         else
         {
             Debug.LogError("Car index out of range: " + index);
+            index = 0;
+            cars[index].SetActive(true);
         }
 
         menuMusic.Play();
@@ -65,32 +67,25 @@ public class CarSelection : MonoBehaviour
 
     void Update()
     {
-        right.interactable = index < cars.Length - 1;
-        left.interactable = index > 0;
+        // Removed button interactable logic for looping
     }
 
     public void RightButton()
     {
-        if (index < cars.Length - 1)
-        {
-            cars[index].SetActive(false);
-            index++;
-            cars[index].SetActive(true);
-            PlayerPrefs.SetInt("CarIndex", index);
-            PlayerPrefs.Save();
-        }
+        cars[index].SetActive(false);
+        index = (index + 1) % cars.Length;
+        cars[index].SetActive(true);
+        PlayerPrefs.SetInt("CarIndex", index);
+        PlayerPrefs.Save();
     }
 
     public void LeftButton()
     {
-        if (index > 0)
-        {
-            cars[index].SetActive(false);
-            index--;
-            cars[index].SetActive(true);
-            PlayerPrefs.SetInt("CarIndex", index);
-            PlayerPrefs.Save();
-        }
+        cars[index].SetActive(false);
+        index = (index - 1 + cars.Length) % cars.Length;
+        cars[index].SetActive(true);
+        PlayerPrefs.SetInt("CarIndex", index);
+        PlayerPrefs.Save();
     }
 
     public void ActivateMapSelection()
