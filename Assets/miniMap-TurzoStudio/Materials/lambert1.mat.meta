@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 198c260874b405847a59e0657530ce7b
+timeCreated: 1469108404
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 67896
+  packageName: MiniMap Camera for Racing/RPG game
+  packageVersion: 1.0
+  assetPath: Assets/miniMap-TurzoStudio/Materials/lambert1.mat
+  uploadId: 129627

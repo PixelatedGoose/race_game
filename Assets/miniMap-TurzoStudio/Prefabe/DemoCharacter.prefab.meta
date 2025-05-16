@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e19d0c2f35a0f5940911f61eff458c9e
+timeCreated: 1469309259
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 67896
+  packageName: MiniMap Camera for Racing/RPG game
+  packageVersion: 1.0
+  assetPath: Assets/miniMap-TurzoStudio/Prefabe/DemoCharacter.prefab
+  uploadId: 129627

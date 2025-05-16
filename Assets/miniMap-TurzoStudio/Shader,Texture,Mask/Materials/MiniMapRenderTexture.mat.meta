@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e2c619f36fdb3b74e86d4ed57009aef4
+timeCreated: 1469308045
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 67896
+  packageName: MiniMap Camera for Racing/RPG game
+  packageVersion: 1.0
+  assetPath: Assets/miniMap-TurzoStudio/Shader,Texture,Mask/Materials/MiniMapRenderTexture.mat
+  uploadId: 129627
