@@ -8,6 +8,11 @@ public class billboarding : MonoBehaviour
     void Start()
     {
         bbCamera = GameObject.Find("Camera").GetComponent<Camera>(); // Find the camera in the scene
+        if (bbCamera == null)
+        {
+            enabled = false;
+            return;
+        }
         
         // Generate a random scale factor between minScale and maxScale
         float randomScale = Random.Range(minScale, maxScale);

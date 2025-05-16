@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 886ab7b7fc46d194fb0726bfc5368c57
+timeCreated: 1469243321
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 67896
+  packageName: MiniMap Camera for Racing/RPG game
+  packageVersion: 1.0
+  assetPath: Assets/miniMap-TurzoStudio/Materials/miniMapPlaneMaterial.mat
+  uploadId: 129627

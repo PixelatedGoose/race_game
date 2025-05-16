@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b6cfc82cbc256404d8dd16e3f4d3f06f
+timeCreated: 1469245356
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 67896
+  packageName: MiniMap Camera for Racing/RPG game
+  packageVersion: 1.0
+  assetPath: Assets/miniMap-TurzoStudio/Shader,Texture,Mask/MaskShader.shader
+  uploadId: 129627

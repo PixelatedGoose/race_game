@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: df4bf717d98f31a4f886beb6aa23b1c1
+timeCreated: 1469307531
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 67896
+  packageName: MiniMap Camera for Racing/RPG game
+  packageVersion: 1.0
+  assetPath: Assets/miniMap-TurzoStudio/Scripts/Player.cs
+  uploadId: 129627
