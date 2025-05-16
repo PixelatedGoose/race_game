@@ -78,7 +78,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             };
         }
 
-        // Update stats for the currently active car at the start
+        
         UpdateCarStats();
     }
 
@@ -119,8 +119,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
                 break;
             }
         }
-
-        // Update stats after unlocking a car
         UpdateCarStats();
     }
 
@@ -129,7 +127,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
         if (index >= 0 && index < carsl.Count)
         {
             activeCarIndex = index;
-            UpdateCarStats(); // Update stats when the active car index changes
+            UpdateCarStats(); 
         }
     }
 

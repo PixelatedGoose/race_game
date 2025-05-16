@@ -36,21 +36,13 @@ public class CarSelection : MonoBehaviour
         {
             Debug.LogError("GameManager.instance is null");
         }
-        else
-        {
-            Debug.Log("GameManager.instance is not null");
-            Debug.Log("Chosen Map: " + GameManager.instance.chosenMap);
-        }
         
         index = PlayerPrefs.GetInt("CarIndex", 0);
-        Debug.Log("Loaded CarIndex: " + index);
 
         foreach (GameObject car in cars)
         {
             car.SetActive(false);
         }
-
-        // Activate the selected car
         if (index >= 0 && index < cars.Length)
         {
             cars[index].SetActive(true);
@@ -63,11 +55,6 @@ public class CarSelection : MonoBehaviour
         }
 
         menuMusic.Play();
-    }
-
-    void Update()
-    {
-        // Removed button interactable logic for looping
     }
 
     public void RightButton()
