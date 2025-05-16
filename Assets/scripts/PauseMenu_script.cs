@@ -32,7 +32,8 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Controls.CarControls.pausemenu.triggered && !optionsOpen && !racerScript.raceFinished)
+        if (Controls.CarControls.pausemenu.triggered && !optionsOpen && !racerScript.raceFinished
+        && racerScript.racestarted)
         {
             TogglePauseMenu();
         }
