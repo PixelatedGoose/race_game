@@ -12,10 +12,13 @@ public class soundFXControl : MonoBehaviour
     public GameObject[] soundSlidersList;
     public GameObject[] soundTogglesList;
 
+    public RacerScript racerScript;
+
     void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
+        racerScript = FindFirstObjectByType<RacerScript>();
     }
 
     void Start()
@@ -98,7 +101,7 @@ public class soundFXControl : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Controls.CarControls.pausemenu.triggered)
+        if (Controls.CarControls.pausemenu.triggered && racerScript.racestarted == true)
         {
             PauseStateHandler();
         }
