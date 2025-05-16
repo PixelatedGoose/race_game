@@ -40,7 +40,7 @@ public class CarController : MonoBehaviour
     public float deceleration = 1.0f;
     [Min (100.0f)] 
     public float maxspeed = 100.0f;
-    public float gravityMultiplier = 1.5f; 
+    public float gravitymultiplier = 1.0f; 
     public float grassSpeedMultiplier = 0.5f;
     public List<Wheel> wheels; 
     float moveInput;
@@ -86,7 +86,7 @@ public class CarController : MonoBehaviour
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         
-        carRb.centerOfMass = _centerofMass - new Vector3(0, 0.2f, 0);
+        carRb.centerOfMass = _centerofMass - new Vector3(0, 0, 0);
     }
 
     private void OnEnable()
@@ -244,15 +244,7 @@ public class CarController : MonoBehaviour
         float speed = carRb.linearVelocity.magnitude * 3.6f;
         
         turnSensitivty = Mathf.Lerp(turnSensitivtyAtLowSpeed, turnSensitivtyAtHighSpeed, Mathf.Clamp01(speed / maxspeed));
-        foreach (var wheel in wheels)
-        {
-            JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
-            suspensionSpring.spring = 3000f;
-            suspensionSpring.damper = 5000f;
-            suspensionSpring.targetPosition = 0.8f;
-            wheel.wheelCollider.suspensionSpring = suspensionSpring;
 
-        }
 
     }
 
@@ -276,16 +268,28 @@ public class CarController : MonoBehaviour
         HandeSteepSlope();
         UpdateTargetTorgue();
         AdjustSpeedForGrass();
+        Handleturningsense();
         foreach (var wheel in wheels)
         {
             if (Controls.CarControls.Brake.IsPressed())
             {
                 Brakes(wheel);
             }
-            else
-            {
-                MotorTorgue(wheel);
-            }
+            else MotorTorgue(wheel);
+        }
+    }
+
+    private void Handleturningsense()
+    {
+        if (activedrift > 0) return;
+        foreach (var wheel in wheels)
+        {
+            JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
+            suspensionSpring.spring = 3000f;
+            suspensionSpring.damper = 6000f;
+            suspensionSpring.targetPosition = 1.0f;
+            wheel.wheelCollider.suspensionSpring = suspensionSpring;
+
         }
     }
 
@@ -343,7 +347,7 @@ public class CarController : MonoBehaviour
         {
             Vector3 velocity = carRb.linearVelocity;
 
-            velocity -= velocity.normalized * deceleration * 2.0f *  Time.deltaTime;
+            velocity -= velocity.normalized * deceleration * 3.0f *  Time.deltaTime;
             
             if (velocity.magnitude < 0.1f) 
             {
@@ -367,7 +371,11 @@ public class CarController : MonoBehaviour
 
     void ApplyGravity()
     {
-        carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
+        if (!IsGrounded())
+        {
+            carRb.AddForce(Vector3.down * Physics.gravity.magnitude, ForceMode.Acceleration);   
+        }
+        
     }
 
     void HandleDrift()
@@ -379,10 +387,8 @@ public class CarController : MonoBehaviour
                 return;
             }
             activedrift++;
-
-            float speed = carRb.linearVelocity.magnitude * 3.6f;
-            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f); 
-            float driftMultiplier = Mathf.Lerp(1.0f, 2.0f, Mathf.Clamp01(carRb.linearVelocity.magnitude / maxspeed));
+            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
+            float driftMultiplier = Mathf.Lerp(1.0f, 2.0f, (carRb.linearVelocity.magnitude * 3.6f) / maxspeed);
 
             foreach (var wheel in wheels)
             {
@@ -399,7 +405,7 @@ public class CarController : MonoBehaviour
             AdjustSuspension();
             AdjustForwardFriction();
 
-            if (speed > 20.0f) 
+            if (GameManager.instance.carSpeed > 20.0f) 
             {
                 GameManager.instance.AddPoints();
             }
@@ -421,8 +427,8 @@ public class CarController : MonoBehaviour
             JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
 
             suspensionSpring.spring = 2000f;
-            suspensionSpring.damper = 3500f;
-            suspensionSpring.targetPosition = 0.4f;
+            suspensionSpring.damper = 3200f;
+            suspensionSpring.targetPosition = 1.0f;
             wheel.wheelCollider.suspensionSpring = suspensionSpring;
         }
     }

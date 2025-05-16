@@ -287,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: deceleration
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: turnSensitivty
@@ -491,7 +491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: deceleration
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: driftMultiplier
@@ -688,7 +688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: deceleration
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: gravityMultiplier
@@ -1054,7 +1054,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: deceleration
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: driftMultiplier
