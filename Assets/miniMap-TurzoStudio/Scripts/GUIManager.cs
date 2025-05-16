@@ -14,12 +14,12 @@ public class GUIManager : MonoBehaviour
     [Range(0f, 1f)] public float width = 0.18f;
     [Range(0f, 1f)] public float height = 0.28f;
 
-    private float offset;
+/*     private float offset;
 
     void Awake()
     {
         offset = 10;
-    }
+    } */
 
     void OnGUI()
     {

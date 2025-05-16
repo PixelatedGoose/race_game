@@ -16,10 +16,14 @@ public class instructionListClass
 
 public class instructionHandler : MonoBehaviour
 {
+    public string[] categories;
+    public int idx;
+    public string nextCategory;
+    public string curCategory; //ei default kategoriaa jotta ei tuu jotai fuck uppeja
     private int index = -1;
     private GameObject instructionBox;
     public Text instructionText;
-    private bool boxOpen = false;
+    public bool boxOpen = false;
 
     public TextAsset instructionListJSON;
     public instructionListClass instructionListData;
@@ -47,31 +51,21 @@ public class instructionHandler : MonoBehaviour
             GameObject.Find("instructionText").GetComponent<AudioSource>()
         };
         instructSounds = instructSounds.OrderBy(a => a.name).ToArray();
+
+        categories = System.Array.ConvertAll(instructionListData
+            .GetType()
+            .GetFields(),
+            field => field.Name
+        );
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         ShowNextInstructionInCategory("intro", false, 1);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            switch (boxOpen)
-            {
-                case true:
-                    ShowNextInstructionInCategory("intro", false, 0);
-                    break;
-                case false:
-                    Debug.Log("no voi vittu");
-                    break;
-            }
-        }
-    }
 
+    
     /// <summary>
     /// näyttää tekstiohjeen. toimii omien tekstien näyttämiseen ja osana funktiota ShowNextInstructionInCategory
     /// </summary>
@@ -124,7 +118,7 @@ public class instructionHandler : MonoBehaviour
     public void ShowNextInstructionInCategory(string category, bool reset = false, int anim = 1)
     {
         string[] texts = GetInstructionListByCategory(category);
-
+        
         if (reset == true)
         {
             index = 0;
@@ -190,6 +184,10 @@ public class instructionHandler : MonoBehaviour
     //lazy
     private string[] GetInstructionListByCategory(string category)
     {
+        curCategory = category;
+        idx = System.Array.FindIndex(categories, category => category == curCategory);
+        nextCategory = categories[idx + 1];
+
         switch (category)
         {
             case "intro":
