@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class loadArea : MonoBehaviour
@@ -31,12 +32,23 @@ public class loadArea : MonoBehaviour
                 break;
             case "11":
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
-                Destroy(gameObject);
+                StartCoroutine(FadeDeath(1.0f));
                 Debug.Log("mf really died");
                 break;
             default:
                 Debug.Log($"prefix {prefix} not defined");
                 break;
         }
+    }
+
+    /// <summary>
+    /// tuhoaa objektin määritetyn ajan jälkee
+    /// </summary>
+    /// <param name="seconds">sekunnit</param>
+    private IEnumerator FadeDeath(float seconds)
+    {
+        LeanTween.alpha(gameObject, 0f, seconds).setEaseLinear();
+        yield return new WaitForSeconds(seconds);
+        Destroy(gameObject);
     }
 } 
