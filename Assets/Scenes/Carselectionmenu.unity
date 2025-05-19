@@ -1649,8 +1649,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 49, y: 12}
-  m_SizeDelta: {x: 850, y: 250}
+  m_AnchoredPosition: {x: 0, y: 12}
+  m_SizeDelta: {x: 1100, y: 250}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &415900335
 CanvasRenderer:
@@ -2588,22 +2588,22 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   carStats:
-  - carName: gren
-    speed: 1
-    acceleration: 1
-    handling: 1
-  - carName: blu
-    speed: 2
-    acceleration: 2
+  - carName: Subaru
+    speed: 10
+    acceleration: 8
     handling: 2
-  - carName: pik
-    speed: 69
-    acceleration: 69
-    handling: 69
-  - carName: lada
-    speed: 180
-    acceleration: 5
-    handling: 5
+  - carName: Honda
+    speed: 6
+    acceleration: 6
+    handling: 4
+  - carName: Toyota
+    speed: 3
+    acceleration: 6
+    handling: 10
+  - carName: Lada
+    speed: 8
+    acceleration: 8
+    handling: 9
   scoreamount: 0
   button: {fileID: 148388788}
   scoreText: {fileID: 787989387}
@@ -2646,8 +2646,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 49, y: 293}
-  m_SizeDelta: {x: 850, y: 250}
+  m_AnchoredPosition: {x: 0, y: 293}
+  m_SizeDelta: {x: 1100, y: 250}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &871701576
 CanvasRenderer:
@@ -2918,8 +2918,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 49, y: 111.99994}
-  m_SizeDelta: {x: 850, y: 250}
+  m_AnchoredPosition: {x: 0, y: 111.99994}
+  m_SizeDelta: {x: 1100, y: 250}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &920404890
 CanvasRenderer:
@@ -3171,8 +3171,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: A very basic mountain region. One of the only mountain regions in the world
-    that also doubles as a race track. Excellent for basic driving and racing, as
-    well as leisure.
+    that also doubles as a race track. Excellent for basic driving and racing.
 --- !u!222 &1057967028
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5530,7 +5529,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CAR selection
+  m_text: Select your car
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5557,8 +5556,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5772,8 +5771,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 49, y: 195.99997}
-  m_SizeDelta: {x: 850, y: 250}
+  m_AnchoredPosition: {x: 0, y: 195.99997}
+  m_SizeDelta: {x: 1100, y: 250}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &1814188271
 CanvasRenderer:
