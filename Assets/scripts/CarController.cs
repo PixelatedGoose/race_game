@@ -197,7 +197,7 @@ public class CarController : MonoBehaviour
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 500 * 1.0f);
+        return Physics.Raycast(transform.position, Vector3.down, 0.89f);
     }
 
     bool IsWheelGrounded(Wheel wheel)
@@ -286,8 +286,8 @@ public class CarController : MonoBehaviour
         {
             JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
             suspensionSpring.spring = 3000f;
-            suspensionSpring.damper = 6000f;
-            suspensionSpring.targetPosition = 1.0f;
+            suspensionSpring.damper = 3000f;
+            suspensionSpring.targetPosition = 0.5f;
             wheel.wheelCollider.suspensionSpring = suspensionSpring;
 
         }
@@ -318,7 +318,7 @@ public class CarController : MonoBehaviour
     private void Brakes(Wheel wheel)
     {
         GameManager.instance.StopAddingPoints();
-        wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
+        wheel.wheelCollider.brakeTorque = brakeAcceleration * 500f;
         wheel.wheelCollider.motorTorque = 0f;
     }
 
@@ -343,18 +343,34 @@ public class CarController : MonoBehaviour
 
     void Decelerate()
     {
-        if (moveInput == 0)
+        if (!IsGrounded())
+        {
+            return;
+
+        }
+        if (moveInput == 0 && IsGrounded())
         {
             Vector3 velocity = carRb.linearVelocity;
+            velocity -= velocity.normalized * deceleration * 2.5f * Time.deltaTime;
 
-            velocity -= velocity.normalized * deceleration * 3.0f *  Time.deltaTime;
-            
-            if (velocity.magnitude < 0.1f) 
+            if (velocity.magnitude < 0.1f)
             {
                 velocity = Vector3.zero;
             }
-        carRb.linearVelocity = velocity;
+            carRb.linearVelocity = velocity;
         }
+        else if (moveInput == 0 && !IsGrounded())
+        {
+            Vector3 velocity = carRb.linearVelocity;
+            velocity -= velocity.normalized * deceleration * 2.5f * Time.deltaTime;
+
+            if (velocity.magnitude < 0.1f)
+            {
+                velocity = Vector3.zero;
+            }
+            carRb.linearVelocity = velocity;
+        }
+
     }
 
     void Steer() 
@@ -372,10 +388,12 @@ public class CarController : MonoBehaviour
     void ApplyGravity()
     {
         if (!IsGrounded())
-        {
-            carRb.AddForce(Vector3.down * Physics.gravity.magnitude, ForceMode.Acceleration);   
+        {   //car enters a random flow state and starts to float
+            carRb.useGravity = true;
+            
+            // carRb.AddForce(Vector3.down * Physics.gravity.magnitude * gravitymultiplier, ForceMode.Acceleration);
+            // Debug.Log("sä olet ilmassa");
         }
-        
     }
 
     void HandleDrift()
@@ -388,7 +406,7 @@ public class CarController : MonoBehaviour
             }
             activedrift++;
             float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
-            float driftMultiplier = Mathf.Lerp(1.0f, 2.0f, (carRb.linearVelocity.magnitude * 3.6f) / maxspeed);
+            float driftMultiplier = Mathf.Lerp(1.0f, 2.0f, maxspeed);
 
             foreach (var wheel in wheels)
             {
@@ -399,6 +417,7 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteSlip = 2.0f * speedFactor * driftMultiplier;
                 sidewaysFriction.extremumValue = 0.5f / (speedFactor * driftMultiplier);
                 sidewaysFriction.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
+                sidewaysFriction.stiffness = 4f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
 
@@ -427,8 +446,8 @@ public class CarController : MonoBehaviour
             JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
 
             suspensionSpring.spring = 2000f;
-            suspensionSpring.damper = 3200f;
-            suspensionSpring.targetPosition = 1.0f;
+            suspensionSpring.damper = 3000f;
+            suspensionSpring.targetPosition = 0.5f;
             wheel.wheelCollider.suspensionSpring = suspensionSpring;
         }
     }
@@ -444,7 +463,10 @@ public class CarController : MonoBehaviour
             forwardFriction.asymptoteSlip = 1.2f;
             forwardFriction.extremumValue = 1.0f;
             forwardFriction.asymptoteValue = 1.0f;
+            forwardFriction.stiffness = 15f;
+            wheel.wheelCollider.forwardFriction = forwardFriction;
         }
+
     }
 
     void StopDrifting()
@@ -456,7 +478,7 @@ public class CarController : MonoBehaviour
             GameManager.instance.StopAddingPoints();
             return;
         }
-        GameManager.instance.StopAddingPoints(); 
+        GameManager.instance.StopAddingPoints();
         foreach (var wheel in wheels)
         {
             if (wheel.wheelCollider == null) continue;
@@ -466,8 +488,18 @@ public class CarController : MonoBehaviour
             sidewaysFriction.asymptoteSlip = 0.5f;
             sidewaysFriction.extremumValue = 1.0f;
             sidewaysFriction.asymptoteValue = 1f;
+            sidewaysFriction.stiffness = 4f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+
+            WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
+            forwardFriction.extremumSlip = 0.4f;
+            forwardFriction.asymptoteSlip = 0.8f;
+            forwardFriction.extremumValue = 1.0f;
+            forwardFriction.asymptoteValue = 1.0f;
+            forwardFriction.stiffness = 4f;
+            wheel.wheelCollider.forwardFriction = forwardFriction;
         }
+
         
     }
 
