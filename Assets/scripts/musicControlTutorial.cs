@@ -32,7 +32,7 @@ public class musicControlTutorial : MonoBehaviour
             .Where(a => a.name.StartsWith(prefix))
             .ToList();
 
-        if (variants.Count == 0)
+        if (variants.Count <= 1)
         {
             Debug.LogWarning("no variants found; ignore if intended");
         }

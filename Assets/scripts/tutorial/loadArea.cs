@@ -10,20 +10,33 @@ public class loadArea : MonoBehaviour
 
     void Awake()
     {
-        prefix = gameObject.name.Substring(0, 1);
+        prefix = gameObject.name.Substring(0, 2);
         collider = GetComponent<Collider>();
         instructionHandler = GameObject.Find("instructionHandler").GetComponent<instructionHandler>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Hello! My name is Gustavo, but you can call me Gus");
         switch (prefix)
         {
-            //ei valmis
-            case "1":
+            case "01":
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 break;
+            case "02":
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 2);
+                break;
+            case "03":
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 3);
+                break;
+            case "11":
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                Destroy(gameObject);
+                Debug.Log("mf really died");
+                break;
+            default:
+                Debug.Log($"prefix {prefix} not defined");
+                break;
         }
-        Debug.Log("Hello! My name is Gustavo, but you can call me Gus");
     }
 } 
