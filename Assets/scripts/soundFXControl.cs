@@ -34,7 +34,7 @@ public class soundFXControl : MonoBehaviour
             soundList[1].GetComponent<AudioSource>().Play();
 
         //hell
-        //paska koodi
+        //paska koodi, rewrite myöhemmi
 
 
 
@@ -111,7 +111,6 @@ public class soundFXControl : MonoBehaviour
     {
         if (GameManager.instance.isPaused == true)
         {
-            Debug.Log("joo ok oot pausessa");
             soundList[2].GetComponent<AudioSource>().volume = 1.0f;
             foreach (GameObject sound in soundList)
             {
@@ -124,7 +123,6 @@ public class soundFXControl : MonoBehaviour
         }
         else if (GameManager.instance.isPaused == false)
         {
-            Debug.Log("joo ok et oo pausessa");
             soundList[2].GetComponent<AudioSource>().volume = 0.0f;
             foreach (GameObject sound in soundList)
             {
@@ -137,17 +135,5 @@ public class soundFXControl : MonoBehaviour
         }
     }
 
-    /* void FixedUpdate()
-    {
-        if (Mathf.Floor(GameManager.instance.carSpeed) == 0)
-        {
-            soundList[1].GetComponent<AudioSource>().volume = 0.0f;
-        }
-        
-        if (GameManager.instance.carSpeed > 0) //kesken
-        {
-            soundList[1].GetComponent<AudioSource>().pitch = GameManager.instance.carSpeed / 40;
-            soundList[1].GetComponent<AudioSource>().volume = GameManager.instance.carSpeed / 80;
-        }
-    } */
+    //rewrite myöhemmi
 }

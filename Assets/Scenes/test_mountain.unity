@@ -6057,6 +6057,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6593832112972554712, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+      propertyPath: m_Name
+      value: StartFinish
+      objectReference: {fileID: 0}
     - target: {fileID: 6806053433548342062, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: Car1Hud
       value: 

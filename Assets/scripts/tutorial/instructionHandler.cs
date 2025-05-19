@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 [System.Serializable]
 public class instructionListClass
@@ -16,24 +18,25 @@ public class instructionListClass
 
 public class instructionHandler : MonoBehaviour
 {
+    [Header("kategoriat")]
     public string[] categories;
+    [Tooltip("kategorian indeksi")]
     public int idx;
     public string nextCategory;
     public string curCategory; //ei default kategoriaa jotta ei tuu jotai fuck uppeja
     private int index = -1;
+
     private GameObject instructionBox;
+
+    [Header("instruction box")]
+    [Tooltip("aseta manuaalisesti. löytyy instructionBoxin sisältä")]
     public Text instructionText;
     public bool boxOpen = false;
 
+    [Header("data")]
     public TextAsset instructionListJSON;
     public instructionListClass instructionListData;
-
     public AudioSource[] instructSounds;
-
-    private bool allowAdvancing;
-    //lisää kunnollinen skippaaminen
-    //eli allowAdvancing = anim 3
-    //varmista että kaikki eri vaihtoehot toimii
 
 
 
@@ -65,13 +68,22 @@ public class instructionHandler : MonoBehaviour
     }
 
 
+
+    private readonly Dictionary<string, int> instructionAnimOverrides = new Dictionary<string, int>
+    {
+        { "intro:2", 3 }, //
+        { "driving:3", 2 }, //
+        { "driving_2:4", 2 }, //
+        { "drifting:1", 2 }, //hasu kohta
+        { "final:3", 3 }
+    };
     
     /// <summary>
     /// näyttää tekstiohjeen. toimii omien tekstien näyttämiseen ja osana funktiota ShowNextInstructionInCategory
     /// </summary>
     /// <param name="instructText">teksti, joka näytetään</param>
     /// <param name="anim">animaatio, joka toistetaan, kun ohje näkyy.
-    /// [0 = ei mitään, 1 = aukeaa, 2 = sulkeutuu, 3 = pois päältä]</param>
+    /// [0 = ei mitään, 1 = aukeaa, 2 = sulkeutuu, 3 = ei skippaamista]</param>
     public void ShowInstruction(string instructText, int anim = 1)
     {
         switch (anim)
@@ -103,6 +115,7 @@ public class instructionHandler : MonoBehaviour
                 break;
             case 3:
                 Debug.Log("stays closed instruction: " + instructText);
+                instructionText.text = instructText;
                 boxOpen = false;
 
                 break;
@@ -119,10 +132,13 @@ public class instructionHandler : MonoBehaviour
     {
         string[] texts = GetInstructionListByCategory(category);
         
-        if (reset == true)
+        if (reset)
         {
             index = 0;
-            Debug.Log("continuing ShowNextInstructionInCategory with reset");
+
+            string key = $"{category}:{index}";
+            if (instructionAnimOverrides.ContainsKey(key))
+                anim = instructionAnimOverrides[key];
 
             if (anim == 2)
             {
@@ -130,6 +146,7 @@ public class instructionHandler : MonoBehaviour
             }
             else
             {
+                Debug.Log("ADVANCING TEXT / RESET");
                 ShowInstruction(GetInstruction(category, index), anim);
             }
         }
@@ -151,6 +168,11 @@ public class instructionHandler : MonoBehaviour
             {
                 Debug.Log("ADVANCING TEXT");
                 index++;
+
+                string key = $"{category}:{index}";
+                if (instructionAnimOverrides.ContainsKey(key))
+                    anim = instructionAnimOverrides[key];
+
                 ShowInstruction(GetInstruction(category, index), anim);
             }
         }
@@ -186,27 +208,35 @@ public class instructionHandler : MonoBehaviour
     {
         curCategory = category;
         idx = System.Array.FindIndex(categories, category => category == curCategory);
-        nextCategory = categories[idx + 1];
+
+        if (!(idx + 1 >= categories.Length))
+        {
+            nextCategory = categories[idx + 1];
+        }
+        else
+        {
+            Debug.Log("HEWGJUYGR4YRGFKUY4EWGFUYESF8WIF43F8IU3F874497H4");
+        }
 
         switch (category)
-        {
-            case "intro":
-                return instructionListData.intro;
-            case "driving":
-                return instructionListData.driving;
-            case "driving_2":
-                return instructionListData.driving_2;
-            case "controls":
-                return instructionListData.controls;
-            case "drifting":
-                return instructionListData.drifting;
-            case "turbe":
-                return instructionListData.turbe;
-            case "final":
-                return instructionListData.final;
-            default:
-                Debug.LogError($"Category '{category}' not found");
-                return null;
-        }
+            {
+                case "intro":
+                    return instructionListData.intro;
+                case "driving":
+                    return instructionListData.driving;
+                case "driving_2":
+                    return instructionListData.driving_2;
+                case "controls":
+                    return instructionListData.controls;
+                case "drifting":
+                    return instructionListData.drifting;
+                case "turbe":
+                    return instructionListData.turbe;
+                case "final":
+                    return instructionListData.final;
+                default:
+                    Debug.LogError($"Category '{category}' not found");
+                    return null;
+            }
     }
 }

@@ -1,14 +1,15 @@
 {
     "intro": [
         "Hello, and welcome to AmisDrift! (PRESS ENTER TO ADVANCE TEXT)",
-        "This tutorial will guide you through the mechanics of the game."
+        "This tutorial will guide you through the mechanics of the game.",
+        "Drive forward to the glowing zone to start."
     ],
 
     "driving": [
         "Use WASD to control your car.",
         "Holding (left) Shift enables the handbrake.",
-        "Go ahead and clear this course to get a feel for the controls.",
-        "Great!"
+        "Try clearing this course to proceed.",
+        "Looks good."
     ],
 
     "driving_2": [
@@ -16,8 +17,7 @@
         "See the difference here...",
         "Any body of water will instantly respawn you at the nearest checkpoint.",
         "Avoid the grass; try to pass this part without touching it.",
-        "Great!",
-        "Nice work, even if you did touch the grass."
+        "Great!"
     ],
 
     "controls": [
@@ -30,11 +30,7 @@
     "drifting": [
         "To drift, hold SPACE while moving.",
         "Nice job! We had to measure your time on that, by the way.",
-        "You did pretty good.",
-        "You did alright.",
-        "You did... okay, I guess.",
-        "You could've done better.",
-        "Based on it, you shouldn't be driving, but I'll let this one slide.",
+        "Hopefully you did alright.",
         "You should've noticed that you accumulated some score from it.",
         "Your time and score determine your rank, given at the end of the map.",
         "You'll unlock more cars as you gain better ranks on maps."
