@@ -12,11 +12,17 @@ public class billboarding : MonoBehaviour
     public float maxScale = 0.6f;
 
     private Camera bbCamera; // Reference to the billboard camera
+    private float updateInterval = 0.2f; // Update every 0.1 seconds (10 times per second)
+    private float timer = 0f;
+
+    // Angle in degrees for lenient visibility (e.g. 70 for a 60 degree FOV camera)
+    [Tooltip("Billboard updates if within this angle from camera forward.")]
+    private float lenientAngle = 90f;
 
     void Start()
     {
         // Find the camera with the tag "Trailercam"
-        GameObject camObj = GameObject.FindGameObjectWithTag("Trailercam");
+        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
         if (camObj != null)
             bbCamera = camObj.GetComponent<Camera>();
         if (bbCamera == null)
@@ -39,13 +45,22 @@ public class billboarding : MonoBehaviour
     }
     void Update()
     {
+        timer += Time.deltaTime;
+        if (timer < updateInterval) return;
+        timer = 0f;
+
         if (bbCamera != null)
         {
+            // Check if within lenient angle
+            Vector3 toObject = (transform.position - bbCamera.transform.position).normalized;
+            float angle = Vector3.Angle(bbCamera.transform.forward, toObject);
+            if (angle > lenientAngle) return;
+
             // Rotate to face the camera on the Y-axis only
             Vector3 lookDirection = bbCamera.transform.position - transform.position;
             lookDirection.y = 0f; // Only rotate around Y
             if (lookDirection.sqrMagnitude > 0.001f)
-                transform.rotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.LookRotation(-lookDirection);
         }
         else
         {
