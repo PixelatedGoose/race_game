@@ -11,7 +11,7 @@ public class instructionCatInHand : MonoBehaviour //shorthand - instruction cate
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) && GameManager.instance.isPaused == false)
         {
             switch (instructionHandler.boxOpen)
             {

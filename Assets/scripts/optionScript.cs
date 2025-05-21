@@ -38,11 +38,7 @@ public class optionScript : MonoBehaviour
     private void CacheUIElements()
     {
         sliders["pixel"] = GameObject.Find("pixel").GetComponent<Slider>();
-        //sliders["volume"] = GameObject.Find("volumeSlider").GetComponent<Slider>(); // Cache volume slider
-        
         pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
-        
-        //sliders["volume"].onValueChanged.AddListener(UpdateVolume);
     }
 
     private void InitializeSliderValues()
@@ -54,12 +50,6 @@ public class optionScript : MonoBehaviour
                 slider.Value.value = PlayerPrefs.GetFloat(slider.Key + "_value");
             }
         }
-
-        // Initialize volume slider
-/*         if (sliders.ContainsKey("volume"))
-        {
-            sliders["volume"].value = PlayerPrefs.GetFloat("volume");
-        } */
     }
 
     public void UpdateTogglePreference(string toggleName)
@@ -89,13 +79,5 @@ public class optionScript : MonoBehaviour
     private void UpdatePixelCountLabel()
     {
         pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * PixelMultiplier).ToString();
-    }
-
-    private void UpdateVolume(float value)
-    {
-        PlayerPrefs.SetFloat("volume", value);
-        PlayerPrefs.Save();
-        AudioListener.volume = value; 
-        Debug.Log($"Volume updated to {value}");
     }
 }
