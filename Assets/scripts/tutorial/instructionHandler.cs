@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 [System.Serializable]
 public class instructionListClass
@@ -24,7 +23,7 @@ public class instructionHandler : MonoBehaviour
     public int idx;
     public string nextCategory;
     public string curCategory; //ei default kategoriaa jotta ei tuu jotai fuck uppeja
-    private int index = -1;
+    public int index = -1;
 
     private GameObject instructionBox;
 
@@ -69,7 +68,7 @@ public class instructionHandler : MonoBehaviour
 
 
 
-    private readonly Dictionary<string, int> instructionAnimOverrides = new Dictionary<string, int>
+    public Dictionary<string, int> instructionAnimOverrides = new Dictionary<string, int>
     {
         { "intro:2", 3 }, //
         { "driving:3", 2 }, //
@@ -131,7 +130,7 @@ public class instructionHandler : MonoBehaviour
     public void ShowNextInstructionInCategory(string category, bool reset = false, int anim = 1)
     {
         string[] texts = GetInstructionListByCategory(category);
-        
+
         if (reset)
         {
             index = 0;
