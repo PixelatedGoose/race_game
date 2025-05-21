@@ -23,7 +23,7 @@ public class instructionHandler : MonoBehaviour
     public int idx;
     public string nextCategory;
     public string curCategory; //ei default kategoriaa jotta ei tuu jotai fuck uppeja
-    private int index = -1;
+    public int index = -1;
 
     private GameObject instructionBox;
 

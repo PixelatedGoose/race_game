@@ -41,10 +41,13 @@ public class loadArea : MonoBehaviour
                 break;
             case "12":
                 StartCoroutine(ChangeAnimOverrides("driving:3", 1)); //manuaalisesti koska fuck this shit
+                instructionHandler.index = 3;
+
                 instructionHandler.ShowInstruction
                 (instructionHandler.GetInstruction("driving", 3)
                 , 1);
-                StartCoroutine(ChangeAnimOverrides("driving:1", 2));
+                
+                //StartCoroutine(ChangeAnimOverrides("driving:1", 2));
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             default:
