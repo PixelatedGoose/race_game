@@ -1,28 +1,39 @@
 using UnityEngine;
 public class billboarding : MonoBehaviour
 {
-    private float minScale = 0.3f; // Minimum scale factor
-    private float maxScale = 0.6f; // Maximum scale factor
-    private Camera bbCamera; // Reference to the main camera
+    [Header("Billboard Options")]
+    [Tooltip("Enable random scaling on start.")]
+    public bool enableScaling = true;
+    [Tooltip("Enable random mirroring on start.")]
+    public bool enableMirroring = true;
+    [Tooltip("Minimum scale factor.")]
+    public float minScale = 0.3f;
+    [Tooltip("Maximum scale factor.")]
+    public float maxScale = 0.6f;
+
+    private Camera bbCamera; // Reference to the billboard camera
 
     void Start()
     {
-        bbCamera = GameObject.Find("Camera").GetComponent<Camera>(); // Find the camera in the scene
+        // Find the camera with the tag "Trailercam"
+        GameObject camObj = GameObject.FindGameObjectWithTag("Trailercam");
+        if (camObj != null)
+            bbCamera = camObj.GetComponent<Camera>();
         if (bbCamera == null)
         {
             enabled = false;
             return;
         }
-        
-        // Generate a random scale factor between minScale and maxScale
-        float randomScale = Random.Range(minScale, maxScale);
-        // Apply the random scale uniformly
-        transform.localScale = new Vector3(randomScale, randomScale, randomScale);
 
-        // 50% chance to mirror the tree
-        if (Random.value > 0.5f) // Random.value generates a float between 0.0 and 1.0
+        float randomScale = 1f;
+        if (enableScaling)
         {
-            // Mirror the tree by flipping the X-axis scale
+            randomScale = Random.Range(minScale, maxScale);
+            transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+        }
+
+        if (enableMirroring && Random.value > 0.5f)
+        {
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
     }
@@ -30,12 +41,15 @@ public class billboarding : MonoBehaviour
     {
         if (bbCamera != null)
         {
-            // Keep the tree facing the camera on the Y-axis
-            transform.rotation = Quaternion.Euler(0f, bbCamera.transform.rotation.eulerAngles.y, 0f);
+            // Rotate to face the camera on the Y-axis only
+            Vector3 lookDirection = bbCamera.transform.position - transform.position;
+            lookDirection.y = 0f; // Only rotate around Y
+            if (lookDirection.sqrMagnitude > 0.001f)
+                transform.rotation = Quaternion.LookRotation(lookDirection);
         }
         else
         {
-            enabled = false; // Disable the script if the camera is not found
+            enabled = false;
         }
     }
 }
