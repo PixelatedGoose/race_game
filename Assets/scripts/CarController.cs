@@ -366,7 +366,7 @@ public class CarController : MonoBehaviour
 
             float speed = carRb.linearVelocity.magnitude * 3.6f;
             float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f); 
-            float driftMultiplier = 1.0f; 
+            float driftMultiplier = 1.0f;
 
             foreach (var wheel in wheels)
             {
@@ -378,6 +378,10 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.extremumValue = 0.5f / (speedFactor * driftMultiplier);
                 sidewaysFriction.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+
+                JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
+                
+
             }
 
             if (speed > 20.0f) 
