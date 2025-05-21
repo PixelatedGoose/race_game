@@ -56,6 +56,12 @@ public class MainMenu : MonoBehaviour
         DatapersistenceManager.instance.LoadGame();
     }
 
+    public void PlayTutorial()
+    {
+        SceneManager.LoadSceneAsync(5);
+        DatapersistenceManager.instance.LoadGame();
+    }
+
     public void QuitGame()
     {
         Application.Quit();
