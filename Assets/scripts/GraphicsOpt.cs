@@ -7,7 +7,6 @@ public class GraphicsOpt : MonoBehaviour
     public TMP_Dropdown resolutionDropdown; // Use TMP_Dropdown instead of Dropdown
     public TMP_Dropdown qualityDropdown;    // Use TMP_Dropdown for quality levels
     public Toggle fullscreenToggle;
-
     private Resolution[] resolutions;
 
     void Start()
