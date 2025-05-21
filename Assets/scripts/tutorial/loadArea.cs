@@ -14,6 +14,7 @@ public class loadArea : MonoBehaviour
         prefix = gameObject.name.Substring(0, 2);
         collider = GetComponent<Collider>();
         instructionHandler = GameObject.Find("instructionHandler").GetComponent<instructionHandler>();
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,10 +44,11 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowInstruction
                 (instructionHandler.GetInstruction("driving", 3)
                 , 1);
+                StartCoroutine(ChangeAnimOverrides("driving:1", 2));
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             default:
-                Debug.Log($"prefix {prefix} not defined");
+                Debug.LogError($"prefix {prefix} not defined");
                 break;
         }
     }
@@ -64,10 +66,9 @@ public class loadArea : MonoBehaviour
 
     private IEnumerator ChangeAnimOverrides(string instruction, int value)
     {
-        Debug.Log("attempting to change anim override: " + instruction + ", " + value);
         if (instruction == null)
         {
-            Debug.LogError("NO INSTRUCTION WITH NAME: " + instruction);
+            Debug.LogError("NO INSTRUCTION WITH NAME: " + instruction, gameObject);
             yield break;
         }
 

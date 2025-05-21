@@ -130,7 +130,7 @@ public class instructionHandler : MonoBehaviour
     public void ShowNextInstructionInCategory(string category, bool reset = false, int anim = 1)
     {
         string[] texts = GetInstructionListByCategory(category);
-        
+
         if (reset)
         {
             index = 0;
