@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 [System.Serializable]
 public class instructionListClass
@@ -69,7 +68,7 @@ public class instructionHandler : MonoBehaviour
 
 
 
-    private readonly Dictionary<string, int> instructionAnimOverrides = new Dictionary<string, int>
+    public Dictionary<string, int> instructionAnimOverrides = new Dictionary<string, int>
     {
         { "intro:2", 3 }, //
         { "driving:3", 2 }, //

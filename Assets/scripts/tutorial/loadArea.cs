@@ -21,19 +21,29 @@ public class loadArea : MonoBehaviour
         Debug.Log("Hello! My name is Gustavo, but you can call me Gus");
         switch (prefix)
         {
+            //eri animaatiot
             case "01":
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
                 break;
             case "02":
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 2);
+                StartCoroutine(FadeDeath(1.0f));
                 break;
             case "03":
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 3);
+                StartCoroutine(FadeDeath(1.0f));
                 break;
             case "11":
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
-                Debug.Log("mf really died");
+                break;
+            case "12":
+                StartCoroutine(ChangeAnimOverrides("driving:3", 1)); //manuaalisesti koska fuck this shit
+                instructionHandler.ShowInstruction
+                (instructionHandler.GetInstruction("driving", 3)
+                , 1);
+                StartCoroutine(FadeDeath(1.0f));
                 break;
             default:
                 Debug.Log($"prefix {prefix} not defined");
@@ -42,7 +52,7 @@ public class loadArea : MonoBehaviour
     }
 
     /// <summary>
-    /// tuhoaa objektin määritetyn ajan jälkee
+    /// tekee pikku fade outin ja tuhoaa objektin määritetyn ajan jälkee
     /// </summary>
     /// <param name="seconds">sekunnit</param>
     private IEnumerator FadeDeath(float seconds)
@@ -50,5 +60,28 @@ public class loadArea : MonoBehaviour
         LeanTween.alpha(gameObject, 0f, seconds).setEaseLinear();
         yield return new WaitForSeconds(seconds);
         Destroy(gameObject);
+    }
+
+    private IEnumerator ChangeAnimOverrides(string instruction, int value)
+    {
+        Debug.Log("attempting to change anim override: " + instruction + ", " + value);
+        if (instruction == null)
+        {
+            Debug.LogError("NO INSTRUCTION WITH NAME: " + instruction);
+            yield break;
+        }
+
+        if (instructionHandler.instructionAnimOverrides.ContainsKey(instruction))
+        {
+            instructionHandler.instructionAnimOverrides[instruction] = value;
+            Debug.Log("success! modified: " + instruction + ", " + value);
+        }
+        else
+        {
+            instructionHandler.instructionAnimOverrides.Add(instruction, value);
+            Debug.Log("success! added: " + instruction + ", " + value);
+        }
+
+        yield break;
     }
 } 
