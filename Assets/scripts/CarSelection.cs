@@ -15,21 +15,43 @@ public class CarSelection : MonoBehaviour
 
     private AudioSource menuMusic;
 
+    private mapSelection mapSelection;
+
     void Awake()
     {
+        mapSelection = GameObject.Find("mapselect").GetComponent<mapSelection>();
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
 
-        cars = new GameObject[] 
-        { 
+        cars = new GameObject[]
+        {
             GameObject.Find("REALCAR_x"),
             GameObject.Find("REALCAR"),
-            GameObject.Find("REALCAR_y"), 
+            GameObject.Find("REALCAR_y"),
             GameObject.Find("Lada")
         };
     }
 
     void Start()
     {
+        if (GameManager.instance.sceneSelected == "Carselectionmenu_VECTORAMA")
+        {
+            mapSelection.maps = new GameObject[]
+            {
+                GameObject.Find("haukipudasDay"),
+                GameObject.Find("haukipudasNight")
+            };
+        }
+        else
+        {
+            mapSelection.maps = new GameObject[]
+            {
+                GameObject.Find("mountainDay"),
+                GameObject.Find("mountainNight"),
+                GameObject.Find("shoreDay"),
+                GameObject.Find("aihaukipudasbutton")
+            };
+        }
+        mapSelection.MapFallAnimResetPos(); //ashfhjdskfkdshjsdfkjsdhjkfsdh
         msObjects.SetActive(false);
         
         if (GameManager.instance == null)
