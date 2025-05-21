@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
-using UnityEngine.Rendering.Universal;
-using Unity.Mathematics;
 
 public class CarController : MonoBehaviour
 {
@@ -40,7 +38,7 @@ public class CarController : MonoBehaviour
     public float deceleration = 1.0f;
     [Min (100.0f)] 
     public float maxspeed = 100.0f;
-    public float gravitymultiplier = 1.0f; 
+    public float gravityMultiplier = 1.5f; 
     public float grassSpeedMultiplier = 0.5f;
     public List<Wheel> wheels; 
     float moveInput;
@@ -77,16 +75,13 @@ public class CarController : MonoBehaviour
         Controls.Enable();
 
         turbeMeter = GameObject.Find("turbeFull").GetComponent<Image>();
-
-        
     }
 
     void Start()
     {
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
-        
-        carRb.centerOfMass = _centerofMass - new Vector3(0, 0, 0);
+        carRb.centerOfMass = _centerofMass;
     }
 
     private void OnEnable()
@@ -138,7 +133,7 @@ public class CarController : MonoBehaviour
         Decelerate();
         ApplySpeedLimit();
         Applyturnsensitivity();
-        BetterGrip();
+        //AdjustWheelFriction();
         OnGrass();
         TURBE();
         TURBEmeter();
@@ -197,7 +192,7 @@ public class CarController : MonoBehaviour
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 0.89f);
+        return Physics.Raycast(transform.position, Vector3.down, 500 * 1.0f);
     }
 
     bool IsWheelGrounded(Wheel wheel)
@@ -244,8 +239,6 @@ public class CarController : MonoBehaviour
         float speed = carRb.linearVelocity.magnitude * 3.6f;
         
         turnSensitivty = Mathf.Lerp(turnSensitivtyAtLowSpeed, turnSensitivtyAtHighSpeed, Mathf.Clamp01(speed / maxspeed));
-
-
     }
 
     void TURBE()
@@ -268,28 +261,16 @@ public class CarController : MonoBehaviour
         HandeSteepSlope();
         UpdateTargetTorgue();
         AdjustSpeedForGrass();
-        Handleturningsense();
         foreach (var wheel in wheels)
         {
             if (Controls.CarControls.Brake.IsPressed())
             {
                 Brakes(wheel);
             }
-            else MotorTorgue(wheel);
-        }
-    }
-
-    private void Handleturningsense()
-    {
-        if (activedrift > 0) return;
-        foreach (var wheel in wheels)
-        {
-            JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
-            suspensionSpring.spring = 3000f;
-            suspensionSpring.damper = 3000f;
-            suspensionSpring.targetPosition = 0.5f;
-            wheel.wheelCollider.suspensionSpring = suspensionSpring;
-
+            else
+            {
+                MotorTorgue(wheel);
+            }
         }
     }
 
@@ -307,8 +288,7 @@ public class CarController : MonoBehaviour
         if(moveInput > 0) {
             targetTorque = 1 * maxAcceleration;
         } else if (moveInput < 0) {
-            targetTorque = -1 * maxAcceleration * 0.5f;
-            maxspeed = Mathf.Lerp(maxspeed, -40.0f, Time.deltaTime);
+            targetTorque = -1 * maxAcceleration;
         } else {
             targetTorque = 0.0f;
         };
@@ -318,7 +298,7 @@ public class CarController : MonoBehaviour
     private void Brakes(Wheel wheel)
     {
         GameManager.instance.StopAddingPoints();
-        wheel.wheelCollider.brakeTorque = brakeAcceleration * 500f;
+        wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
         wheel.wheelCollider.motorTorque = 0f;
     }
 
@@ -343,34 +323,18 @@ public class CarController : MonoBehaviour
 
     void Decelerate()
     {
-        if (!IsGrounded())
-        {
-            return;
-
-        }
-        if (moveInput == 0 && IsGrounded())
+        if (moveInput == 0)
         {
             Vector3 velocity = carRb.linearVelocity;
-            velocity -= velocity.normalized * deceleration * 2.5f * Time.deltaTime;
 
-            if (velocity.magnitude < 0.1f)
+            velocity -= velocity.normalized * deceleration * 2.0f *  Time.deltaTime;
+            
+            if (velocity.magnitude < 0.1f) 
             {
                 velocity = Vector3.zero;
             }
-            carRb.linearVelocity = velocity;
+        carRb.linearVelocity = velocity;
         }
-        else if (moveInput == 0 && !IsGrounded())
-        {
-            Vector3 velocity = carRb.linearVelocity;
-            velocity -= velocity.normalized * deceleration * 2.5f * Time.deltaTime;
-
-            if (velocity.magnitude < 0.1f)
-            {
-                velocity = Vector3.zero;
-            }
-            carRb.linearVelocity = velocity;
-        }
-
     }
 
     void Steer() 
@@ -387,13 +351,7 @@ public class CarController : MonoBehaviour
 
     void ApplyGravity()
     {
-        if (!IsGrounded())
-        {   //car enters a random flow state and starts to float
-            carRb.useGravity = true;
-            
-            // carRb.AddForce(Vector3.down * Physics.gravity.magnitude * gravitymultiplier, ForceMode.Acceleration);
-            // Debug.Log("sä olet ilmassa");
-        }
+        carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
     }
 
     void HandleDrift()
@@ -405,8 +363,10 @@ public class CarController : MonoBehaviour
                 return;
             }
             activedrift++;
-            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
-            float driftMultiplier = Mathf.Lerp(1.0f, 2.0f, maxspeed);
+
+            float speed = carRb.linearVelocity.magnitude * 3.6f;
+            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f); 
+            float driftMultiplier = 1.0f; 
 
             foreach (var wheel in wheels)
             {
@@ -417,14 +377,10 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.asymptoteSlip = 2.0f * speedFactor * driftMultiplier;
                 sidewaysFriction.extremumValue = 0.5f / (speedFactor * driftMultiplier);
                 sidewaysFriction.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
-                sidewaysFriction.stiffness = 4f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
 
-            AdjustSuspension();
-            AdjustForwardFriction();
-
-            if (GameManager.instance.carSpeed > 20.0f) 
+            if (speed > 20.0f) 
             {
                 GameManager.instance.AddPoints();
             }
@@ -437,38 +393,6 @@ public class CarController : MonoBehaviour
         };        
     }
 
-    void AdjustSuspension()
-    {
-        foreach (var wheel in wheels)
-        {
-            if (wheel.wheelCollider == null) continue;
-
-            JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
-
-            suspensionSpring.spring = 2000f;
-            suspensionSpring.damper = 3000f;
-            suspensionSpring.targetPosition = 0.5f;
-            wheel.wheelCollider.suspensionSpring = suspensionSpring;
-        }
-    }
-
-    void AdjustForwardFriction()
-    {
-        foreach (var wheel in wheels)
-        {
-            if (wheel.wheelCollider == null) continue;
-            WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
-
-            forwardFriction.extremumSlip = 0.8f;
-            forwardFriction.asymptoteSlip = 1.2f;
-            forwardFriction.extremumValue = 1.0f;
-            forwardFriction.asymptoteValue = 1.0f;
-            forwardFriction.stiffness = 15f;
-            wheel.wheelCollider.forwardFriction = forwardFriction;
-        }
-
-    }
-
     void StopDrifting()
     {
         activedrift = 0;
@@ -478,7 +402,7 @@ public class CarController : MonoBehaviour
             GameManager.instance.StopAddingPoints();
             return;
         }
-        GameManager.instance.StopAddingPoints();
+        GameManager.instance.StopAddingPoints(); 
         foreach (var wheel in wheels)
         {
             if (wheel.wheelCollider == null) continue;
@@ -488,33 +412,14 @@ public class CarController : MonoBehaviour
             sidewaysFriction.asymptoteSlip = 0.5f;
             sidewaysFriction.extremumValue = 1.0f;
             sidewaysFriction.asymptoteValue = 1f;
-            sidewaysFriction.stiffness = 4f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-
-            WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
-            forwardFriction.extremumSlip = 0.4f;
-            forwardFriction.asymptoteSlip = 0.8f;
-            forwardFriction.extremumValue = 1.0f;
-            forwardFriction.asymptoteValue = 1.0f;
-            forwardFriction.stiffness = 4f;
-            wheel.wheelCollider.forwardFriction = forwardFriction;
         }
-
         
     }
 
-    void BetterGrip()
+    private void OnMovePerformed(InputAction.CallbackContext ctx)
     {
-        float speed = carRb.linearVelocity.magnitude;
-        foreach (var wheel in wheels)
-        {
-            if (wheel.wheelCollider == null) continue;
-            WheelFrictionCurve friction = wheel.wheelCollider.sidewaysFriction;
-
-            friction.extremumValue = math.lerp(1.0f, 0.5f, speed / maxspeed);
-            friction.asymptoteValue = math.lerp(0.8f, 0.4f, speed / maxspeed);
-            
-        }
+        GameManager.instance.AddPoints();
     }
 
     void Animatewheels()

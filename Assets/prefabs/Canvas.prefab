@@ -345,7 +345,7 @@ MonoBehaviour:
   minimapRect: {fileID: 7691231252275674018}
   playerArrowPrefab: {fileID: 327136211597673486}
   aiArrowPrefab: {fileID: 7921350744915557280}
-  worldMin: {x: -500, y: -1000}
-  worldMax: {x: 1000, y: 1000}
-  arrowOffsetX: 0
-  arrowOffsetY: 0
+  worldMin: {x: 6.6, y: 490.2}
+  worldMax: {x: 926.2, y: 1369}
+  arrowOffsetX: 0.071
+  arrowOffsetY: 0.009
