@@ -147,7 +147,7 @@
         "GameObject.Find('REALCAR').GetComponent<Rigidbody>();",
         "Playing AmisDrift requires you to have a driver's licence",
         "Cars do not come supplied with airbags, screw safety",
-        "For an authentic experience, set the pixel amount to 64",
+        "For an authentic experience, set the pixel density to 64",
         "kuka on vastuussa näistä teksteistä haluun lisätä oman",
         "who is that one guy in this game",
         "digi/tailun ope on se paras ope",

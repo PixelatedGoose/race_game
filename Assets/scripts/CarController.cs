@@ -149,7 +149,7 @@ public class CarController : MonoBehaviour
             if (IsOnGrass())
             {
                 trailRenderer.material = grassMaterial;
-                GameManager.instance.scoreAddWT = 0.08f;
+                GameManager.instance.scoreAddWT = 0.10f;
             }
             else
             {

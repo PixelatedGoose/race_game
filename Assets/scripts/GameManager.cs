@@ -163,7 +163,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         while (isAddingPoints)   
         {
-            yield return new WaitForSeconds(scoreAddWT);   
+            yield return new WaitForSecondsRealtime(scoreAddWT);   
             score += 1;   
 
            
