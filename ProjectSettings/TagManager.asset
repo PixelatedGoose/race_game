@@ -15,6 +15,7 @@ TagManager:
   - msObj
   - musicTrack
   - Trailercam
+  - TrailerTarget
   layers:
   - Default
   - TransparentFX
