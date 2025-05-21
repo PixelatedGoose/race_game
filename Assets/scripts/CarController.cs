@@ -119,7 +119,7 @@ public class CarController : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+
         // Stop drifting if the race is finished
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished && activedrift > 0)
@@ -137,6 +137,7 @@ public class CarController : MonoBehaviour
         OnGrass();
         TURBE();
         TURBEmeter();
+        
     }
 
     void OnGrass()
@@ -282,16 +283,44 @@ public class CarController : MonoBehaviour
             carRb.linearVelocity = Vector3.ClampMagnitude(carRb.linearVelocity, maxspeed / 3.6f);
         }
     }
+    private void AdjustSuspension()
+    {
+        foreach (var wheel in wheels)
+        {
+            JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
+            suspensionSpring.spring = 8000.0f;
+            suspensionSpring.damper = 2000.0f;
+            wheel.wheelCollider.suspensionSpring = suspensionSpring;
+        }
+    }
+    private void AdjustForwardFrictrion()
+    {
+        foreach (var wheel in wheels)
+        {
+            WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
+            forwardFriction.extremumSlip = 0.4f;
+            forwardFriction.extremumValue = 1;
+            forwardFriction.asymptoteSlip = 0.8f;
+            forwardFriction.asymptoteValue = 1;
+        }
+
+    }
 
     private void UpdateTargetTorgue()
     {
-        if(moveInput > 0) {
+        if (moveInput > 0)
+        {
             targetTorque = 1 * maxAcceleration;
-        } else if (moveInput < 0) {
+        }
+        else if (moveInput < 0)
+        {
             targetTorque = -1 * maxAcceleration;
-        } else {
+        }
+        else
+        {
             targetTorque = 0.0f;
-        };
+        }
+        ;
         maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? Turbesped : basespeed, Time.deltaTime);
     }
 
@@ -378,13 +407,12 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.extremumValue = 0.5f / (speedFactor * driftMultiplier);
                 sidewaysFriction.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-
-                JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
                 
-
             }
+            AdjustdriftSuspension();
+            AdjustDriftForwardFriction();
 
-            if (speed > 20.0f) 
+            if (speed > 20.0f)
             {
                 GameManager.instance.AddPoints();
             }
@@ -396,6 +424,30 @@ public class CarController : MonoBehaviour
             WheelEffects(false);
         };        
     }
+    private void AdjustdriftSuspension()
+    {
+        foreach (var wheel in wheels)
+        {
+            JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
+            suspensionSpring.spring = 4000.0f;
+            suspensionSpring.damper = 1000.0f;
+            wheel.wheelCollider.suspensionSpring = suspensionSpring;
+         }
+
+    }
+
+    private void AdjustDriftForwardFriction()
+    {
+        foreach (var wheel in wheels)
+        {
+            WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
+            forwardFriction.extremumSlip = 0.2f;
+            forwardFriction.asymptoteSlip = 0.5f;
+            forwardFriction.extremumValue = 1;
+            forwardFriction.asymptoteValue = 1;
+            wheel.wheelCollider.forwardFriction = forwardFriction;
+        }
+    }
 
     void StopDrifting()
     {
@@ -406,7 +458,9 @@ public class CarController : MonoBehaviour
             GameManager.instance.StopAddingPoints();
             return;
         }
-        GameManager.instance.StopAddingPoints(); 
+        GameManager.instance.StopAddingPoints();
+        AdjustSuspension();
+        AdjustForwardFrictrion();
         foreach (var wheel in wheels)
         {
             if (wheel.wheelCollider == null) continue;
@@ -418,6 +472,7 @@ public class CarController : MonoBehaviour
             sidewaysFriction.asymptoteValue = 1f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }
+        
         
     }
 
