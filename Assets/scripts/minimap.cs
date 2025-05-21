@@ -7,8 +7,8 @@ public class minimap : MonoBehaviour
     public RectTransform minimapRect;
     public RectTransform playerArrowPrefab;
     public RectTransform aiArrowPrefab;
-    public Vector2 worldMin;
-    public Vector2 worldMax;
+    public Vector2 worldMin = new Vector2(0, 500);
+    public Vector2 worldMax = new Vector2(500, 1300);
 
     [Header("Arrow Offset (as % of minimap size)")]
     [Range(-1f, 1f)] public float arrowOffsetX = 0f;
@@ -108,5 +108,40 @@ public class minimap : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(worldCenter, minimapSize.magnitude * 0.01f);
     }
+
+    void OnDrawGizmosSelected()
+    {
+        // Draw the minimap area in world space
+        Gizmos.color = Color.green;
+        Vector3 bl = new Vector3(worldMin.x, 0, worldMin.y); // Bottom Left
+        Vector3 br = new Vector3(worldMax.x, 0, worldMin.y); // Bottom Right
+        Vector3 tr = new Vector3(worldMax.x, 0, worldMax.y); // Top Right
+        Vector3 tl = new Vector3(worldMin.x, 0, worldMax.y); // Top Left
+
+        Gizmos.DrawLine(bl, br);
+        Gizmos.DrawLine(br, tr);
+        Gizmos.DrawLine(tr, tl);
+        Gizmos.DrawLine(tl, bl);
+    }
 #endif
+}
+
+public class MinimapBoundsHelper : MonoBehaviour
+{
+    public Transform cornerA;
+    public Transform cornerB;
+
+    void OnDrawGizmos()
+    {
+        if (cornerA && cornerB)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(cornerA.position, new Vector3(cornerA.position.x, cornerA.position.y, cornerB.position.z));
+            Gizmos.DrawLine(cornerA.position, new Vector3(cornerB.position.x, cornerA.position.y, cornerA.position.z));
+            Gizmos.DrawLine(cornerB.position, new Vector3(cornerA.position.x, cornerB.position.y, cornerB.position.z));
+            Gizmos.DrawLine(cornerB.position, new Vector3(cornerB.position.x, cornerB.position.y, cornerA.position.z));
+            Debug.Log($"worldMin: new Vector2({Mathf.Min(cornerA.position.x, cornerB.position.x)}, {Mathf.Min(cornerA.position.z, cornerB.position.z)})");
+            Debug.Log($"worldMax: new Vector2({Mathf.Max(cornerA.position.x, cornerB.position.x)}, {Mathf.Max(cornerA.position.z, cornerB.position.z)})");
+        }
+    }
 }
