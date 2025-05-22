@@ -42,7 +42,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         "AItest",
         "ai_haukipudas",
         "night_ai_haukipudas",
-        "tutorial"
+        "tutorial",
+        "haukipudas_night"
     };
     
     [Header("auto")]

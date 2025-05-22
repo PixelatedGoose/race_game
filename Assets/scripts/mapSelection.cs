@@ -1,6 +1,7 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class mapSelection : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class mapSelection : MonoBehaviour
     private AudioSource loadingLoop;
     public GameObject[] maps;
     private RectTransform mapRectTransform;
+    private int haukipudas = 6;
+    private int night_haukipudas = 8;
 
     void Awake()
     {
@@ -65,12 +68,12 @@ public class mapSelection : MonoBehaviour
 
                 break;
             case 6:
-                PlayerPrefs.SetInt("chosenMap", 6);
+                PlayerPrefs.SetInt("chosenMap", haukipudas);
                 StartCoroutine(MapButtonFunc());
 
                 break;
             case 8:
-                PlayerPrefs.SetInt("chosenMap", 8);
+                PlayerPrefs.SetInt("chosenMap", night_haukipudas);
                 StartCoroutine(MapButtonFunc());
 
                 break;
@@ -101,6 +104,23 @@ public class mapSelection : MonoBehaviour
 
         //en tiiä onko performance riski ottaa chosenMap GameManagerista
         SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap"));
+    }
+
+    public void SetAIMaps(string toggleName)
+    {
+        Toggle toggle = GameObject.Find(toggleName).GetComponent<Toggle>();
+        if (toggle.isOn)
+        {
+            haukipudas = 6;
+            night_haukipudas = 8;
+            Debug.Log("haukipudas, 6 - night_haukipudas, 8");
+        }
+        else
+        {
+            haukipudas = 4;
+            night_haukipudas = 9;
+            Debug.Log("haukipudas, 4 - night_haukipudas, 9");
+        }
     }
 
     private IEnumerator MapFallAnimFunc()
