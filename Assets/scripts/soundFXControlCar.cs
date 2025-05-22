@@ -52,7 +52,7 @@ public class soundFXControlCar : MonoBehaviour
             {
                 soundSliderComponent.onValueChanged.AddListener(value =>
                 {
-                    soundClickList[2].GetComponent<AudioSource>().Play();
+                    soundClickList.First(obj => obj.name == "optionSliderTick").GetComponent<AudioSource>().Play();
                 });
             }
         }
@@ -65,7 +65,7 @@ public class soundFXControlCar : MonoBehaviour
             {
                 soundToggleComponent.onValueChanged.AddListener(value =>
                 {
-                    soundClickList[1].GetComponent<AudioSource>().Play();
+                    soundClickList.First(obj => obj.name == "optionClick").GetComponent<AudioSource>().Play();
                 });
             }
         }
