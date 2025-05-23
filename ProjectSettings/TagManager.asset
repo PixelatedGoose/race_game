@@ -16,6 +16,9 @@ TagManager:
   - musicTrack
   - Trailercam
   - TrailerTarget
+  - pl
+  - rl
+  - ll
   layers:
   - Default
   - TransparentFX

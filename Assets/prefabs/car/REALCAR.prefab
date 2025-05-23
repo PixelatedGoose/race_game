@@ -165,7 +165,6 @@ GameObject:
   - component: {fileID: 1977769058933094464}
   - component: {fileID: 7530438695844709834}
   - component: {fileID: 344340134926670439}
-  - component: {fileID: 2568210429651770412}
   m_Layer: 0
   m_Name: underlight
   m_TagString: Untagged
@@ -276,22 +275,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!114 &2568210429651770412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1959587334024615407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf77673f73d573c489fdc8dfb2a2c314, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointLight: {fileID: 7530438695844709834}
-  right: {fileID: 1864640289754993523}
-  left: {fileID: 210715059323131502}
-  duration: 3
 --- !u!1 &1960591665487200419
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,8 +1172,8 @@ MonoBehaviour:
   maxAcceleration: 700
   brakeAcceleration: 23000
   turnSensitivty: 10
-  turnSensitivtyatHighSpeed: 3
-  turnSensitivtyatLowSpeed: 5
+  turnSensitivtyAtHighSpeed: 1
+  turnSensitivtyAtLowSpeed: 1
   deceleration: 8
   maxspeed: 180
   gravityMultiplier: 1.5
@@ -1228,6 +1211,8 @@ MonoBehaviour:
   Turbesped: 230
   basespeed: 180
   grassmaxspeed: 50
+  driftMultiplier: 1
+  isTurnedDown: 0
   turbeMeter: {fileID: 0}
   turbeAmount: 100
   turbeMax: 100
@@ -1253,6 +1238,7 @@ MonoBehaviour:
   laptime: 0
   Rank: 0
   besttime: 0
+  racestarted: 0
   LtimeTexts:
   - {fileID: 0}
   - {fileID: 0}

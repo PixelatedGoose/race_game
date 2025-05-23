@@ -198,6 +198,7 @@ MonoBehaviour:
   pauseMenuObjects:
   - {fileID: 6628541172485080053}
   racerScript: {fileID: 0}
+  fullMenu: {fileID: 0}
 --- !u!1 &191596636955508915
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,7 +482,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1251157877469258929}
+      - m_Target: {fileID: 7235799923018272578}
         m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
         m_MethodName: UpdateSliderPreference
         m_Mode: 5
@@ -1286,7 +1287,7 @@ RectTransform:
   m_Father: {fileID: 3926090229730743349}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.75, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3429,7 +3430,7 @@ RectTransform:
   m_Father: {fileID: 6817672154956265702}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.6666667, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4974,7 +4975,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1251157877469258929}
+      - m_Target: {fileID: 7235799923018272578}
         m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
         m_MethodName: UpdateSliderPreference
         m_Mode: 5
@@ -5823,14 +5824,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5510088316915151052}
-  - component: {fileID: 1251157877469258929}
+  - component: {fileID: 7235799923018272578}
+  - component: {fileID: 8115813495693976893}
   m_Layer: 5
   m_Name: Optionspanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5510088316915151052
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5853,7 +5855,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 327.109, y: 206.7864}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1251157877469258929
+--- !u!114 &7235799923018272578
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5866,6 +5868,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
+--- !u!114 &8115813495693976893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4447528910841764756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eede637e947b634e9c70ad12cdab33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeSlider: {fileID: 7619745064807321182}
 --- !u!1 &4528182524473525034
 GameObject:
   m_ObjectHideFlags: 0
@@ -8065,7 +8080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3717288388201525740
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8754,8 +8769,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 9031716853045834527}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.75, y: 0}
-  m_AnchorMax: {x: 0.75, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9920,8 +9935,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 9159157563253069648}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.6666667, y: 0}
-  m_AnchorMax: {x: 0.6666667, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10294,7 +10309,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7235799923018272578}
+        m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
+        m_MethodName: UpdateTogglePreference
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Fullscreen
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &8994348922129435324
 GameObject:
@@ -10457,7 +10484,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1251157877469258929}
+      - m_Target: {fileID: 7235799923018272578}
         m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
         m_MethodName: UpdateTogglePreference
         m_Mode: 5

@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     private bool optionsOpen => Optionspanel != null && Optionspanel.activeSelf;
     private CarInputActions Controls;
     public RacerScript racerScript;
+    public GameObject fullMenu;
 
     void Awake()
     {
@@ -19,6 +20,8 @@ public class PauseMenu : MonoBehaviour
             Debug.LogWarning("PauseMenuObjects array is not assigned or empty.");
         if (Optionspanel == null)
             Debug.LogWarning("Optionspanel is not assigned.");
+        
+        fullMenu = GameObject.Find("menuCanvas");
     }
 
     private void OnEnable() => Controls.Enable();
@@ -27,6 +30,8 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
+        fullMenu.SetActive(false);
+        Optionspanel.SetActive(false);
         racerScript = FindFirstObjectByType<RacerScript>();
     }
 
