@@ -40,6 +40,10 @@ public class TrailerCameraFollow : MonoBehaviour
 
     private bool isPlaying = false; // Manual play control
 
+    private List<float> cumulativeDistances = new List<float>();
+
+    private float distanceTravelled = 0f;
+
     private void OnValidate()
     {
         UpdateWaypoints();
@@ -129,22 +133,25 @@ public class TrailerCameraFollow : MonoBehaviour
     private void CalculatePathLength()
     {
         pathLength = 0f;
+        cumulativeDistances.Clear();
+        cumulativeDistances.Add(0f);
         for (int i = 1; i < bezierPoints.Count; i++)
+        {
             pathLength += Vector3.Distance(bezierPoints[i - 1], bezierPoints[i]);
+            cumulativeDistances.Add(pathLength);
+        }
     }
 
     private void MoveCameraAlongPath()
     {
-        if (bezierPoints.Count < 2) return;
+        if (bezierPoints.Count < 2 || pathLength <= 0f) return;
 
-        // Move at constant speed along the path
-        cameraPathT += (cameraSpeed / pathLength) * Time.deltaTime;
-        cameraPathT = Mathf.Clamp01(cameraPathT);
+        distanceTravelled += cameraSpeed * Time.deltaTime;
+        distanceTravelled = Mathf.Clamp(distanceTravelled, 0f, pathLength);
 
-        Vector3 camPos = GetPointOnPath(cameraPathT);
+        Vector3 camPos = GetPointAtDistance(distanceTravelled);
         trailerCamera.transform.position = camPos;
 
-        // Look at assigned target
         if (lookAtTarget != null)
         {
             trailerCamera.transform.LookAt(lookAtTarget.position);
@@ -159,6 +166,22 @@ public class TrailerCameraFollow : MonoBehaviour
         float frac = total - idx;
         if (idx >= bezierPoints.Count - 1) return bezierPoints[bezierPoints.Count - 1];
         return Vector3.Lerp(bezierPoints[idx], bezierPoints[idx + 1], frac);
+    }
+
+    private Vector3 GetPointAtDistance(float distance)
+    {
+        if (bezierPoints.Count == 0) return transform.position;
+        if (distance <= 0f) return bezierPoints[0];
+        if (distance >= pathLength) return bezierPoints[bezierPoints.Count - 1];
+
+        // Find the segment containing the distance
+        int i = 1;
+        while (i < cumulativeDistances.Count && cumulativeDistances[i] < distance)
+            i++;
+
+        float segDist = cumulativeDistances[i] - cumulativeDistances[i - 1];
+        float t = (distance - cumulativeDistances[i - 1]) / segDist;
+        return Vector3.Lerp(bezierPoints[i - 1], bezierPoints[i], t);
     }
 
 #if UNITY_EDITOR
@@ -184,6 +207,7 @@ public class TrailerCameraFollow : MonoBehaviour
     public void MoveCameraToStart()
     {
         cameraPathT = 0f;
+        distanceTravelled = 0f;
         if (trailerCamera != null && bezierPoints.Count > 0)
             trailerCamera.transform.position = bezierPoints[0];
     }
