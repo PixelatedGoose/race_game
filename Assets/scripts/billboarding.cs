@@ -22,7 +22,7 @@ public class billboarding : MonoBehaviour
     void Start()
     {
         // Find the camera with the tag "Trailercam"
-        GameObject camObj = GameObject.FindGameObjectWithTag("Trailercam");
+        GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
         if (camObj != null)
             bbCamera = camObj.GetComponent<Camera>();
         if (bbCamera == null)
