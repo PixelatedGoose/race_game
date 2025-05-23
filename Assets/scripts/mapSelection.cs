@@ -1,6 +1,7 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class mapSelection : MonoBehaviour
 {
@@ -10,8 +11,10 @@ public class mapSelection : MonoBehaviour
     private float schizophrenia;
     private GameObject loadObjects;
     private AudioSource loadingLoop;
-    private GameObject[] maps;
+    public GameObject[] maps;
     private RectTransform mapRectTransform;
+    private int haukipudas = 6;
+    private int night_haukipudas = 8;
 
     void Awake()
     {
@@ -21,15 +24,7 @@ public class mapSelection : MonoBehaviour
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
 
-        maps = new GameObject[]
-        {
-            GameObject.Find("mountainDay"),
-            GameObject.Find("mountainNight"),
-            GameObject.Find("shoreDay"),
-            GameObject.Find("aihaukipudasbutton")
-        };
-
-        MapFallAnimResetPos();
+        //mfw kun pitää siirtää koko maps paska car selection scriptiin
     }
 
     public void Back()
@@ -39,7 +34,7 @@ public class mapSelection : MonoBehaviour
         msObjects.SetActive(false);
     }
 
-    private void MapFallAnimResetPos()
+    public void MapFallAnimResetPos()
     {
         foreach (GameObject map in maps)
         {
@@ -70,12 +65,17 @@ public class mapSelection : MonoBehaviour
             case 4:
                 PlayerPrefs.SetInt("chosenMap", 4);
                 StartCoroutine(MapButtonFunc());
-                
+
                 break;
             case 6:
-                PlayerPrefs.SetInt("chosenMap", 6);
+                PlayerPrefs.SetInt("chosenMap", haukipudas);
                 StartCoroutine(MapButtonFunc());
-                
+
+                break;
+            case 8:
+                PlayerPrefs.SetInt("chosenMap", night_haukipudas);
+                StartCoroutine(MapButtonFunc());
+
                 break;
         }
     }
@@ -104,6 +104,23 @@ public class mapSelection : MonoBehaviour
 
         //en tiiä onko performance riski ottaa chosenMap GameManagerista
         SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap"));
+    }
+
+    public void SetAIMaps(string toggleName)
+    {
+        Toggle toggle = GameObject.Find(toggleName).GetComponent<Toggle>();
+        if (toggle.isOn)
+        {
+            haukipudas = 6;
+            night_haukipudas = 8;
+            Debug.Log("haukipudas, 6 - night_haukipudas, 8");
+        }
+        else
+        {
+            haukipudas = 4;
+            night_haukipudas = 9;
+            Debug.Log("haukipudas, 4 - night_haukipudas, 9");
+        }
     }
 
     private IEnumerator MapFallAnimFunc()

@@ -70,7 +70,7 @@ public class instructionHandler : MonoBehaviour
 
     public Dictionary<string, int> instructionAnimOverrides = new Dictionary<string, int>
     {
-        { "intro:2", 3 }, //
+        { "intro:2", 4 }, //
         { "driving:3", 2 }, //
         { "driving_2:4", 2 }, //
         { "drifting:1", 2 }, //hasu kohta
@@ -116,6 +116,13 @@ public class instructionHandler : MonoBehaviour
                 Debug.Log("stays closed instruction: " + instructText);
                 instructionText.text = instructText;
                 boxOpen = false;
+
+                break;
+            case 4:
+                Debug.Log("stays closed with sound: " + instructText);
+                instructionText.text = instructText;
+                boxOpen = false;
+                instructSounds[1].Play();
 
                 break;
         }
