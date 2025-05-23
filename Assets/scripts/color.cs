@@ -14,19 +14,49 @@ public class ColorChanger : MonoBehaviour
     {
         Controls = new CarInputActions();
         Controls.Enable();
-
     }
 
     CarInputActions Controls;
 
 
 
-    private void Onable()
+    private void OnEnable()
     {
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("pl"))
+            {
+                // Do something with child.gameObject, e.g. get the Light component
+                Light childLight = child.GetComponent<Light>();
+                if (childLight != null)
+                {
+                    pointLight = childLight;
+                }
+            }
+            else if (child.CompareTag("rl"))
+            {
+                // Do something with child.gameObject, e.g. get the Light component
+                Light childLight = child.GetComponent<Light>();
+                if (childLight != null)
+                {
+                    right = childLight;
+                }
+            }
+            else if (child.CompareTag("ll"))
+            {
+                // Do something with child.gameObject, e.g. get the Light component
+                Light childLight = child.GetComponent<Light>();
+                if (childLight != null)
+                {
+                    left = childLight;
+                }
+            }
+        }
+
         Controls.Enable();
     }
 
-    private void Disable()
+    private void OnDisable()
     {
         Controls.Disable();
     }
@@ -35,13 +65,13 @@ public class ColorChanger : MonoBehaviour
     private void Update()
     {
 
-        if (Controls.CarControls.lights.triggered)
+        if (Controls.CarControls.lights.triggered && PlayerPrefs.GetInt("optionTest_value") == 1)
         {
             left.enabled = !left.enabled;
             right.enabled = !right.enabled;
         }
 
-        if (Controls.CarControls.underglow.triggered)
+        if (Controls.CarControls.underglow.triggered && PlayerPrefs.GetInt("optionTest_value") == 1)
         {
             pointLight.enabled = !pointLight.enabled;
         }
@@ -50,6 +80,23 @@ public class ColorChanger : MonoBehaviour
         {
             float t = Mathf.PingPong(Time.time / duration, 1.0f);
             pointLight.color = Color.Lerp(Color.red, Color.blue, t);
+        }
+    }
+
+    public void CheckLightState()
+    {
+        Debug.Log("FUNC CALL: " + PlayerPrefs.GetInt("optionTest_value"));
+        if (PlayerPrefs.GetInt("optionTest_value") == 0)
+        {
+            pointLight.enabled = false;
+            left.enabled = false;
+            right.enabled = false;
+        }
+        else
+        {
+            pointLight.enabled = true;
+            left.enabled = true;
+            right.enabled = true;
         }
     }
 }

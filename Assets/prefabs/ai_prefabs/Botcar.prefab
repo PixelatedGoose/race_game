@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 3959540198050532660}
   m_Layer: 0
   m_Name: left light
-  m_TagString: Untagged
+  m_TagString: ll
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 4007936024177291942}
   m_Layer: 0
   m_Name: right light
-  m_TagString: Untagged
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -667,10 +667,9 @@ GameObject:
   - component: {fileID: 1660167061791714716}
   - component: {fileID: 7852830132284332927}
   - component: {fileID: 8308701380397512410}
-  - component: {fileID: 7602065429448493320}
   m_Layer: 0
   m_Name: underlight
-  m_TagString: Untagged
+  m_TagString: pl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -778,22 +777,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!114 &7602065429448493320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2417198540213562803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf77673f73d573c489fdc8dfb2a2c314, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointLight: {fileID: 7852830132284332927}
-  right: {fileID: 4967018550424267922}
-  left: {fileID: 7422337276073698729}
-  duration: 3
 --- !u!1 &2571841267644749643
 GameObject:
   m_ObjectHideFlags: 0
@@ -876,6 +859,7 @@ GameObject:
   - component: {fileID: 1567024701487940102}
   - component: {fileID: 5446521475156399261}
   - component: {fileID: 5795431006828513906}
+  - component: {fileID: 4064597349267489822}
   m_Layer: 0
   m_Name: aicar
   m_TagString: Untagged
@@ -960,6 +944,11 @@ MonoBehaviour:
   cornerAngleThreshold: 25
   detectionRadius: 25
   curveTolerance: 5
+  avoidanceBuffer: 6
+  avoidanceLateralOffset: 3
+  showWaypointHorizontalLine: 0
+  waypointLineLength: 5
+  waypointLineWidth: 0.1
   showDebugGizmos: 1
   showDetectionSphere: 0
   showFarthestPointLine: 0
@@ -991,12 +980,26 @@ MonoBehaviour:
     axel: 1
   carRb: {fileID: 5446521475156399261}
   playerCar: {fileID: 0}
-  avoidanceBuffer: 6
-  avoidanceLateralOffset: 3
   carName: AI Car
   assignedMaxSpeed: 0
   assignedTurnSensitivity: 0
   currentPlacement: 1
+--- !u!114 &4064597349267489822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2690342914894996201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf77673f73d573c489fdc8dfb2a2c314, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointLight: {fileID: 7852830132284332927}
+  right: {fileID: 7422337276073698729}
+  left: {fileID: 4967018550424267922}
+  duration: 3
 --- !u!1 &3909613612338946281
 GameObject:
   m_ObjectHideFlags: 0
