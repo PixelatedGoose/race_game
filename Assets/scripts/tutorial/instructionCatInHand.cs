@@ -2,16 +2,33 @@ using UnityEngine;
 
 public class instructionCatInHand : MonoBehaviour //shorthand - instruction category (and) input handler
 {
+    CarInputActions Controls;
     public instructionHandler instructionHandler;
 
     void Awake()
     {
-        instructionHandler = GameObject.Find("instructionHandler").GetComponent<instructionHandler>();
+        Controls = new CarInputActions();
+        Controls.Enable();
+
+        instructionHandler = gameObject.GetComponent<instructionHandler>();
+    }
+    private void OnEnable()
+    {
+        Controls.Enable();
+    }
+    private void OnDisable()
+    {
+        Controls.Disable(); 
+    }
+    private void OnDestroy()
+    {
+        Controls.Disable();
+        Controls.Dispose();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && GameManager.instance.isPaused == false)
+        if (Controls.CarControls.ui_advance.triggered && GameManager.instance.isPaused == false)
         {
             switch (instructionHandler.boxOpen)
             {

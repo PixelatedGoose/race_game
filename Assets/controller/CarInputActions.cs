@@ -200,9 +200,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""backcam"",
+                    ""name"": ""ui_advance"",
                     ""type"": ""Button"",
-                    ""id"": ""4715b76c-7bee-4754-b997-e5abbf6fcc85"",
+                    ""id"": ""04744b37-2fa2-4f48-8585-43f95a092a5a"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -273,17 +273,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Drift"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1ce4522c-fbfa-4c09-835a-44e3e4edfa5d"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""turbo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -575,23 +564,23 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""913b8bc1-b8d1-4ef3-b488-10a96823eaea"",
-                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""id"": ""9f57deab-bbd1-43d0-9024-33b8ebc0d2b8"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""backcam"",
+                    ""action"": ""ui_advance"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""12267ecb-a4ff-46d1-91b8-fa3ba1cc9d76"",
-                    ""path"": ""<Keyboard>/b"",
+                    ""id"": ""4e3bfa4c-d507-4768-bc59-93dc3be8d3af"",
+                    ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""backcam"",
+                    ""action"": ""ui_advance"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -626,7 +615,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_pausemenu = m_CarControls.FindAction("pausemenu", throwIfNotFound: true);
         m_CarControls_menusubmit = m_CarControls.FindAction("menusubmit", throwIfNotFound: true);
         m_CarControls_menucancel = m_CarControls.FindAction("menucancel", throwIfNotFound: true);
-        m_CarControls_backcam = m_CarControls.FindAction("backcam", throwIfNotFound: true);
+        m_CarControls_ui_advance = m_CarControls.FindAction("ui_advance", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -719,7 +708,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_pausemenu;
     private readonly InputAction m_CarControls_menusubmit;
     private readonly InputAction m_CarControls_menucancel;
-    private readonly InputAction m_CarControls_backcam;
+    private readonly InputAction m_CarControls_ui_advance;
     /// <summary>
     /// Provides access to input actions defined in input action map "CarControls".
     /// </summary>
@@ -780,9 +769,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @menucancel => m_Wrapper.m_CarControls_menucancel;
         /// <summary>
-        /// Provides access to the underlying input action "CarControls/backcam".
+        /// Provides access to the underlying input action "CarControls/ui_advance".
         /// </summary>
-        public InputAction @backcam => m_Wrapper.m_CarControls_backcam;
+        public InputAction @ui_advance => m_Wrapper.m_CarControls_ui_advance;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -845,9 +834,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @menucancel.started += instance.OnMenucancel;
             @menucancel.performed += instance.OnMenucancel;
             @menucancel.canceled += instance.OnMenucancel;
-            @backcam.started += instance.OnBackcam;
-            @backcam.performed += instance.OnBackcam;
-            @backcam.canceled += instance.OnBackcam;
+            @ui_advance.started += instance.OnUi_advance;
+            @ui_advance.performed += instance.OnUi_advance;
+            @ui_advance.canceled += instance.OnUi_advance;
         }
 
         /// <summary>
@@ -895,9 +884,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @menucancel.started -= instance.OnMenucancel;
             @menucancel.performed -= instance.OnMenucancel;
             @menucancel.canceled -= instance.OnMenucancel;
-            @backcam.started -= instance.OnBackcam;
-            @backcam.performed -= instance.OnBackcam;
-            @backcam.canceled -= instance.OnBackcam;
+            @ui_advance.started -= instance.OnUi_advance;
+            @ui_advance.performed -= instance.OnUi_advance;
+            @ui_advance.canceled -= instance.OnUi_advance;
         }
 
         /// <summary>
@@ -1036,11 +1025,11 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMenucancel(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "backcam" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "ui_advance" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnBackcam(InputAction.CallbackContext context);
+        void OnUi_advance(InputAction.CallbackContext context);
     }
 }

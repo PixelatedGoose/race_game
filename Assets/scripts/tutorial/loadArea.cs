@@ -37,6 +37,7 @@ public class loadArea : MonoBehaviour
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "11":
+                musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");                
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
@@ -50,13 +51,10 @@ public class loadArea : MonoBehaviour
                 
                 //StartCoroutine(ChangeAnimOverrides("driving:1", 2));
                 StartCoroutine(FadeDeath(1.0f));
-                break;
-            case "50":
-                musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
-                StartCoroutine(FadeDeath(1.0f));
-                break;
-            case "51":
-                musicControlTutorial.MusicSections("3_FINAL_TUTORIAL_main");
+                break;                
+            case "13":
+                musicControlTutorial.MusicSections("3_FINAL_TUTORIAL_main", "fade");
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "52":

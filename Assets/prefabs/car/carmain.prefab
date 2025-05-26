@@ -1295,6 +1295,7 @@ MonoBehaviour:
   moveOffset: {x: 0, y: 2.5, z: -4}
   rotOffset: {x: 0, y: 1.7, z: 0}
   carTarget: {fileID: 4231860650160643061}
+  smoothTime: 0.3
 --- !u!1 &4596069863458778694
 GameObject:
   m_ObjectHideFlags: 0
@@ -1375,23 +1376,54 @@ MonoBehaviour:
   maxAcceleration: 300
   brakeAcceleration: 600
   turnSensitivty: 1
-  maxsteerAngle: 30
+  turnSensitivtyAtHighSpeed: 1
+  turnSensitivtyAtLowSpeed: 1
   deceleration: 3
   maxspeed: 100
+  gravityMultiplier: 1.5
+  grassSpeedMultiplier: 0.5
   wheels:
   - wheelModel: {fileID: 4182341874864446412}
     wheelCollider: {fileID: 7008134804244252079}
+    wheelEffectobj: {fileID: 0}
+    smokeParticle: {fileID: 0}
     axel: 0
   - wheelModel: {fileID: 7458575643746078380}
     wheelCollider: {fileID: 1575402673344747080}
+    wheelEffectobj: {fileID: 0}
+    smokeParticle: {fileID: 0}
     axel: 0
   - wheelModel: {fileID: 519907634043631943}
     wheelCollider: {fileID: 208659167071752555}
+    wheelEffectobj: {fileID: 0}
+    smokeParticle: {fileID: 0}
     axel: 1
   - wheelModel: {fileID: 1007556162099369497}
     wheelCollider: {fileID: 6400993877836164209}
+    wheelEffectobj: {fileID: 0}
+    smokeParticle: {fileID: 0}
     axel: 1
   _centerofMass: {x: 0, y: 0, z: 0}
+  grass:
+    serializedVersion: 2
+    m_Bits: 0
+  targetTorque: 0
+  grassMaterial: {fileID: 0}
+  roadMaterial: {fileID: 0}
+  driftmaterial: {fileID: 0}
+  carRb: {fileID: 0}
+  Turbesped: 150
+  basespeed: 100
+  grassmaxspeed: 50
+  driftMultiplier: 1
+  isTurnedDown: 0
+  turbeMeter: {fileID: 0}
+  turbeAmount: 100
+  turbeMax: 100
+  turbeReduce: 0
+  turbeRegen: 0
+  isRegenerating: 0
+  turbeRegenCoroutineAmount: 0
 --- !u!114 &2136980685887261712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1404,11 +1436,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718c68663d4dc28408fcc839dde75394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rankManager: {fileID: 0}
+  winMenu: {fileID: 0}
+  Car1Hud: {fileID: 0}
   laptime: 0
+  Rank: 0
   besttime: 0
-  Ltime: {fileID: 8808136006470933881}
-  Btime: {fileID: 5899963910701371}
+  racestarted: 0
+  LtimeTexts: []
+  BtimeTexts: []
+  rankText: {fileID: 0}
   LapCounter: {fileID: 0}
+  resetPrompt: {fileID: 0}
+  startFinishLine: {fileID: 0}
+  checkpoints: []
+  raceFinished: 0
 --- !u!1 &4934781887389325266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1974,7 +2016,7 @@ MonoBehaviour:
   maxSpeed: 260
   minSpeedArrowAngle: 11.615
   maxSpeedArrowAngle: -190.879
-  speedLabel: {fileID: 3945459462782609306}
+  speedLabel: {fileID: 0}
   arrow: {fileID: 2814178925120633630}
 --- !u!1 &8525822017268327100
 GameObject:

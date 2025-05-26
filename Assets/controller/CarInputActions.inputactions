@@ -114,9 +114,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "backcam",
+                    "name": "ui_advance",
                     "type": "Button",
-                    "id": "4715b76c-7bee-4754-b997-e5abbf6fcc85",
+                    "id": "04744b37-2fa2-4f48-8585-43f95a092a5a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -187,17 +187,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Drift",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1ce4522c-fbfa-4c09-835a-44e3e4edfa5d",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "turbo",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -489,23 +478,23 @@
                 },
                 {
                     "name": "",
-                    "id": "913b8bc1-b8d1-4ef3-b488-10a96823eaea",
-                    "path": "<Gamepad>/dpad/right",
+                    "id": "9f57deab-bbd1-43d0-9024-33b8ebc0d2b8",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "backcam",
+                    "action": "ui_advance",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "12267ecb-a4ff-46d1-91b8-fa3ba1cc9d76",
-                    "path": "<Keyboard>/b",
+                    "id": "4e3bfa4c-d507-4768-bc59-93dc3be8d3af",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "backcam",
+                    "action": "ui_advance",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

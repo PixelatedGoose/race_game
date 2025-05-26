@@ -66,27 +66,50 @@ public class musicControlTutorial : MonoBehaviour
     }
 
     /// <summary>
-    /// vaihtaa musiikkiraidat trackNamen mukaan.
+    /// vaihtaa musiikkiraidat trackNamen mukaan
     /// </summary>
     /// <param name="trackName">koko tiedostonimi, ilman .wav päätettä</param>
-    public void MusicSections(string trackName) //lisään myöhemmi oikeet fade outit ja transitionit
+    public void MusicSections(string trackName, string mode = "instant") //lisään myöhemmi oikeet fade outit ja transitionit
     {
         float volSet = mainTrack.volume;
 
-        mainTrack.Stop();
-        if (driftTrack != null)
-            driftTrack.Stop();
-        if (turboTrack != null)
-            turboTrack.Stop();
+        switch (mode)
+        {
+            case "instant":
+                mainTrack.Stop();
+                if (driftTrack != null)
+                    driftTrack.Stop();
+                if (turboTrack != null)
+                    turboTrack.Stop();
+                
+                ChangeTrack(trackName);
+                mainTrack.volume = volSet;
 
-        ChangeTrack(trackName);
-        mainTrack.volume = volSet;
-        
-        mainTrack.Play();
-        if (driftTrack != null)
-            driftTrack.Play();
-        if (turboTrack != null)
-            turboTrack.Play();
+                mainTrack.Play();
+                if (driftTrack != null)
+                    driftTrack.Play();
+                if (turboTrack != null)
+                    turboTrack.Play();
+                break;
+            case "fade":
+                AudioSource previousMain = mainTrack;
+                AudioSource previousDrift = driftTrack;
+                AudioSource previousTurbo = turboTrack;
+
+                if (driftTrack != null)
+                    previousDrift = driftTrack;
+                if (driftTrack != null)
+                    previousTurbo = turboTrack;
+
+                ChangeTrack(trackName);
+                
+                mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.3f, 1.0f * Time.deltaTime);
+                if (driftTrack != null)
+                    driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.3f, 1.0f * Time.deltaTime);
+                if (turboTrack != null)
+                    turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.3f, 1.0f * Time.deltaTime);
+                break;
+        }
     }
 
     void Update()

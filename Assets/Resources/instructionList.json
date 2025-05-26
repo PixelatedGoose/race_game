@@ -24,6 +24,7 @@
         "Pressing L toggles long lights.",
         "Pressing C toggles the underlight.",
         "You can pause the game with ESC, in case it wasn't obvious.",
+        "The red part of your timer shows your milliseconds.",
         "We'll teach you the most important thing now."
     ],
 
@@ -40,13 +41,12 @@
         "You're able to use your turbo by holding (left) CTRL.",
         "We only have a limited supply of it per car; the amount is on the bottom left.",
         "The supply regenerates after letting it rest for a while.",
-        "placeholder 1"
+        "Try using it here."
     ],
 
     "final": [
-        "placeholder for intro",
-        "placeholder for other yapping 1",
-        "placeholder for other yapping 2",
-        "ok now go do clear"
+        "Congratulations clearing the tutorial!",
+        "I have nothing else to tell you, so fuck off now.",
+        "Enter the finish line to exit the level."
     ]
 }
