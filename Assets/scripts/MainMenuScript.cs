@@ -52,7 +52,7 @@ public class MainMenu : MonoBehaviour
 
     public void Playgame()
     {
-        SceneManager.LoadSceneAsync(3); //menee ny carselectioniin suoraan
+        SceneManager.LoadSceneAsync(7); //menee ny carselectioniin suoraan
         DatapersistenceManager.instance.LoadGame();
     }
 

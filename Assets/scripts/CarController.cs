@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class CarController : MonoBehaviour
 {
@@ -57,16 +58,18 @@ public class CarController : MonoBehaviour
     public float grassmaxspeed = 50.0f;
     [Header("Drift asetukset")]
     public float driftMultiplier = 1.0f;
-    public bool isTurnedDown = false; 
+    public bool isTurnedDown = false;
+    
 
     [Header("turbe asetukset")]
     public Image turbeMeter;
-    public float turbeAmount = 100.0f, turbeMax = 100.0f;
+    public float turbeAmount = 100.0f, turbeMax = 100.0f, turbepush = 50.0f;
     public float turbeReduce;
     public float turbeRegen;
 
     public bool isRegenerating = false;
     public int turbeRegenCoroutineAmount = 0;
+    Dictionary<string, float> carTurboValues = new Dictionary<string, float>();
 
 
     void Awake()
@@ -79,9 +82,16 @@ public class CarController : MonoBehaviour
 
     void Start()
     {
+
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
+        AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
+    }
+
+    private void AdjustTurboForEachCar(object carsParent)
+    {
+        throw new NotImplementedException();
     }
 
     private void OnEnable()
@@ -132,8 +142,7 @@ public class CarController : MonoBehaviour
         HandleDrift();
         Decelerate();
         ApplySpeedLimit();
-        Applyturnsensitivity();
-        //AdjustWheelFriction();
+        Applyturnsensitivity(); 
         OnGrass();
         TURBE();
         TURBEmeter();
@@ -252,7 +261,7 @@ public class CarController : MonoBehaviour
         isTurboActive = Controls.CarControls.turbo.IsPressed() && turbeAmount > 0;
         if (isTurboActive)
         {
-            carRb.AddForce(transform.forward * 50f, ForceMode.Acceleration);
+            carRb.AddForce(transform.forward * turbepush, ForceMode.Acceleration);
             targetTorque *= 1.5f;
         }
     }
@@ -471,9 +480,7 @@ public class CarController : MonoBehaviour
             sidewaysFriction.extremumValue = 1.0f;
             sidewaysFriction.asymptoteValue = 1f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-        }
-        
-        
+        }    
     }
 
     private void OnMovePerformed(InputAction.CallbackContext ctx)
@@ -494,6 +501,41 @@ public class CarController : MonoBehaviour
         Controls.CarControls.Move.canceled+= ctx => {
             steerInput = 0.0f;
         };   
+    }
+
+
+    void AdjustTurboForEachCar(GameObject carsParent)
+    {
+        int childCount = carsParent.transform.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            GameObject car = carsParent.transform.GetChild(i).gameObject;
+            if (car.activeInHierarchy)
+            {
+                string carName = car.name;
+                switch (carName)
+                {
+                    case "REALCAR":
+                        turbepush = 50.0f;
+                        break;
+                    case "REALCAR_x":
+                        turbepush  = 10.0f;
+                        break;
+                    case "REALCAR_y":
+                        turbepush = 70.0f;
+                        break;
+                    case "Lada":
+                        turbepush = 50.0f;
+                        break;
+                    default:
+                        Debug.LogWarning($"Unknown car name: {carName}");
+                        break;
+                }
+                carTurboValues[carName] = turbepush;
+                Debug.Log($"Turbo set for active car: {carName} = {turbepush}");
+                return;
+            }
+        }
     }
     //bobbing effect
 
