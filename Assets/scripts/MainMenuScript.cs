@@ -43,7 +43,7 @@ public class MainMenu : MonoBehaviour
 
     void OnEnable()
     {
-        Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value");
+        Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value") * 10;
         setHeadline();
     }
 
