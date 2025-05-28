@@ -34,31 +34,26 @@ public class CarController : MonoBehaviour
     public float brakeAcceleration = 3.0f;
     [Header("turn asetukset")]
     public float turnSensitivty = 1.0f;
-    public float turnSensitivtyAtHighSpeed = 1.0f;
-    public float turnSensitivtyAtLowSpeed = 1.0f;
+    public float turnSensitivtyAtHighSpeed = 1.0f, turnSensitivtyAtLowSpeed = 1.0f;
     public float deceleration = 1.0f;
     [Min (100.0f)] 
     public float maxspeed = 100.0f;
     public float gravityMultiplier = 1.5f; 
     public float grassSpeedMultiplier = 0.5f;
     public List<Wheel> wheels; 
-    float moveInput;
-    float steerInput;
+    float moveInput, steerInput;
     public Vector3 _centerofMass;
     public LayerMask grass;
     public float targetTorque;
-    public Material grassMaterial;
-    public Material roadMaterial;
-    public Material driftmaterial;
+    public Material grassMaterial, roadMaterial, driftmaterial;
     public Rigidbody carRb;
     bool isTurboActive = false;
     private float activedrift = 0.0f;
-    public float Turbesped = 150.0f;
-    public float basespeed = 100.0f;
-    public float grassmaxspeed = 50.0f;
+    public float Turbesped = 150.0f, basespeed = 100.0f,  grassmaxspeed = 50.0f, driftMaxSpeed = 40f;
     [Header("Drift asetukset")]
     public float driftMultiplier = 1.0f;
-    public bool isTurnedDown = false;
+    public bool isTurnedDown = false, isDrifting;
+    private float perusMaxAccerelation, perusTargetTorque;
     
 
     [Header("turbe asetukset")]
@@ -82,7 +77,8 @@ public class CarController : MonoBehaviour
 
     void Start()
     {
-
+        perusMaxAccerelation = maxAcceleration;
+        perusTargetTorque = targetTorque;
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
@@ -129,7 +125,10 @@ public class CarController : MonoBehaviour
 
     void FixedUpdate()
     {
-
+        if (isDrifting)
+        { 
+            maxspeed = Mathf.Lerp(maxspeed, driftMaxSpeed, Time.deltaTime * 0.25f);
+        }
         // Stop drifting if the race is finished
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished && activedrift > 0)
@@ -268,6 +267,7 @@ public class CarController : MonoBehaviour
 
     void Move()
     {
+        if (activedrift > 0) return;
         HandeSteepSlope();
         UpdateTargetTorgue();
         AdjustSpeedForGrass();
@@ -317,20 +317,21 @@ public class CarController : MonoBehaviour
 
     private void UpdateTargetTorgue()
     {
-        if (moveInput > 0)
-        {
+        if (activedrift > 0) return;
+
+
+        if(moveInput > 0) {
             targetTorque = 1 * maxAcceleration;
-        }
-        else if (moveInput < 0)
-        {
+        } else if (moveInput < 0) {
             targetTorque = -1 * maxAcceleration;
-        }
-        else
-        {
+        } else {
             targetTorque = 0.0f;
+        };
+
+        if (!isDrifting)
+        {
+            maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? Turbesped : basespeed, Time.deltaTime);
         }
-        ;
-        maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? Turbesped : basespeed, Time.deltaTime);
     }
 
     private void Brakes(Wheel wheel)
@@ -348,7 +349,7 @@ public class CarController : MonoBehaviour
 
     private void AdjustSpeedForGrass()
     {
-        if (IsOnGrass())
+        if (IsOnGrass() && !isDrifting)
         {
             targetTorque *= grassSpeedMultiplier;
             maxspeed = Mathf.Lerp(maxspeed, grassSpeedMultiplier, Time.deltaTime);
@@ -392,20 +393,22 @@ public class CarController : MonoBehaviour
         carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
     }
 
+
     void HandleDrift()
     {
-        Controls.CarControls.Drift.performed += ctx => {
+        Controls.CarControls.Drift.performed += ctx =>
+        {
+
+            if (isDrifting) return;
             RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-            if (activedrift > 0)
-            {
-                return;
-            }
+
             activedrift++;
-
+            isDrifting = true;
+            maxAcceleration = perusMaxAccerelation * 0.7f;
+            targetTorque = perusTargetTorque * 0.7f;
             float speed = carRb.linearVelocity.magnitude * 3.6f;
-            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f); 
+            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
             float driftMultiplier = 1.0f;
-
             foreach (var wheel in wheels)
             {
                 if (wheel.wheelCollider == null) continue;
@@ -416,7 +419,7 @@ public class CarController : MonoBehaviour
                 sidewaysFriction.extremumValue = 0.5f / (speedFactor * driftMultiplier);
                 sidewaysFriction.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-                
+
             }
             AdjustdriftSuspension();
             AdjustDriftForwardFriction();
@@ -425,14 +428,17 @@ public class CarController : MonoBehaviour
             {
                 GameManager.instance.AddPoints();
             }
-
             WheelEffects(true);
         };
-        Controls.CarControls.Drift.canceled += ctx => {
+        Controls.CarControls.Drift.canceled += ctx =>
+        {
             StopDrifting();
+            maxAcceleration = perusMaxAccerelation;
+            targetTorque = perusTargetTorque;
             WheelEffects(false);
         };        
     }
+
     private void AdjustdriftSuspension()
     {
         foreach (var wheel in wheels)
@@ -441,7 +447,7 @@ public class CarController : MonoBehaviour
             suspensionSpring.spring = 4000.0f;
             suspensionSpring.damper = 1000.0f;
             wheel.wheelCollider.suspensionSpring = suspensionSpring;
-         }
+        }
 
     }
 
@@ -461,6 +467,9 @@ public class CarController : MonoBehaviour
     void StopDrifting()
     {
         activedrift = 0;
+        isDrifting = false;
+        maxAcceleration = perusMaxAccerelation;
+        targetTorque = perusTargetTorque;
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
         {
@@ -532,7 +541,6 @@ public class CarController : MonoBehaviour
                         break;
                 }
                 carTurboValues[carName] = turbepush;
-                Debug.Log($"Turbo set for active car: {carName} = {turbepush}");
                 return;
             }
         }
