@@ -75,9 +75,8 @@
         "Excuse me, waiter, but there appears to be a bug in my car game",
         "taco bell aiheutti valovuoden pitusen paskan",
         "that's shit",
-        "prepare to have your ears blasted",
-        "prepare to have your eyes blinded",
-        "prepare to have your brain screwed",
+        "prepare yourself",
+        "Worst case scenario: you play this game and you die",
         "prepare",
         "the cat turned into a cat",
         "to drift or not to drift, that is the question: whether 'tis nobler...",
@@ -104,7 +103,11 @@
         "noni tekstejä on ny sata voin mennä nukkuu ai mitä tää menee siihe peliin",
         "Monster Energy Monarch",
         "We do not own slaves :)",
-        "honorable mentions: leo robert valtteri luuton luuranko maissitanko"
+        "honorable mentions: leo robert valtteri luuton luuranko maissitanko",
+        "the second coming of horrible life decisions",
+        "THE CAR STARTED HYPERVENTILATING",
+        "copilot_aftermath.jpg",
+        "'Sentään meiän peli ei oo rikki, nii se ei oo niin paha tilanne' -Leobold"
     ],
 
     "uncommon": [
@@ -129,19 +132,20 @@
         "https://www.youtube.com/watch?v=ynQsDFxTSU4",
         "Ja sähän lähdet.",
         "Four-dimensional soup. Coming soon to AmisDrift.",
+        "みんなー！ チルノのさんすう教室はじまるよー！",
         "ya got games on yo phone?",
         "A bullet to the head would've been far too humane",
         "geneva conventions more like geneva suggestions",
         "Love is in the air? Wrong! Gas leak",
-        "i bet yous don't did ever listen to some ALEX TERRIBLE",
-        "i bet yous don't did ever listen to some xi~on",
-        "i bet yous don't did ever listen to some Pendulum",
-        "i bet yous don't did ever listen to some Dave Rodgers",
-        "i bet yous don't did ever listen to some Slaughter to Prevail",
-        "i bet yous don't did ever listen to some Demetori",
-        "i bet yous don't did ever listen to some Floating Door",
-        "i bet yous don't did ever listen to some sped up songs",
-        "where the fuck's my car game i've been patient",
+        "i bet yous didn't ever listen to some ALEX TERRIBLE",
+        "i bet yous didn't ever listen to some xi~on",
+        "i bet yous didn't ever listen to some Pendulum",
+        "i bet yous didn't ever listen to some Dave Rodgers",
+        "i bet yous didn't ever listen to some Slaughter to Prevail",
+        "i bet yous didn't ever listen to some Demetori",
+        "i bet yous didn't ever listen to some Floating Door",
+        "i bet yous didn't ever listen to some sped up songs",
+        "where the fuck's my car game i've been patient for 7 years",
         "Haistakaa paska koko valtiovalta",
         "We will not add flying cars",
         "GameObject.Find('REALCAR').GetComponent<Rigidbody>();",
@@ -152,7 +156,7 @@
         "who is that one guy in this game",
         "digi/tailun ope on se paras ope",
         "i thought this game had pixelated gooses?",
-        "We've bought a cake. If not yet - we will have soon",
+        "We've bought a cake.",
         "Where's the lamb sauce",
         "who cooked for this game it's raw",
         "30 is the new 20, 20 is the new 10, 10 is the new nonexistant",
@@ -170,7 +174,9 @@
         "Alcohol, drugs and driving",
         "We are a very serious company",
         "Gambling magazines are now available in the main menu",
-        "waltuh i am very drunk waltuh"
+        "waltuh i am very drunk waltuh",
+        "The design of our game is like Windows 8: total ass",
+        "Walter. Put your Unity Engine away, Walter."
     ],
 
     "rare": [
@@ -206,8 +212,6 @@
         ".json my beloved",
         "'I... am Kari.' - Jack Black",
         "'THIS is a REALCAR.' - Jack Black",
-        "'As a child I yearned for the drifts.' - Jack Black",
-        "'Flint and wheels!' - Jack Black",
         "'Until we came across... The TEST_MOUNTAIN.' - Jack Black",
         "Hello Mario",
         "Our game is actually a zip bomb.",
@@ -246,7 +250,8 @@
         "(insert obscure loading text here)",
         "16 years, yet still no fumofumo? you got one hell of a boring life",
         "Kaivosyritys, jossa Kari työskenteli, meni konkurssiin vuonna 1992",
-        "damn girl are you a construction worker? because you are BUILDING"
+        "damn girl are you a construction worker? because you are BUILDING",
+        "github has down syndrome today"
     ],
 
     "special": [
@@ -259,6 +264,7 @@
         "Are you serious? That shit?",
         "You have ran out of time",
         "Juud 7: juud'd",
-        "i am the one who grass"
+        "i am the one who grass",
+        "congratulations, you got a different loading screen!"
     ]
 }

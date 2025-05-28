@@ -152,7 +152,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
             return; 
         }
 
-        if (!isAddingPoints && currentCar.activeSelf && instance != null)
+        if (!isAddingPoints && currentCar.activeSelf && instance != null
+        && !GameManager.instance.isPaused)
         {
             StartCoroutine(IncrementScoreWithDelay());
         }
@@ -160,18 +161,26 @@ public class GameManager : MonoBehaviour, IDataPersistence
     
     private IEnumerator IncrementScoreWithDelay()
     {
-        isAddingPoints = true;   
+        isAddingPoints = true;
+        float timer = 0f;
 
-        while (isAddingPoints)   
+        while (isAddingPoints)
         {
-            yield return new WaitForSecondsRealtime(scoreAddWT);   
-            score += 1;   
+            // Use Time.deltaTime if you want score to pause with the game,
+            // or Time.unscaledDeltaTime if you want it to keep going while paused.
+            timer += Time.deltaTime;
 
-           
-            foreach (Text scoreText in ScoreTexts)
+            while (timer >= scoreAddWT)
             {
-                scoreText.text = "Score: " + score.ToString();
-            }               
+                score += 1;
+                timer -= scoreAddWT;
+
+                foreach (Text scoreText in ScoreTexts)
+                {
+                    scoreText.text = "Score: " + score.ToString();
+                }
+            }
+            yield return null; // Wait for next frame
         }
     }
 

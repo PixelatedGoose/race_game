@@ -1,11 +1,13 @@
 {
     "error": 1.0,
+    "allthetexts": 0.0,
     "play1": 0.2,
     "play2": 0.2,
     "play3": 0.2,
     "chance": 0.02237136465,
     "shit": 0.05007511266,
-    "outoftime": 0.0,
+    "outoftime": 0.01,
     "juud7": 0.007,
-    "grass": 0.0009
+    "grass": 0.0009,
+    "reallyspecial": 0.0000833
 }
