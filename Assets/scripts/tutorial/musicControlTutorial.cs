@@ -100,12 +100,16 @@ public class musicControlTutorial : MonoBehaviour
                 
                 mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.3f, 1.0f * Time.deltaTime);
                 previousMain.volume = Mathf.MoveTowards(previousMain.volume, 0.0f, 1.0f * Time.deltaTime);
-                if (driftTrack != null)
+                if (driftTrack != null && previousDrift != null)
+                {
                     driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.3f, 1.0f * Time.deltaTime);
                     previousDrift.volume = Mathf.MoveTowards(previousDrift.volume, 0.0f, 1.0f * Time.deltaTime);
-                if (turboTrack != null)
+                }
+                if (turboTrack != null && previousTurbo != null)
+                {
                     turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.3f, 1.0f * Time.deltaTime);
                     previousTurbo.volume = Mathf.MoveTowards(previousTurbo.volume, 0.0f, 1.0f * Time.deltaTime);
+                }
                 break;
         }
     }
@@ -115,16 +119,19 @@ public class musicControlTutorial : MonoBehaviour
         if (GameManager.instance.turbeActive)
         {
             if (turboTrack != null)
+            {
                 if (turboTrack.volume <= 0.390f)
                 {
                     turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.5f, 1.0f * Time.deltaTime);
                     driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.0f, 1.0f * Time.deltaTime);
                     mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.0f, 1.0f * Time.deltaTime);
                 }
+            }
         }
         else
         {
             if (driftTrack != null)
+            {
                 if (GameManager.instance.isAddingPoints)
                 {
                     if (driftTrack.volume <= 0.390f)
@@ -141,14 +148,18 @@ public class musicControlTutorial : MonoBehaviour
                         mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.5f, 1.0f * Time.deltaTime);
                     }
                 }
-            
+            }
+
             if (turboTrack != null)
+            {
                 if (turboTrack.volume > 0.000f)
                 {
                     turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.0f, 1.0f * Time.deltaTime);
                     mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.5f, 1.0f * Time.deltaTime);
                 }
+            }
         }
+
 
 
         if (GameManager.instance.isPaused == true)

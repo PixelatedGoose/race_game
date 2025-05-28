@@ -6,12 +6,14 @@ public class optionScript : MonoBehaviour
 {
     public Material pixelCount;
     private Text pixelCountLabel;
+    private Text framerateLabel;
     private Dictionary<string, Slider> sliders = new Dictionary<string, Slider>();
     private Dictionary<string, Toggle> toggles = new Dictionary<string, Toggle>();
 
     private const float DefaultPixelValue = 256f;
     private const float PixelMultiplier = 64f;
     private const float DefaultVolume = 0.5f;
+    private const int DefaultFramerate = 60;
 
     void OnEnable()
     {
@@ -26,6 +28,12 @@ public class optionScript : MonoBehaviour
             PlayerPrefs.SetFloat("volume", DefaultVolume);
             Debug.Log("volume not found; set to default: " + DefaultVolume);
         }
+
+        if (!PlayerPrefs.HasKey("framerate"))
+        {
+            PlayerPrefs.SetInt("framerate", DefaultFramerate);
+            Debug.Log("framerate not found; set to default: " + DefaultFramerate);
+        }
     }
 
     void Start()
@@ -38,14 +46,16 @@ public class optionScript : MonoBehaviour
         CacheUIElements();
         InitializeSliderValues();
         InitializeToggleValues();
-        UpdatePixelCountLabel();
+        UpdateLabels();
     }
 
     private void CacheUIElements()
     {
         toggles["optionTest"] = GameObject.Find("optionTest").GetComponent<Toggle>();
         sliders["pixel"] = GameObject.Find("pixel").GetComponent<Slider>();
+        sliders["framerate"] = GameObject.Find("framerate").GetComponent<Slider>();
         pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
+        framerateLabel = GameObject.Find("LabelFR").GetComponent<Text>();
     }
 
     private void InitializeSliderValues()
@@ -94,14 +104,20 @@ public class optionScript : MonoBehaviour
             if (sliderName == "pixel")
             {
                 pixelCount.SetFloat("_pixelcount", slider.value * PixelMultiplier);
-                UpdatePixelCountLabel();
+                UpdateLabels();
+            }
+            if (sliderName == "framerate")
+            {
+                Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value") * 10;
+                UpdateLabels();
             }
             PlayerPrefs.Save();
         }
     }
 
-    private void UpdatePixelCountLabel()
+    private void UpdateLabels()
     {
         pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * PixelMultiplier).ToString();
+        framerateLabel.text = ((int)PlayerPrefs.GetFloat("framerate_value") * 10) .ToString();
     }
 }

@@ -47,6 +47,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     private Transform respawnPoint;
     private CarController carController;
+    private CarController_2 carController_2;
 
     public void LoadData(GameData data)
     {
@@ -92,6 +93,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Controls = new CarInputActions();
         Controls.Enable();
         carController = GetComponent<CarController>();
+        if (carController == null)
+            carController_2 = GetComponent<CarController_2>();
     }
 
     private void OnEnable()
@@ -210,23 +213,46 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     IEnumerator TurnDownCarsValues()
     {
-        carController.isTurnedDown = true;
+        if (carController == null)
+        {
+            carController_2.isTurnedDown = true;
 
-        float BasicMaxAcceleration = carController.maxAcceleration;
-        float BasicBaseSpeed = carController.basespeed;
-        float BasicTargetTorque = carController.targetTorque;
+            float BasicMaxAcceleration = carController_2.maxAcceleration;
+            float BasicBaseSpeed = carController_2.basespeed;
+            float BasicTargetTorque = carController_2.targetTorque;
 
-        carController.maxAcceleration = 0;
-        carController.basespeed = 0;
-        carController.targetTorque = 0;
-        GameManager.instance.turbeActive = false;
+            carController_2.maxAcceleration = 0;
+            carController_2.basespeed = 0;
+            carController_2.targetTorque = 0;
+            GameManager.instance.turbeActive = false;
 
-        yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.5f);
 
-        carController.maxAcceleration = BasicMaxAcceleration;
-        carController.basespeed = BasicBaseSpeed;
-        carController.targetTorque = BasicTargetTorque;
-        carController.isTurnedDown = false;
+            carController_2.maxAcceleration = BasicMaxAcceleration;
+            carController_2.basespeed = BasicBaseSpeed;
+            carController_2.targetTorque = BasicTargetTorque;
+            carController_2.isTurnedDown = false;
+        }
+        else
+        {
+            carController.isTurnedDown = true;
+
+            float BasicMaxAcceleration = carController.maxAcceleration;
+            float BasicBaseSpeed = carController.basespeed;
+            float BasicTargetTorque = carController.targetTorque;
+
+            carController.maxAcceleration = 0;
+            carController.basespeed = 0;
+            carController.targetTorque = 0;
+            GameManager.instance.turbeActive = false;
+
+            yield return new WaitForSeconds(0.5f);
+
+            carController.maxAcceleration = BasicMaxAcceleration;
+            carController.basespeed = BasicBaseSpeed;
+            carController.targetTorque = BasicTargetTorque;
+            carController.isTurnedDown = false;
+        }
     }
 
     void Inactivity()
@@ -412,19 +438,5 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         racestarted = true;
         startTimer = true;
-    }
-
-    public void QuitGame()
-    {
-        Debug.Log("Quitting Game...");
-        Application.Quit();
-        if (!raceFinished)
-        {
-            
-        }
-    }
-     void BackToMenu()
-    {
-        SceneManager.LoadSceneAsync(0);
     }
 }

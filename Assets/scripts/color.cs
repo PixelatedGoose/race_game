@@ -85,7 +85,6 @@ public class ColorChanger : MonoBehaviour
 
     public void CheckLightState()
     {
-        Debug.Log("FUNC CALL: " + PlayerPrefs.GetInt("optionTest_value"));
         if (PlayerPrefs.GetInt("optionTest_value") == 0)
         {
             pointLight.enabled = false;

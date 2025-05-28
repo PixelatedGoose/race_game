@@ -57,12 +57,29 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "52":
-                musicControlTutorial.MusicSections("4_FINAL_TUTORIAL_main");
+            case "14":
+                musicControlTutorial.MusicSections("4_FINAL_TUTORIAL_main", "fade");
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "53":
-                musicControlTutorial.MusicSections("5_FINAL_TUTORIAL_main");
+            case "15":
+                musicControlTutorial.MusicSections("5_FINAL_TUTORIAL_main", "fade");
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "16":
+                musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_main");
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "17":
+                musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_main", "fade");
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "18":
+                musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_main");
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             default:

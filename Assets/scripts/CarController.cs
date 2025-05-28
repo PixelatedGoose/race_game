@@ -85,6 +85,7 @@ public class CarController : MonoBehaviour
         AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
     }
 
+    //??? mut tää funktio on jo tuol alempana
     private void AdjustTurboForEachCar(object carsParent)
     {
         throw new NotImplementedException();
@@ -399,7 +400,7 @@ public class CarController : MonoBehaviour
         Controls.CarControls.Drift.performed += ctx =>
         {
 
-            if (isDrifting) return;
+            if (isDrifting || GameManager.instance.isPaused) return;
             RacerScript racerScript = FindAnyObjectByType<RacerScript>();
 
             activedrift++;
