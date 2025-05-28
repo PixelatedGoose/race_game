@@ -360,7 +360,10 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (winMenu != null)
         {
             winMenu.SetActive(true);
-            raceFinished = true; 
+            Button restartButton = winMenu.GetComponentsInChildren<Button>(true)
+                .First(b => b.name == "Back_to_Main_Menu");
+            restartButton.Select();
+            raceFinished = true;
             DatapersistenceManager.instance.SaveGame();
             print("data saved");
         }
