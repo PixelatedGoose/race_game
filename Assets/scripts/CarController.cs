@@ -85,7 +85,7 @@ public class CarController : MonoBehaviour
         AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
     }
 
-    
+
     private void OnEnable()
     {
         Controls.Enable();
@@ -193,11 +193,6 @@ public class CarController : MonoBehaviour
         if(!Controls.CarControls.MoveBackward.IsPressed() && !Controls.CarControls.MoveForward.IsPressed()) {
             moveInput = 0.0f;
         }
-    }
-
-    bool IsGrounded()
-    {
-        return Physics.Raycast(transform.position, Vector3.down, 500 * 1.0f);
     }
 
     bool IsWheelGrounded(Wheel wheel)
