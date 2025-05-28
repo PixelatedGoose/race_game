@@ -85,12 +85,7 @@ public class CarController : MonoBehaviour
         AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
     }
 
-    //??? mut tää funktio on jo tuol alempana
-    private void AdjustTurboForEachCar(object carsParent)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     private void OnEnable()
     {
         Controls.Enable();
@@ -492,12 +487,6 @@ public class CarController : MonoBehaviour
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }    
     }
-
-    private void OnMovePerformed(InputAction.CallbackContext ctx)
-    {
-        GameManager.instance.AddPoints();
-    }
-
     void Animatewheels()
     {
         foreach(var wheel in wheels) 
