@@ -96,18 +96,16 @@ public class musicControlTutorial : MonoBehaviour
                 AudioSource previousDrift = driftTrack;
                 AudioSource previousTurbo = turboTrack;
 
-                if (driftTrack != null)
-                    previousDrift = driftTrack;
-                if (driftTrack != null)
-                    previousTurbo = turboTrack;
-
                 ChangeTrack(trackName);
                 
                 mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.3f, 1.0f * Time.deltaTime);
+                previousMain.volume = Mathf.MoveTowards(previousMain.volume, 0.0f, 1.0f * Time.deltaTime);
                 if (driftTrack != null)
                     driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.3f, 1.0f * Time.deltaTime);
+                    previousDrift.volume = Mathf.MoveTowards(previousDrift.volume, 0.0f, 1.0f * Time.deltaTime);
                 if (turboTrack != null)
                     turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.3f, 1.0f * Time.deltaTime);
+                    previousTurbo.volume = Mathf.MoveTowards(previousTurbo.volume, 0.0f, 1.0f * Time.deltaTime);
                 break;
         }
     }

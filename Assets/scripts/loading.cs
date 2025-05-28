@@ -15,11 +15,16 @@ public class loadText_data
 public class specialTextChances
 {
     public float error;
+    public float allthetexts;
     public float play1;
     public float play2;
     public float play3;
     public float chance;
     public float shit;
+    public float outoftime;
+    public float juud7;
+    public float grass;
+    public float reallyspecial;
 }
 
 public class loading : MonoBehaviour
@@ -108,13 +113,15 @@ public class loading : MonoBehaviour
             string key = field.Name;
             float value = (float)field.GetValue(specialChances);
 
-            //Debug.Log($"Key: {key}, Value: {value}");
-
             float sChance = Random.Range(value * 1000, 100000);
             if (sChance <= value * 1000)
             {
                 loadText_text.text = textData.special[index];
                 Debug.Log(key);
+
+                loadtextbehaviour loadtextbehaviour = gameObject.GetComponent<loadtextbehaviour>();
+                loadtextbehaviour.SetSpecialLoadTextBehaviour(key);
+
                 break;
             }
             else
