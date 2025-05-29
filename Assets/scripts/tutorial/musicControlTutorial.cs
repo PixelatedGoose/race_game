@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Collections;
 
 public class musicControlTutorial : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class musicControlTutorial : MonoBehaviour
     void TrackVariants(bool set = false)
     {
         string clipName = mainTrack.clip.name;
+        Debug.Log(clipName);
 
         // Get the prefix (e.g. first two characters)
         string prefix = clipName.Substring(0, 1);
@@ -81,7 +84,7 @@ public class musicControlTutorial : MonoBehaviour
                     driftTrack.Stop();
                 if (turboTrack != null)
                     turboTrack.Stop();
-                
+
                 ChangeTrack(trackName);
                 mainTrack.volume = volSet;
 
@@ -92,25 +95,41 @@ public class musicControlTutorial : MonoBehaviour
                     turboTrack.Play();
                 break;
             case "fade":
-                AudioSource previousMain = mainTrack;
-                AudioSource previousDrift = driftTrack;
-                AudioSource previousTurbo = turboTrack;
-
-                ChangeTrack(trackName);
-                
-                mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.3f, 1.0f * Time.deltaTime);
-                previousMain.volume = Mathf.MoveTowards(previousMain.volume, 0.0f, 1.0f * Time.deltaTime);
-                if (driftTrack != null && previousDrift != null)
-                {
-                    driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.3f, 1.0f * Time.deltaTime);
-                    previousDrift.volume = Mathf.MoveTowards(previousDrift.volume, 0.0f, 1.0f * Time.deltaTime);
-                }
-                if (turboTrack != null && previousTurbo != null)
-                {
-                    turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.3f, 1.0f * Time.deltaTime);
-                    previousTurbo.volume = Mathf.MoveTowards(previousTurbo.volume, 0.0f, 1.0f * Time.deltaTime);
-                }
+                StartCoroutine(FadeSections(trackName));
                 break;
+        }
+    }
+
+    private IEnumerator FadeSections(string trackName)
+    {
+        AudioSource previousMain = mainTrack;
+        AudioSource previousDrift = driftTrack;
+        AudioSource previousTurbo = turboTrack;
+
+        float duration = 1.0f;
+        float elapsed = 0.0f;
+
+        ChangeTrack(trackName);
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+
+            mainTrack.volume = Mathf.Lerp(0.0f, 0.3f, t);
+            previousMain.volume = Mathf.Lerp(0.3f, 0.0f, t);
+
+            if (driftTrack != null && previousDrift != null)
+            {
+                driftTrack.volume = Mathf.Lerp(0.0f, 0.3f, t);
+                previousDrift.volume = Mathf.Lerp(0.3f, 0.0f, t);
+            }
+            if (turboTrack != null && previousTurbo != null)
+            {
+                turboTrack.volume = Mathf.Lerp(0.0f, 0.3f, t);
+                previousTurbo.volume = Mathf.Lerp(0.3f, 0.0f, t);
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
         }
     }
 
