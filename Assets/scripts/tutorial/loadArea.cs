@@ -50,7 +50,6 @@ public class loadArea : MonoBehaviour
                 (instructionHandler.GetInstruction("driving", 3)
                 , 1);
                 
-                //StartCoroutine(ChangeAnimOverrides("driving:1", 2));
                 StartCoroutine(FadeDeath(1.0f));
                 break;                
             case "13":
@@ -80,6 +79,11 @@ public class loadArea : MonoBehaviour
             case "18":
                 musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_main");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "50":
+                //AIKA VITTU LOPPUU JA KELLO ON 2 yöllä EI SAATANA EI PERKELE EI VITTEJFSFKJGERGDREDOK
+                instructionHandler.ShowInstruction("You have passed a checkpoint. They change where you respawn when resetting (press R to try it).");
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             default:

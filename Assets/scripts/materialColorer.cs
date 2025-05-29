@@ -10,7 +10,7 @@ public class materialColorer : MonoBehaviour
 
     void Awake()
     {
-        suffix = gameObject.name.Substring(gameObject.name.Length - 6, 6);
+        suffix = gameObject.name.Substring(gameObject.name.Length - 8, 8);
         hexColor = "#" + suffix;
     }
 

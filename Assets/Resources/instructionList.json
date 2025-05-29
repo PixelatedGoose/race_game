@@ -21,15 +21,16 @@
     ],
 
     "controls": [
+        "Here's some more info you might wanna know.",
         "Pressing L toggles long lights.",
         "Pressing C toggles the underlight.",
         "You can pause the game with ESC, in case it wasn't obvious.",
         "The red part of your timer shows your milliseconds.",
-        "We'll teach you the most important thing now."
+        "But now, we'll teach you the most important thing."
     ],
 
     "drifting": [
-        "To drift, hold SPACE while moving.",
+        "To drift, hold SPACE while driving.",
         "Nice job! We had to measure your time on that, by the way.",
         "Hopefully you did alright.",
         "You should've noticed that you accumulated some score from it.",
@@ -41,7 +42,7 @@
         "You're able to use your turbo by holding (left) CTRL.",
         "We only have a limited supply of it per car; the amount is on the bottom left.",
         "The supply regenerates after letting it rest for a while.",
-        "Try using it here."
+        "Try using it here to cross these spinning blockades."
     ],
 
     "final": [

@@ -35,7 +35,6 @@ public class musicControlTutorial : MonoBehaviour
     void TrackVariants(bool set = false)
     {
         string clipName = mainTrack.clip.name;
-        Debug.Log(clipName);
 
         // Get the prefix (e.g. first two characters)
         string prefix = clipName.Substring(0, 1);
