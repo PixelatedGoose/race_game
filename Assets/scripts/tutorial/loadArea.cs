@@ -49,7 +49,7 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowInstruction
                 (instructionHandler.GetInstruction("driving", 3)
                 , 1);
-                
+
                 StartCoroutine(FadeDeath(1.0f));
                 break;                
             case "13":
@@ -83,7 +83,7 @@ public class loadArea : MonoBehaviour
                 break;
             case "50":
                 //AIKA VITTU LOPPUU JA KELLO ON 2 yöllä EI SAATANA EI PERKELE EI VITTEJFSFKJGERGDREDOK
-                instructionHandler.ShowInstruction("You have passed a checkpoint. They change where you respawn when resetting (press R to try it).");
+                instructionHandler.ShowInstruction("You've passed a checkpoint. They change where you respawn upon reset (press R [keyboard] / D-Pad Left [controller] to test).");
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             default:
