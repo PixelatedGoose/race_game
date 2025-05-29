@@ -616,7 +616,7 @@ GameObject:
   - component: {fileID: 154160960}
   m_Layer: 0
   m_Name: 1_FINAL_TUTORIAL_main
-  m_TagString: musicTrack
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -648,7 +648,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: e2c540fbad93fa949b5855c495b7e1d9, type: 3}
   m_Resource: {fileID: 8300000, guid: e2c540fbad93fa949b5855c495b7e1d9, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
@@ -1629,7 +1629,7 @@ GameObject:
   - component: {fileID: 618915591}
   - component: {fileID: 618915590}
   m_Layer: 0
-  m_Name: 13_intro2-FF0000
+  m_Name: 13_COURSE1_music3-FF0000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1644,8 +1644,8 @@ Transform:
   m_GameObject: {fileID: 618915588}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 15, y: 5, z: 272.2}
-  m_LocalScale: {x: 10, y: 10, z: 30}
+  m_LocalPosition: {x: 172.5, y: 5, z: 170}
+  m_LocalScale: {x: 20, y: 10, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 741837261}
@@ -2703,8 +2703,8 @@ Transform:
   m_GameObject: {fileID: 933222515}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 168, y: 5, z: 159.5}
-  m_LocalScale: {x: 74, y: 10, z: 1}
+  m_LocalPosition: {x: 153, y: 5, z: 159.5}
+  m_LocalScale: {x: 44, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1543357478}
@@ -3864,7 +3864,7 @@ GameObject:
   - component: {fileID: 1378671769}
   - component: {fileID: 1378671768}
   m_Layer: 0
-  m_Name: 14_music3-00FF00
+  m_Name: 14_music4-00FF00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3879,7 +3879,7 @@ Transform:
   m_GameObject: {fileID: 1378671766}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 63.26, y: 5, z: 151.86}
+  m_LocalPosition: {x: 63, y: 5, z: 277}
   m_LocalScale: {x: 20, y: 10, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5116,7 +5116,7 @@ GameObject:
   - component: {fileID: 1609939822}
   m_Layer: 0
   m_Name: 8_FINAL_TUTORIAL_outro
-  m_TagString: musicTrack
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5151,7 +5151,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 0
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -6424,8 +6424,8 @@ Transform:
   m_GameObject: {fileID: 2094386552}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 168, y: 5, z: 180.5}
-  m_LocalScale: {x: 74, y: 10, z: 1}
+  m_LocalPosition: {x: 153, y: 5, z: 180.5}
+  m_LocalScale: {x: 44, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1543357478}

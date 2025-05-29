@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Collections;
 
 public class musicControlTutorial : MonoBehaviour
 {
     public GameObject[] musicList;
+    public AudioSource[] musicListSources;
     public AudioSource mainTrack;
     public AudioSource driftTrack;
     public AudioSource turboTrack;
@@ -13,14 +13,25 @@ public class musicControlTutorial : MonoBehaviour
     void Start()
     {
         musicList = GameObject.FindGameObjectsWithTag("musicTrack");
+        musicListSources = musicList.Select(go => go.GetComponent<AudioSource>()).ToArray();
         TrackVariants();
-
-        foreach (GameObject musicTrack in musicList)
-        {
-            musicTrack.GetComponent<AudioSource>().Play();
-        }
     }
 
+    //"track 2" eli se joka alkaa, ku menee ekasta triggeristä läpi
+    //on se, mistä kaikkien muitten pitäs referoida alkukohta.
+    //joudun tän lisäksi tekee tän vielä uudestaa driftin alotustrackkia varten,
+    //mut se sit joudutaa tekee just ja just enne vikoja päiviä. helppo juttu lol
+    //(famous last words)
+    public void StartNonIntroTracks()
+    {
+        foreach (AudioSource musicTrack in musicListSources)
+        {
+            if (!musicTrack.isPlaying)
+            {
+                musicTrack.Play();
+            }
+        }
+    }
     void TrackVariants(bool set = false)
     {
         string clipName = mainTrack.clip.name;
@@ -183,16 +194,16 @@ public class musicControlTutorial : MonoBehaviour
 
         if (GameManager.instance.isPaused == true)
         {
-            foreach (GameObject musicTrack in musicList)
+            foreach (AudioSource musicTrack in musicListSources)
             {
-                musicTrack.GetComponent<AudioSource>().Pause();
+                musicTrack.Pause();
             }
         }
         else if (GameManager.instance.isPaused == false && mainTrack.isPlaying == false)
         {
-            foreach (GameObject musicTrack in musicList)
+            foreach (AudioSource musicTrack in musicListSources)
             {
-                musicTrack.GetComponent<AudioSource>().UnPause();
+                musicTrack.UnPause();
             }
         }
     }
