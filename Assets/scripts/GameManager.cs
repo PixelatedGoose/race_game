@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance;
 
+    private CarController carController;
+
     [Header("score systeemi")]
     public int score;
 
@@ -158,7 +160,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             StartCoroutine(IncrementScoreWithDelay());
         }
     }
-    
+
     private IEnumerator IncrementScoreWithDelay()
     {
         isAddingPoints = true;
@@ -174,12 +176,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
             {
                 score += 1;
                 timer -= scoreAddWT;
-
                 foreach (Text scoreText in ScoreTexts)
                 {
                     scoreText.text = "Score: " + score.ToString();
                 }
             }
+
             yield return null; // Wait for next frame
         }
     }
