@@ -87,7 +87,14 @@ public class instructionHandler : MonoBehaviour
             }
             else if (change == InputDeviceChange.Removed)
             {
-                instructionText.text = GetInstruction(categories[idx - 7], index);
+                try
+                {
+                    instructionText.text = GetInstruction(categories[idx - 7], index);
+                }
+                catch (System.IndexOutOfRangeException ex)
+                {
+                    Debug.LogWarning("controller disconnected during incorrect text display: " + ex.Message);
+                }
             }
         }
     }
@@ -95,6 +102,11 @@ public class instructionHandler : MonoBehaviour
     void Start()
     {
         ShowNextInstructionInCategory("intro", false, 1);
+
+        if (Gamepad.all.Count > 0)
+        {
+            instructionText.text = GetInstruction(categories[idx + 7], index);
+        }
     }
 
 
