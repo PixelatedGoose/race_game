@@ -153,7 +153,7 @@ public class CarController : MonoBehaviour
             if (IsOnGrass())
             {
                 trailRenderer.material = grassMaterial;
-                GameManager.instance.scoreAddWT = 0.10f;
+                GameManager.instance.scoreAddWT = 0.1f;
             }
             else
             {
@@ -214,7 +214,7 @@ public class CarController : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 0.02f);
     }
 
-    bool IsOnGrass()
+    public bool IsOnGrass()
     {
         foreach (var wheel in wheels)
         {
@@ -400,14 +400,17 @@ public class CarController : MonoBehaviour
 
             if (isDrifting || GameManager.instance.isPaused) return;
             RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-
+            //varmistaa että drift tapahtuu
             activedrift++;
             isDrifting = true;
+            // arvot vaihtuu ja huonotuu driftin ajaksi
             maxAcceleration = perusMaxAccerelation * 0.7f;
             targetTorque = perusTargetTorque * 0.7f;
+            //random shit
             float speed = carRb.linearVelocity.magnitude * 3.6f;
             float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
             float driftMultiplier = 1.0f;
+
             foreach (var wheel in wheels)
             {
                 if (wheel.wheelCollider == null) continue;
@@ -420,6 +423,7 @@ public class CarController : MonoBehaviour
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
 
             }
+            //laittaa jousitukset driftiä varten
             AdjustdriftSuspension();
             AdjustDriftForwardFriction();
 
@@ -465,10 +469,13 @@ public class CarController : MonoBehaviour
 
     void StopDrifting()
     {
+        //varmistaa drift loppuu
         activedrift = 0;
         isDrifting = false;
+        //laittaa arvot takaisin normaaleihin
         maxAcceleration = perusMaxAccerelation;
         targetTorque = perusTargetTorque;
+
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
         {
@@ -476,6 +483,8 @@ public class CarController : MonoBehaviour
             return;
         }
         GameManager.instance.StopAddingPoints();
+
+        //laittaa jousitukset kuntoon
         AdjustSuspension();
         AdjustForwardFrictrion();
         foreach (var wheel in wheels)
