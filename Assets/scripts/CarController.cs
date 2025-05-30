@@ -123,7 +123,7 @@ public class CarController : MonoBehaviour
     {
         if (isDrifting)
         { 
-            maxspeed = Mathf.Lerp(maxspeed, driftMaxSpeed, Time.deltaTime * 0.25f);
+            maxspeed = Mathf.Lerp(maxspeed, driftMaxSpeed, Time.deltaTime * 0.1f);
         }
         // Stop drifting if the race is finished
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
@@ -207,6 +207,11 @@ public class CarController : MonoBehaviour
             return ((1 << hit.collider.gameObject.layer) & grass) != 0;
         }
         return false;
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 0.02f);
     }
 
     bool IsOnGrass()
@@ -381,7 +386,10 @@ public class CarController : MonoBehaviour
 
     void ApplyGravity()
     {
-        carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
+        if (!IsGrounded())
+        {
+            carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
+        }
     }
 
 
