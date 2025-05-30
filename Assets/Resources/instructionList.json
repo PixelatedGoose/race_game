@@ -21,15 +21,16 @@
     ],
 
     "controls": [
+        "Here's some more info you might wanna know.",
         "Pressing L toggles long lights.",
         "Pressing C toggles the underlight.",
         "You can pause the game with ESC, in case it wasn't obvious.",
         "The red part of your timer shows your milliseconds.",
-        "We'll teach you the most important thing now."
+        "But now, we'll teach you the most important thing."
     ],
 
     "drifting": [
-        "To drift, hold SPACE while moving.",
+        "To drift, hold SPACE while driving.",
         "Nice job! We had to measure your time on that, by the way.",
         "Hopefully you did alright.",
         "You should've noticed that you accumulated some score from it.",
@@ -41,10 +42,62 @@
         "You're able to use your turbo by holding (left) CTRL.",
         "We only have a limited supply of it per car; the amount is on the bottom left.",
         "The supply regenerates after letting it rest for a while.",
-        "Try using it here."
+        "Try using it here to cross these spinning blockades."
     ],
 
     "final": [
+        "Congratulations clearing the tutorial!",
+        "I have nothing else to tell you, so fuck off now.",
+        "Enter the finish line to exit the level."
+    ],
+
+    "controller_intro": [
+        "Hello, and welcome to AmisDrift! (PRESS Y TO ADVANCE TEXT)",
+        "This tutorial will guide you through the mechanics of the game.",
+        "Drive forward to the glowing zone to start."
+    ],
+
+    "controller_driving": [
+        "Use RT and LT for moving forward and backward respectively; use the left stick to steer your car.",
+        "Holding X or LB enables the handbrake.",
+        "To make sure you understand, try clearing this course to proceed.",
+        "Looks good."
+    ],
+
+    "controller_driving_2": [
+        "Driving on a road is preferred, as driving on grass slows you down.",
+        "See the difference here...",
+        "Any body of water will instantly respawn you at the nearest checkpoint.",
+        "Avoid the grass; try to pass this part without touching it.",
+        "Great!"
+    ],
+
+    "controller_controls": [
+        "Here's some more info you might wanna know.",
+        "Pressing down on the D-Pad toggles long lights.",
+        "Pressing up on the D-Pad toggles the underlight.",
+        "You can pause the game with the start button, in case it wasn't obvious.",
+        "The red part of your timer shows your milliseconds.",
+        "But now, we'll teach you the most important thing."
+    ],
+
+    "controller_drifting": [
+        "To drift, hold RB or B while driving.",
+        "Nice job! We had to measure your time on that, by the way.",
+        "Hopefully you did alright.",
+        "You should've noticed that you accumulated some score from it.",
+        "Your time and score determine your rank, given at the end of the map.",
+        "You'll unlock more cars as you gain better ranks on maps."
+    ],
+
+    "controller_turbe": [
+        "You're able to use your turbo by holding A.",
+        "We only have a limited supply of it per car; the amount is on the bottom left.",
+        "The supply regenerates after letting it rest for a while.",
+        "Try using it here to cross these spinning blockades."
+    ],
+
+    "controller_final": [
         "Congratulations clearing the tutorial!",
         "I have nothing else to tell you, so fuck off now.",
         "Enter the finish line to exit the level."

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 [System.Serializable]
 public class instructionListClass
@@ -13,6 +14,14 @@ public class instructionListClass
     public string[] drifting;
     public string[] turbe;
     public string[] final;
+
+    public string[] controller_intro;
+    public string[] controller_driving;
+    public string[] controller_driving_2;
+    public string[] controller_controls;
+    public string[] controller_drifting;
+    public string[] controller_turbe;
+    public string[] controller_final;
 }
 
 public class instructionHandler : MonoBehaviour
@@ -59,11 +68,45 @@ public class instructionHandler : MonoBehaviour
             .GetFields(),
             field => field.Name
         );
+
+        InputSystem.onDeviceChange += OnDeviceChange;
+    }
+
+    void OnDisable()
+    {
+        InputSystem.onDeviceChange -= OnDeviceChange;
+    }
+
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (device is Gamepad)
+        {
+            if (change == InputDeviceChange.Added)
+            {
+                instructionText.text = GetInstruction(categories[idx + 7], index);
+            }
+            else if (change == InputDeviceChange.Removed)
+            {
+                try
+                {
+                    instructionText.text = GetInstruction(categories[idx - 7], index);
+                }
+                catch (System.IndexOutOfRangeException ex)
+                {
+                    Debug.LogWarning("controller disconnected during incorrect text display: " + ex.Message);
+                }
+            }
+        }
     }
 
     void Start()
     {
         ShowNextInstructionInCategory("intro", false, 1);
+
+        if (Gamepad.all.Count > 0)
+        {
+            instructionText.text = GetInstruction(categories[idx + 7], index);
+        }
     }
 
 
@@ -74,7 +117,12 @@ public class instructionHandler : MonoBehaviour
         { "driving:3", 2 }, //
         { "driving_2:4", 2 }, //
         { "drifting:1", 2 }, //hasu kohta
-        { "final:3", 3 }
+        { "final:3", 3 },
+        { "controller_intro:2", 4 }, //
+        { "controller_driving:3", 2 }, //
+        { "controller_driving_2:4", 2 }, //
+        { "controller_drifting:1", 2 }, //hasu kohta
+        { "controller_final:3", 3 }
     };
     
     /// <summary>
@@ -240,6 +288,21 @@ public class instructionHandler : MonoBehaviour
                     return instructionListData.turbe;
                 case "final":
                     return instructionListData.final;
+
+                case "controller_intro":
+                    return instructionListData.controller_intro;
+                case "controller_driving":
+                    return instructionListData.controller_driving;
+                case "controller_driving_2":
+                    return instructionListData.controller_driving_2;
+                case "controller_controls":
+                    return instructionListData.controller_controls;
+                case "controller_drifting":
+                    return instructionListData.controller_drifting;
+                case "controller_turbe":
+                    return instructionListData.controller_turbe;
+                case "controller_final":
+                    return instructionListData.controller_final;
                 default:
                     Debug.LogError($"Category '{category}' not found");
                     return null;

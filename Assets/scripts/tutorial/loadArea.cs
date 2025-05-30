@@ -37,7 +37,8 @@ public class loadArea : MonoBehaviour
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "11":
-                musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");                
+                musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
+                musicControlTutorial.StartNonIntroTracks();            
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
@@ -48,13 +49,11 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowInstruction
                 (instructionHandler.GetInstruction("driving", 3)
                 , 1);
-                
-                //StartCoroutine(ChangeAnimOverrides("driving:1", 2));
+
                 StartCoroutine(FadeDeath(1.0f));
                 break;                
             case "13":
                 musicControlTutorial.MusicSections("3_FINAL_TUTORIAL_main", "fade");
-                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "14":
@@ -80,6 +79,11 @@ public class loadArea : MonoBehaviour
             case "18":
                 musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_main");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "50":
+                //AIKA VITTU LOPPUU JA KELLO ON 2 yöllä EI SAATANA EI PERKELE EI VITTEJFSFKJGERGDREDOK
+                instructionHandler.ShowInstruction("You've passed a checkpoint. They change where you respawn upon reset (press R [keyboard] / D-Pad Left [controller] to test).");
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             default:
