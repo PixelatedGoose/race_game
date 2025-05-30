@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.SocialPlatforms.Impl;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
@@ -207,53 +208,58 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         rb.linearVelocity = Vector3.zero;//stop the car
         rb.angularVelocity = Vector3.zero;
         
-        StartCoroutine(TurnDownCarsValues());
+        //StartCoroutine(TurnDownCarsValues());
 
     }
 
-    IEnumerator TurnDownCarsValues()
-    {
-        if (carController == null)
-        {
-            carController_2.isTurnedDown = true;
+    // IEnumerator TurnDownCarsValues()
+    // {
+    //     if (carController == null)
+    //     {
+    //         carController_2.isTurnedDown = true;
 
-            float BasicMaxAcceleration = carController_2.maxAcceleration;
-            float BasicBaseSpeed = carController_2.basespeed;
-            float BasicTargetTorque = carController_2.targetTorque;
+    //         float BasicMaxAcceleration = carController_2.maxAcceleration;
+    //         float BasicBaseSpeed = carController_2.basespeed;
+    //         float BasicTargetTorque = carController_2.targetTorque;
 
-            carController_2.maxAcceleration = 0;
-            carController_2.basespeed = 0;
-            carController_2.targetTorque = 0;
-            GameManager.instance.turbeActive = false;
+    //         carController_2.maxAcceleration = 0;
+    //         carController_2.basespeed = 0;
+    //         carController_2.targetTorque = 0;
+    //         GameManager.instance.turbeActive = false;
 
-            yield return new WaitForSeconds(0.5f);
+    //         yield return new WaitForSeconds(0.5f);
 
-            carController_2.maxAcceleration = BasicMaxAcceleration;
-            carController_2.basespeed = BasicBaseSpeed;
-            carController_2.targetTorque = BasicTargetTorque;
-            carController_2.isTurnedDown = false;
-        }
-        else
-        {
-            carController.isTurnedDown = true;
+    //         carController_2.maxAcceleration = BasicMaxAcceleration;
+    //         carController_2.basespeed = BasicBaseSpeed;
+    //         carController_2.targetTorque = BasicTargetTorque;
+    //         carController_2.isTurnedDown = false;
+    //     }
+    //     else
+    //     {
+    //         carController.isTurnedDown = true;
 
-            float BasicMaxAcceleration = carController.maxAcceleration;
-            float BasicBaseSpeed = carController.basespeed;
-            float BasicTargetTorque = carController.targetTorque;
+    //         if (carController.maxAcceleration <= 0 || carController.basespeed <= 0 || carController.targetTorque <= 0)
+    //         {
+               
+    //         }
 
-            carController.maxAcceleration = 0;
-            carController.basespeed = 0;
-            carController.targetTorque = 0;
-            GameManager.instance.turbeActive = false;
+    //         float BasicMaxAcceleration = carController.maxAcceleration;
+    //         float BasicBaseSpeed = carController.basespeed;
+    //         float BasicTargetTorque = carController.targetTorque;
 
-            yield return new WaitForSeconds(0.5f);
+    //         carController.maxAcceleration = 0;
+    //         carController.basespeed = 0;
+    //         carController.targetTorque = 0;
+    //         GameManager.instance.turbeActive = false;
 
-            carController.maxAcceleration = BasicMaxAcceleration;
-            carController.basespeed = BasicBaseSpeed;
-            carController.targetTorque = BasicTargetTorque;
-            carController.isTurnedDown = false;
-        }
-    }
+    //         yield return new WaitForSeconds(0.5f);
+
+    //         carController.maxAcceleration = BasicMaxAcceleration;
+    //         carController.basespeed = BasicBaseSpeed;
+    //         carController.targetTorque = BasicTargetTorque;
+    //         carController.isTurnedDown = false;
+    //     }
+    // }
 
     void Inactivity()
     {
