@@ -59,6 +59,7 @@ public class loadArea : MonoBehaviour
             case "14":
                 musicControlTutorial.MusicSections("4_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "15":
@@ -85,6 +86,14 @@ public class loadArea : MonoBehaviour
                 //AIKA VITTU LOPPUU JA KELLO ON 2 yöllä EI SAATANA EI PERKELE EI VITTEJFSFKJGERGDREDOK
                 instructionHandler.ShowInstruction("You've passed a checkpoint. They change where you respawn upon reset (press R [keyboard] / D-Pad Left [controller] to test).");
                 StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "51":
+                CameraFollow cameraFollowRead = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
+                cameraFollowRead.rotOffset = new Vector3(cameraFollowRead.rotOffset.x, 3.0f);
+                break;
+            case "52":
+                CameraFollow cameraFollow3 = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
+                cameraFollow3.rotOffset = new Vector3(cameraFollow3.rotOffset.x, 1.7f);
                 break;
             default:
                 Debug.LogError($"prefix {prefix} not defined");
