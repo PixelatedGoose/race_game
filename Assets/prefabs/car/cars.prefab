@@ -607,6 +607,42 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -298.7
       objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5318218194112899866, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: Car1Hud
       value: 
@@ -679,6 +715,42 @@ PrefabInstance:
       propertyPath: m_TagString
       value: MainCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -730,6 +802,78 @@ PrefabInstance:
     - target: {fileID: 7691087905362571268, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteValue
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8957915437899560415, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Enabled
@@ -1123,16 +1267,40 @@ PrefabInstance:
       value: -298.7
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SuspensionSpring.damper
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteValue
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_AsymptoteValue
@@ -1199,16 +1367,40 @@ PrefabInstance:
       value: MainCamera
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SuspensionSpring.damper
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteValue
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_AsymptoteValue
@@ -1263,32 +1455,80 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SuspensionSpring.damper
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteValue
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_AsymptoteValue
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SuspensionSpring.damper
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteValue
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_AsymptoteValue
@@ -1701,6 +1941,46 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -298.7
       objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SuspensionSpring.damper
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5190267703085483472, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SizeDelta.x
       value: 360
@@ -1760,6 +2040,46 @@ PrefabInstance:
     - target: {fileID: 6376610170378868151, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_TagString
       value: MainCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SuspensionSpring.damper
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteValue
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -1821,9 +2141,89 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SuspensionSpring.damper
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8191507237820614989, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: speedMeter
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_WheelDampingRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SuspensionSpring.damper
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_ExtremumSlip
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteSlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_ForwardFriction.m_AsymptoteValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteSlip
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_SidewaysFriction.m_AsymptoteValue
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8957915437899560415, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Enabled

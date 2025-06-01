@@ -207,6 +207,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ThrottleMod"",
+                    ""type"": ""Value"",
+                    ""id"": ""7603759c-be72-43e3-8049-184ff3360045"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -583,6 +592,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ui_advance"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d42d4f8c-40e4-4c75-bb52-bb537600fbb6"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrottleMod"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -616,6 +636,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_menusubmit = m_CarControls.FindAction("menusubmit", throwIfNotFound: true);
         m_CarControls_menucancel = m_CarControls.FindAction("menucancel", throwIfNotFound: true);
         m_CarControls_ui_advance = m_CarControls.FindAction("ui_advance", throwIfNotFound: true);
+        m_CarControls_ThrottleMod = m_CarControls.FindAction("ThrottleMod", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -709,6 +730,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_menusubmit;
     private readonly InputAction m_CarControls_menucancel;
     private readonly InputAction m_CarControls_ui_advance;
+    private readonly InputAction m_CarControls_ThrottleMod;
     /// <summary>
     /// Provides access to input actions defined in input action map "CarControls".
     /// </summary>
@@ -772,6 +794,10 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CarControls/ui_advance".
         /// </summary>
         public InputAction @ui_advance => m_Wrapper.m_CarControls_ui_advance;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/ThrottleMod".
+        /// </summary>
+        public InputAction @ThrottleMod => m_Wrapper.m_CarControls_ThrottleMod;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -837,6 +863,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @ui_advance.started += instance.OnUi_advance;
             @ui_advance.performed += instance.OnUi_advance;
             @ui_advance.canceled += instance.OnUi_advance;
+            @ThrottleMod.started += instance.OnThrottleMod;
+            @ThrottleMod.performed += instance.OnThrottleMod;
+            @ThrottleMod.canceled += instance.OnThrottleMod;
         }
 
         /// <summary>
@@ -887,6 +916,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @ui_advance.started -= instance.OnUi_advance;
             @ui_advance.performed -= instance.OnUi_advance;
             @ui_advance.canceled -= instance.OnUi_advance;
+            @ThrottleMod.started -= instance.OnThrottleMod;
+            @ThrottleMod.performed -= instance.OnThrottleMod;
+            @ThrottleMod.canceled -= instance.OnThrottleMod;
         }
 
         /// <summary>
@@ -1031,5 +1063,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUi_advance(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ThrottleMod" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnThrottleMod(InputAction.CallbackContext context);
     }
 }
