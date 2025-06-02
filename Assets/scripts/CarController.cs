@@ -30,7 +30,7 @@ public class CarController : MonoBehaviour
     }
 
     [Header("Auton asetukset")]
-    public float maxAcceleration = 300.0f;
+    public float maxAcceleration = 700.0f;
     public float brakeAcceleration = 3.0f;
     [Header("turn asetukset")]
     public float turnSensitivty = 1.0f;
@@ -53,7 +53,7 @@ public class CarController : MonoBehaviour
     [Header("Drift asetukset")]
     public float driftMultiplier = 1.0f;
     public bool isTurnedDown = false, isDrifting;
-    private float perusMaxAccerelation, perusTargetTorque;
+    private float perusMaxAccerelation, perusTargetTorque, throttlemodifier, smoothedMaxAcceleration;
     
 
     [Header("turbe asetukset")]
@@ -78,6 +78,7 @@ public class CarController : MonoBehaviour
     void Start()
     {
         perusMaxAccerelation = maxAcceleration;
+        smoothedMaxAcceleration = perusMaxAccerelation;
         perusTargetTorque = targetTorque;
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
@@ -122,7 +123,7 @@ public class CarController : MonoBehaviour
     void FixedUpdate()
     {
         if (isDrifting)
-        { 
+        {
             maxspeed = Mathf.Lerp(maxspeed, driftMaxSpeed, Time.deltaTime * 0.1f);
         }
         // Stop drifting if the race is finished
@@ -171,28 +172,35 @@ public class CarController : MonoBehaviour
             return slopeAngle > 30.0f;
         }
         return false;
-    }   
-    
-    void GetInputs()    
-    {
-         //moveInput = Input.GetAxis("Vertical");
-         //steerInput = Input.GetAxis("Horizontal");
+    }
 
-        Controls.CarControls.Move.performed += ctx => {
+    void GetInputs()
+    {
+        //moveInput = Input.GetAxis("Vertical");
+        //steerInput = Input.GetAxis("Horizontal");
+
+        Controls.CarControls.Move.performed += ctx =>
+        {
             steerInput = ctx.ReadValue<Vector2>().x;
         };
 
-        if(Controls.CarControls.MoveForward.IsPressed()) {
+        if (Controls.CarControls.MoveForward.IsPressed())
+        {
             moveInput = Controls.CarControls.MoveForward.ReadValue<float>();
         }
 
-        if(Controls.CarControls.MoveBackward.IsPressed()) {
+        if (Controls.CarControls.MoveBackward.IsPressed())
+        {
             moveInput = -Controls.CarControls.MoveBackward.ReadValue<float>();
         }
 
-        if(!Controls.CarControls.MoveBackward.IsPressed() && !Controls.CarControls.MoveForward.IsPressed()) {
+        if (!Controls.CarControls.MoveBackward.IsPressed() && !Controls.CarControls.MoveForward.IsPressed())
+        {
             moveInput = 0.0f;
         }
+        
+
+       throttlemodifier = Controls.CarControls.ThrottleMod.ReadValue<float>();
     }
 
     bool IsWheelGrounded(Wheel wheel)
@@ -294,7 +302,7 @@ public class CarController : MonoBehaviour
         {
             JointSpring suspensionSpring = wheel.wheelCollider.suspensionSpring;
             suspensionSpring.spring = 8000.0f;
-            suspensionSpring.damper = 2000.0f;
+            suspensionSpring.damper = 5000.0f;
             wheel.wheelCollider.suspensionSpring = suspensionSpring;
         }
     }
@@ -303,9 +311,9 @@ public class CarController : MonoBehaviour
         foreach (var wheel in wheels)
         {
             WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
-            forwardFriction.extremumSlip = 0.4f;
+            forwardFriction.extremumSlip = 0.6f;
             forwardFriction.extremumValue = 1;
-            forwardFriction.asymptoteSlip = 0.8f;
+            forwardFriction.asymptoteSlip = 1.0f;
             forwardFriction.asymptoteValue = 1;
         }
 
@@ -313,16 +321,21 @@ public class CarController : MonoBehaviour
 
     private void UpdateTargetTorgue()
     {
+
         if (activedrift > 0) return;
+        float rawTrigger = Controls.CarControls.ThrottleMod.ReadValue<float>();
+        float throttleModifier = Mathf.Pow(rawTrigger, 0.9f); 
 
+        float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
+        smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 300f);
 
-        if(moveInput > 0) {
-            targetTorque = 1 * maxAcceleration;
+        if (moveInput > 0) {
+            targetTorque = 1 * smoothedMaxAcceleration;
         } else if (moveInput < 0) {
-            targetTorque = -1 * maxAcceleration;
+            targetTorque = -1 * smoothedMaxAcceleration;
         } else {
             targetTorque = 0.0f;
-        };
+        }
 
         if (!isDrifting)
         {
@@ -405,7 +418,6 @@ public class CarController : MonoBehaviour
             isDrifting = true;
             // arvot vaihtuu ja huonotuu driftin ajaksi
             maxAcceleration = perusMaxAccerelation * 0.7f;
-            targetTorque = perusTargetTorque * 0.7f;
             //random shit
             float speed = carRb.linearVelocity.magnitude * 3.6f;
             float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
@@ -474,7 +486,6 @@ public class CarController : MonoBehaviour
         isDrifting = false;
         //laittaa arvot takaisin normaaleihin
         maxAcceleration = perusMaxAccerelation;
-        targetTorque = perusTargetTorque;
 
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
@@ -492,8 +503,8 @@ public class CarController : MonoBehaviour
             if (wheel.wheelCollider == null) continue;
 
             WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-            sidewaysFriction.extremumSlip = 0.2f;
-            sidewaysFriction.asymptoteSlip = 0.5f;
+            sidewaysFriction.extremumSlip = 0.4f;
+            sidewaysFriction.asymptoteSlip = 0.8f;
             sidewaysFriction.extremumValue = 1.0f;
             sidewaysFriction.asymptoteValue = 1f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
