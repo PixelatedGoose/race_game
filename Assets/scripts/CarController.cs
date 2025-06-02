@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
-using Unity.VisualScripting;
+
 
 public class CarController : MonoBehaviour
 {
-    //#pragma warning disable CS0618
     
     CarInputActions Controls;
 
@@ -275,6 +274,7 @@ public class CarController : MonoBehaviour
         HandeSteepSlope();
         UpdateTargetTorgue();
         AdjustSpeedForGrass();
+        AdjustSuspension(); 
         foreach (var wheel in wheels)
         {
             if (Controls.CarControls.Brake.IsPressed())
@@ -315,8 +315,8 @@ public class CarController : MonoBehaviour
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteSlip = 1.0f;
             forwardFriction.asymptoteValue = 1;
+            wheel.wheelCollider.forwardFriction = forwardFriction;
         }
-
     }
 
     private void UpdateTargetTorgue()
@@ -327,7 +327,7 @@ public class CarController : MonoBehaviour
         float throttleModifier = Mathf.Pow(rawTrigger, 0.9f); 
 
         float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
-        smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 300f);
+        smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
 
         if (moveInput > 0) {
             targetTorque = 1 * smoothedMaxAcceleration;
@@ -403,6 +403,7 @@ public class CarController : MonoBehaviour
         {
             carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
         }
+       
     }
 
 
@@ -448,6 +449,7 @@ public class CarController : MonoBehaviour
         Controls.CarControls.Drift.canceled += ctx =>
         {
             StopDrifting();
+            AdjustForwardFrictrion();
             maxAcceleration = perusMaxAccerelation;
             targetTorque = perusTargetTorque;
             WheelEffects(false);
@@ -471,8 +473,8 @@ public class CarController : MonoBehaviour
         foreach (var wheel in wheels)
         {
             WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
-            forwardFriction.extremumSlip = 0.2f;
-            forwardFriction.asymptoteSlip = 0.5f;
+            forwardFriction.extremumSlip = 0.4f;
+            forwardFriction.asymptoteSlip = 0.6f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteValue = 1;
             wheel.wheelCollider.forwardFriction = forwardFriction;
@@ -489,27 +491,26 @@ public class CarController : MonoBehaviour
 
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
-        {
+        { 
             GameManager.instance.StopAddingPoints();
             return;
-        }
+        }  
         GameManager.instance.StopAddingPoints();
+       
 
-        //laittaa jousitukset kuntoon
-        AdjustSuspension();
-        AdjustForwardFrictrion();
         foreach (var wheel in wheels)
         {
             if (wheel.wheelCollider == null) continue;
 
             WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-            sidewaysFriction.extremumSlip = 0.4f;
-            sidewaysFriction.asymptoteSlip = 0.8f;
+            sidewaysFriction.extremumSlip = 0.2f;
+            sidewaysFriction.asymptoteSlip = 0.4f;
             sidewaysFriction.extremumValue = 1.0f;
             sidewaysFriction.asymptoteValue = 1f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-        }    
+        }   
     }
+
     void Animatewheels()
     {
         foreach(var wheel in wheels) 
@@ -533,18 +534,18 @@ public class CarController : MonoBehaviour
         {
             GameObject car = carsParent.transform.GetChild(i).gameObject;
             if (car.activeInHierarchy)
-            {
+            { 
                 string carName = car.name;
                 switch (carName)
                 {
                     case "REALCAR":
-                        turbepush = 50.0f;
+                        turbepush = 15.0f;
                         break;
                     case "REALCAR_x":
                         turbepush  = 10.0f;
                         break;
                     case "REALCAR_y":
-                        turbepush = 70.0f;
+                        turbepush = 7.0f;
                         break;
                     case "Lada":
                         turbepush = 50.0f;
