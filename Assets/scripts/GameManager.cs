@@ -171,11 +171,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
             // Use Time.deltaTime if you want score to pause with the game,
             // or Time.unscaledDeltaTime if you want it to keep going while paused.
             timer += Time.deltaTime;
+            float interval = Mathf.Abs(scoreAddWT);
+            if (interval < 0.0001f) interval = 0.0001f;
 
-            while (timer >= scoreAddWT)
+            if (timer >= scoreAddWT)
             {
-                score += 1;
-                timer -= scoreAddWT;
+                score = Mathf.Max(0, score + (scoreAddWT > 0 ? 1 : -1));
+                timer -= 0;
                 foreach (Text scoreText in ScoreTexts)
                 {
                     scoreText.text = "Score: " + score.ToString();
