@@ -14,9 +14,8 @@
 
     "driving_2": [
         "Driving on a road is preferred, as driving on grass slows you down.",
-        "See the difference here...",
         "Any body of water will instantly respawn you at the nearest checkpoint.",
-        "Avoid the grass; try to pass this part without touching it.",
+        "Avoid the grass and try to pass this part without touching it.",
         "Great!"
     ],
 
@@ -47,7 +46,7 @@
 
     "final": [
         "Congratulations clearing the tutorial!",
-        "I have nothing else to tell you, so fuck off now.",
+        "I have nothing else to tell you, so get outta here now.",
         "Enter the finish line to exit the level."
     ],
 
@@ -66,9 +65,8 @@
 
     "controller_driving_2": [
         "Driving on a road is preferred, as driving on grass slows you down.",
-        "See the difference here...",
         "Any body of water will instantly respawn you at the nearest checkpoint.",
-        "Avoid the grass; try to pass this part without touching it.",
+        "Avoid the grass and try to pass this part without touching it.",
         "Great!"
     ],
 
@@ -99,7 +97,7 @@
 
     "controller_final": [
         "Congratulations clearing the tutorial!",
-        "I have nothing else to tell you, so fuck off now.",
+        "I have nothing else to tell you, so get outta here now.",
         "Enter the finish line to exit the level."
     ]
 }

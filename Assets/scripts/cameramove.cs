@@ -12,7 +12,7 @@ public class cameramove : MonoBehaviour
     {
         freeCamera = GameObject.Find("freeCamera").GetComponent<Camera>();
 
-        GameObject.Find("Managers").SetActive(false);
+        /* GameObject.Find("Managers").SetActive(false);
         if (SceneManager.GetActiveScene().name == "test_mountain" || SceneManager.GetActiveScene().name == "haukipudas")
             GameObject.Find("WinCanvas").SetActive(false);
         GameObject.Find("UIcanvas").SetActive(false);
@@ -20,7 +20,7 @@ public class cameramove : MonoBehaviour
         GameObject.Find("musicControl").SetActive(false);
         GameObject.Find("soundControl").SetActive(false);
         if (SceneManager.GetActiveScene().name == "test_mountain_night")
-            GameObject.Find("pixel_kuusi").SetActive(false);
+            GameObject.Find("pixel_kuusi").SetActive(false); */
     }
 
     // Update is called once per frame

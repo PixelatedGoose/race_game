@@ -115,12 +115,12 @@ public class instructionHandler : MonoBehaviour
     {
         { "intro:2", 4 }, //
         { "driving:3", 2 }, //
-        { "driving_2:4", 2 }, //
+        { "driving_2:3", 2 }, //
         { "drifting:1", 2 }, //hasu kohta
         { "final:3", 3 },
         { "controller_intro:2", 4 }, //
         { "controller_driving:3", 2 }, //
-        { "controller_driving_2:4", 2 }, //
+        { "controller_driving_2:3", 2 }, //
         { "controller_drifting:1", 2 }, //hasu kohta
         { "controller_final:3", 3 }
     };
