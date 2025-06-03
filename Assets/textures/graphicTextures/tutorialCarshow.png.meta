@@ -34,7 +34,11 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
+<<<<<<< HEAD:Assets/textures/graphicTextures/tutorialCarshow.png.meta
     filterMode: 2
+=======
+    filterMode: 0
+>>>>>>> 28aae4c4e5be1e706999941e0b0640dc8f30fbca:Assets/textures/Pixel_menu/Continue.png.meta
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -69,10 +73,14 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
+<<<<<<< HEAD:Assets/textures/graphicTextures/tutorialCarshow.png.meta
     textureCompression: 2
+=======
+    textureCompression: 0
+>>>>>>> 28aae4c4e5be1e706999941e0b0640dc8f30fbca:Assets/textures/Pixel_menu/Continue.png.meta
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
