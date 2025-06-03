@@ -52,7 +52,7 @@ public class CarController : MonoBehaviour
     [Header("Drift asetukset")]
     public float driftMultiplier = 1.0f;
     public bool isTurnedDown = false, isDrifting;
-    private float perusMaxAccerelation, perusTargetTorque, throttlemodifier, smoothedMaxAcceleration;
+    private float perusMaxAccerelation, perusTargetTorque, throttlemodifier, smoothedMaxAcceleration, modifiedMaxAcceleration;
     
 
     [Header("turbe asetukset")]
@@ -88,11 +88,13 @@ public class CarController : MonoBehaviour
 
     private void OnEnable()
     {
+        //InputSystem.onDeviceChange += OnDeviceChange;
         Controls.Enable();
     }
 
     private void OnDisable()
     {
+        //InputSystem.onDeviceChange -= OnDeviceChange;
         Controls.Disable(); 
     }
 
@@ -142,6 +144,29 @@ public class CarController : MonoBehaviour
         TURBE();
         TURBEmeter();
         
+    }
+
+
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (device is Gamepad)
+        {
+            if (change is InputDeviceChange.Added)
+            {
+                print("controller");
+            }
+            else if (change == InputDeviceChange.Removed)
+            {
+                try
+                {
+                    print("keyboard");
+                }
+                catch (System.IndexOutOfRangeException ex)
+                {
+                    Debug.LogWarning("vittu ohjain irtosi " + ex.Message);
+                }
+            }
+        }
     }
 
     void OnGrass()
@@ -323,10 +348,13 @@ public class CarController : MonoBehaviour
     {
 
         if (activedrift > 0) return;
+
         float rawTrigger = Controls.CarControls.ThrottleMod.ReadValue<float>();
         float throttleModifier = Mathf.Pow(rawTrigger, 0.9f); 
 
         float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
+
+        
         smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
 
         if (moveInput > 0) {
@@ -346,8 +374,7 @@ public class CarController : MonoBehaviour
     private void Brakes(Wheel wheel)
     {
         GameManager.instance.StopAddingPoints();
-        wheel.wheelCollider.brakeTorque = brakeAcceleration * 1000f;
-        wheel.wheelCollider.motorTorque = 0f;
+        wheel.wheelCollider.brakeTorque = brakeAcceleration * 500f;
     }
 
     private void MotorTorgue(Wheel wheel)
@@ -474,7 +501,7 @@ public class CarController : MonoBehaviour
         {
             WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
             forwardFriction.extremumSlip = 0.4f;
-            forwardFriction.asymptoteSlip = 0.6f;
+            forwardFriction.asymptoteSlip = 0.8f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteValue = 1;
             wheel.wheelCollider.forwardFriction = forwardFriction;
