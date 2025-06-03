@@ -443,7 +443,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public void StartRace() // <-- Call this from Waitbeforestart
     {
         racestarted = true;
-        musicControl.StartMusicTracks();
+        if (GameManager.instance.sceneSelected != "tutorial")
+            musicControl.StartMusicTracks();
         startTimer = true;
     }
 }
