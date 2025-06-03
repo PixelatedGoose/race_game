@@ -51,9 +51,8 @@ public class MainMenu : MonoBehaviour
     {
         Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value") * 10;
         setHeadline();
-
-        Debug.Log(fucker);
-        if (fucker < 11)
+        
+        if (fucker <= 2)
         {
             videoPlayer.loopPointReached += OnVideoFinished;
             videoPlayer.Play();
