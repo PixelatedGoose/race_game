@@ -74,7 +74,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        if (fucker < 11)
+        if (fucker <= 2)
         {
             return;
         }
