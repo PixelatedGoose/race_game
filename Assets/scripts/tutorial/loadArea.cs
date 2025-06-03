@@ -5,8 +5,8 @@ public class loadArea : MonoBehaviour
 {
     public new Collider collider;
     public string prefix;
-    public instructionHandler instructionHandler; //jotta tää on paljon helpompaa
-    public musicControlTutorial musicControlTutorial;
+    private instructionHandler instructionHandler; //jotta tää on paljon helpompaa
+    private musicControlTutorial musicControlTutorial;
 
 
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
@@ -15,12 +16,13 @@ public class PauseMenu : MonoBehaviour
     {
         Controls = new CarInputActions();
         Controls.Enable();
+        Controls.CarControls.pausemenu.performed += PauseMenuCheck;
 
         if (pauseMenuObjects == null || pauseMenuObjects.Length == 0)
             Debug.LogWarning("PauseMenuObjects array is not assigned or empty.");
         if (Optionspanel == null)
             Debug.LogWarning("Optionspanel is not assigned.");
-        
+
         fullMenu = GameObject.Find("menuCanvas");
     }
 
@@ -35,10 +37,9 @@ public class PauseMenu : MonoBehaviour
         racerScript = FindFirstObjectByType<RacerScript>();
     }
 
-    void Update()
+    void PauseMenuCheck(InputAction.CallbackContext context)
     {
-        if (Controls.CarControls.pausemenu.triggered && !optionsOpen && !racerScript.raceFinished
-        && racerScript.racestarted)
+        if (!optionsOpen && !racerScript.raceFinished && racerScript.racestarted)
         {
             TogglePauseMenu();
         }

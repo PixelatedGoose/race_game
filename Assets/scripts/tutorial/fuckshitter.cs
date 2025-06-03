@@ -9,11 +9,14 @@ public class fuckshitter : MonoBehaviour
     private AudioSource wallMovement_Lower;
     private AudioSource wallMovement_End;
 
+    private musicControlTutorial musicControlTutorial;
+
     public void SetupFuckShit()
     {
         beginwall = GameObject.Find("TERRAIN/walls_ground/beginwall");
         wallMovement_Lower = GameObject.Find("wallMovement_Lower").GetComponent<AudioSource>();
         wallMovement_End = GameObject.Find("wallMovement_End").GetComponent<AudioSource>();
+        musicControlTutorial = GameObject.FindAnyObjectByType<musicControlTutorial>();
     }
 
     public void DoSomeFuckShit(string value)
@@ -28,8 +31,8 @@ public class fuckshitter : MonoBehaviour
                 });
                 wallMovement_Lower.Play();
                 return;
-            case "oh_no":
-                Debug.Log("uhh");
+            case "predriftfadeout":
+                LeanTween.value(musicControlTutorial.mainTrack.volume, 0.0f, 5.0f);
                 return;
             default:
                 Debug.LogWarning($"case {value} not found");
