@@ -124,18 +124,18 @@ public class musicControlTutorial : MonoBehaviour
         {
             float t = elapsed / duration;
 
-            mainTrack.volume = Mathf.Lerp(0.0f, 0.3f, t);
-            previousMain.volume = Mathf.Lerp(0.3f, 0.0f, t);
+            mainTrack.volume = Mathf.Lerp(0.0f, 0.28f, t);
+            previousMain.volume = Mathf.Lerp(0.28f, 0.0f, t);
 
             if (driftTrack != null && previousDrift != null)
             {
-                driftTrack.volume = Mathf.Lerp(0.0f, 0.3f, t);
-                previousDrift.volume = Mathf.Lerp(0.3f, 0.0f, t);
+                driftTrack.volume = Mathf.Lerp(0.0f, 0.28f, t);
+                previousDrift.volume = Mathf.Lerp(0.28f, 0.0f, t);
             }
             if (turboTrack != null && previousTurbo != null)
             {
-                turboTrack.volume = Mathf.Lerp(0.0f, 0.3f, t);
-                previousTurbo.volume = Mathf.Lerp(0.3f, 0.0f, t);
+                turboTrack.volume = Mathf.Lerp(0.0f, 0.28f, t);
+                previousTurbo.volume = Mathf.Lerp(0.28f, 0.0f, t);
             }
 
             elapsed += Time.deltaTime;
