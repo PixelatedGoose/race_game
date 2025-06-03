@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 using System.Collections;
 
 
@@ -53,6 +54,9 @@ public class CarController : MonoBehaviour
     public float driftMultiplier = 1.0f;
     public bool isTurnedDown = false, isDrifting;
     private float perusMaxAccerelation, perusTargetTorque, throttlemodifier, smoothedMaxAcceleration, modifiedMaxAcceleration;
+    //fuck this shit im doing this controller keyboard the fucking lazy/shit way!!!!!!!!!!
+    [SerializeField] private PlayerInput playerInput;
+    private string currentControlScheme = "Keyboard";
     
 
     [Header("turbe asetukset")]
@@ -60,6 +64,7 @@ public class CarController : MonoBehaviour
     public float turbeAmount = 100.0f, turbeMax = 100.0f, turbepush = 50.0f;
     public float turbeReduce;
     public float turbeRegen;
+
 
     public bool isRegenerating = false;
     public int turbeRegenCoroutineAmount = 0;
@@ -70,7 +75,6 @@ public class CarController : MonoBehaviour
     {
         Controls = new CarInputActions();
         Controls.Enable();
-
         turbeMeter = GameObject.Find("turbeFull").GetComponent<Image>();
     }
 
@@ -85,17 +89,31 @@ public class CarController : MonoBehaviour
         AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
     }
 
+    private void OnControlsChanged(PlayerInput input)
+    {
+        currentControlScheme = input.currentControlScheme;
+    }
+
 
     private void OnEnable()
     {
         //InputSystem.onDeviceChange += OnDeviceChange;
         Controls.Enable();
+        if (playerInput != null)
+        {
+            playerInput.onControlsChanged += OnControlsChanged; 
+        }
+        
     }
 
     private void OnDisable()
     {
         //InputSystem.onDeviceChange -= OnDeviceChange;
-        Controls.Disable(); 
+        Controls.Disable();
+        if (playerInput != null)
+        {
+            playerInput.onControlsChanged -= OnControlsChanged; 
+        }
     }
 
     private void OnDestroy()
@@ -340,6 +358,7 @@ public class CarController : MonoBehaviour
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteSlip = 1.0f;
             forwardFriction.asymptoteValue = 1;
+            forwardFriction.stiffness = 5f;
             wheel.wheelCollider.forwardFriction = forwardFriction;
         }
     }
@@ -347,16 +366,21 @@ public class CarController : MonoBehaviour
     private void UpdateTargetTorgue()
     {
 
+        //yes i know this is the shittiest way and laziest way but it works
+
         if (activedrift > 0) return;
-
-        float rawTrigger = Controls.CarControls.ThrottleMod.ReadValue<float>();
-        float throttleModifier = Mathf.Pow(rawTrigger, 0.9f); 
-
-        float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
-
-        
-        smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
-
+        if (currentControlScheme == "Gamepad")
+        {
+            float rawTrigger = Controls.CarControls.ThrottleMod.ReadValue<float>();
+            float throttleModifier = Mathf.Pow(rawTrigger, 0.9f);
+            float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
+            smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
+        }else{
+            float keyboardThrottle = Mathf.Abs(moveInput);
+            float throttleModifier = Mathf.Pow(keyboardThrottle, 0.9f);
+            float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
+            smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
+        }
         if (moveInput > 0) {
             targetTorque = 1 * smoothedMaxAcceleration;
         } else if (moveInput < 0) {
@@ -456,10 +480,11 @@ public class CarController : MonoBehaviour
                 if (wheel.wheelCollider == null) continue;
 
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-                sidewaysFriction.extremumSlip = 1.5f * speedFactor * driftMultiplier;
-                sidewaysFriction.asymptoteSlip = 2.0f * speedFactor * driftMultiplier;
-                sidewaysFriction.extremumValue = 0.5f / (speedFactor * driftMultiplier);
+                sidewaysFriction.extremumSlip = 2.0f * speedFactor * driftMultiplier;
+                sidewaysFriction.asymptoteSlip = 2.5f * speedFactor * driftMultiplier;
+                sidewaysFriction.extremumValue = 0.75f / (speedFactor * driftMultiplier);
                 sidewaysFriction.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
+                sidewaysFriction.stiffness = 3f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
 
             }
@@ -501,9 +526,10 @@ public class CarController : MonoBehaviour
         {
             WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
             forwardFriction.extremumSlip = 0.4f;
-            forwardFriction.asymptoteSlip = 0.8f;
+            forwardFriction.asymptoteSlip = 0.6f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteValue = 1;
+            forwardFriction.stiffness = 3f;
             wheel.wheelCollider.forwardFriction = forwardFriction;
         }
     }
@@ -534,6 +560,7 @@ public class CarController : MonoBehaviour
             sidewaysFriction.asymptoteSlip = 0.4f;
             sidewaysFriction.extremumValue = 1.0f;
             sidewaysFriction.asymptoteValue = 1f;
+            sidewaysFriction.stiffness = 5f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
         }   
     }

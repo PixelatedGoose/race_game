@@ -291,6 +291,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (6)
@@ -365,6 +369,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (2)
@@ -431,6 +439,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (8)
@@ -497,6 +509,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (6)
@@ -613,11 +629,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -625,7 +641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -725,11 +741,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -737,7 +753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -817,11 +833,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -829,7 +845,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -853,11 +869,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -865,7 +881,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -933,6 +949,10 @@ MonoBehaviour:
   s3: {fileID: 0}
   go: {fileID: 0}
   racerScript: {fileID: 6806053433548342062}
+  count1: {fileID: 0}
+  count2: {fileID: 0}
+  count3: {fileID: 0}
+  countGo: {fileID: 0}
 --- !u!114 &33521460955142030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -962,6 +982,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (4)
@@ -1028,6 +1052,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (4)
@@ -1102,6 +1130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (7)
@@ -1168,6 +1200,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (1)
@@ -1284,11 +1320,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -1296,7 +1332,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -1388,11 +1424,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -1400,7 +1436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -1476,11 +1512,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -1488,7 +1524,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -1516,11 +1552,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -1528,7 +1564,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -1581,6 +1617,10 @@ MonoBehaviour:
   s3: {fileID: 0}
   go: {fileID: 0}
   racerScript: {fileID: 9059760393653632985}
+  count1: {fileID: 0}
+  count2: {fileID: 0}
+  count3: {fileID: 0}
+  countGo: {fileID: 0}
 --- !u!114 &7859560685591799201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1621,6 +1661,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1
@@ -1695,6 +1739,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (3)
@@ -1769,6 +1817,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (5)
@@ -1835,6 +1887,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (3)
@@ -1963,11 +2019,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -1975,7 +2031,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3550375196746440512, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -2067,11 +2123,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -2079,7 +2135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 6705612120970947237, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -2171,11 +2227,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -2183,7 +2239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8119975032355210539, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -2215,11 +2271,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_ExtremumSlip
@@ -2227,7 +2283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_ForwardFriction.m_AsymptoteSlip
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8401347387012967341, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
@@ -2296,6 +2352,10 @@ MonoBehaviour:
   s3: {fileID: 0}
   go: {fileID: 0}
   racerScript: {fileID: 2293941396014156875}
+  count1: {fileID: 0}
+  count2: {fileID: 0}
+  count3: {fileID: 0}
+  countGo: {fileID: 0}
 --- !u!114 &6968916883164566048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2417,6 +2477,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8615394258543275466}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1
@@ -2483,6 +2547,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (2)
@@ -2557,6 +2625,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (5)
@@ -2926,6 +2998,10 @@ MonoBehaviour:
   s3: {fileID: 0}
   go: {fileID: 0}
   racerScript: {fileID: 4367026445408578668}
+  count1: {fileID: 0}
+  count2: {fileID: 0}
+  count3: {fileID: 0}
+  countGo: {fileID: 0}
 --- !u!114 &7803556294602960466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3041,6 +3117,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (7)
@@ -3115,6 +3195,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (1)
@@ -3189,6 +3273,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3152281370798780940}
     m_Modifications:
+    - target: {fileID: 912351206628324797, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9046071776278189272, guid: 68c0c8b810aa6e243a73047261f6b21e, type: 3}
       propertyPath: m_Name
       value: checkpoint1 (8)
