@@ -177,7 +177,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
             if (timer >= scoreAddWT)
             {
                 score = Mathf.Max(0, score + (scoreAddWT > 0 ? 1 : -1));
-                timer -= 0;
                 foreach (Text scoreText in ScoreTexts)
                 {
                     scoreText.text = "Score: " + score.ToString();
