@@ -13,7 +13,6 @@ public class CameraFollow : MonoBehaviour
     
     private Camera Cam;
     private CarController carController;
-    private CarController_2 carController_2;
     float normalFOV = 60;
     float ZoomFOV = 70;
     public float smoothTime = 0.3f;
@@ -24,14 +23,7 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         Cam = GetComponent<Camera>();
-        if (!setTutorialValues)
-        {
-            carController = carTarget.GetComponent<CarController>();
-        }
-        else
-        {
-            carController_2 = carTarget.GetComponent<CarController_2>();
-        }
+        carController = carTarget.GetComponent<CarController>();
     }
 
     private void FixedUpdate()
@@ -63,17 +55,8 @@ public class CameraFollow : MonoBehaviour
     {
         float speed;
         float maxSpeed;
-
-        if (!setTutorialValues)
-        {
-            speed = carController.GetSpeed();
-            maxSpeed = carController.GetMaxSpeed();
-        }
-        else
-        {
-            speed = carController_2.GetSpeed();
-            maxSpeed = carController_2.GetMaxSpeed();
-        }
+        speed = carController.GetSpeed();
+        maxSpeed = carController.GetMaxSpeed();
         float speedRatio = Mathf.Clamp01(speed / maxSpeed);
         float targetFov = Mathf.Lerp(normalFOV, ZoomFOV, speedRatio);
         //how did you know i was listening to lorna shore while writing this? 

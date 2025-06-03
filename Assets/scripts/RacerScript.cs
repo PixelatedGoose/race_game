@@ -45,7 +45,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     private Transform respawnPoint;
     private CarController carController;
-    private CarController_2 carController_2;
 
     private musicControl musicControl;
 
@@ -93,8 +92,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Controls = new CarInputActions();
         Controls.Enable();
         carController = GetComponent<CarController>();
-        if (carController == null)
-            carController_2 = GetComponent<CarController_2>();
         musicControl = FindAnyObjectByType<musicControl>();
     }
 

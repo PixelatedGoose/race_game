@@ -32,7 +32,10 @@ public class fuckshitter : MonoBehaviour
                 wallMovement_Lower.Play();
                 return;
             case "predriftfadeout":
-                LeanTween.value(musicControlTutorial.mainTrack.volume, 0.0f, 5.0f);
+                LeanTween.value(musicControlTutorial.mainTrack.volume, 0.0f, 5.0f)
+                .setOnUpdate((float val) => {
+                    musicControlTutorial.mainTrack.volume = val;
+                });
                 return;
             default:
                 Debug.LogWarning($"case {value} not found");

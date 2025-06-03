@@ -70,6 +70,8 @@ public class CarController : MonoBehaviour
     public int turbeRegenCoroutineAmount = 0;
     Dictionary<string, float> carTurboValues = new Dictionary<string, float>();
 
+    public bool canDrift = false;
+    public bool canUseTurbo = false;
 
     void Awake()
     {
@@ -86,6 +88,11 @@ public class CarController : MonoBehaviour
         if (carRb == null)
             carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerofMass;
+        if (GameManager.instance.sceneSelected != "tutorial")
+        {
+            canDrift = true;
+            canUseTurbo = true;
+        }
         AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
     }
 
@@ -154,13 +161,19 @@ public class CarController : MonoBehaviour
         ApplyGravity();
         Move();
         Steer();
-        HandleDrift();
+        if (canDrift)
+        {
+            HandleDrift();
+        }
         Decelerate();
         ApplySpeedLimit();
         Applyturnsensitivity(); 
         OnGrass();
-        TURBE();
-        TURBEmeter();
+        if (canUseTurbo)
+        {
+            TURBE();
+            TURBEmeter();
+        }
         
     }
 
@@ -188,7 +201,7 @@ public class CarController : MonoBehaviour
     }
 
     void OnGrass()
-    {        
+    {
         TrailRenderer trailRenderer = null;
         foreach (var wheel in wheels)
         {
@@ -297,7 +310,7 @@ public class CarController : MonoBehaviour
     }
 
     void TURBE()
-    {
+    {            
         if (isTurnedDown)
         {
             isTurboActive = false;
@@ -660,7 +673,7 @@ public class CarController : MonoBehaviour
         }
         else if (!isTurboActive && turbeAmount < turbeMax) //jos et käytä turboa ja se ei oo täynnä
         {
-            
+
             GameManager.instance.turbeActive = false;
 
             if (turbeRegenCoroutineAmount == 0 && isRegenerating == false)
