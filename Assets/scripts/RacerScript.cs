@@ -3,9 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
-using UnityEngine.SocialPlatforms.Impl;
-using System.Collections;
-using Unity.VisualScripting;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
@@ -49,6 +46,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private Transform respawnPoint;
     private CarController carController;
     private CarController_2 carController_2;
+
+    private musicControl musicControl;
 
     public void LoadData(GameData data)
     {
@@ -96,6 +95,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         carController = GetComponent<CarController>();
         if (carController == null)
             carController_2 = GetComponent<CarController_2>();
+        musicControl = FindAnyObjectByType<musicControl>();
     }
 
     private void OnEnable()
@@ -443,6 +443,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public void StartRace() // <-- Call this from Waitbeforestart
     {
         racestarted = true;
+        musicControl.StartMusicTracks();
         startTimer = true;
     }
 }

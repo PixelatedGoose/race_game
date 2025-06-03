@@ -10,6 +10,12 @@ public class Waitbeforestart : MonoBehaviour
     public GameObject go;
     public RacerScript racerScript; // Assign in Inspector!
 
+    public AudioSource count1;
+    public AudioSource count2;
+    public AudioSource count3;
+    public AudioSource countGo;
+    
+
     void Start()
     {
         s1 = GameObject.Find("s1");
@@ -23,6 +29,11 @@ public class Waitbeforestart : MonoBehaviour
 
         if (GameManager.instance.sceneSelected != "tutorial")
         {
+            count1 = GameObject.Find("count1").GetComponent<AudioSource>();
+            count2 = GameObject.Find("count2").GetComponent<AudioSource>();
+            count3 = GameObject.Find("count3").GetComponent<AudioSource>();
+            countGo = GameObject.Find("countGo").GetComponent<AudioSource>();
+
             StartCoroutine(ShowS1AfterDelay());
         }
         else
@@ -44,21 +55,27 @@ public class Waitbeforestart : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        yield return new WaitForSecondsRealtime(1.5f);
+        count3.Play();
+        yield return new WaitForSecondsRealtime(1.0f);
         s3.SetActive(false);
 
         s2.SetActive(true);
-        yield return new WaitForSecondsRealtime(1.5f);
+        count2.Play();
+        yield return new WaitForSecondsRealtime(1.0f);
         s2.SetActive(false);
 
         s1.SetActive(true);
-        yield return new WaitForSecondsRealtime(1.5f);
+        count1.Play();
+        yield return new WaitForSecondsRealtime(1.0f);
         s1.SetActive(false);
 
         go.SetActive(true);
-        yield return new WaitForSecondsRealtime(0.5f);
-        go.SetActive(false);
+        countGo.Play();
         Time.timeScale = 1f;
         racerScript.StartRace(); // Start the race!
+
+        LeanTween.alphaText(go.GetComponent<RectTransform>(), 0.0f, 2f).setEaseLinear();
+        yield return new WaitForSecondsRealtime(2f);
+        go.SetActive(false);
     }
 }

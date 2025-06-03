@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class MainMenu : MonoBehaviour
 {
+    int fucker;
     [SerializeField] optionScript OptionScript;
     public GameObject fullMenu;
     private AudioSource menuMusic;
@@ -30,6 +32,8 @@ public class MainMenu : MonoBehaviour
         "Tämä peli on tehty rakkaudella ja viinalla"
     };
 
+    public VideoPlayer videoPlayer;
+
     void Awake()
     {
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
@@ -39,20 +43,48 @@ public class MainMenu : MonoBehaviour
         fullMenu = GameObject.Find("menuCanvas");
         OptionScript = GameObject.Find("Optionspanel").GetComponent<optionScript>();
         GameObject.Find("Optionspanel").SetActive(false);
+
+        fucker = Random.Range(1, 3334);
     }
 
     void OnEnable()
     {
         Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value") * 10;
         setHeadline();
+        
+        if (fucker <= 2)
+        {
+            videoPlayer.loopPointReached += OnVideoFinished;
+            videoPlayer.Play();
+        }
+    }
+    void OnVideoFinished(VideoPlayer vp)
+    {
+        videoPlayer.Stop();
+        Destroy(videoPlayer);
+
+        LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
+        menuMusic.Play();
+        scrollText();
+    }
+    void OnDisable()
+    {
+        videoPlayer.loopPointReached -= OnVideoFinished;
     }
 
     void Start()
     {
-        LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
-        menuMusic.Play();
-        
-        scrollText();
+        if (fucker <= 2)
+        {
+            return;
+        }
+        else
+        {
+            LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
+            menuMusic.Play();
+            
+            scrollText();
+        }
     }
 
     public void Playgame()

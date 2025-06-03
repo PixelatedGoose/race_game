@@ -3825,6 +3825,7 @@ MonoBehaviour:
   - Vuoden peli 1997
   - "Uusi tutkimus: alkoholi on vaarallista auton sis\xE4ll\xE4"
   - "Nyt puhutaan asiaa. Aivan pelkk\xE4\xE4 faktaa. Mit\xE4 vittua"
+  videoPlayer: {fileID: 2068169514}
 --- !u!224 &379873883
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8743,6 +8744,8 @@ MonoBehaviour:
   - {fileID: 13628474}
   soundSlidersList:
   - {fileID: 675558056}
+  - {fileID: 598677091}
+  - {fileID: 1155424865}
   soundTogglesList:
   - {fileID: 1715398636}
   - {fileID: 319442749}
@@ -8885,6 +8888,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1155424866}
   - component: {fileID: 1155424867}
+  - component: {fileID: 1155424868}
   m_Layer: 5
   m_Name: framerate
   m_TagString: Untagged
@@ -8979,6 +8983,35 @@ MonoBehaviour:
           m_StringArgument: framerate
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1155424868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155424865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1307730817}
+          m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+          m_MethodName: Play
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1162527903
 GameObject:
   m_ObjectHideFlags: 0
@@ -13257,6 +13290,74 @@ RectTransform:
   m_AnchoredPosition: {x: -7.5, y: -0.5}
   m_SizeDelta: {x: -35, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2068169513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2068169515}
+  - component: {fileID: 2068169514}
+  m_Layer: 5
+  m_Name: Video Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!328 &2068169514
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2068169513}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: 3ae240bbc11caa74cbeda68d7317ca54, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 312904180}
+  m_TargetTexture: {fileID: 8400000, guid: 9301e994148f06445bfce307d9d9ac0c, type: 2}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: 
+  m_RenderMode: 1
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 0
+  m_PlaybackSpeed: 10
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 0
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!4 &2068169515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2068169513}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 486.5, y: 273.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2095770030
 GameObject:
   m_ObjectHideFlags: 0
@@ -13544,3 +13645,4 @@ SceneRoots:
   - {fileID: 1138940553}
   - {fileID: 494631809}
   - {fileID: 1760974379}
+  - {fileID: 2068169515}
