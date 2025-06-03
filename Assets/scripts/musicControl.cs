@@ -15,13 +15,16 @@ public class musicControl : MonoBehaviour
         cirnoturbo = GameObject.Find("cirnoturbo").GetComponent<AudioSource>();
         cirnodrift = GameObject.Find("cirnodrift").GetComponent<AudioSource>();
         cirno = GameObject.Find("cirno").GetComponent<AudioSource>();
+    }
 
+    public void StartMusicTracks()
+    {
         foreach (GameObject musicTrack in musicList)
         {
             musicTrack.GetComponent<AudioSource>().Play();
         }
     }
-
+    
     void Update()
     {
         if (GameManager.instance.turbeActive)
