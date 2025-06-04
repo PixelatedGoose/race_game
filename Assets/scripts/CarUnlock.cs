@@ -46,12 +46,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     }
     void Awake()
     {
-        if (DatapersistenceManager.instance != null)
-        {
-            DatapersistenceManager.instance.LoadGame();
-            GameData data = DatapersistenceManager.instance.gameData;
-            LoadData(data);
-        }
+
         carsl = new List<GameObject>
         {
             GameObject.Find("REALCAR_x"),
