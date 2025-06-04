@@ -169,7 +169,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         while (isAddingPoints)
         {
             timer += Time.deltaTime;
-            while (timer >= scoreAddWT)
+            if (timer >= scoreAddWT)
             {
                 score = Mathf.Max(0, score + (scoreAddWT > 0 ? 1 : -1));
                 foreach (Text scoreText in ScoreTexts)
