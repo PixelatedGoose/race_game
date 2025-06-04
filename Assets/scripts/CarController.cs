@@ -257,6 +257,10 @@ public class CarController : MonoBehaviour
         {
             moveInput = 0.0f;
         }
+        if (!Controls.CarControls.Drift.IsPressed())
+        {
+            StopDrifting();
+        }
 
 
         throttlemodifier = Controls.CarControls.ThrottleMod.ReadValue<float>();
