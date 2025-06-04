@@ -40,12 +40,9 @@ public class fuckshitter : MonoBehaviour
                     return;
                     
                 happened = true;
-                LeanTween.value(musicControlTutorial.mainTrack.volume, 0.0f, 5.0f)
-                .setOnUpdate((float val) => {
-                    musicControlTutorial.mainTrack.volume = val;
-                }).setOnComplete(() => {
-                    musicControlTutorial.mainTrack.Stop();
-                });
+                musicControlTutorial.TrackedTween_Start(
+                    musicControlTutorial.mainTrack.volume, 0.0f, 5.0f, val =>
+                    musicControlTutorial.mainTrack.volume = val);
 
                 wallMovement_Lower.transform.position = new Vector3(
                     predriftwall.transform.position.x,

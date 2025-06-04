@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Linq;
-using System.Collections;
+using System.Collections.Generic;
 
 public class musicControlTutorial : MonoBehaviour
 {
@@ -9,6 +9,10 @@ public class musicControlTutorial : MonoBehaviour
     public AudioSource mainTrack;
     public AudioSource driftTrack;
     public AudioSource turboTrack;
+
+    private List<int> tweenIds = new List<int>();
+
+
 
     void Start()
     {
@@ -45,7 +49,7 @@ public class musicControlTutorial : MonoBehaviour
             .Where(a => a.name.StartsWith(prefix))
             .ToList();
 
-        if (variants.Count <= 1)
+        if (variants.Count == 1)
         {
             Debug.LogWarning("no variants found; ignore if intended");
             if (set)
@@ -53,14 +57,27 @@ public class musicControlTutorial : MonoBehaviour
                 mainTrack = variants[0].GetComponent<AudioSource>();
             }
         }
-        else
+        //lazy
+        else if (variants.Count == 2)
         {
             Debug.Log($"Found {variants.Count} variants for prefix {prefix}");
             if (set)
             {
                 mainTrack = variants[0].GetComponent<AudioSource>();
-                driftTrack = variants[1].GetComponent<AudioSource>();
-                turboTrack = variants[2].GetComponent<AudioSource>();
+                if (variants[1] != null)
+                    driftTrack = variants[1].GetComponent<AudioSource>();
+            }
+        }
+        else if (variants.Count == 3)
+        {
+            Debug.Log($"Found {variants.Count} variants for prefix {prefix}");
+            if (set)
+            {
+                mainTrack = variants[0].GetComponent<AudioSource>();
+                if (variants[1] != null)
+                    driftTrack = variants[1].GetComponent<AudioSource>();
+                if (variants[2] != null)
+                    turboTrack = variants[2].GetComponent<AudioSource>();
             }
         }
 
@@ -84,7 +101,14 @@ public class musicControlTutorial : MonoBehaviour
     /// <param name="trackName">koko tiedostonimi, ilman .wav päätettä</param>
     public void MusicSections(string trackName, string mode = "instant") //lisään myöhemmi oikeet fade outit ja transitionit
     {
-        float volSet = mainTrack.volume;
+        //death sentence
+        foreach (var tweenId in tweenIds)
+        {
+            LeanTween.cancel(tweenId);
+        }
+        tweenIds.Clear();
+        
+        float volSet = 0.28f;
 
         switch (mode)
         {
@@ -118,24 +142,18 @@ public class musicControlTutorial : MonoBehaviour
 
         ChangeTrack(trackName);
 
-        LeanTween.value(mainTrack.volume, 0.28f, 1.0f).setOnUpdate((float val) =>
-        {mainTrack.volume = val;});
-        LeanTween.value(previousMain.volume, 0f, 1.0f).setOnUpdate((float val) =>
-        {previousMain.volume = val;});
+        TrackedTween_Start(mainTrack.volume, 0.28f, 1.0f, val => mainTrack.volume = val);
+        TrackedTween_Start(previousMain.volume, 0.0f, 1.0f, val => previousMain.volume = val);
 
         if (driftTrack != null && previousDrift != null)
         {
-            LeanTween.value(driftTrack.volume, 0.28f, 1.0f).setOnUpdate((float val) =>
-            {driftTrack.volume = val;});
-            LeanTween.value(previousDrift.volume, 0f, 1.0f).setOnUpdate((float val) =>
-            {previousDrift.volume = val;});
+            TrackedTween_Start(driftTrack.volume, 0.28f, 1.0f, val => driftTrack.volume = val);
+            TrackedTween_Start(previousDrift.volume, 0.0f, 1.0f, val => previousDrift.volume = val);
         }
         if (turboTrack != null && previousTurbo != null)
         {
-            LeanTween.value(turboTrack.volume, 0.28f, 1.0f).setOnUpdate((float val) =>
-            {turboTrack.volume = val;});
-            LeanTween.value(previousTurbo.volume, 0f, 1.0f).setOnUpdate((float val) =>
-            {previousTurbo.volume = val;});
+            TrackedTween_Start(turboTrack.volume, 0.28f, 1.0f, val => turboTrack.volume = val);
+            TrackedTween_Start(previousTurbo.volume, 0.0f, 1.0f, val => previousTurbo.volume = val);
         }
     }
 
@@ -201,5 +219,12 @@ public class musicControlTutorial : MonoBehaviour
                 musicTrack.UnPause();
             }
         }
+    }
+
+    public int TrackedTween_Start(float from, float to, float time, System.Action<float> onUpdate)
+    {
+        int tweenId = LeanTween.value(from, to, time).setOnUpdate(onUpdate).uniqueId;
+        tweenIds.Add(tweenId);
+        return tweenId;
     }
 }
