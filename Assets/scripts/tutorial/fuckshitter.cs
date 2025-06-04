@@ -1,26 +1,39 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 //tän scriptin ainoa tarkotus on tehä jotai kun se halutaan instructionCatInHand.cs:ssä
 //en tosiaan haluais pidentää sitä enää lol
 public class fuckshitter : MonoBehaviour
 {
+    CarInputActions Controls;
     private GameObject beginwall;
     private GameObject predriftwall;
     private AudioSource wallMovement_Lower;
     private AudioSource wallMovement_End;
 
     private musicControlTutorial musicControlTutorial;
+    private CarController carController;
 
     private bool happened;
 
     public void SetupFuckShit()
     {
+        Controls = new CarInputActions();
+        Controls.Enable();
+
+        Controls.CarControls.Drift.performed += StartDriftTrack;
+
         beginwall = GameObject.Find("TERRAIN/walls_ground/beginwall");
         predriftwall = GameObject.Find("TERRAIN/walls_ground/course2after_endwall");
         wallMovement_Lower = GameObject.Find("wallMovement_Lower").GetComponent<AudioSource>();
         wallMovement_End = GameObject.Find("wallMovement_End").GetComponent<AudioSource>();
-        musicControlTutorial = GameObject.FindAnyObjectByType<musicControlTutorial>();
+        musicControlTutorial = FindAnyObjectByType<musicControlTutorial>();
+        carController = FindAnyObjectByType<CarController>();
+    }
+
+    void OnDisable()
+    {
+        Controls.Disable();
     }
 
     public void DoSomeFuckShit(string value)
@@ -38,14 +51,11 @@ public class fuckshitter : MonoBehaviour
             case "predriftfadeout":
                 if (happened)
                     return;
-                    
                 happened = true;
-                LeanTween.value(musicControlTutorial.mainTrack.volume, 0.0f, 5.0f)
-                .setOnUpdate((float val) => {
-                    musicControlTutorial.mainTrack.volume = val;
-                }).setOnComplete(() => {
-                    musicControlTutorial.mainTrack.Stop();
-                });
+                
+                musicControlTutorial.TrackedTween_Start(
+                    musicControlTutorial.mainTrack.volume, 0.0f, 5.0f, val =>
+                    musicControlTutorial.mainTrack.volume = val);
 
                 wallMovement_Lower.transform.position = new Vector3(
                     predriftwall.transform.position.x,
@@ -67,5 +77,12 @@ public class fuckshitter : MonoBehaviour
                 Debug.LogWarning($"case {value} not found");
                 return;
         }
+    }
+
+    void StartDriftTrack(InputAction.CallbackContext context)
+    {
+        if (carController.isDrifting)
+            Controls.CarControls.Drift.performed -= StartDriftTrack;
+            musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_main");
     }
 }
