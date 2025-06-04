@@ -77,13 +77,21 @@ public class loadArea : MonoBehaviour
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "17":
+                instructionHandler.index = 1;
+                instructionHandler.ShowInstruction(
+                    instructionHandler.GetInstruction(
+                        instructionHandler.curCategory,
+                        instructionHandler.index));
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "18":
                 CarController carController3 = FindAnyObjectByType<CarController>();
                 carController3.canUseTurbo = true;
                 musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "18":
+            case "19":
                 musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_main");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
