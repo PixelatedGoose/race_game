@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         if (data != null)
         {
-            data.scored += this.score;
+            //data.scored += this.score;
         }       
     }
 

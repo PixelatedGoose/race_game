@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 using System.Collections;
-
 
 public class CarController : MonoBehaviour
 {
-    
+
     CarInputActions Controls;
 
     public enum Axel
@@ -36,11 +34,11 @@ public class CarController : MonoBehaviour
     public float turnSensitivty = 1.0f;
     public float turnSensitivtyAtHighSpeed = 1.0f, turnSensitivtyAtLowSpeed = 1.0f;
     public float deceleration = 1.0f;
-    [Min (100.0f)] 
+    [Min(100.0f)]
     public float maxspeed = 100.0f;
-    public float gravityMultiplier = 1.5f; 
+    public float gravityMultiplier = 1.5f;
     public float grassSpeedMultiplier = 0.5f;
-    public List<Wheel> wheels; 
+    public List<Wheel> wheels;
     float moveInput, steerInput;
     public Vector3 _centerofMass;
     public LayerMask grass;
@@ -49,7 +47,7 @@ public class CarController : MonoBehaviour
     public Rigidbody carRb;
     bool isTurboActive = false;
     private float activedrift = 0.0f;
-    public float Turbesped = 150.0f, basespeed = 100.0f,  grassmaxspeed = 50.0f, driftMaxSpeed = 40f;
+    public float Turbesped = 150.0f, basespeed = 100.0f, grassmaxspeed = 50.0f, driftMaxSpeed = 40f;
     [Header("Drift asetukset")]
     public float driftMultiplier = 1.0f;
     public bool isTurnedDown = false, isDrifting;
@@ -57,7 +55,7 @@ public class CarController : MonoBehaviour
     //fuck this shit im doing this controller keyboard the fucking lazy/shit way!!!!!!!!!!
     [SerializeField] private PlayerInput playerInput;
     private string currentControlScheme = "Keyboard";
-    
+
 
     [Header("turbe asetukset")]
     public Image turbeMeter;
@@ -110,9 +108,9 @@ public class CarController : MonoBehaviour
         Controls.Enable();
         if (playerInput != null)
         {
-            playerInput.onControlsChanged += OnControlsChanged; 
+            playerInput.onControlsChanged += OnControlsChanged;
         }
-        
+
     }
 
     private void OnDisable()
@@ -121,7 +119,7 @@ public class CarController : MonoBehaviour
         Controls.Disable();
         if (playerInput != null)
         {
-            playerInput.onControlsChanged -= OnControlsChanged; 
+            playerInput.onControlsChanged -= OnControlsChanged;
         }
     }
 
@@ -139,7 +137,7 @@ public class CarController : MonoBehaviour
 
     public float GetMaxSpeed()
     {
-         return maxspeed;
+        return maxspeed;
     }
 
     void Update()
@@ -152,6 +150,10 @@ public class CarController : MonoBehaviour
     {
         if (isDrifting)
         {
+            if (isTurboActive)
+            {
+                maxspeed = Mathf.Lerp(maxspeed, Turbesped, Time.deltaTime * 0.5f);
+            }
             maxspeed = Mathf.Lerp(maxspeed, driftMaxSpeed, Time.deltaTime * 0.1f);
         }
         // Stop drifting if the race is finished
@@ -169,14 +171,14 @@ public class CarController : MonoBehaviour
         }
         Decelerate();
         ApplySpeedLimit();
-        Applyturnsensitivity(); 
+        Applyturnsensitivity();
         OnGrass();
         if (canUseTurbo)
         {
             TURBE();
             TURBEmeter();
         }
-        
+
     }
 
 
@@ -255,9 +257,9 @@ public class CarController : MonoBehaviour
         {
             moveInput = 0.0f;
         }
-        
 
-       throttlemodifier = Controls.CarControls.ThrottleMod.ReadValue<float>();
+
+        throttlemodifier = Controls.CarControls.ThrottleMod.ReadValue<float>();
     }
 
     bool IsWheelGrounded(Wheel wheel)
@@ -297,7 +299,7 @@ public class CarController : MonoBehaviour
 
     void ApplySpeedLimit()
     {
-        float speed = carRb.linearVelocity.magnitude * 3.6f; 
+        float speed = carRb.linearVelocity.magnitude * 3.6f;
         if (speed > maxspeed)
         {
             carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
@@ -307,12 +309,12 @@ public class CarController : MonoBehaviour
     void Applyturnsensitivity()
     {
         float speed = carRb.linearVelocity.magnitude * 3.6f;
-        
+
         turnSensitivty = Mathf.Lerp(turnSensitivtyAtLowSpeed, turnSensitivtyAtHighSpeed, Mathf.Clamp01(speed / maxspeed));
     }
 
     void TURBE()
-    {            
+    {
         if (isTurnedDown)
         {
             isTurboActive = false;
@@ -332,7 +334,7 @@ public class CarController : MonoBehaviour
         HandeSteepSlope();
         UpdateTargetTorgue();
         AdjustSpeedForGrass();
-        AdjustSuspension(); 
+        AdjustSuspension();
         foreach (var wheel in wheels)
         {
             if (Controls.CarControls.Brake.IsPressed())
@@ -390,9 +392,11 @@ public class CarController : MonoBehaviour
             float throttleModifier = Mathf.Pow(rawTrigger, 0.9f);
             float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
             smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
-        }else{
+        }
+        else
+        {
             float keyboardThrottle = Mathf.Abs(moveInput);
-            float throttleModifier = Mathf.Pow(keyboardThrottle, 0.9f);
+            float throttleModifier = Mathf.Pow(keyboardThrottle, 0.1f);
             float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
             smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
         }
@@ -403,7 +407,6 @@ public class CarController : MonoBehaviour
         } else {
             targetTorque = 0.0f;
         }
-
         if (!isDrifting)
         {
             maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? Turbesped : basespeed, Time.deltaTime);
@@ -413,7 +416,7 @@ public class CarController : MonoBehaviour
     private void Brakes(Wheel wheel)
     {
         GameManager.instance.StopAddingPoints();
-        wheel.wheelCollider.brakeTorque = brakeAcceleration * 500f;
+        wheel.wheelCollider.brakeTorque = brakeAcceleration * 15f;
     }
 
     private void MotorTorgue(Wheel wheel)
@@ -441,19 +444,19 @@ public class CarController : MonoBehaviour
         {
             Vector3 velocity = carRb.linearVelocity;
 
-            velocity -= velocity.normalized * deceleration * 2.0f *  Time.deltaTime;
-            
-            if (velocity.magnitude < 0.1f) 
+            velocity -= velocity.normalized * deceleration * 2.0f * Time.deltaTime;
+
+            if (velocity.magnitude < 0.1f)
             {
                 velocity = Vector3.zero;
             }
-        carRb.linearVelocity = velocity;
+            carRb.linearVelocity = velocity;
         }
     }
 
-    void Steer() 
-    { 
-        foreach(var wheel in wheels)
+    void Steer()
+    {
+        foreach (var wheel in wheels)
         {
             if (wheel.axel == Axel.Front)
             {
@@ -469,7 +472,7 @@ public class CarController : MonoBehaviour
         {
             carRb.AddForce(Vector3.down * gravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
         }
-       
+
     }
 
 
@@ -520,7 +523,7 @@ public class CarController : MonoBehaviour
             maxAcceleration = perusMaxAccerelation;
             targetTorque = perusTargetTorque;
             WheelEffects(false);
-        };        
+        };
     }
 
     private void AdjustdriftSuspension()
@@ -559,12 +562,12 @@ public class CarController : MonoBehaviour
 
         RacerScript racerScript = FindAnyObjectByType<RacerScript>();
         if (racerScript != null && racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
-        { 
+        {
             GameManager.instance.StopAddingPoints();
             return;
-        }  
+        }
         GameManager.instance.StopAddingPoints();
-       
+
 
         foreach (var wheel in wheels)
         {
@@ -577,12 +580,12 @@ public class CarController : MonoBehaviour
             sidewaysFriction.asymptoteValue = 1f;
             sidewaysFriction.stiffness = 5f;
             wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-        }   
+        }
     }
 
     void Animatewheels()
     {
-        foreach(var wheel in wheels) 
+        foreach (var wheel in wheels)
         {
             Quaternion rot;
             Vector3 pos;
@@ -590,9 +593,10 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rot;
         }
-        Controls.CarControls.Move.canceled+= ctx => {
+        Controls.CarControls.Move.canceled += ctx =>
+        {
             steerInput = 0.0f;
-        };   
+        };
     }
 
 
@@ -603,7 +607,7 @@ public class CarController : MonoBehaviour
         {
             GameObject car = carsParent.transform.GetChild(i).gameObject;
             if (car.activeInHierarchy)
-            { 
+            {
                 string carName = car.name;
                 switch (carName)
                 {
@@ -611,7 +615,7 @@ public class CarController : MonoBehaviour
                         turbepush = 15.0f;
                         break;
                     case "REALCAR_x":
-                        turbepush  = 10.0f;
+                        turbepush = 10.0f;
                         break;
                     case "REALCAR_y":
                         turbepush = 7.0f;
@@ -637,7 +641,7 @@ public class CarController : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-            if (wheel.axel == Axel.Rear) 
+            if (wheel.axel == Axel.Rear)
             {
                 var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
                 if (trailRenderer != null)
@@ -654,7 +658,7 @@ public class CarController : MonoBehaviour
             }
         }
     }
-    
+
     /// <summary>
     /// käytetään TURBEmeterin päivittämiseen joka frame
     /// </summary>
@@ -738,7 +742,7 @@ public class CarController : MonoBehaviour
     /// <param name="option">start / stop</param>
     private void turbeRegenCoroutines(string option)
     {
-        switch(option)
+        switch (option)
         {
             case "start":
                 StartCoroutine("turbeRegenerate");
