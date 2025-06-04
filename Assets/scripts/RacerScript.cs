@@ -32,6 +32,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     // Other variables
     public Transform startFinishLine;
     public Transform[] checkpoints;
+    public int CurrentLap => currentLap;
 
     private bool[] checkpointStates;
 
