@@ -709,11 +709,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: maxAcceleration
-      value: 400
+      value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: brakeAcceleration
-      value: 500
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: gravityMultiplier
@@ -1392,7 +1392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: brakeAcceleration
-      value: 500
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: gravityMultiplier
@@ -2091,7 +2091,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: brakeAcceleration
-      value: 5000
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6116647207104193425, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: gravityMultiplier
