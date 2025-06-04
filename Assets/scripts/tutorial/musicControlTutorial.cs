@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class musicControlTutorial : MonoBehaviour
 {
+    CarInputActions Controls;
     public GameObject[] musicList;
     public AudioSource[] musicListSources;
     public AudioSource mainTrack;
@@ -11,8 +13,85 @@ public class musicControlTutorial : MonoBehaviour
     public AudioSource turboTrack;
 
     private List<int> tweenIds = new List<int>();
+    private enum MusicState { Main, Drift, Turbo }
+    private MusicState currentState = MusicState.Main;
 
+    void Awake()
+    {
+        Controls = new CarInputActions();
+        Controls.Enable();
 
+        Controls.CarControls.Drift.performed += DriftCall;
+        Controls.CarControls.turbo.performed += TurboCall;
+        Controls.CarControls.Drift.canceled += DriftCanceled;
+        Controls.CarControls.turbo.canceled += TurboCanceled;
+    }
+    void DriftCall(InputAction.CallbackContext context)
+    {
+        if (currentState == MusicState.Turbo)
+            return;
+
+        CancelTweens();
+        if (GameManager.instance.isAddingPoints)
+        {
+            TrackedTween_Start(mainTrack.volume, 0.0f, 1.0f, val => mainTrack.volume = val);
+            TrackedTween_Start(driftTrack.volume, 0.28f, 1.0f, val => driftTrack.volume = val);
+
+            if (turboTrack != null)
+                TrackedTween_Start(turboTrack.volume, 0.0f, 1.0f, val => turboTrack.volume = val);
+
+            currentState = MusicState.Drift;
+        }
+    }
+    void DriftCanceled(InputAction.CallbackContext context)
+    {
+        if (currentState == MusicState.Turbo)
+            return;
+
+        if (!GameManager.instance.isAddingPoints) //turha mut nyt ei oteta riskejä lol
+        {
+            TrackedTween_Start(mainTrack.volume, 0.28f, 1.0f, val => mainTrack.volume = val);
+            TrackedTween_Start(driftTrack.volume, 0.0f, 1.0f, val => driftTrack.volume = val);
+
+            if (turboTrack != null)
+                TrackedTween_Start(turboTrack.volume, 0.0f, 1.0f, val => turboTrack.volume = val);
+
+            currentState = MusicState.Main;
+        }
+    }
+
+    void TurboCall(InputAction.CallbackContext context)
+    {
+        CancelTweens();
+        TrackedTween_Start(turboTrack.volume, 0.28f, 1.0f, val => turboTrack.volume = val);
+        TrackedTween_Start(driftTrack.volume, 0.0f, 1.0f, val => driftTrack.volume = val);
+        TrackedTween_Start(mainTrack.volume, 0.0f, 1.0f, val => mainTrack.volume = val);
+
+        currentState = MusicState.Turbo;
+    }
+    void TurboCanceled(InputAction.CallbackContext context)
+    {
+        if (GameManager.instance.isAddingPoints)
+        {
+            TrackedTween_Start(driftTrack.volume, 0.28f, 1.0f, val => driftTrack.volume = val);
+            TrackedTween_Start(mainTrack.volume, 0.0f, 1.0f, val => mainTrack.volume = val);
+            TrackedTween_Start(turboTrack.volume, 0.0f, 1.0f, val => turboTrack.volume = val);
+
+            currentState = MusicState.Drift;
+        }
+        else
+        {
+            TrackedTween_Start(mainTrack.volume, 0.28f, 1.0f, val => mainTrack.volume = val);
+            TrackedTween_Start(driftTrack.volume, 0.0f, 1.0f, val => driftTrack.volume = val);
+            TrackedTween_Start(turboTrack.volume, 0.0f, 1.0f, val => turboTrack.volume = val);
+
+            currentState = MusicState.Main;
+        }
+    }
+    void OnDisable()
+    {
+        Controls.Disable();
+    }
 
     void Start()
     {
@@ -89,6 +168,15 @@ public class musicControlTutorial : MonoBehaviour
         }
     }
 
+    void CancelTweens()
+    {
+        foreach (var tweenId in tweenIds)
+        {
+            LeanTween.cancel(tweenId);
+        }
+        tweenIds.Clear();
+    }
+
     void ChangeTrack(string selectedAudio)
     {
         mainTrack = GameObject.Find(selectedAudio).GetComponent<AudioSource>();
@@ -101,13 +189,8 @@ public class musicControlTutorial : MonoBehaviour
     /// <param name="trackName">koko tiedostonimi, ilman .wav päätettä</param>
     public void MusicSections(string trackName, string mode = "instant") //lisään myöhemmi oikeet fade outit ja transitionit
     {
-        //death sentence
-        foreach (var tweenId in tweenIds)
-        {
-            LeanTween.cancel(tweenId);
-        }
-        tweenIds.Clear();
-        
+        CancelTweens();
+
         float volSet = 0.28f;
 
         switch (mode)
@@ -157,54 +240,10 @@ public class musicControlTutorial : MonoBehaviour
         }
     }
 
+
+
     void Update()
     {
-        if (GameManager.instance.turbeActive)
-        {
-            if (turboTrack != null)
-            {
-                if (turboTrack.volume <= 0.390f)
-                {
-                    turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.5f, 1.0f * Time.deltaTime);
-                    driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.0f, 1.0f * Time.deltaTime);
-                    mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.0f, 1.0f * Time.deltaTime);
-                }
-            }
-        }
-        else
-        {
-            if (driftTrack != null)
-            {
-                if (GameManager.instance.isAddingPoints)
-                {
-                    if (driftTrack.volume <= 0.390f)
-                    {
-                        driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.5f, 1.0f * Time.deltaTime);
-                        mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.0f, 1.0f * Time.deltaTime);
-                    }
-                }
-                else
-                {
-                    if (driftTrack.volume > 0.000f)
-                    {
-                        driftTrack.volume = Mathf.MoveTowards(driftTrack.volume, 0.0f, 1.0f * Time.deltaTime);
-                        mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.5f, 1.0f * Time.deltaTime);
-                    }
-                }
-            }
-
-            if (turboTrack != null)
-            {
-                if (turboTrack.volume > 0.000f)
-                {
-                    turboTrack.volume = Mathf.MoveTowards(turboTrack.volume, 0.0f, 1.0f * Time.deltaTime);
-                    mainTrack.volume = Mathf.MoveTowards(mainTrack.volume, 0.5f, 1.0f * Time.deltaTime);
-                }
-            }
-        }
-
-
-
         if (GameManager.instance.isPaused == true)
         {
             foreach (AudioSource musicTrack in musicListSources)
