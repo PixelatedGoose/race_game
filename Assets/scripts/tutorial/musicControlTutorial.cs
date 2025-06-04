@@ -105,41 +105,37 @@ public class musicControlTutorial : MonoBehaviour
                     turboTrack.Play();
                 break;
             case "fade":
-                StartCoroutine(FadeSections(trackName));
+                FadeSections(trackName);
                 break;
         }
     }
 
-    private IEnumerator FadeSections(string trackName)
+    private void FadeSections(string trackName)
     {
         AudioSource previousMain = mainTrack;
         AudioSource previousDrift = driftTrack;
         AudioSource previousTurbo = turboTrack;
 
-        float duration = 1.0f;
-        float elapsed = 0.0f;
-
         ChangeTrack(trackName);
-        while (elapsed < duration)
+
+        LeanTween.value(mainTrack.volume, 0.28f, 1.0f).setOnUpdate((float val) =>
+        {mainTrack.volume = val;});
+        LeanTween.value(previousMain.volume, 0f, 1.0f).setOnUpdate((float val) =>
+        {previousMain.volume = val;});
+
+        if (driftTrack != null && previousDrift != null)
         {
-            float t = elapsed / duration;
-
-            mainTrack.volume = Mathf.Lerp(0.0f, 0.28f, t);
-            previousMain.volume = Mathf.Lerp(0.28f, 0.0f, t);
-
-            if (driftTrack != null && previousDrift != null)
-            {
-                driftTrack.volume = Mathf.Lerp(0.0f, 0.28f, t);
-                previousDrift.volume = Mathf.Lerp(0.28f, 0.0f, t);
-            }
-            if (turboTrack != null && previousTurbo != null)
-            {
-                turboTrack.volume = Mathf.Lerp(0.0f, 0.28f, t);
-                previousTurbo.volume = Mathf.Lerp(0.28f, 0.0f, t);
-            }
-
-            elapsed += Time.deltaTime;
-            yield return null;
+            LeanTween.value(driftTrack.volume, 0.28f, 1.0f).setOnUpdate((float val) =>
+            {driftTrack.volume = val;});
+            LeanTween.value(previousDrift.volume, 0f, 1.0f).setOnUpdate((float val) =>
+            {previousDrift.volume = val;});
+        }
+        if (turboTrack != null && previousTurbo != null)
+        {
+            LeanTween.value(turboTrack.volume, 0.28f, 1.0f).setOnUpdate((float val) =>
+            {turboTrack.volume = val;});
+            LeanTween.value(previousTurbo.volume, 0f, 1.0f).setOnUpdate((float val) =>
+            {previousTurbo.volume = val;});
         }
     }
 
