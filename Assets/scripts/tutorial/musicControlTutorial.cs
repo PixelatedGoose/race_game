@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Timeline;
 
 public class musicControlTutorial : MonoBehaviour
 {
@@ -11,10 +13,13 @@ public class musicControlTutorial : MonoBehaviour
     public AudioSource mainTrack;
     public AudioSource driftTrack;
     public AudioSource turboTrack;
+    private List<GameObject> variants;
 
     private List<int> tweenIds = new List<int>();
     private enum MusicState { Main, Drift, Turbo }
     private MusicState currentState = MusicState.Main;
+
+    private CarController carController;
 
     void Awake()
     {
@@ -28,7 +33,7 @@ public class musicControlTutorial : MonoBehaviour
     }
     void DriftCall(InputAction.CallbackContext context)
     {
-        if (currentState == MusicState.Turbo)
+        if (currentState == MusicState.Turbo || variants.Count <= 1) //VOI VITTU IHAN OIKEASTI
             return;
 
         CancelTweens();
@@ -45,7 +50,7 @@ public class musicControlTutorial : MonoBehaviour
     }
     void DriftCanceled(InputAction.CallbackContext context)
     {
-        if (currentState == MusicState.Turbo)
+        if (currentState == MusicState.Turbo || variants.Count <= 1)
             return;
 
         if (!GameManager.instance.isAddingPoints) //turha mut nyt ei oteta riskejä lol
@@ -62,6 +67,9 @@ public class musicControlTutorial : MonoBehaviour
 
     void TurboCall(InputAction.CallbackContext context)
     {
+        if (variants.Count < 2 || !GameManager.instance.turbeActive)
+            return;
+        
         CancelTweens();
         TrackedTween_Start(turboTrack.volume, 0.28f, 1.0f, val => turboTrack.volume = val);
         TrackedTween_Start(driftTrack.volume, 0.0f, 1.0f, val => driftTrack.volume = val);
@@ -71,6 +79,9 @@ public class musicControlTutorial : MonoBehaviour
     }
     void TurboCanceled(InputAction.CallbackContext context)
     {
+        if (variants.Count < 2 || !GameManager.instance.turbeActive)
+            return;
+
         if (GameManager.instance.isAddingPoints)
         {
             TrackedTween_Start(driftTrack.volume, 0.28f, 1.0f, val => driftTrack.volume = val);
@@ -91,6 +102,10 @@ public class musicControlTutorial : MonoBehaviour
     void OnDisable()
     {
         Controls.Disable();
+        Controls.CarControls.Drift.performed -= DriftCall;
+        Controls.CarControls.turbo.performed -= TurboCall;
+        Controls.CarControls.Drift.canceled -= DriftCanceled;
+        Controls.CarControls.turbo.canceled -= TurboCanceled;
     }
 
     void Start()
@@ -123,7 +138,7 @@ public class musicControlTutorial : MonoBehaviour
         string prefix = clipName.Substring(0, 1);
 
         // Find all AudioSources with the same prefix
-        var variants = musicList
+        variants = musicList
             .Select(go => go)
             .Where(a => a.name.StartsWith(prefix))
             .ToList();

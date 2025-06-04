@@ -25,6 +25,7 @@ public class specialTextChances
     public float juud7;
     public float grass;
     public float reallyspecial;
+    public float nine_trillion;
 }
 
 public class loading : MonoBehaviour

@@ -64,7 +64,7 @@
         "THIS IS A DEMO. EVERYTHING IS (NOT) FINISHED",
         "behold - the fridge",
         "blender baked but goose cooked :fire: :fire: :speaking_head:",
-        "if you give criticism to alex, he may turn you into a three-course meal",
+        "if you give criticism to Vizl87, he may turn you into a three-course meal",
         "remember, if peace is not an option, drifting sure is",
         "this is line 69 in the json file and that's nice",
         "tilanne meni niinku nollasta sataan",
@@ -86,7 +86,7 @@
         "We clean our cars with acetylene and hydrogen fluoride",
         "Here you'll see us developing our game: https://youtu.be/rJrEe8_gi64&t=213",
         "pelataan videopelejä",
-        "Aamulla tuntu ihan kivalta lähtee töihin, mut nyt vituttaa",
+        "Aamulla tuntu ihan kivalta lähtee töihin, mut nyt v*tuttaa",
         "voikko oottaa kaks sekuntia mulla jäi mun pää koneen sisälle",
         "If the game is taking too long to load, please punch the screen",
         "This game includes secret codes (nuclear launch ones)",
@@ -103,7 +103,7 @@
         "noni tekstejä on ny sata voin mennä nukkuu ai mitä tää menee siihe peliin",
         "Monster Energy Monarch",
         "We do not own slaves :)",
-        "honorable mentions: leo robert valtteri luuranko maissitanko",
+        "honorable mentions: leodeemus luuranko maissitanko",
         "the second coming of horrible life decisions",
         "THE CAR STARTED HYPERVENTILATING",
         "copilot_aftermath.jpg",
@@ -122,11 +122,17 @@
         "We did not commit war crimes during the second world war",
         "Hetkinen...",
         "HETKINEN...",
-        "Technical Difficulties"
+        "Technical Difficulties",
+        "how about you take your time instead of me taking my time?",
+        "If any questionable messages appear on this screen, we will not explain them",
+        "uhh uhhhhh huh mm huh uh uh what huh ok so uhhhhh uhhhhhhhhhhhhhhhhhhhh",
+        "ok anna mulle yks sekunti mul pitää ettii se mappi minkä nää valittit",
+        "Please remember that you don't have infinite amounts of turbo.",
+        "Please remember that you need to drift to win in this game."
     ],
 
     "uncommon": [
-        "Ronny Puikkonen didn't commit anything to this game",
+        "rojp didn't commit anything to this game",
         "No one committed war crimes in 1995. There was no incident.",
         "What the heck is a kilometer",
         "fumo fumo. fumo fumo? fumo fumo, fumo fumo. fumo?",
@@ -207,7 +213,7 @@
         "Your credit card declined. We accept drift score too.",
         "driving a car has never been easier",
         "You look like the type of person to drink energy drinks. Nice.",
-        "Rico Najal you have not answer the phone, we are real Microsoft",
+        "Rico Najar you have not answer the phone, we are real Microsoft",
         "Animal Avalanche, the best damn game I've seen",
         "sori koodi ei toimi, anna viis sekkaa korjaan äkkii nyt",
         "do you want to see a magic trick?",
@@ -226,12 +232,12 @@
         "egg",
         "Your intellect is as weak as your dollar.",
         "Niin justiinsa, sinä sen sanoit",
-        "Who is Ronny Puikkonen? (thank you copilot)",
+        "Who the damn even is rojp?",
         "tää peli on vähä kyseenalainen",
         "PLEASE DO <b>NOT</b> drift in the voice chats.",
         "Leo is goblin",
         "WHAT WILL YOU HAVE AFTER 500 YEARS?",
-        "Hello Rico Najal. We are calling you from Microsoft Technical Support.",
+        "Hello Rico Najar. We are calling you from Microsoft Technical Support.",
         "Terve terve",
         "1,499,316 riviä koodia poistettu",
         "La Creatura se ha comido todo nuestro puto código",
@@ -273,7 +279,13 @@
         "älä etsi googlesta saarta nimeltä Seppänen",
         "kolmen tunnin jälkeen",
         "famous words from patrick star: 'FINLAND!'",
-        "tää on iha hiton hyvä peli"
+        "tää on iha hiton hyvä peli",
+        "AmisDrift: The Movie, by PoorAF Studios",
+        "we don't sell those posters over there you know",
+        "If you want a good deal, meet me behind the black curtain in five minutes",
+        "This is an one of a kind game about cars",
+        "Whiplash injuries are common in car accidents. Remember: road safety first.",
+        "Sandwiches at a cheap price? Satisfactory"
     ],
 
     "obscure": [
@@ -289,7 +301,12 @@
         "(insert obscure loading text here)",
         "17 years, yet still no fumo? you got a boring life not gonna lie",
         "Kaivosyritys, jossa Kari työskenteli, meni konkurssiin vuonna 1992",
-        "damn girl are you a construction worker? because you are BUILDING"
+        "'damn girl are you a construction worker? because you are BUILDING' 'what'",
+        "Do not enter the magic school bus.",
+        "good job kid, ya got a loading text that's one of a kind! really rare 'n stuff ya know.",
+        "tässä pelissä on kirja.",
+        "I have been waiting for you.",
+        "C:/.../AppData/LocalLow/Pooraf Studios/race_game/data.game"
     ],
 
     "special": [
@@ -303,6 +320,7 @@
         "You have ran out of time",
         "Juud 7: juud'd",
         "i am the one who grass",
-        "congratulations, you got a different loading screen!"
+        "congratulations, you got a different loading screen!",
+        "Your chance of seeing this exact text on this loading screen is 1 in 12 quadrillion."
     ]
 }

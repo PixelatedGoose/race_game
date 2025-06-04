@@ -20,12 +20,18 @@
     ],
 
     "controls": [
-        "Here's some more info you might wanna know.",
+        "Here's some more info you might wanna know. You don't need to drive anywhere for now.",
         "Pressing L toggles long lights.",
         "Pressing C toggles the underlight.",
         "You can pause the game with ESC, in case it wasn't obvious.",
-        "The red part of your timer shows your milliseconds.",
-        "But now, we'll teach you the most important thing. Drive to the next zone to continue."
+        "Take a small moment to look at the bottom left corner.",
+        "This is the most important part of your UI. You can call it whatever ya want.",
+        "You can see how fast you're going by looking at the speedometer.",
+        "You also have quick access to your score.",
+        "The timer here isn't visible, but you'll see it while playing other maps.",
+        "These two were supposed to show your laps; we ran out of time. Yeah we broke the 4th wall",
+        "This gauge here tells you how much of your turbo you have left. You'll learn about it soon.",
+        "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
     "drifting": [
@@ -75,8 +81,14 @@
         "Pressing down on the D-Pad toggles long lights.",
         "Pressing up on the D-Pad toggles the underlight.",
         "You can pause the game with the start button, in case it wasn't obvious.",
-        "The red part of your timer shows your milliseconds.",
-        "But now, we'll teach you the most important thing. Drive to the next zone to continue."
+        "Take a small moment to look at the bottom left corner.",
+        "This is the most important part of your UI. You can call it whatever ya want.",
+        "You can see how fast you're going by looking at the speedometer.",
+        "You also have quick access to your score.",
+        "The timer here isn't visible, but you'll see it while playing other maps.",
+        "These two were supposed to show your laps; we ran out of time. Yeah we broke the 4th wall",
+        "This gauge here tells you how much of your turbo you have left. You'll learn about it soon.",
+        "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
     "controller_drifting": [

@@ -54,7 +54,7 @@ public class instructionCatInHand : MonoBehaviour //shorthand - instruction cate
                     if (instructionHandler.GetInstruction(
                         instructionHandler.curCategory,
                         instructionHandler.index)
-                        == "But now, we'll teach you the most important thing. Drive to the next zone to continue.")
+                        == "But first, we'll teach you something more important. Drive to the next zone to continue.")
                     //unity haista paska jo iha oikeasti ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                     {
                         fuckshitter.DoSomeFuckShit("predriftfadeout");
