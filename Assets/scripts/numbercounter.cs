@@ -7,33 +7,50 @@ public class numbercounter : MonoBehaviour
     public GameObject scoreContainer; // Parent GameObject for the score UI
     public GameObject digitPrefab; // Prefab for a single digit (with an Image component)
 
-    void Update()
-    {
-        // Read the score from the GameManager
-        int score = GameManager.instance != null ? GameManager.instance.score : 0;
+    private const int digitCount = 7; // Always 7 digits
+    private Image[] digitImages;
+    private string lastScoreString = "";
 
-        // Update the score UI
-        UpdateScoreUI(score);
+    void Start()
+    {
+        // Instantiate digit objects once and cache their Image components
+        digitImages = new Image[digitCount];
+        for (int i = 0; i < digitCount; i++)
+        {
+            GameObject digitGO = Instantiate(digitPrefab, scoreContainer.transform);
+            digitImages[i] = digitGO.GetComponent<Image>();
+        }
     }
 
-    void UpdateScoreUI(int score)
+    void Update()
     {
-        // Clear existing digits
-        foreach (Transform child in scoreContainer.transform)
+        int score = GameManager.instance != null ? GameManager.instance.score : 0;
+        string scoreString = score.ToString().PadLeft(digitCount, '0');
+
+        // Only update UI if the score string has changed
+        if (scoreString != lastScoreString)
         {
-            Destroy(child.gameObject);
+            UpdateScoreUI(scoreString, lastScoreString);
+            lastScoreString = scoreString;
         }
+    }
 
-        // Convert score to a string with leading zeros to ensure 7 digits
-        string scoreString = score.ToString().PadLeft(7, '0'); // Pads with zeros to make it 7 characters long
-
-        // Create UI digits
-        foreach (char digitChar in scoreString)
+    void UpdateScoreUI(string scoreString, string prevScoreString)
+    {
+        for (int i = 0; i < digitCount; i++)
         {
-            int digit = digitChar - '0'; // Convert char to int
-            GameObject digitGO = Instantiate(digitPrefab, scoreContainer.transform);
-            Image digitImage = digitGO.GetComponent<Image>();
-            digitImage.sprite = numberSprites[digit];
+            if (digitImages[i] == null)
+                continue;
+
+            char digitChar = scoreString[i];
+            int digit = digitChar - '0';
+
+            // Only update if this digit has changed
+            if (prevScoreString.Length != digitCount || prevScoreString[i] != digitChar)
+            {
+                if (digit >= 0 && digit <= 9 && numberSprites != null && numberSprites.Length > digit)
+                    digitImages[i].sprite = numberSprites[digit];
+            }
         }
     }
 }
