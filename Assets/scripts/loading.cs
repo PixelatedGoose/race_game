@@ -20,7 +20,7 @@ public class specialTextChances
     public float play2;
     public float play3;
     public float chance;
-    public float shit;
+    public float i_tried;
     public float outoftime;
     public float juud7;
     public float grass;
@@ -70,28 +70,21 @@ public class loading : MonoBehaviour
             loadTextRarity = "general";
         }
 
-        //lisää tähän erillinen mahollisuus special teksteille
-        //overwritaa mahollisuuet käyttämällä .json filen lukua ja kirjotusta (kirjotuksen tarvii aarren special tekstiä varten)
-
         switch (loadTextRarity)
         {
             case "general":
-                Debug.Log("GENERAL");
                 loadText_text.text = textData.general[Random.Range(0, textData.general.Length)];
 
                 break;
             case "uncommon":
-                Debug.Log("UNCOMMON");
                 loadText_text.text = textData.uncommon[Random.Range(0, textData.uncommon.Length)];
 
                 break;
             case "rare":
-                Debug.Log("RARE");
                 loadText_text.text = textData.rare[Random.Range(0, textData.rare.Length)];
 
                 break;
             case "obscure":
-                Debug.Log("OBSCURE");
                 loadText_text.text = textData.obscure[Random.Range(0, textData.obscure.Length)];
 
                 break;
@@ -126,7 +119,7 @@ public class loading : MonoBehaviour
             }
             else
             {
-                Debug.Log("fuck off");
+                Debug.Log("special load text not triggered");
             }
         }
     }

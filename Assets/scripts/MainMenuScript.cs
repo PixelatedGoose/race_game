@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class MainMenu : MonoBehaviour
@@ -9,37 +8,12 @@ public class MainMenu : MonoBehaviour
     [SerializeField] optionScript OptionScript;
     public GameObject fullMenu;
     private AudioSource menuMusic;
-
-    private GameObject textScroll;
-    private RectTransform rectTransform;
-    private Text headline;
-    public string[] headlines = new string[]
-    {
-        "voi vitun paska saatana perkele mitä vittua",
-        "Niin justiinsa, sinä sen sanoit",
-        "Joonas Kallio! Joonas Kallio! Joonas Kallio!",
-        "jdfgkhfkdgjjghubbjlreghwefwovjergubroewöwefwG",
-        "vittu nää oot pässi.",
-        "Vuoden peli 1997",
-        "Uusi tutkimus: alkoholi on vaarallista auton sisällä",
-        "Nyt puhutaan asiaa. Aivan pelkkää faktaa. Mitä vittua",
-        "Ootko kuullu semmosesta kaverista ku Kari?",
-        "kolmen tähen kaveri arvosteli; ei kiinnosta paskaakaa",
-        "vittu sun kanssa. kyllä red bull on parempaa ku nocco",
-        "miks pelaat tätä paskaa? mene ulos",
-        "Sponsored by no one ............................ yet",
-        "haastattelimme Karia. hän ei kertonut autoista mitään",
-        "Tämä peli on tehty rakkaudella ja viinalla"
-    };
-
     public VideoPlayer videoPlayer;
 
     void Awake()
     {
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
-        textScroll = GameObject.Find("textScroll");
-        headline = textScroll.GetComponent<Text>();
-        rectTransform = textScroll.GetComponent<RectTransform>();
+
         fullMenu = GameObject.Find("menuCanvas");
         OptionScript = GameObject.Find("Optionspanel").GetComponent<optionScript>();
         GameObject.Find("Optionspanel").SetActive(false);
@@ -50,7 +24,6 @@ public class MainMenu : MonoBehaviour
     void OnEnable()
     {
         Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value") * 10;
-        setHeadline();
         
         if (fucker <= 2)
         {
@@ -65,7 +38,6 @@ public class MainMenu : MonoBehaviour
 
         LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
         menuMusic.Play();
-        scrollText();
     }
     void OnDisable()
     {
@@ -82,8 +54,6 @@ public class MainMenu : MonoBehaviour
         {
             LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
             menuMusic.Play();
-            
-            scrollText();
         }
     }
 
@@ -102,26 +72,5 @@ public class MainMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-    }
-
-    public void scrollText()
-    {
-        LeanTween.value(textScroll, rectTransform.anchoredPosition.x, -1288.0f, 7f)
-        .setEase(LeanTweenType.linear)
-        .setOnUpdate((float val) =>
-        {
-            rectTransform.anchoredPosition = new Vector2(val, rectTransform.anchoredPosition.y);
-        }).setOnComplete(() =>
-        {
-            rectTransform.anchoredPosition = new Vector2(1288.0f, rectTransform.anchoredPosition.y);
-            scrollText();
-            setHeadline();
-        }).setIgnoreTimeScale(true);
-    }
-
-    public void setHeadline()
-    {
-        Random.InitState(System.DateTime.Now.Millisecond);
-        headline.text = headlines[Random.Range(0, headlines.Length)];
     }
 }
