@@ -5,8 +5,8 @@ public class loadArea : MonoBehaviour
 {
     public new Collider collider;
     public string prefix;
-    public instructionHandler instructionHandler; //jotta tää on paljon helpompaa
-    public musicControlTutorial musicControlTutorial;
+    private instructionHandler instructionHandler; //jotta tää on paljon helpompaa
+    private musicControlTutorial musicControlTutorial;
 
 
 
@@ -67,12 +67,18 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
+            case "26":
+                CarController carController = GameObject.FindAnyObjectByType<CarController>();
+                carController.canDrift = true;
+                break;
             case "16":
                 musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_main");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "17":
+                CarController carController3 = GameObject.FindAnyObjectByType<CarController>();
+                carController3.canUseTurbo = true;
                 musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));

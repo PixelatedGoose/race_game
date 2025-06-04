@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class instructionCatInHand : MonoBehaviour //shorthand - instruction category (and) input handler
 {
     CarInputActions Controls;
     public instructionHandler instructionHandler;
+    private fuckshitter fuckshitter;
 
     void Awake()
     {
@@ -15,10 +18,15 @@ public class instructionCatInHand : MonoBehaviour //shorthand - instruction cate
     private void OnEnable()
     {
         Controls.Enable();
+        fuckshitter = FindAnyObjectByType<fuckshitter>();
+        fuckshitter.SetupFuckShit(); //jos vaikuttaa performanceen se on vaa lataukses
+
+        Controls.CarControls.ui_advance.performed += VITTU;
     }
+
     private void OnDisable()
     {
-        Controls.Disable(); 
+        Controls.Disable();
     }
     private void OnDestroy()
     {
@@ -26,15 +34,33 @@ public class instructionCatInHand : MonoBehaviour //shorthand - instruction cate
         Controls.Dispose();
     }
 
-    void Update()
+    //you learn something new everyday
+    private void VITTU(InputAction.CallbackContext context)
     {
-        if (Controls.CarControls.ui_advance.triggered && GameManager.instance.isPaused == false)
+        if (GameManager.instance.isPaused == false)
         {
             switch (instructionHandler.boxOpen)
             {
                 case true:
                     instructionHandler.ShowNextInstructionInCategory(instructionHandler.curCategory, false, 0);
+                    if (instructionHandler.GetInstruction(
+                        instructionHandler.curCategory,
+                        instructionHandler.index)
+                        == "To make sure you understand, try clearing this course to proceed.")
+                    //unity haista paska jo iha oikeasti ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    {
+                        fuckshitter.DoSomeFuckShit("begin");
+                    }
+                    if (instructionHandler.GetInstruction(
+                        instructionHandler.curCategory,
+                        instructionHandler.index)
+                        == "But now, we'll teach you the most important thing. Drive to the next zone to continue.")
+                    //unity haista paska jo iha oikeasti ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    {
+                        fuckshitter.DoSomeFuckShit("predriftfadeout");
+                    }
                     break;
+
                 case false:
                     Debug.Log("no voi vittu");
                     break;
