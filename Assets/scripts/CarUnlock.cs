@@ -30,22 +30,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     public TextMeshProUGUI handlingText; // For handling
     private int activeCarIndex = 0;
     public TextMeshProUGUI CurrentScoreText;
-
-    void Awake()
-    {
-        carsl = new List<GameObject>
-        {
-            GameObject.Find("REALCAR_x"),
-            GameObject.Find("REALCAR"),
-            GameObject.Find("REALCAR_y"),
-            GameObject.Find("Lada")
-        };
-
-        left = GameObject.Find("left").GetComponent<Button>();
-        left.onClick.AddListener(UnlockCar);
-        right = GameObject.Find("right").GetComponent<Button>();
-        right.onClick.AddListener(UnlockCar);
-    }
+    private int requiredScore;
 
     public void LoadData(GameData data)
     {
@@ -59,11 +44,32 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     {
         return;        
     }
+    void Awake()
+    {
+
+        carsl = new List<GameObject>
+        {
+            GameObject.Find("REALCAR_x"),
+            GameObject.Find("REALCAR"),
+            GameObject.Find("REALCAR_y"),
+            GameObject.Find("Lada")
+        };
+
+        left = GameObject.Find("left").GetComponent<Button>();
+        left.onClick.AddListener(UnlockCar);
+        right = GameObject.Find("right").GetComponent<Button>();
+        right.onClick.AddListener(UnlockCar);
+
+
+
+    }
 
     void Start()
     {
+        scoreamount = 100000;
         if (GameManager.instance == null)
         {
+            Debug.Log("GameManager instance is null.");
             return;
         }
 
@@ -72,53 +78,82 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             carPointRequirements = new Dictionary<GameObject, int>
             {
                 { carsl[0], 0 },
-                { carsl[1], 2 }, //98734
-                { carsl[2], 2000 },
+                { carsl[1], 2 },
+                { carsl[2], 10000 },
                 { carsl[3], 10000000 }
             };
         }
 
-        
-        UpdateCarStats();
+
+        activeCarIndex = carsl.FindIndex(car => car.activeInHierarchy);
+
+        if (activeCarIndex >= 0 && activeCarIndex < carsl.Count)
+        {
+            GameObject activeCar = carsl[activeCarIndex];
+
+            if (activeCar.name == "Lada")
+            {
+                scoreText.text = $"Score needed to unlock: {requiredScore}";
+                button.interactable = false;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No active car found!");
+        }
+        if (scoreamount > 90000)
+        {
+            scoreText.text = "Car alreary Unlocked!";
+        }
     }
 
     void Update()
     {
         CurrentScoreText.text = "Your Score: " + scoreamount.ToString();
     }
-
+    
     public void UnlockCar()
     {
+        button.interactable = false;
+
         foreach (var car in carsl)
         {
             if (car.activeInHierarchy)
             {
+                if (car.name == "Lada")
+                {
+                    button.interactable = false;
+                    continue;
+                }
                 if (!unlockedCars.Contains(car) && scoreamount >= carPointRequirements[car])
                 {
-                    button.interactable = true;
                     unlockedCars.Add(car);
                     car.SetActive(true);
+                    button.interactable = true;
                 }
+
                 else if (scoreamount < carPointRequirements[car])
                 {
                     button.interactable = false;
                 }
-
-                if (unlockedCars.Contains(car))
-                {
-                    button.interactable = true;
-                }
             }
         }
 
+        activeCarIndex = -1;
         for (int i = 0; i < carsl.Count; i++)
         {
             if (carsl[i].activeInHierarchy)
             {
-                activeCarIndex = i; 
+                activeCarIndex = i;
                 break;
             }
         }
+
+        if (activeCarIndex == -1)
+        {
+            Debug.LogWarning("No active car found!");
+        }
+
         UpdateCarStats();
     }
 
@@ -144,14 +179,14 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             accelerationText.text = $"Acceleration: {stats.acceleration}";
             handlingText.text = $"Handling: {stats.handling}";
 
-            if (!unlockedCars.Contains(activeCar))
+            if (unlockedCars.Contains(activeCar))
             {
-                int requiredScore = carPointRequirements[activeCar];
-                scoreText.text = $"Score needed to unlock: {requiredScore}";
+                scoreText.text = "Car already unlocked!";
             }
             else
             {
-                scoreText.text = "Car already unlocked!";
+                requiredScore = carPointRequirements[activeCar];
+                scoreText.text = $"Score needed to unlock: {requiredScore}";
             }
         }
         else

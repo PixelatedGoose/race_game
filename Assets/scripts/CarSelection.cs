@@ -40,6 +40,7 @@ public class CarSelection : MonoBehaviour
                 GameObject.Find("haukipudasDay"),
                 GameObject.Find("haukipudasNight")
             };
+        
         }
         else
         {
