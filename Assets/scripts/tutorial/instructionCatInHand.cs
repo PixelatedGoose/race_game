@@ -46,7 +46,7 @@ public class instructionCatInHand : MonoBehaviour //shorthand - instruction cate
                     if (instructionHandler.GetInstruction(
                         instructionHandler.curCategory,
                         instructionHandler.index)
-                        == "To make sure you understand, try clearing this course to proceed.")
+                        == "To make sure you understand simple instructions, try clearing this course to proceed.")
                     //unity haista paska jo iha oikeasti ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                     {
                         fuckshitter.DoSomeFuckShit("begin");

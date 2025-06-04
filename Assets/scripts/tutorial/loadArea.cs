@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class loadArea : MonoBehaviour
@@ -94,11 +95,25 @@ public class loadArea : MonoBehaviour
                 break;
             case "51":
                 CameraFollow cameraFollowRead = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
-                cameraFollowRead.rotOffset = new Vector3(cameraFollowRead.rotOffset.x, 3.0f);
+                LeanTween.value(cameraFollowRead.rotOffset.y, 3.0f, 1f)
+                .setOnUpdate((float val) =>
+                {
+                    var rot = cameraFollowRead.rotOffset;
+                    rot.y = val;
+                    cameraFollowRead.rotOffset = rot;
+                })
+                .setEaseInOutSine();
                 break;
             case "52":
                 CameraFollow cameraFollow3 = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
-                cameraFollow3.rotOffset = new Vector3(cameraFollow3.rotOffset.x, 1.7f);
+                LeanTween.value(cameraFollow3.rotOffset.y, 1.7f, 1f)
+                .setOnUpdate((float val) =>
+                {
+                    var rot = cameraFollow3.rotOffset;
+                    rot.y = val;
+                    cameraFollow3.rotOffset = rot;
+                })
+                .setEaseInOutSine();
                 break;
             default:
                 Debug.LogError($"prefix {prefix} not defined");

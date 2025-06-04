@@ -8,7 +8,7 @@
     "driving": [
         "Use WASD to control your car.",
         "Holding (left) Shift enables the handbrake.",
-        "To make sure you understand, try clearing this course to proceed.",
+        "To make sure you understand simple instructions, try clearing this course to proceed.",
         "Looks good."
     ],
 
@@ -28,7 +28,7 @@
         "This is the most important part of your UI. You can call it whatever ya want.",
         "You can see how fast you're going by looking at the speedometer.",
         "You also have quick access to your score.",
-        "The timer here isn't visible, but you'll see it while playing other maps.",
+        "As you may have also noted, you have a timer here. The red numbers are the milliseconds.",
         "These two were supposed to show your laps; we ran out of time. Yeah we broke the 4th wall",
         "This gauge here tells you how much of your turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
@@ -36,11 +36,11 @@
 
     "drifting": [
         "To drift, hold SPACE while driving.",
-        "Nice job! We had to measure your time on that, by the way.",
-        "Hopefully you did alright.",
+        "Nice job! Hopefully you did alright.",
         "You should've noticed that you accumulated some score from it.",
         "Your time and score determine your rank, given at the end of the map.",
-        "You'll unlock more cars as you gain better ranks on maps."
+        "You'll unlock more cars as you gain better ranks on maps.",
+        "Now it's finally time to talk about turbo."
     ],
 
     "turbe": [
@@ -65,7 +65,7 @@
     "controller_driving": [
         "Use RT and LT for moving forward and backward respectively; use the left stick to steer your car.",
         "Holding X or LB enables the handbrake.",
-        "To make sure you understand, try clearing this course to proceed.",
+        "To make sure you understand simple instructions, try clearing this course to proceed.",
         "Looks good."
     ],
 
@@ -85,7 +85,7 @@
         "This is the most important part of your UI. You can call it whatever ya want.",
         "You can see how fast you're going by looking at the speedometer.",
         "You also have quick access to your score.",
-        "The timer here isn't visible, but you'll see it while playing other maps.",
+        "As you may have also noted, you have a timer here. The red numbers are the milliseconds.",
         "These two were supposed to show your laps; we ran out of time. Yeah we broke the 4th wall",
         "This gauge here tells you how much of your turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
@@ -93,11 +93,11 @@
 
     "controller_drifting": [
         "To drift, hold RB or B while driving.",
-        "Nice job! We had to measure your time on that, by the way.",
-        "Hopefully you did alright.",
+        "Nice job! Hopefully you did alright.",
         "You should've noticed that you accumulated some score from it.",
         "Your time and score determine your rank, given at the end of the map.",
-        "You'll unlock more cars as you gain better ranks on maps."
+        "You'll unlock more cars as you gain better ranks on maps.",
+        "Now it's finally time to talk about turbo."
     ],
 
     "controller_turbe": [

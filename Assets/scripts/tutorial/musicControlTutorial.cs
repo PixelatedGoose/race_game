@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using UnityEngine.Timeline;
 
 public class musicControlTutorial : MonoBehaviour
 {
