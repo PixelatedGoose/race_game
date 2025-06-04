@@ -94,7 +94,7 @@ public class FileDataHandler
         GameData loadedData = null;
         
         {
-            Debug.Log("Loading data from: " + fullPath);
+           
             try
             {
                 
