@@ -20,7 +20,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     public int scoreamount;
     public Button button;
     private Button left, right;
-    private HashSet<GameObject> unlockedCars = new HashSet<GameObject>();
+    private readonly HashSet<GameObject> unlockedCars = new();
 
     // UI Elements
     public TextMeshProUGUI scoreText;
@@ -59,8 +59,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
         left.onClick.AddListener(UnlockCar);
         right = GameObject.Find("right").GetComponent<Button>();
         right.onClick.AddListener(UnlockCar);
-
-
 
     }
 
@@ -114,7 +112,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     
     public void UnlockCar()
     {
-        button.interactable = false;
+        button.interactable = true;
 
         foreach (var car in carsl)
         {
@@ -131,13 +129,10 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
                     car.SetActive(true);
                     button.interactable = true;
                 }
-
-                else if (scoreamount < carPointRequirements[car])
-                {
-                    button.interactable = false;
-                }
             }
         }
+
+
 
         activeCarIndex = -1;
         for (int i = 0; i < carsl.Count; i++)
