@@ -4,7 +4,7 @@ public class skybox : MonoBehaviour
 {
     void OnEnable()
     {
-        float duration = 280f;
+        float duration = 250f;
         LeanTween.value(gameObject, 0f, 360f, duration)
             .setOnUpdate((float val) =>
             {

@@ -1,4 +1,6 @@
 using System.Collections;
+using Unity.Burst.Intrinsics;
+using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 
 public class loadArea : MonoBehaviour
@@ -76,14 +78,25 @@ public class loadArea : MonoBehaviour
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "17":
-                CarController carController3 = FindAnyObjectByType<CarController>();
-                carController3.canUseTurbo = true;
-                musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_main", "fade");
-                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                instructionHandler.index = 1;
+                instructionHandler.ShowInstruction(
+                    instructionHandler.GetInstruction(
+                        instructionHandler.curCategory,
+                        instructionHandler.index));
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "18":
-                musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_main");
+                CarController carController3 = FindAnyObjectByType<CarController>();
+                carController3.canUseTurbo = true;
+
+                musicControlTutorial.EnableTurboFunctions();
+                musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_1main", "fade");
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "19":
+                musicControlTutorial.StopNonIntroTracks();
+                musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_outro");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
@@ -94,11 +107,28 @@ public class loadArea : MonoBehaviour
                 break;
             case "51":
                 CameraFollow cameraFollowRead = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
-                cameraFollowRead.rotOffset = new Vector3(cameraFollowRead.rotOffset.x, 3.0f);
+                LeanTween.value(cameraFollowRead.rotOffset.y, 3.0f, 1f)
+                .setOnUpdate((float val) =>
+                {
+                    var rot = cameraFollowRead.rotOffset;
+                    rot.y = val;
+                    cameraFollowRead.rotOffset = rot;
+                })
+                .setEaseInOutSine();
                 break;
             case "52":
                 CameraFollow cameraFollow3 = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
-                cameraFollow3.rotOffset = new Vector3(cameraFollow3.rotOffset.x, 1.7f);
+                LeanTween.value(cameraFollow3.rotOffset.y, 1.7f, 1f)
+                .setOnUpdate((float val) =>
+                {
+                    var rot = cameraFollow3.rotOffset;
+                    rot.y = val;
+                    cameraFollow3.rotOffset = rot;
+                })
+                .setEaseInOutSine();
+                break;
+            case "53":
+                StartCoroutine(musicControlTutorial.End());
                 break;
             default:
                 Debug.LogError($"prefix {prefix} not defined");

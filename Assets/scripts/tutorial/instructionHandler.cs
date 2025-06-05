@@ -117,12 +117,12 @@ public class instructionHandler : MonoBehaviour
         { "driving:3", 2 }, //
         { "driving_2:3", 2 }, //
         { "drifting:1", 2 }, //hasu kohta
-        { "final:3", 3 },
+        { "final:2", 4 },
         { "controller_intro:2", 4 }, //
         { "controller_driving:3", 2 }, //
         { "controller_driving_2:3", 2 }, //
         { "controller_drifting:1", 2 }, //hasu kohta
-        { "controller_final:3", 3 }
+        { "controller_final:2", 4 }
     };
     
     /// <summary>
@@ -136,7 +136,7 @@ public class instructionHandler : MonoBehaviour
         switch (anim)
         {
             case 0:
-                Debug.Log("stays open instruction: " + instructText);
+                //Debug.Log("stays open instruction: " + instructText);
                 boxOpen = true;
                 instructionText.text = instructText;
 
@@ -144,7 +144,7 @@ public class instructionHandler : MonoBehaviour
 
                 break;
             case 1:
-                Debug.Log("open instruction: " + instructText);
+                //Debug.Log("open instruction: " + instructText);
                 instructionText.text = instructText;
 
                 LeanTween.scaleX(instructionBox, 1.0f, 0.5f).setEaseOutCubic();
@@ -153,7 +153,7 @@ public class instructionHandler : MonoBehaviour
 
                 break;
             case 2:
-                Debug.Log("close instruction: " + instructText);
+                //Debug.Log("close instruction: " + instructText);
 
                 LeanTween.scaleX(instructionBox, 0.0f, 0.5f).setEaseOutCubic();
                 boxOpen = false;
@@ -161,13 +161,13 @@ public class instructionHandler : MonoBehaviour
 
                 break;
             case 3:
-                Debug.Log("stays closed instruction: " + instructText);
+                //Debug.Log("stays closed instruction: " + instructText);
                 instructionText.text = instructText;
                 boxOpen = false;
 
                 break;
             case 4:
-                Debug.Log("stays closed with sound: " + instructText);
+                //Debug.Log("stays closed with sound: " + instructText);
                 instructionText.text = instructText;
                 boxOpen = false;
                 instructSounds[1].Play();
@@ -206,7 +206,7 @@ public class instructionHandler : MonoBehaviour
         }
         else
         {
-            Debug.Log("continuing ShowNextInstructionInCategory without reset");
+            //Debug.Log("continuing ShowNextInstructionInCategory without reset");
 
             if (index == texts.Length - 1)
             {
@@ -215,12 +215,12 @@ public class instructionHandler : MonoBehaviour
 
             if (anim == 2)
             {
-                Debug.Log("NOT ADVANCING TEXT; CLOSING");
+                //Debug.Log("NOT ADVANCING TEXT; CLOSING");
                 ShowInstruction(GetInstruction(category, index), 2);
             }
             else
             {
-                Debug.Log("ADVANCING TEXT");
+                //Debug.Log("ADVANCING TEXT");
                 index++;
 
                 string key = $"{category}:{index}";

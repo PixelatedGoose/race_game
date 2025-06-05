@@ -92,8 +92,6 @@ public class CarController : MonoBehaviour
             canUseTurbo = true;
         }
         AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
-        canDrift = true;
-        canUseTurbo = true;
     }
 
     private void OnControlsChanged(PlayerInput input)
