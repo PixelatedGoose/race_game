@@ -12,7 +12,7 @@ public class AICarController : MonoBehaviour
     private const float STEERING_DEAD_ZONE = 0.05f;
     private const float STEERING_LERP = 0.6f;
     private const float NODE_GIZMO_RADIUS = 0.5f;
-    private static readonly Vector3 DEFAULT_CENTER_OF_MASS = new Vector3(0, -0.3f, 0);
+    private static readonly Vector3 DEFAULT_CENTER_OF_MASS = new Vector3(0, -0.0f, 0);
 
     // --- Path Following ---
     [Header("Path Following Settings")]
@@ -49,11 +49,13 @@ public class AICarController : MonoBehaviour
     [SerializeField] private float grassSpeedMultiplier = 0.5f;
 
     // --- Corner Slowdown ---
-    [Header("Corner Slowdown Settings")]
-    [Tooltip("Minimum slowdown factor (0-1).")]
-    [SerializeField] private float slowdownFactor = 0.2f;
-    [Tooltip("Angle threshold for sharp corners.")]
-    [SerializeField] private float cornerAngleThreshold = 60.0f;
+    [Header("AI Turn Slowdown Settings")]
+    [Tooltip("Degrees: Only slow down for turns sharper than this.")]
+    [SerializeField] private float slowdownThreshold = 30f;
+    [Tooltip("Degrees: Max slowdown at this angle or above.")]
+    [SerializeField] private float maxSlowdownAngle = 90f;
+    [Tooltip("Minimum speed factor at max angle (e.g. 0.35 = 35% of maxSpeed).")]
+    [SerializeField] private float minSlowdown = 0.35f;
 
     // --- Turn Detection ---
     [Header("Turn Detection Settings")]
@@ -138,6 +140,9 @@ public class AICarController : MonoBehaviour
     [HideInInspector] public float assignedTurnSensitivity; //WIP - will be set by AIManager
     [HideInInspector] public int currentPlacement = 1; //updates at runtime
     public static List<AICarController> AllAICars = new List<AICarController>();
+
+    public enum AIDifficulty { Beginner, Intermediate, Hard }
+    [HideInInspector] public AIDifficulty difficulty = AIDifficulty.Beginner;
 
     private void OnEnable() => AllAICars.Add(this);
     private void OnDisable() => AllAICars.Remove(this);
@@ -279,38 +284,42 @@ public class AICarController : MonoBehaviour
             return;
         }
 
-        // Start grouping nodes for a single Bezier curve
         List<Vector3> curveNodes = new List<Vector3>();
-        curveNodes.Add(waypoints[currentWaypointIndex].position); // Add the current node
+
+        // --- Insert car's current position as the first control point if coming from straight ---
+        if (!isFollowingBezierCurve)
+        {
+            curveNodes.Add(transform.position); // Start at car's current position
+            curveNodes.Add(waypoints[currentWaypointIndex].position); // Next waypoint
+        }
+        else
+        {
+            curveNodes.Add(waypoints[currentWaypointIndex].position); // Standard behavior
+        }
 
         int index = currentWaypointIndex;
         while (true)
         {
-            // Get the next and next-next nodes
             Vector3 currentNode = waypoints[index].position;
             Vector3 nextNode = waypoints[(index + 1) % waypoints.Count].position;
             Vector3 nextNextNode = waypoints[(index + 2) % waypoints.Count].position;
 
-            // Calculate the angle between the current, next, and next-next nodes
             Vector3 directionToNext = (nextNode - currentNode).normalized;
             Vector3 directionToNextNext = (nextNextNode - nextNode).normalized;
             float angle = Vector3.Angle(directionToNext, directionToNextNext);
 
             if (angle > angleThreshold)
             {
-                // Add the next node to the curve
                 curveNodes.Add(nextNode);
                 index = (index + 1) % waypoints.Count;
             }
             else
             {
-                // Add the next node and stop grouping
                 curveNodes.Add(nextNode);
                 index = (index + 1) % waypoints.Count;
                 break;
             }
 
-            // Stop if looped through all nodes
             if (index == currentWaypointIndex)
             {
                 LogDebug("Looped through all nodes without finding a straight section.");
@@ -318,12 +327,10 @@ public class AICarController : MonoBehaviour
             }
         }
 
-        // Generate a Bezier curve using the grouped nodes
         bezierCurvePoints = GenerateMultiPointBezierCurve(curveNodes);
 
-        // Update the current node index to the node after the curve
         currentWaypointIndex = index;
-        isFollowingBezierCurve = true; // Enter Bezier curve mode
+        isFollowingBezierCurve = true;
     }
 
     List<Vector3> GenerateMultiPointBezierCurve(List<Vector3> points)
@@ -458,10 +465,35 @@ public class AICarController : MonoBehaviour
     {
         if (bezierCurvePoints.Count == 0) return;
 
-        // Steer towards the next point in the Bezier curve, with avoidance offset
-        Vector3 targetPoint = bezierCurvePoints[0];
+        // 1. Find the closest point on the curve to the car
+        int closestIdx = 0;
+        float closestDist = float.MaxValue;
+        for (int i = 0; i < bezierCurvePoints.Count; i++)
+        {
+            float dist = Vector3.Distance(transform.position, bezierCurvePoints[i]);
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                closestIdx = i;
+            }
+        }
 
-        // Apply lateral offset in local space
+        // 2. Look ahead a fixed distance (in curve points, or meters)
+        float lookaheadMeters = Mathf.Lerp(4f, 10f, carRb.linearVelocity.magnitude / maxSpeed); // Tune as needed
+        float accumDist = 0f;
+        int targetIdx = closestIdx;
+        for (int i = closestIdx + 1; i < bezierCurvePoints.Count; i++)
+        {
+            accumDist += Vector3.Distance(bezierCurvePoints[i - 1], bezierCurvePoints[i]);
+            if (accumDist >= lookaheadMeters)
+            {
+                targetIdx = i;
+                break;
+            }
+        }
+        Vector3 targetPoint = bezierCurvePoints[targetIdx];
+
+        // 3. Steer toward the target point
         Vector3 localTarget = transform.InverseTransformPoint(targetPoint);
         localTarget.x += avoidanceOffset;
         targetPoint = transform.TransformPoint(localTarget);
@@ -471,6 +503,12 @@ public class AICarController : MonoBehaviour
 
         steerInput = Mathf.Abs(localDirection.x) > STEERING_DEAD_ZONE ? Mathf.Clamp(localDirection.x, -1.0f, 1.0f) : 0.0f;
         steerInput = Mathf.Lerp(steerInput, Mathf.Clamp(localDirection.x, -1.0f, 1.0f), 0.1f);
+
+        // Clamp steering at high speed
+        float speed = carRb.linearVelocity.magnitude;
+        float speedFactor = Mathf.InverseLerp(0, maxSpeed, speed);
+        float steerClamp = Mathf.Lerp(1f, 0.3f, speedFactor);
+        steerInput = Mathf.Clamp(steerInput, -steerClamp, steerClamp);
 
         foreach (var wheel in wheels)
         {
@@ -487,6 +525,38 @@ public class AICarController : MonoBehaviour
         FindFarthestAndClosestBezierPoints(out Vector3 farthestPoint, out float farthestDistance, out Vector3 closestPoint, out float closestDistance);
         AdjustSpeedForUpcomingTurn(farthestPoint, farthestDistance);
         AdjustTurningForUpcomingTurn(closestDistance);
+
+        float turnAngle = 0f;
+        bool foundTurn = false;
+
+        if (isFollowingBezierCurve && bezierCurvePoints.Count > 2)
+        {
+            Vector3 segA = (bezierCurvePoints[1] - bezierCurvePoints[0]).normalized;
+            Vector3 segB = (bezierCurvePoints[2] - bezierCurvePoints[1]).normalized;
+            turnAngle = Vector3.Angle(segA, segB);
+            foundTurn = true;
+        }
+        else if (waypoints != null && waypoints.Count > 2)
+        {
+            int idx0 = currentWaypointIndex % waypoints.Count;
+            int idx1 = (currentWaypointIndex + 1) % waypoints.Count;
+            int idx2 = (currentWaypointIndex + 2) % waypoints.Count;
+
+            Vector3 dirA = (waypoints[idx1].position - waypoints[idx0].position).normalized;
+            Vector3 dirB = (waypoints[idx2].position - waypoints[idx1].position).normalized;
+            turnAngle = Vector3.Angle(dirA, dirB);
+            foundTurn = true;
+        }
+
+        if (foundTurn && turnAngle > slowdownThreshold)
+        {
+            // Normalize angle between threshold and max
+            float t = Mathf.InverseLerp(slowdownThreshold, maxSlowdownAngle, turnAngle);
+            float speedFactor = Mathf.Lerp(1f, minSlowdown, t);
+            float targetSpeed = maxSpeed * speedFactor;
+            ApplySpeedLimit(targetSpeed);
+            LogDebug($"Proportional slowdown: Upcoming turn {turnAngle:F1}°, limiting speed to {targetSpeed:F1}.");
+        }
     }
 
     private void FindFarthestAndClosestBezierPoints(out Vector3 farthestPoint, out float farthestDistance, out Vector3 closestPoint, out float closestDistance)
@@ -528,6 +598,8 @@ public class AICarController : MonoBehaviour
                 float targetSpeed = Mathf.Lerp(maxSpeed * 0.3f, maxSpeed, 1.0f - slowdownFactor);
 
                 ApplySpeedLimit(targetSpeed);
+            }
+            else
             {
                 // Restore max speed if no sharp turn is detected
                 ApplySpeedLimit(maxSpeed);
@@ -538,7 +610,6 @@ public class AICarController : MonoBehaviour
             // No points within detection radius, restore max speed
             ApplySpeedLimit(maxSpeed);
         }
-    }
     }
 
     private void AdjustTurningForUpcomingTurn(float closestDistance)
@@ -625,6 +696,12 @@ public class AICarController : MonoBehaviour
     {
         avoidanceOffset = 0f; // Reset each frame
 
+        float avoidanceScale = 1f;
+        if (difficulty == AIDifficulty.Hard)
+            avoidanceScale = 0.3f; // Hard AI avoids much less (tweak as needed)
+        else if (difficulty == AIDifficulty.Intermediate)
+            avoidanceScale = 0.7f; // Optional: intermediate avoids a bit less
+
         float mySafeRadius = Mathf.Max(this.CarWidth, this.CarLength) * 0.5f;
 
         foreach (var other in AllAICars)
@@ -645,7 +722,7 @@ public class AICarController : MonoBehaviour
                 if (futureDist < minSafeDistance)
                 {
                     float steerDirection = Vector3.Cross(transform.forward, toOther).y > 0 ? -1f : 1f;
-                    avoidanceOffset += steerDirection * avoidanceLateralOffset;
+                    avoidanceOffset += steerDirection * avoidanceLateralOffset * avoidanceScale;
 
                     if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > other.carRb.linearVelocity.magnitude)
                         moveInput = 0.7f;
@@ -704,6 +781,15 @@ public class AICarController : MonoBehaviour
             speedLimit = (maxSpeed * boostMultiplier) + 20f; // Add flat +20 for immediate effect
 
         ApplySpeedLimit(speedLimit);
+    }
+
+    public void SetMaxSpeed(float value)
+    {
+        maxSpeed = value;
+    }
+    public void SetMaxAcceleration(float value)
+    {
+        maxAcceleration = value;
     }
 
 #if UNITY_EDITOR // every visual debugging tool
