@@ -69,7 +69,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
             foreach (var btimeText in BtimeTexts)
             {
-                btimeText.text = "Record: " + besttime.ToString("F2");
+                if (GameManager.instance.sceneSelected != "tutorial")
+                    btimeText.text = "Record: " + besttime.ToString("F2");
             }
         }
     }
@@ -187,7 +188,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
         foreach (var ltimeText in LtimeTexts)
         {
-            ltimeText.text = laptime.ToString("F2");
+            if (GameManager.instance.sceneSelected != "tutorial")
+                ltimeText.text = laptime.ToString("F2");
         }
 
         if (transform.position.y < -1)
@@ -267,7 +269,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
             foreach (var ltimeText in LtimeTexts)
             {
-                ltimeText.text = laptime.ToString("F2");
+                if (GameManager.instance.sceneSelected != "tutorial")
+                    ltimeText.text = laptime.ToString("F2");
             }
         }
 
@@ -429,8 +432,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             Rank = score / laptime;
 
             string assignedRank = rankManager != null ? rankManager.GetRank(Rank) : "N/A";
-
-            rankText.text = $"Rank: {assignedRank} ({Rank:F2})";
+            if (GameManager.instance.sceneSelected != "tutorial")
+                rankText.text = $"Rank: {assignedRank} ({Rank:F2})";
         }
         else
         {
