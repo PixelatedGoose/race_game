@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class musicControlTutorial : MonoBehaviour
 {
@@ -45,11 +47,11 @@ public class musicControlTutorial : MonoBehaviour
         CancelTweens();
         if (GameManager.instance.isAddingPoints)
         {
-            TrackedTween_Start(mainTrack.volume, 0.0f, 1.0f, val => mainTrack.volume = val);
-            TrackedTween_Start(driftTrack.volume, 0.28f, 1.0f, val => driftTrack.volume = val);
+            TrackedTween_Start(mainTrack.volume, 0.0f, 0.6f, val => mainTrack.volume = val);
+            TrackedTween_Start(driftTrack.volume, 0.28f, 0.6f, val => driftTrack.volume = val);
 
             if (turboTrack != null)
-                TrackedTween_Start(turboTrack.volume, 0.0f, 1.0f, val => turboTrack.volume = val);
+                TrackedTween_Start(turboTrack.volume, 0.0f, 0.6f, val => turboTrack.volume = val);
 
             currentState = MusicState.Drift;
         }
@@ -61,11 +63,11 @@ public class musicControlTutorial : MonoBehaviour
 
         if (!GameManager.instance.isAddingPoints) //turha mut nyt ei oteta riskejä lol
         {
-            TrackedTween_Start(mainTrack.volume, 0.28f, 1.0f, val => mainTrack.volume = val);
-            TrackedTween_Start(driftTrack.volume, 0.0f, 1.0f, val => driftTrack.volume = val);
+            TrackedTween_Start(mainTrack.volume, 0.28f, 0.6f, val => mainTrack.volume = val);
+            TrackedTween_Start(driftTrack.volume, 0.0f, 0.6f, val => driftTrack.volume = val);
 
             if (turboTrack != null)
-                TrackedTween_Start(turboTrack.volume, 0.0f, 1.0f, val => turboTrack.volume = val);
+                TrackedTween_Start(turboTrack.volume, 0.0f, 0.6f, val => turboTrack.volume = val);
 
             currentState = MusicState.Main;
         }
@@ -75,11 +77,11 @@ public class musicControlTutorial : MonoBehaviour
     {
         if (variants.Count < 3) //|| GameManager.instance.turbeActive)
             return;
-        
+
         CancelTweens();
-        TrackedTween_Start(turboTrack.volume, 0.28f, 1.0f, val => turboTrack.volume = val);
-        TrackedTween_Start(driftTrack.volume, 0.0f, 1.0f, val => driftTrack.volume = val);
-        TrackedTween_Start(mainTrack.volume, 0.0f, 1.0f, val => mainTrack.volume = val);
+        TrackedTween_Start(turboTrack.volume, 0.28f, 0.6f, val => turboTrack.volume = val);
+        TrackedTween_Start(driftTrack.volume, 0.0f, 0.6f, val => driftTrack.volume = val);
+        TrackedTween_Start(mainTrack.volume, 0.0f, 0.6f, val => mainTrack.volume = val);
 
         currentState = MusicState.Turbo;
     }
@@ -90,17 +92,17 @@ public class musicControlTutorial : MonoBehaviour
 
         if (GameManager.instance.isAddingPoints)
         {
-            TrackedTween_Start(driftTrack.volume, 0.28f, 1.0f, val => driftTrack.volume = val);
-            TrackedTween_Start(mainTrack.volume, 0.0f, 1.0f, val => mainTrack.volume = val);
-            TrackedTween_Start(turboTrack.volume, 0.0f, 1.0f, val => turboTrack.volume = val);
+            TrackedTween_Start(driftTrack.volume, 0.28f, 0.6f, val => driftTrack.volume = val);
+            TrackedTween_Start(mainTrack.volume, 0.0f, 0.6f, val => mainTrack.volume = val);
+            TrackedTween_Start(turboTrack.volume, 0.0f, 0.6f, val => turboTrack.volume = val);
 
             currentState = MusicState.Drift;
         }
         else
         {
-            TrackedTween_Start(mainTrack.volume, 0.28f, 1.0f, val => mainTrack.volume = val);
-            TrackedTween_Start(driftTrack.volume, 0.0f, 1.0f, val => driftTrack.volume = val);
-            TrackedTween_Start(turboTrack.volume, 0.0f, 1.0f, val => turboTrack.volume = val);
+            TrackedTween_Start(mainTrack.volume, 0.28f, 0.6f, val => mainTrack.volume = val);
+            TrackedTween_Start(driftTrack.volume, 0.0f, 0.6f, val => driftTrack.volume = val);
+            TrackedTween_Start(turboTrack.volume, 0.0f, 0.6f, val => turboTrack.volume = val);
 
             currentState = MusicState.Main;
         }
@@ -254,18 +256,18 @@ public class musicControlTutorial : MonoBehaviour
 
         ChangeTrack(trackName);
 
-        TrackedTween_Start(mainTrack.volume, 0.28f, 1.0f, val => mainTrack.volume = val);
-        TrackedTween_Start(previousMain.volume, 0.0f, 1.0f, val => previousMain.volume = val);
-        
+        TrackedTween_Start(mainTrack.volume, 0.28f, 0.6f, val => mainTrack.volume = val);
+        TrackedTween_Start(previousMain.volume, 0.0f, 0.6f, val => previousMain.volume = val);
+
         //the worst
         if (driftTrack != null && carController.isDrifting)
-            TrackedTween_Start(driftTrack.volume, 0.28f, 1.0f, val => driftTrack.volume = val);
+            TrackedTween_Start(driftTrack.volume, 0.28f, 0.6f, val => driftTrack.volume = val);
         if (previousDrift != null)
-            TrackedTween_Start(previousDrift.volume, 0.0f, 1.0f, val => previousDrift.volume = val);
+            TrackedTween_Start(previousDrift.volume, 0.0f, 0.6f, val => previousDrift.volume = val);
         if (turboTrack != null && GameManager.instance.turbeActive)
-            TrackedTween_Start(turboTrack.volume, 0.28f, 1.0f, val => turboTrack.volume = val);
+            TrackedTween_Start(turboTrack.volume, 0.28f, 0.6f, val => turboTrack.volume = val);
         if (previousTurbo != null)
-            TrackedTween_Start(previousTurbo.volume, 0.0f, 1.0f, val => previousTurbo.volume = val);
+            TrackedTween_Start(previousTurbo.volume, 0.0f, 0.6f, val => previousTurbo.volume = val);
     }
 
 
@@ -307,5 +309,11 @@ public class musicControlTutorial : MonoBehaviour
 
         tweenIds.Add(tweenId);
         return tweenId;
+    }
+
+    public IEnumerator End()
+    {
+        SceneManager.LoadSceneAsync(0);
+        yield return null;
     }
 }

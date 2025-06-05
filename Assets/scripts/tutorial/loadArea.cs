@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.Burst.Intrinsics;
+using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 
 public class loadArea : MonoBehaviour
@@ -94,7 +95,8 @@ public class loadArea : MonoBehaviour
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "19":
-                musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_main");
+                musicControlTutorial.StopNonIntroTracks();
+                musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_outro");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
@@ -124,6 +126,9 @@ public class loadArea : MonoBehaviour
                     cameraFollow3.rotOffset = rot;
                 })
                 .setEaseInOutSine();
+                break;
+            case "53":
+                StartCoroutine(musicControlTutorial.End());
                 break;
             default:
                 Debug.LogError($"prefix {prefix} not defined");
