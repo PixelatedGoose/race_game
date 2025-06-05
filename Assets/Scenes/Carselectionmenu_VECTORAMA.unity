@@ -2443,7 +2443,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   carStats:
-  - carName: Subaru
+  - carName: Toyota
     speed: 10
     acceleration: 8
     handling: 2
@@ -2451,7 +2451,7 @@ MonoBehaviour:
     speed: 6
     acceleration: 6
     handling: 4
-  - carName: Toyota
+  - carName: Subaru
     speed: 3
     acceleration: 6
     handling: 10
