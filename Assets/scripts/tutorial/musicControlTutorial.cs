@@ -24,11 +24,19 @@ public class musicControlTutorial : MonoBehaviour
         Controls = new CarInputActions();
         Controls.Enable();
 
+        carController = FindAnyObjectByType<CarController>();
+    }
+    public void EnableDriftFunctions()
+    {
         Controls.CarControls.Drift.performed += DriftCall;
-        Controls.CarControls.turbo.performed += TurboCall;
         Controls.CarControls.Drift.canceled += DriftCanceled;
+    }
+    public void EnableTurboFunctions()
+    {
+        Controls.CarControls.turbo.performed += TurboCall;
         Controls.CarControls.turbo.canceled += TurboCanceled;
     }
+
     void DriftCall(InputAction.CallbackContext context)
     {
         if (currentState == MusicState.Turbo || variants.Count <= 1) //VOI VITTU IHAN OIKEASTI
@@ -65,7 +73,7 @@ public class musicControlTutorial : MonoBehaviour
 
     void TurboCall(InputAction.CallbackContext context)
     {
-        if (variants.Count < 2 || !GameManager.instance.turbeActive)
+        if (variants.Count < 3) //|| GameManager.instance.turbeActive)
             return;
         
         CancelTweens();
@@ -77,7 +85,7 @@ public class musicControlTutorial : MonoBehaviour
     }
     void TurboCanceled(InputAction.CallbackContext context)
     {
-        if (variants.Count < 2 || !GameManager.instance.turbeActive)
+        if (variants.Count < 3) //!GameManager.instance.turbeActive)
             return;
 
         if (GameManager.instance.isAddingPoints)
@@ -128,6 +136,13 @@ public class musicControlTutorial : MonoBehaviour
             }
         }
     }
+    public void StopNonIntroTracks()
+    {
+        foreach (AudioSource musicTrack in musicListSources)
+        {
+            musicTrack.Stop();
+        }
+    }
     void TrackVariants(bool set = false)
     {
         string clipName = mainTrack.clip.name;
@@ -139,6 +154,7 @@ public class musicControlTutorial : MonoBehaviour
         variants = musicList
             .Select(go => go)
             .Where(a => a.name.StartsWith(prefix))
+            .OrderBy(a => a.name)
             .ToList();
 
         if (variants.Count == 1)
@@ -240,17 +256,16 @@ public class musicControlTutorial : MonoBehaviour
 
         TrackedTween_Start(mainTrack.volume, 0.28f, 1.0f, val => mainTrack.volume = val);
         TrackedTween_Start(previousMain.volume, 0.0f, 1.0f, val => previousMain.volume = val);
-
-        if (driftTrack != null && previousDrift != null)
-        {
+        
+        //the worst
+        if (driftTrack != null && carController.isDrifting)
             TrackedTween_Start(driftTrack.volume, 0.28f, 1.0f, val => driftTrack.volume = val);
+        if (previousDrift != null)
             TrackedTween_Start(previousDrift.volume, 0.0f, 1.0f, val => previousDrift.volume = val);
-        }
-        if (turboTrack != null && previousTurbo != null)
-        {
+        if (turboTrack != null && GameManager.instance.turbeActive)
             TrackedTween_Start(turboTrack.volume, 0.28f, 1.0f, val => turboTrack.volume = val);
+        if (previousTurbo != null)
             TrackedTween_Start(previousTurbo.volume, 0.0f, 1.0f, val => previousTurbo.volume = val);
-        }
     }
 
 
@@ -273,9 +288,23 @@ public class musicControlTutorial : MonoBehaviour
         }
     }
 
-    public int TrackedTween_Start(float from, float to, float time, System.Action<float> onUpdate)
+    public int TrackedTween_Start(float from, float to, float time, System.Action<float> onUpdate, bool yeah = false)
     {
-        int tweenId = LeanTween.value(from, to, time).setOnUpdate(onUpdate).uniqueId;
+        int tweenId;
+
+        if (yeah)
+        {
+            tweenId = LeanTween.value(from, to, time).setOnUpdate(onUpdate)
+            .setOnComplete(() =>
+            {
+                mainTrack.volume = 0f;
+            }).uniqueId;
+        }
+        else
+        {
+            tweenId = LeanTween.value(from, to, time).setOnUpdate(onUpdate).uniqueId;
+        }
+
         tweenIds.Add(tweenId);
         return tweenId;
     }

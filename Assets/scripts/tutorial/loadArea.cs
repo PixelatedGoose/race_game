@@ -87,7 +87,9 @@ public class loadArea : MonoBehaviour
             case "18":
                 CarController carController3 = FindAnyObjectByType<CarController>();
                 carController3.canUseTurbo = true;
-                musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_main", "fade");
+
+                musicControlTutorial.EnableTurboFunctions();
+                musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_1main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;

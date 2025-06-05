@@ -113,7 +113,7 @@ public class fuckshitter : MonoBehaviour
 
                 musicControlTutorial.TrackedTween_Start(
                     musicControlTutorial.mainTrack.volume, 0.0f, 5.0f, val =>
-                    musicControlTutorial.mainTrack.volume = val);
+                    musicControlTutorial.mainTrack.volume = val, true);
 
                 wallMovement_Lower.transform.position = new Vector3(
                     predriftwall.transform.position.x,
@@ -142,7 +142,13 @@ public class fuckshitter : MonoBehaviour
         if (carController.isDrifting)
         {
             Controls.CarControls.Drift.performed -= StartDriftTrack;
-            musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_main");
+
+            musicControlTutorial.EnableDriftFunctions();
+            musicControlTutorial.mainTrack.volume = 0f;
+            musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_1main");
+            musicControlTutorial.StopNonIntroTracks();
+            musicControlTutorial.StartNonIntroTracks();
+            //pitää synkronisoida, että se fade ei kuulosta paskalta
         }
     }
 }
