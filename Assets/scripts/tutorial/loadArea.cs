@@ -1,6 +1,4 @@
 using System.Collections;
-using Unity.Burst.Intrinsics;
-using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 
 public class loadArea : MonoBehaviour
@@ -96,6 +94,8 @@ public class loadArea : MonoBehaviour
                 break;
             case "19":
                 musicControlTutorial.StopNonIntroTracks();
+                musicControlTutorial.turboTrack.Stop();
+                musicControlTutorial.driftTrack.Stop();
                 musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_outro");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));

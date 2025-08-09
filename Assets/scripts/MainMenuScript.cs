@@ -24,7 +24,7 @@ public class MainMenu : MonoBehaviour
     void OnEnable()
     {
         Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value") * 10;
-        
+
         if (fucker <= 2)
         {
             videoPlayer.loopPointReached += OnVideoFinished;
@@ -72,5 +72,10 @@ public class MainMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void Credits()
+    {
+        SceneManager.LoadSceneAsync(10);
     }
 }
