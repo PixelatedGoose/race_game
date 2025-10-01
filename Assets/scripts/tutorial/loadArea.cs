@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class loadArea : MonoBehaviour
 {
@@ -16,6 +17,49 @@ public class loadArea : MonoBehaviour
         collider = GetComponent<Collider>();
         instructionHandler = GameObject.Find("instructionHandler").GetComponent<instructionHandler>();
         musicControlTutorial = GameObject.Find("music").GetComponent<musicControlTutorial>();
+    }
+
+    void OnEnable()
+    {
+        InputSystem.onDeviceChange += OnDeviceChange;
+    }
+
+    void OnDisable()
+    {
+        InputSystem.onDeviceChange -= OnDeviceChange;
+    }
+
+
+    /* elikkäs:
+    1. lisää 2 eri dictionarya, vaihtaa niiden välil OnDeviceChangessa
+    2. vaiha kaikki variablet niille jotka käyttää ChangeAnimOverrides()
+    3. en muista ja kello on iha just 3
+    */
+    //TO DO (as stated by copilot):
+    //1. tarkista että kaikki toimii
+    //2. make
+    //3. KORJAA TÄMÄ VITUN PASKA
+
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (device is Gamepad)
+        {
+            if (change == InputDeviceChange.Added)
+            {
+                Debug.Log("controller connect");
+            }
+            else if (change == InputDeviceChange.Removed)
+            {
+                try
+                {
+                    Debug.Log("controller disconnect");
+                }
+                catch (System.IndexOutOfRangeException ex)
+                {
+                    Debug.LogWarning("SOMETHING HAS FUCKED UP" + ex.Message);
+                }
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,7 +82,7 @@ public class loadArea : MonoBehaviour
                 break;
             case "11":
                 musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
-                musicControlTutorial.StartNonIntroTracks();            
+                musicControlTutorial.StartNonIntroTracks();
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
@@ -51,7 +95,7 @@ public class loadArea : MonoBehaviour
                 , 1);
 
                 StartCoroutine(FadeDeath(1.0f));
-                break;                
+                break;
             case "13":
                 musicControlTutorial.MusicSections("3_FINAL_TUTORIAL_main", "fade");
                 StartCoroutine(FadeDeath(1.0f));
@@ -59,7 +103,7 @@ public class loadArea : MonoBehaviour
             case "14":
                 musicControlTutorial.MusicSections("4_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
-                
+
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "15":
