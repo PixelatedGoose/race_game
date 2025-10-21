@@ -4,11 +4,15 @@ using UnityEngine.Video;
 
 public class MainMenu : MonoBehaviour
 {
-    int fucker;
+    int randomChance;
     [SerializeField] optionScript OptionScript;
     public GameObject fullMenu;
     private AudioSource menuMusic;
     public VideoPlayer videoPlayer;
+
+    // new: assign in inspector (or the script will try to find "PlayPanel")
+    [SerializeField] private GameObject playConfirmPanel;
+    [SerializeField] private GameObject mainMenuPanel; // assign in Inspector (fallback to Find below)
 
     void Awake()
     {
@@ -18,14 +22,21 @@ public class MainMenu : MonoBehaviour
         OptionScript = GameObject.Find("Optionspanel").GetComponent<optionScript>();
         GameObject.Find("Optionspanel").SetActive(false);
 
-        fucker = Random.Range(1, 3334);
+        if (mainMenuPanel == null)
+            mainMenuPanel = GameObject.Find("MainMenu");
+        if (playConfirmPanel == null)
+            playConfirmPanel = GameObject.Find("PlayPanel");
+        if (playConfirmPanel != null)
+            playConfirmPanel.SetActive(false);
+
+        randomChance = Random.Range(1, 3334);
     }
 
     void OnEnable()
     {
         Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value") * 10;
 
-        if (fucker <= 2)
+        if (randomChance <= 2)
         {
             videoPlayer.loopPointReached += OnVideoFinished;
             videoPlayer.Play();
@@ -46,7 +57,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        if (fucker <= 2)
+        if (randomChance <= 2)
         {
             return;
         }
@@ -57,10 +68,37 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    // changed: show the play-confirm UI instead of immediately loading
     public void Playgame()
+    {
+        if (playConfirmPanel == null)
+        {
+            // fallback to old behaviour if no UI panel found
+            ConfirmPlay();
+            return;
+        }
+
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(false);
+
+        playConfirmPanel.SetActive(true);
+    }
+
+    // called by the "Play Game" button on the playConfirmPanel
+    public void ConfirmPlay()
     {
         SceneManager.LoadSceneAsync(7); //menee ny carselectioniin suoraan
         DatapersistenceManager.instance.LoadGame();
+    }
+
+    // optional: called by a "Back" button on the playConfirmPanel
+    public void CancelPlay()
+    {
+        if (playConfirmPanel != null)
+            playConfirmPanel.SetActive(false);
+
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(true);
     }
 
     public void PlayTutorial()
