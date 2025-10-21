@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
+using UnityEngine.Events;
 
 public class MainMenu : MonoBehaviour
 {
@@ -69,6 +70,10 @@ public class MainMenu : MonoBehaviour
     }
 
     // changed: show the play-confirm UI instead of immediately loading
+    // new: events for camera animation (assign in Inspector)
+    [SerializeField] private UnityEvent onShowPlayMenu;
+    [SerializeField] private UnityEvent onHidePlayMenu;
+
     public void Playgame()
     {
         if (playConfirmPanel == null)
@@ -82,6 +87,9 @@ public class MainMenu : MonoBehaviour
             mainMenuPanel.SetActive(false);
 
         playConfirmPanel.SetActive(true);
+
+        // signal camera to move forward on Play
+        onShowPlayMenu?.Invoke();
     }
 
     // called by the "Play Game" button on the playConfirmPanel
@@ -99,6 +107,9 @@ public class MainMenu : MonoBehaviour
 
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(true);
+
+        // signal camera to move back to start
+        onHidePlayMenu?.Invoke();
     }
 
     public void PlayTutorial()
