@@ -13,6 +13,7 @@ public class mapSelection : MonoBehaviour
     private AudioSource loadingLoop;
     public GameObject[] maps;
     private RectTransform mapRectTransform;
+    //aion tehä jotain näiden integereiden kans (ei nyt näis commiteis, teen tätä vittu githubin text editoris atm)
     private int haukipudas = 6;
     private int night_haukipudas = 8;
 
@@ -54,30 +55,22 @@ public class mapSelection : MonoBehaviour
         {
             case 1:
                 PlayerPrefs.SetInt("chosenMap", 1);
-                StartCoroutine(MapButtonFunc());
-
                 break;
             case 2:
                 PlayerPrefs.SetInt("chosenMap", 2);
-                StartCoroutine(MapButtonFunc());
-
                 break;
             case 4:
                 PlayerPrefs.SetInt("chosenMap", 4);
-                StartCoroutine(MapButtonFunc());
-
                 break;
             case 6:
                 PlayerPrefs.SetInt("chosenMap", haukipudas);
-                StartCoroutine(MapButtonFunc());
-
                 break;
             case 8:
                 PlayerPrefs.SetInt("chosenMap", night_haukipudas);
-                StartCoroutine(MapButtonFunc());
-
                 break;
         }
+        //en usko sitä että tää oli aiemmin KAIKISSA nois caseissa erikseen...
+        StartCoroutine(MapButtonFunc());
     }
 
     //helpottaa asioit ja se on coroutine jo valmiiksi
