@@ -1,14 +1,15 @@
 using UnityEngine;
 
+//tämä on EPÄPYHÄ HELVETTI ja aion korjata valojen toimivuuen lol. oletan et se on jotai PlayerPrefsin kanssa,
+//koska ne valot sai pois päältä ainoastaa jos sen asetuksen laitto päälle ja pois. like seriously wtf
+//HUOM. tein pieniä muutoksia joten jos ne ei toimi nii tuun korjaa tulevina päivinä, oletan vaan kaiken :)))
 public class ColorChanger : MonoBehaviour
 {
     public Light pointLight;
-
     public Light right;
     public Light left;
 
     public float duration = 1.0f;
-
 
     void Awake()
     {
@@ -22,12 +23,12 @@ public class ColorChanger : MonoBehaviour
 
     private void OnEnable()
     {
+        Controls.Enable();
+        
         foreach (Transform child in transform)
         {
             if (child.CompareTag("pl"))
             {
-                // Do something with child.gameObject, e.g. get the Light component
-                Light childLight = child.GetComponent<Light>();
                 if (childLight != null)
                 {
                     pointLight = childLight;
@@ -35,8 +36,6 @@ public class ColorChanger : MonoBehaviour
             }
             else if (child.CompareTag("rl"))
             {
-                // Do something with child.gameObject, e.g. get the Light component
-                Light childLight = child.GetComponent<Light>();
                 if (childLight != null)
                 {
                     right = childLight;
@@ -44,16 +43,14 @@ public class ColorChanger : MonoBehaviour
             }
             else if (child.CompareTag("ll"))
             {
-                // Do something with child.gameObject, e.g. get the Light component
-                Light childLight = child.GetComponent<Light>();
                 if (childLight != null)
                 {
                     left = childLight;
                 }
             }
+            
+            Light childLight = child.GetComponent<Light>();
         }
-
-        Controls.Enable();
     }
 
     private void OnDisable()
@@ -62,18 +59,21 @@ public class ColorChanger : MonoBehaviour
     }
 
 
+
     private void Update()
     {
-
-        if (Controls.CarControls.lights.triggered && PlayerPrefs.GetInt("optionTest_value") == 1)
+        if (CheckLightState() == true)
         {
-            left.enabled = !left.enabled;
-            right.enabled = !right.enabled;
-        }
+            if (Controls.CarControls.lights.triggered)
+            {
+                left.enabled = !left.enabled;
+                right.enabled = !right.enabled;
+            }
 
-        if (Controls.CarControls.underglow.triggered && PlayerPrefs.GetInt("optionTest_value") == 1)
-        {
-            pointLight.enabled = !pointLight.enabled;
+            if (Controls.CarControls.underglow.triggered)
+            {
+                pointLight.enabled = !pointLight.enabled;
+            }
         }
 
         if (pointLight.enabled)
@@ -85,7 +85,8 @@ public class ColorChanger : MonoBehaviour
 
     public void CheckLightState()
     {
-        if (PlayerPrefs.GetInt("optionTest_value") == 0)
+        bool lightEnabled = PlayerPrefs.GetInt("optionTest_value") == 0;
+        if (!lightEnabled)
         {
             pointLight.enabled = false;
             left.enabled = false;
@@ -97,5 +98,6 @@ public class ColorChanger : MonoBehaviour
             left.enabled = true;
             right.enabled = true;
         }
+        return lightEnabled;
     }
 }

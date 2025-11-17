@@ -71,26 +71,29 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    //ronnyinen funktio tääl näi
+    public void SetPausedState(bool paused)
+    {
+        Time.timeScale = paused ? 0 : 1;
+        GameManager.instance.isPaused = paused;
+    }
+
     public void ContinueGame()
     {
         foreach (GameObject obj in pauseMenuObjects)
         {
             obj.SetActive(false);
         }
-        GameManager.instance.isPaused = false;
-        Time.timeScale = 1;
+        SetPausedState(false);
     }
-
     public void QuitGame()
     {
-        GameManager.instance.isPaused = false;
-        Time.timeScale = 1;
+        SetPausedState(false);
         SceneManager.LoadSceneAsync(0);
     }
     public void RestartGame()
     {
-        Time.timeScale = 1;
+        SetPausedState(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
 }
