@@ -146,42 +146,42 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
 
 
-    public void AddPoints()
-    {
-        RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-        if (racerScript != null && racerScript.raceFinished)
-        {
-            return; 
-        }
+    // public void AddPoints()
+    // {
+    //     RacerScript racerScript = FindAnyObjectByType<RacerScript>();
+    //     if (racerScript != null && racerScript.raceFinished)
+    //     {
+    //         return; 
+    //     }
 
-        if (!isAddingPoints && currentCar.activeSelf && instance != null
-        && !GameManager.instance.isPaused)
-        {
-            StartCoroutine(IncrementScoreWithDelay());
-        }
-    }
+    //     if (!isAddingPoints && currentCar.activeSelf && instance != null
+    //     && !GameManager.instance.isPaused)
+    //     {
+    //         StartCoroutine(IncrementScoreWithDelay());
+    //     }
+    // }
 
-    private IEnumerator IncrementScoreWithDelay()
-    {
-        isAddingPoints = true;
-        float timer = 0f;
+    // private IEnumerator IncrementScoreWithDelay()
+    // {
+    //     isAddingPoints = true;
+    //     float timer = 0f;
 
-        while (isAddingPoints)
-        {
-            timer += Time.deltaTime;
-            if (timer >= scoreAddWT)
-            {
-                score = Mathf.Max(0, score + (scoreAddWT > 0 ? 1 : -1));
-                foreach (Text scoreText in ScoreTexts)
-                {
-                    scoreText.text = "Score: " + score.ToString();
-                }
-                timer -= scoreAddWT;
-            }
+    //     while (isAddingPoints)
+    //     {
+    //         timer += Time.deltaTime;
+    //         if (timer >= scoreAddWT)
+    //         {
+    //             score = Mathf.Max(0, score + (scoreAddWT > 0 ? 1 : -1));
+    //             foreach (Text scoreText in ScoreTexts)
+    //             {
+    //                 scoreText.text = "Score: " + score.ToString();
+    //             }
+    //             timer -= scoreAddWT;
+    //         }
 
-            yield return null;
-        }
-    }
+    //         yield return null;
+    //     }
+    // }
 
     public void StopAddingPoints()
     {
