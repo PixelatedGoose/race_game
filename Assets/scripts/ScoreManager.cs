@@ -187,7 +187,6 @@ public class ScoreManager : MonoBehaviour
     void UpdateScoreTexts()
     {
         string s = "Score: " + GetScoreInt().ToString();
-        if (ScoreTexts == null) return;
         for (int i = 0; i < ScoreTexts.Length; i++)
             if (ScoreTexts[i] != null) ScoreTexts[i].text = s;
     }
