@@ -38,9 +38,9 @@ public class optionScript : MonoBehaviour
 
     void Start()
     {
-        foreach (var colorChanger in FindObjectsByType<ColorChanger>(FindObjectsSortMode.None))
+       // foreach (var colorChanger in FindObjectsByType<ColorChanger>(FindObjectsSortMode.None))
         {
-            colorChanger.CheckLightState();
+            //colorChanger.CheckLightState();
         }
 
         CacheUIElements();
@@ -87,9 +87,9 @@ public class optionScript : MonoBehaviour
             PlayerPrefs.SetInt(toggleName + "_value", toggle.isOn ? 1 : 0);
             if (toggleName == "optionTest")
             {
-                foreach (var colorChanger in FindObjectsByType<ColorChanger>(FindObjectsSortMode.None))
+                //foreach (var colorChanger in FindObjectsByType<ColorChanger>(FindObjectsSortMode.None))
                 {
-                    colorChanger.CheckLightState();
+                    //colorChanger.CheckLightState();
                 }
             }
             PlayerPrefs.Save();

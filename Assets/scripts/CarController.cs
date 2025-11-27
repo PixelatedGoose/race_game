@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
+using NUnit.Framework;
 
 public class CarController : MonoBehaviour
 {
@@ -148,6 +149,8 @@ public class CarController : MonoBehaviour
     {
         if (isDrifting)
         {
+            float sharpness = GetDriftSharpness();
+            Debug.Log("Drift Sharpness: " + sharpness);
             if (isTurboActive)
             {
                 maxspeed = Mathf.Lerp(maxspeed, Turbesped, Time.deltaTime * 0.5f);
@@ -483,11 +486,14 @@ public class CarController : MonoBehaviour
         Controls.CarControls.Drift.performed += ctx =>
         {
 
+
             if (isDrifting || GameManager.instance.isPaused) return;
             RacerScript racerScript = FindAnyObjectByType<RacerScript>();
             //varmistaa että drift tapahtuu
             activedrift++;
             isDrifting = true;
+            float sharpness = GetDriftSharpness();
+            Debug.Log("Drift Sharpness: " + sharpness);
             // arvot vaihtuu ja huonotuu driftin ajaksi
             maxAcceleration = perusMaxAccerelation * 0.7f;
             //random shit
@@ -512,10 +518,7 @@ public class CarController : MonoBehaviour
             AdjustdriftSuspension();
             AdjustDriftForwardFriction();
 
-            if (speed > 20.0f)
-            {
-                GameManager.instance.AddPoints();
-            }
+
             WheelEffects(true);
         };
         Controls.CarControls.Drift.canceled += ctx =>
@@ -526,6 +529,20 @@ public class CarController : MonoBehaviour
             targetTorque = perusTargetTorque;
             WheelEffects(false);
         };
+    }
+
+    public float GetDriftSharpness()
+    {
+        if (isDrifting)
+        {
+            Vector3 velocity = carRb.linearVelocity;
+            Vector3 forward = transform.forward;
+            float angle = Vector3.Angle(forward, velocity);
+            return angle;  
+        }
+        //checks the angle between the car's forward direction and its velocity vector constantly while drifting
+
+        return 0.0f;
     }
 
     private void AdjustdriftSuspension()
