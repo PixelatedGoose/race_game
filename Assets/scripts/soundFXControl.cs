@@ -1,10 +1,41 @@
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class soundFXControl : MonoBehaviour
 {
+    //the pain is inbound
+    class soundFXAttributes
+    {
+        public GameObject objectForSound;
+        public GameObject[] allSoundsList;
+    }
+
+    class soundFXButton : soundFXAttributes
+    {
+        public Button buttonComponent;
+        public void AddSoundToComponent()
+        {
+            if (buttonComponent != null)
+            {
+                buttonComponent.onClick.AddListener(() =>
+                {
+                    this.allSoundsList[0].GetComponent<AudioSource>().Play();
+                });
+            }
+        }
+    }
+    class soundFXSlider : soundFXAttributes
+    {
+        public Slider sliderComponent;
+    }
+    class soundFXToggle : soundFXAttributes
+    {
+        public Toggle toggleComponent;
+    }
+
+
+
     CarInputActions Controls;
     public GameObject[] soundList;
     public GameObject[] soundClickList;
@@ -35,8 +66,6 @@ public class soundFXControl : MonoBehaviour
 
         //hell
         //paska koodi, rewrite myöhemmi
-
-
 
         foreach (GameObject soundButton in soundButtonsList) //jokaselle niistä (jotta niitä voidaan käyttää)
         {
@@ -96,7 +125,6 @@ public class soundFXControl : MonoBehaviour
     private void OnDestroy()
     {
         Controls.Disable();
-        //Controls.Dispose();
     }
 
     void LateUpdate()
@@ -104,6 +132,40 @@ public class soundFXControl : MonoBehaviour
         if (Controls.CarControls.pausemenu.triggered && racerScript.racestarted == true)
         {
             PauseStateHandler();
+        }
+    }
+
+    /// <summary>
+    /// liittää jokaseen määritettyyn nappiin, slideriin ja toggleen niitten omat äänet.
+    /// korjaa sen ikivanhan kolmen foreachin koodin
+    /// </summary>
+    /// <param name="type">selittää itse itsensä</param>
+    
+    //sais inherittaa classin ja säätää sen switch-case statementis
+    public void SoundFXHandler(string type)
+    {
+        switch (type)
+        {
+            case "button":
+            case "slider":
+            case "toggle":
+            default:
+                Debug.Log("Nope!");
+                break;
+        }
+        
+        //placeholder
+        foreach (GameObject soundButton in soundButtonsList) //jokaselle niistä (jotta niitä voidaan käyttää)
+        {
+            Button soundButtonComponent = soundButton.GetComponent<Button>(); //eti nappi itessään
+
+            if (soundButtonComponent != null) //jos se on olemas
+            {
+                soundButtonComponent.onClick.AddListener(() => //lisää listener jokaiseen "Button" componentin "On Click" toimintoon, jotta...
+                {
+                    soundClickList[0].GetComponent<AudioSource>().Play(); //...ääni voiaan toistaa
+                });
+            }
         }
     }
 
@@ -134,6 +196,4 @@ public class soundFXControl : MonoBehaviour
             }
         }
     }
-
-    //rewrite myöhemmi
 }
