@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 
 //this is the joonas kallio secret script
 //lore
