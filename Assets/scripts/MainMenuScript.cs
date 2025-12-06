@@ -35,8 +35,6 @@ public class MainMenu : MonoBehaviour
 
     void OnEnable()
     {
-        Application.targetFrameRate = (int)PlayerPrefs.GetFloat("framerate_value") * 10;
-
         if (randomChance <= 2)
         {
             videoPlayer.loopPointReached += OnVideoFinished;
@@ -64,8 +62,12 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
-            menuMusic.Play();
+            LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f)
+            .setEase(LeanTweenType.easeOutBounce)
+            .setOnStart(() =>
+            {
+                menuMusic.Play();
+            });
         }
     }
 
