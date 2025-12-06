@@ -1,115 +1,117 @@
 {
     "intro": [
-        "Hello, and welcome to AmisDrift! (PRESS ENTER TO ADVANCE TEXT)",
-        "This tutorial will guide you through the mechanics of the game.",
-        "Drive forward to the glowing zone to start."
+        "Hello, welcome to AmisDrift! (PRESS ENTER TO ADVANCE TEXT)",
+        "This tutorial's gonna guide you through the mechanics of the game.",
+        "Drive forward to that blue glowing zone to start."
     ],
 
     "driving": [
         "Use WASD to control your car.",
-        "Holding (left) Shift enables the handbrake.",
-        "To make sure you understand simple instructions, try clearing this course to proceed.",
-        "Looks good."
+        "Holding [left] Shift enables the handbrake.",
+        "To make sure you've understood, go ahead and clear this first course.",
+        "Well done."
     ],
 
     "driving_2": [
-        "Driving on a road is preferred, as driving on grass slows you down.",
-        "Any body of water will instantly respawn you at the nearest checkpoint.",
-        "Avoid the grass and try to pass this part without touching it.",
+        "Driving away from grass is recommended, as the grass slows ya down.",
+        "Any bodies of water will instantly respawn you at the nearest checkpoint.",
+        "For now though, just avoid the grass and pass the second course without touching it.",
         "Great!"
     ],
 
     "controls": [
-        "Here's some more info you might wanna know. You don't need to drive anywhere for now.",
-        "Pressing L toggles long lights.",
+        "Here's some more info you might wanna know.",
+        "Pressing L toggles the headlights.",
         "Pressing C toggles the underlight.",
-        "You can pause the game with ESC, in case it wasn't obvious.",
-        "Take a small moment to look at the bottom left corner.",
-        "This is the most important part of your UI. You can call it whatever ya want.",
-        "You can see how fast you're going by looking at the speedometer.",
-        "You also have quick access to your score.",
-        "As you may have also noted, you have a timer here. The red numbers are the milliseconds.",
-        "These two will show your laps during a race; that's also why you can't see it here.",
-        "This gauge here tells you how much of your turbo you have left. You'll learn about it soon.",
+        "You can pause the game with ESC, if it wasn't obvious.",
+        "Take a moment to look at the bottom left corner.",
+        "This is a sorta dashboard for your UI.",
+        "Some info is already displayed in the top corners for convenience.",
+        "Regardless, here you can also see your score.",
+        "This dashboard also has a timer. The red numbers are the milliseconds.",
+        "These two will show the laps during a race, it's why you can't see it yet.",
+        "This gauge here tells you how much turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
     "drifting": [
-        "To drift, hold SPACE while driving.",
+        "To drift, hold SPACE while driving. Good luck on the third course.",
         "Nice job! Hopefully you did alright.",
-        "You should've noticed that you accumulated some score from it.",
+        "If you did well, you can notice that you accumulated some score from it.",
         "Your time and score determine your rank, given at the end of an map.",
-        "Your best times are saved, while your score is global between maps.",
+        "If you got a good time, it'll be saved to the leaderboard.",
+        "You're gonna see that after clearing a race.",
         "Now it's finally time to talk about turbo."
     ],
 
     "turbe": [
-        "You're able to use your turbo by holding (left) CTRL.",
-        "We only have a limited supply of it per car; the amount is on the bottom left, as stated before.",
-        "The supply regenerates after letting it rest for a while.",
-        "Try using it here to cross these spinning blockades effectively."
+        "You can use turbo by holding [left] CTRL.",
+        "We have a limited supply of that stuff per car; the amount's on the dashboard, as said before.",
+        "The supply does regenerate after letting it rest for a while.",
+        "Try using it here to gain more speed and get past the final course."
     ],
 
     "final": [
-        "Congratulations clearing the tutorial!",
-        "I have nothing else to tell you, so get outta here now.",
-        "Drive on top of that platform to exit the level."
+        "Congratulations on clearing the tutorial!",
+        "I have nothing else to explain, so get outta here.",
+        "Drive on top of that platform to exit."
     ],
 
     "controller_intro": [
-        "Hello, and welcome to AmisDrift! (PRESS Y TO ADVANCE TEXT)",
-        "This tutorial will guide you through the mechanics of the game.",
-        "Drive forward to the glowing zone to start."
+        "Hello, welcome to AmisDrift! (PRESS Y TO ADVANCE TEXT)",
+        "This tutorial's gonna guide you through the mechanics of the game.",
+        "Drive forward to that blue glowing zone to start."
     ],
 
     "controller_driving": [
         "Use RT and LT for moving forward and backward respectively; use the left stick to steer your car.",
         "Holding X or LB enables the handbrake.",
-        "To make sure you understand simple instructions, try clearing this course to proceed.",
-        "Looks good."
+        "To make sure you've understood, go ahead and clear this first course.",
+        "Well done."
     ],
 
     "controller_driving_2": [
-        "Driving on a road is preferred, as driving on grass slows you down.",
-        "Any body of water will instantly respawn you at the nearest checkpoint.",
-        "Avoid the grass and try to pass this part without touching it.",
+        "Driving away from grass is recommended, as the grass slows ya down.",
+        "Any bodies of water will instantly respawn you at the nearest checkpoint.",
+        "For now though, just avoid the grass and pass the second course without touching it.",
         "Great!"
     ],
 
     "controller_controls": [
         "Here's some more info you might wanna know.",
-        "Pressing down on the D-Pad toggles long lights.",
+        "Pressing down on the D-Pad toggles the headlights.",
         "Pressing up on the D-Pad toggles the underlight.",
-        "You can pause the game with the start button, in case it wasn't obvious.",
-        "Take a small moment to look at the bottom left corner.",
-        "This is the most important part of your UI. You can call it whatever ya want.",
-        "You can see how fast you're going by looking at the speedometer.",
-        "You also have quick access to your score.",
-        "As you may have also noted, you have a timer here. The red numbers are the milliseconds.",
-        "These two will show your laps during a race; that's also why you can't see it here.",
-        "This gauge here tells you how much of your turbo you have left. You'll learn about it soon.",
+        "You can pause the game with the start button, if it wasn't obvious.",
+        "Take a moment to look at the bottom left corner.",
+        "This is a sorta dashboard for your UI.",
+        "Some info is already displayed in the top corners for convenience.",
+        "Regardless, here you can also see your score.",
+        "This dashboard also has a timer. The red numbers are the milliseconds.",
+        "These two will show the laps during a race, it's why you can't see it yet.",
+        "This gauge here tells you how much turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
     "controller_drifting": [
-        "To drift, hold RB or B while driving.",
+        "To drift, hold RB or B while driving. Good luck on the third course.",
         "Nice job! Hopefully you did alright.",
-        "You should've noticed that you accumulated some score from it.",
+        "If you did well, you can notice that you accumulated some score from it.",
         "Your time and score determine your rank, given at the end of an map.",
-        "Your best times are saved, while your score is global between maps.",
+        "If you got a good time, it'll be saved to the leaderboard.",
+        "You're gonna see that after clearing a race.",
         "Now it's finally time to talk about turbo."
     ],
 
     "controller_turbe": [
-        "You're able to use your turbo by holding A.",
-        "We only have a limited supply of it per car; the amount is on the bottom left, as stated before.",
-        "The supply regenerates after letting it rest for a while.",
-        "Try using it here to cross these spinning blockades effectively."
+        "You can use turbo by holding A.",
+        "We have a limited supply of that stuff per car; the amount's on the dashboard, as said before.",
+        "The supply does regenerate after letting it rest for a while.",
+        "Try using it here to gain more speed and get past the final course."
     ],
 
     "controller_final": [
-        "Congratulations clearing the tutorial!",
-        "I have nothing else to tell you, so get outta here now.",
-        "Drive on top of that platform to exit the level."
+        "Congratulations on clearing the tutorial!",
+        "I have nothing else to explain, so get outta here.",
+        "Drive on top of that platform to exit."
     ]
 }
