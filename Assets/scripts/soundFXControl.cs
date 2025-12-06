@@ -109,9 +109,6 @@ public class soundFXControl : MonoBehaviour
     {
         FindSoundGameObjects();
 
-        if (GameManager.instance.sceneSelected != "tutorial")
-            soundList[1].GetComponent<AudioSource>().Play();
-
         if (soundClickList.Length == 0)
         {
             Debug.LogError("EI ÄÄNIÄ SOUNDCLICKLISTISSÄ");
