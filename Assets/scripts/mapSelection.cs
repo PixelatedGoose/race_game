@@ -13,7 +13,6 @@ public class mapSelection : MonoBehaviour
     private AudioSource loadingLoop;
     public GameObject[] maps;
     private RectTransform mapRectTransform;
-    //aion tehä jotain näiden integereiden kans (ei nyt näis commiteis, teen tätä vittu githubin text editoris atm)
     private int haukipudas = 6;
     private int night_haukipudas = 8;
 
@@ -53,14 +52,11 @@ public class mapSelection : MonoBehaviour
     {
         switch (selecta)
         {
+            //ja näin
             case 1:
-                PlayerPrefs.SetInt("chosenMap", 1);
-                break;
             case 2:
-                PlayerPrefs.SetInt("chosenMap", 2);
-                break;
             case 4:
-                PlayerPrefs.SetInt("chosenMap", 4);
+                PlayerPrefs.SetInt("chosenMap", selecta);
                 break;
             case 6:
                 PlayerPrefs.SetInt("chosenMap", haukipudas);
@@ -92,7 +88,7 @@ public class mapSelection : MonoBehaviour
             LeanTween.moveLocalY(theobject, theobject.transform.position.y + 451, 0.8f).setEase(LeanTweenType.easeInOutCubic);
         }
 
-        Debug.Log("you will now wait for: " + schizophrenia + "seconds");
+        Debug.Log("you will now wait for: " + schizophrenia + " seconds");
         yield return new WaitForSeconds(schizophrenia);
 
         //en tiiä onko performance riski ottaa chosenMap GameManagerista
@@ -106,13 +102,11 @@ public class mapSelection : MonoBehaviour
         {
             haukipudas = 6;
             night_haukipudas = 8;
-            Debug.Log("haukipudas, 6 - night_haukipudas, 8");
         }
         else
         {
             haukipudas = 4;
             night_haukipudas = 9;
-            Debug.Log("haukipudas, 4 - night_haukipudas, 9");
         }
     }
 
