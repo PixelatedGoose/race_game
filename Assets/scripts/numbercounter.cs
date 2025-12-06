@@ -24,7 +24,7 @@ public class numbercounter : MonoBehaviour
 
     void Update()
     {
-        int score = GameManager.instance != null ? GameManager.instance.score : 0;
+        int score = ScoreManager.instance.GetScoreInt();
         string scoreString = score.ToString().PadLeft(digitCount, '0');
 
         // Only update UI if the score string has changed

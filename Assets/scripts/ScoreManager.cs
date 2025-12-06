@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.AI;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -25,10 +26,20 @@ public class ScoreManager : MonoBehaviour
     [Tooltip("How long the drift bonus is animated into the real score (seconds)")]
     [SerializeField] float bonusApplyDuration = 1.0f; // seconds over which the bonus is added (animated)
 
-    float scoreFloat;
+    // NEW: drift reward tuning
+    [Header("Drift reward tuning")]
+    [Tooltip("Extra base value to treat as 'earned during drift' for bonus calc.")]
+    [SerializeField] float driftBaseReward = 5f;
+    [Tooltip("How strong the multiplier is applied to drift earnings.")]
+    [SerializeField] float driftBonusStrength = 1.5f;
+
+    public static ScoreManager instance;
+
+    public float scoreFloat;
     int lastReportedScore = -1;
     float driftTime;
     CarController cr;
+    bool OnGrass = false; 
     public Text[] ScoreTexts;
 
     // drift-delayed application state
@@ -47,11 +58,21 @@ public class ScoreManager : MonoBehaviour
     void Awake()
     {
         UpdateScoreTexts();
+
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
     void Start()
     {
-        // try to cache the CarController once
+        //ottaa carcontrollerin 
         cr = FindFirstObjectByType<CarController>();
     }
 
@@ -59,33 +80,31 @@ public class ScoreManager : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        // base continuous score (adds directly to float)
-        Vector3 vel = (cr != null && cr.carRb != null) ? cr.carRb.linearVelocity : Vector3.zero; // use Rigidbody.velocity
+        // pelaaja saa jatkuvasti scorea, nopeus vaikuttaa
+        Vector3 vel = (cr != null && cr.carRb != null) ? cr.carRb.linearVelocity : Vector3.zero;
         float forwardSpeed = Mathf.Max(0f, Vector3.Dot(vel, cr.transform.forward));
         float speedFactor = Mathf.Clamp01(forwardSpeed / Mathf.Max(0.0001f, maxForwardSpeedForBase));
         float baseMultiplier = 1f + speedFactor * baseSpeedMultiplier;
         scoreFloat += basePointsPerSecond * baseMultiplier * dt;
+        
 
-        // handle drift start / ongoing / end
-        if (cr.isDrifting)
+        // drifttaus multiplier resettantuu jos driftaa nurmella
+        if (!OnGrass && cr != null && cr.isDrifting)
         {
             if (!driftingActive)
             {
-                // drift just started
                 driftingActive = true;
-                driftStartScore = scoreFloat;          // remember score at drift start
-                driftCompoundMultiplier = 1f;         // reset compound multiplier
+                driftStartScore = scoreFloat;
+                driftCompoundMultiplier = 1f;
                 driftTime = 0f;
             }
-
-            // update compound multiplier only (do NOT modify scoreFloat here)
             UpdateDriftCompound(dt, vel);
         }
         else
         {
             if (driftingActive)
             {
-                // drift just ended -> prepare accumulated multiplicative bonus to be animated in
+                // diftaus loppuu nii multi resettantuu
                 PrepareDriftBonus();
                 driftingActive = false;
                 driftTime = 0f;
@@ -93,7 +112,7 @@ public class ScoreManager : MonoBehaviour
             }
         }
 
-        // apply animated bonus over time if present
+        // Bonus tehty koukuttavvaksi: animoidaan pisteiden lisäys
         if (applyingBonus && pendingDriftBonusTotal > 0f)
         {
             bonusApplyProgress += (bonusApplyDuration <= 0f) ? 1f : (dt / bonusApplyDuration);
@@ -110,7 +129,6 @@ public class ScoreManager : MonoBehaviour
 
             if (t >= 1f)
             {
-                // finished applying bonus
                 applyingBonus = false;
                 pendingDriftBonusTotal = 0f;
                 bonusApplyProgress = 0f;
@@ -160,20 +178,26 @@ public class ScoreManager : MonoBehaviour
         driftCompoundMultiplier *= multThisFrame;
     }
 
-    // prepare the drift bonus to be animated in rather than applied instantly
+    // Driftaus on palkitsevampi
     void PrepareDriftBonus()
     {
         // points earned while drifting (base + any other additions already in scoreFloat)
         float earnedDuringDrift = Mathf.Max(0f, scoreFloat - driftStartScore);
-        if (earnedDuringDrift <= 0f)
+
+        // treat as if you earned a bit more during drift (so small drifts still feel good)
+        float effectiveEarned = earnedDuringDrift + driftBaseReward;
+
+        if (effectiveEarned <= 0f)
             return; // nothing earned to amplify
 
-        // bonus = earnedDuringDrift * (driftCompoundMultiplier - 1)
-        float bonus = earnedDuringDrift * (driftCompoundMultiplier - 1f);
-        if (bonus <= 0f) return;
+        // stronger use of multiplier: (compound - 1) * driftBonusStrength
+        float rawMultiplierGain = (driftCompoundMultiplier - 1f) * driftBonusStrength;
+        if (rawMultiplierGain <= 0f) return;
 
-        // safety clamp to avoid insane values
-        bonus = Mathf.Clamp(bonus, 0f, earnedDuringDrift * 10f);
+        float bonus = effectiveEarned * rawMultiplierGain;
+
+        // clamp but allow bigger bonuses
+        bonus = Mathf.Clamp(bonus, 0f, effectiveEarned * 20f);
 
         // Instead of instantly adding bonus, set it as pending and animate it into scoreFloat
         pendingDriftBonusTotal = bonus;
@@ -181,7 +205,7 @@ public class ScoreManager : MonoBehaviour
         bonusApplyProgress = 0f;
         bonusAddedSoFar = 0f;
 
-        Debug.Log($"[ScoreManager] Drift ended. earnedDuringDrift={earnedDuringDrift:F2}, compound={driftCompoundMultiplier:F3}, pendingBonus={pendingDriftBonusTotal:F2}");
+        Debug.Log($"[ScoreManager] Drift ended. earned={earnedDuringDrift:F2}, eff={effectiveEarned:F2}, compound={driftCompoundMultiplier:F3}, bonus={pendingDriftBonusTotal:F2}");
     }
 
     void UpdateScoreTexts()
@@ -191,6 +215,12 @@ public class ScoreManager : MonoBehaviour
             if (ScoreTexts[i] != null) ScoreTexts[i].text = s;
     }
 
-    public int GetScoreInt() => Mathf.FloorToInt(scoreFloat);
     public float GetScoreFloat() => scoreFloat;
+    public int GetScoreInt() => Mathf.FloorToInt(scoreFloat);
+    
+    // NEW: handle grass surface state
+    public void SetOnGrass(bool isOnGrass)
+    {
+        OnGrass = isOnGrass;
+    }
 }
