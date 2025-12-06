@@ -4,46 +4,76 @@ using UnityEngine.UI;
 
 public class soundFXControl : MonoBehaviour
 {
-    //the pain is inbound
-    class soundFXAttributes
-    {
-        public GameObject objectForSound;
-        public GameObject[] allSoundsList;
-    }
-
-    class soundFXButton : soundFXAttributes
-    {
-        public Button buttonComponent;
-        public void AddSoundToComponent()
-        {
-            if (buttonComponent != null)
-            {
-                buttonComponent.onClick.AddListener(() =>
-                {
-                    this.allSoundsList[0].GetComponent<AudioSource>().Play();
-                });
-            }
-        }
-    }
-    class soundFXSlider : soundFXAttributes
-    {
-        public Slider sliderComponent;
-    }
-    class soundFXToggle : soundFXAttributes
-    {
-        public Toggle toggleComponent;
-    }
-
-
-
     CarInputActions Controls;
+    //säilyttää KAIKKI äänet, paitsi ne, joita käytetään interactableiden kanssa
     public GameObject[] soundList;
+    //kaikki äänet, joita käytetään interactablea käyttäessä
     public GameObject[] soundClickList;
     public GameObject[] soundButtonsList;
     public GameObject[] soundSlidersList;
     public GameObject[] soundTogglesList;
-
     public RacerScript racerScript;
+
+    abstract class soundFXAttributes<T> where T : Component
+    {
+        protected AudioSource soundToPlay;
+        protected T componentReference;
+
+        public soundFXAttributes(T gameobject, AudioSource sound)
+        {
+            componentReference = gameobject;
+            soundToPlay = sound;
+        }
+        public abstract void AddSoundToComponent();
+    }
+
+    class soundFXButton : soundFXAttributes<Button>
+    {
+        //base() toimii constructorina ilma toistoa; tässä ne asetetaan tyhjäksi
+        public soundFXButton(Button button, AudioSource sound) : base(button, sound) { }
+        public override void AddSoundToComponent()
+        {
+            if (componentReference != null)
+            {
+                componentReference.onClick.AddListener(() =>
+                {
+                    soundToPlay.Play();
+                });
+            }
+        }
+    }
+
+    class soundFXSlider : soundFXAttributes<Slider>
+    {
+        public soundFXSlider(Slider slider, AudioSource sound) : base(slider, sound) { }
+        public override void AddSoundToComponent()
+        {
+            if (componentReference != null)
+            {
+                componentReference.onValueChanged.AddListener((value) =>
+                {
+                    soundToPlay.Play();
+                });
+            }
+        }
+    }
+
+    class soundFXToggle : soundFXAttributes<Toggle>
+    {
+        public soundFXToggle(Toggle toggle, AudioSource sound) : base(toggle, sound) { }
+        public override void AddSoundToComponent()
+        {
+            if (componentReference != null)
+            {
+                componentReference.onValueChanged.AddListener((value) =>
+                {
+                    soundToPlay.Play();
+                });
+            }
+        }
+    }
+
+
 
     void Awake()
     {
@@ -52,7 +82,20 @@ public class soundFXControl : MonoBehaviour
         racerScript = FindFirstObjectByType<RacerScript>();
     }
 
-    void Start()
+    private void OnEnable()
+    {
+        Controls.Enable();
+    }
+    private void OnDisable()
+    {
+        Controls.Disable();
+    }
+    private void OnDestroy()
+    {
+        Controls.Disable();
+    }
+
+    private void FindSoundGameObjects()
     {
         //eti äänet tässä
         soundList = GameObject.FindGameObjectsWithTag("soundFX");
@@ -60,71 +103,23 @@ public class soundFXControl : MonoBehaviour
 
         soundClickList = GameObject.FindGameObjectsWithTag("soundFXonClick"); //koska array on vitun paska
         soundClickList = soundClickList.OrderBy(a => a.name).ToArray();
+    }
+
+    void Start()
+    {
+        FindSoundGameObjects();
 
         if (GameManager.instance.sceneSelected != "tutorial")
             soundList[1].GetComponent<AudioSource>().Play();
 
-        //hell
-        //paska koodi, rewrite myöhemmi
-
-        foreach (GameObject soundButton in soundButtonsList) //jokaselle niistä (jotta niitä voidaan käyttää)
-        {
-            Button soundButtonComponent = soundButton.GetComponent<Button>(); //eti nappi itessään
-
-            if (soundButtonComponent != null) //jos se on olemas
-            {
-                soundButtonComponent.onClick.AddListener(() => //lisää listener jokaiseen "Button" componentin "On Click" toimintoon, jotta...
-                {
-                    soundClickList[0].GetComponent<AudioSource>().Play(); //...ääni voiaan toistaa
-                });
-            }
-        }
-
-        foreach (GameObject soundSlider in soundSlidersList)
-        {
-            Slider soundSliderComponent = soundSlider.GetComponent<Slider>();
-
-            if (soundSliderComponent != null)
-            {
-                soundSliderComponent.onValueChanged.AddListener(value =>
-                {
-                    soundClickList[2].GetComponent<AudioSource>().Play();
-                });
-            }
-        }
-
-        foreach (GameObject soundToggle in soundTogglesList)
-        {
-            Toggle soundToggleComponent = soundToggle.GetComponent<Toggle>();
-
-            if (soundToggleComponent != null)
-            {
-                soundToggleComponent.onValueChanged.AddListener(value =>
-                {
-                    soundClickList[1].GetComponent<AudioSource>().Play();
-                });
-            }
-        }
-
         if (soundClickList.Length == 0)
         {
-            Debug.LogError("no sounds");
+            Debug.LogError("EI ÄÄNIÄ SOUNDCLICKLISTISSÄ");
         }
-    }
 
-    private void OnEnable()
-    {
-        Controls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        Controls.Disable();
-    }
-
-    private void OnDestroy()
-    {
-        Controls.Disable();
+        SoundFXHandler("button", soundButtonsList, soundClickList[0].GetComponent<AudioSource>());
+        SoundFXHandler("toggle", soundTogglesList, soundClickList[1].GetComponent<AudioSource>());
+        SoundFXHandler("slider", soundSlidersList, soundClickList[2].GetComponent<AudioSource>());
     }
 
     void LateUpdate()
@@ -140,58 +135,66 @@ public class soundFXControl : MonoBehaviour
     /// korjaa sen ikivanhan kolmen foreachin koodin
     /// </summary>
     /// <param name="type">selittää itse itsensä</param>
-    
-    //sais inherittaa classin ja säätää sen switch-case statementis
-    public void SoundFXHandler(string type)
+    public void SoundFXHandler(string type, GameObject[] componentsToChange, AudioSource soundToPlay)
     {
-        switch (type)
-        {
-            case "button":
-            case "slider":
-            case "toggle":
-            default:
-                Debug.Log("Nope!");
-                break;
-        }
-        
-        //placeholder
-        foreach (GameObject soundButton in soundButtonsList) //jokaselle niistä (jotta niitä voidaan käyttää)
-        {
-            Button soundButtonComponent = soundButton.GetComponent<Button>(); //eti nappi itessään
-
-            if (soundButtonComponent != null) //jos se on olemas
+        //componentit saa eri muutoksia riippuen tyypistä
+        foreach (GameObject component in componentsToChange)
+        {    
+            switch (type)
             {
-                soundButtonComponent.onClick.AddListener(() => //lisää listener jokaiseen "Button" componentin "On Click" toimintoon, jotta...
-                {
-                    soundClickList[0].GetComponent<AudioSource>().Play(); //...ääni voiaan toistaa
-                });
+                case "button":
+                    Button buttonComponent = component.GetComponent<Button>();
+                    if (buttonComponent != null)
+                    {
+                        //soundFXButton (soundFX) toimii setuppina
+                        //sama koskee jokasta eri classia
+                        var soundFX = new soundFXButton(buttonComponent, soundToPlay);
+                        soundFX.AddSoundToComponent();
+                    }
+                    break;
+                case "slider":
+                    Slider sliderComponent = component.GetComponent<Slider>();
+                    if (sliderComponent != null)
+                    {
+                        var soundFX = new soundFXSlider(sliderComponent, soundToPlay);
+                        soundFX.AddSoundToComponent();
+                    }
+                    break;
+                case "toggle":
+                    Toggle toggleComponent = component.GetComponent<Toggle>();
+                    if (toggleComponent != null)
+                    {
+                        var soundFX = new soundFXToggle(toggleComponent, soundToPlay);
+                        soundFX.AddSoundToComponent();
+                    }
+                    break;
+                default:
+                    Debug.Log("Nope!");
+                    break;
             }
         }
     }
 
     public void PauseStateHandler()
     {
-        if (GameManager.instance.isPaused == true)
+        bool isPaused = GameManager.instance.isPaused;
+
+        soundList[2].GetComponent<AudioSource>().volume = isPaused ? 1.0f : 0.0f;
+        
+        foreach (GameObject sound in soundList)
         {
-            soundList[2].GetComponent<AudioSource>().volume = 1.0f;
-            foreach (GameObject sound in soundList)
+            if (sound.GetComponent<AudioSource>().name != "pausedTrack")
             {
-                if (sound.GetComponent<AudioSource>().name != "pausedTrack")
+                AudioSource audioSource = sound.GetComponent<AudioSource>();
+                if (isPaused)
                 {
                     Debug.Log(sound + " pysäytetty");
-                    sound.GetComponent<AudioSource>().Pause();
+                    audioSource.Pause();
                 }
-            }
-        }
-        else if (GameManager.instance.isPaused == false)
-        {
-            soundList[2].GetComponent<AudioSource>().volume = 0.0f;
-            foreach (GameObject sound in soundList)
-            {
-                if (sound.GetComponent<AudioSource>().name != "pausedTrack")
+                else
                 {
                     Debug.Log(sound + " ei pysäytetty");
-                    sound.GetComponent<AudioSource>().UnPause();
+                    audioSource.UnPause();
                 }
             }
         }
