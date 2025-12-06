@@ -11,6 +11,8 @@ public class CarController : MonoBehaviour
 
     CarInputActions Controls;
 
+    RacerScript racerScript;
+
     public enum Axel
     {
         Front,
@@ -93,6 +95,8 @@ public class CarController : MonoBehaviour
             canUseTurbo = true;
         }
         AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
+
+        racerScript = FindAnyObjectByType<RacerScript>();
     }
 
     private void OnControlsChanged(PlayerInput input)
@@ -101,25 +105,42 @@ public class CarController : MonoBehaviour
     }
 
 
+     // handlers
+    void OnMovePerformed(InputAction.CallbackContext ctx)
+    {
+        steerInput = ctx.ReadValue<Vector2>().x;
+    }
+    void OnMoveCanceled(InputAction.CallbackContext ctx)
+    {
+        steerInput = 0f;
+    }
+
+
     private void OnEnable()
     {
-        //InputSystem.onDeviceChange += OnDeviceChange;
         Controls.Enable();
         if (playerInput != null)
-        {
             playerInput.onControlsChanged += OnControlsChanged;
-        }
 
+        // INPUT SUBSCRIPTIONS: KERRAN
+        Controls.CarControls.Move.performed += OnMovePerformed;
+        Controls.CarControls.Move.canceled  += OnMoveCanceled;
+
+        Controls.CarControls.Drift.performed   += OnDriftPerformed;
+        Controls.CarControls.Drift.canceled    += OnDriftCanceled;
     }
 
     private void OnDisable()
     {
-        //InputSystem.onDeviceChange -= OnDeviceChange;
         Controls.Disable();
         if (playerInput != null)
-        {
             playerInput.onControlsChanged -= OnControlsChanged;
-        }
+
+        // UNSUBSCRIBE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Controls.CarControls.Move.performed -= OnMovePerformed;
+        Controls.CarControls.Move.canceled  -= OnMoveCanceled;
+        Controls.CarControls.Drift.performed -= OnDriftPerformed;
+        Controls.CarControls.Drift.canceled  -= OnDriftCanceled;
     }
 
     private void OnDestroy()
@@ -145,81 +166,84 @@ public class CarController : MonoBehaviour
         Animatewheels();
     }
 
+    bool isOnGrassCached;
+    bool isOnGrassCachedValid;
+
     void FixedUpdate()
     {
-        if (isDrifting)
-        {
-            float sharpness = GetDriftSharpness();
-            Debug.Log("Drift Sharpness: " + sharpness);
-            if (isTurboActive)
-            {
-                maxspeed = Mathf.Lerp(maxspeed, Turbesped, Time.deltaTime * 0.5f);
-            }
-            maxspeed = Mathf.Lerp(maxspeed, driftMaxSpeed, Time.deltaTime * 0.1f);
-        }
-        // Stop drifting if the race is finished
-        RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-        if (racerScript != null && racerScript.raceFinished && activedrift > 0)
-        {
-            StopDrifting();
-        }
+        isOnGrassCachedValid = false;
+
+        if (!IsCarActive()) return;
+
+        UpdateDriftSpeed();
+        StopDriftIfRaceFinished();
+
         ApplyGravity();
         Move();
         Steer();
-        if (canDrift)
-        {
-            HandleDrift();
-        }
-        Decelerate();
-        ApplySpeedLimit();
-        Applyturnsensitivity();
-        OnGrass();
-        if (canUseTurbo)
-        {
-            TURBE();
-            TURBEmeter();
-        }
 
+        Decelerate();
+        float speed = carRb.linearVelocity.magnitude * 3.6f;
+        ApplySpeedLimit(speed);
+        Applyturnsensitivity(speed);
+        OnGrass();
+        HandleTurbo();
+    }
+
+    bool IsCarActive()
+    {
+        // jos tulee random paskaa kuten peli paussi tai auto kolaroi, LISÄTKÄÄ SE TÄHÄN EI MISSÄÄN NIMESSÄ FIXEDUPDATEEN!!!!!!!!!!!
+        return true;
+    }
+
+    void UpdateDriftSpeed()
+    {
+        if (!isDrifting) return;
+
+        float sharpness = GetDriftSharpness();
+        Debug.Log("Drift Sharpness: " + sharpness);
+
+        if (isTurboActive)
+            maxspeed = Mathf.Lerp(maxspeed, Turbesped, Time.deltaTime * 0.5f);
+
+        maxspeed = Mathf.Lerp(maxspeed, driftMaxSpeed, Time.deltaTime * 0.1f);
+    }
+
+    void StopDriftIfRaceFinished()
+    {
+        if (racerScript == null) return;
+        if (!racerScript.raceFinished) return;
+        if (activedrift <= 0) return;
+
+        StopDrifting();
     }
 
 
-    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+
+    void HandleTurbo()
     {
-        if (device is Gamepad)
-        {
-            if (change is InputDeviceChange.Added)
-            {
-                print("controller");
-            }
-            else if (change == InputDeviceChange.Removed)
-            {
-                try
-                {
-                    print("keyboard");
-                }
-                catch (System.IndexOutOfRangeException ex)
-                {
-                    Debug.LogWarning("vittu ohjain irtosi " + ex.Message);
-                }
-            }
-        }
+        if (!canUseTurbo) return;
+        TURBE();
+        TURBEmeter();
     }
 
     void OnGrass()
     {
-        TrailRenderer trailRenderer = null;
-        foreach (var wheel in wheels)
+        bool onGrass = IsOnGrassCached();
+
+        foreach(var wheel in wheels)
         {
-            trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (IsOnGrass())
+            var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
+            if (trailRenderer != null) continue;
+
+            if (onGrass)
             {
                 trailRenderer.material = grassMaterial;
-                GameManager.instance.scoreAddWT = -0.02f;
+                
             }
             else
             {
                 trailRenderer.material = roadMaterial;
-                GameManager.instance.scoreAddWT = 0.01f;
             }
         }
     }
@@ -236,33 +260,15 @@ public class CarController : MonoBehaviour
 
     void GetInputs()
     {
-        //moveInput = Input.GetAxis("Vertical");
-        //steerInput = Input.GetAxis("Horizontal");
-
-        Controls.CarControls.Move.performed += ctx =>
-        {
-            steerInput = ctx.ReadValue<Vector2>().x;
-        };
-
         if (Controls.CarControls.MoveForward.IsPressed())
-        {
             moveInput = Controls.CarControls.MoveForward.ReadValue<float>();
-        }
-
-        if (Controls.CarControls.MoveBackward.IsPressed())
-        {
+        else if (Controls.CarControls.MoveBackward.IsPressed())
             moveInput = -Controls.CarControls.MoveBackward.ReadValue<float>();
-        }
+        else
+            moveInput = 0f;
 
-        if (!Controls.CarControls.MoveBackward.IsPressed() && !Controls.CarControls.MoveForward.IsPressed())
-        {
-            moveInput = 0.0f;
-        }
         if (!Controls.CarControls.Drift.IsPressed())
-        {
             StopDrifting();
-        }
-
 
         throttlemodifier = Controls.CarControls.ThrottleMod.ReadValue<float>();
     }
@@ -290,32 +296,36 @@ public class CarController : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-            if (!IsWheelGrounded(wheel))
+            if (!IsWheelGrounded(wheel) && !IsWheelOnGrass(wheel))
             {
-                return false;
-            }
-            if (!IsWheelOnGrass(wheel))
-            {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    void ApplySpeedLimit()
+    bool IsOnGrassCached()
     {
-        float speed = carRb.linearVelocity.magnitude * 3.6f;
-        if (speed > maxspeed)
+        if (!isOnGrassCachedValid)
         {
-            carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
+            isOnGrassCached = IsOnGrass();
+            isOnGrassCachedValid = true;
         }
+        return isOnGrassCached;
     }
 
-    void Applyturnsensitivity()
+    void ApplySpeedLimit(float speed)
     {
-        float speed = carRb.linearVelocity.magnitude * 3.6f;
+        if (speed <= maxspeed) return;
+        carRb.linearVelocity = carRb.linearVelocity.normalized * (maxspeed / 3.6f);
+    }
 
-        turnSensitivty = Mathf.Lerp(turnSensitivtyAtLowSpeed, turnSensitivtyAtHighSpeed, Mathf.Clamp01(speed / maxspeed));
+    void Applyturnsensitivity(float speed)
+    {
+        turnSensitivty = Mathf.Lerp(
+            turnSensitivtyAtLowSpeed,
+            turnSensitivtyAtHighSpeed,
+            Mathf.Clamp01(speed / maxspeed));
     }
 
     void TURBE()
@@ -336,7 +346,7 @@ public class CarController : MonoBehaviour
     void Move()
     {
         if (activedrift > 0) return;
-        HandeSteepSlope();
+        //HandeSteepSlope();
         UpdateTargetTorgue();
         AdjustSpeedForGrass();
         AdjustSuspension();
@@ -352,15 +362,15 @@ public class CarController : MonoBehaviour
             }
         }
     }
-
-    private void HandeSteepSlope()
-    {
-        if (IsOnSteepSlope())
-        {
-            targetTorque *= 0.5f;
-            carRb.linearVelocity = Vector3.ClampMagnitude(carRb.linearVelocity, maxspeed / 3.6f);
-        }
-    }
+    //kommentoin tämän pois koska jos meille tulee se mistä aarre puhu eli autot menee ylös ja alas tiellä niin tämähän estää sen
+    // private void HandeSteepSlope()
+    // {
+    //     if (IsOnSteepSlope())
+    //     {
+    //         targetTorque *= 0.5f;
+    //         carRb.linearVelocity = Vector3.ClampMagnitude(carRb.linearVelocity, maxspeed / 3.6f);
+    //     }
+    // }
     private void AdjustSuspension()
     {
         foreach (var wheel in wheels)
@@ -387,34 +397,34 @@ public class CarController : MonoBehaviour
 
     private void UpdateTargetTorgue()
     {
-
-        //yes i know this is the shittiest way and laziest way but it works
-
         if (activedrift > 0) return;
-        if (currentControlScheme == "Gamepad")
-        {
-            float rawTrigger = Controls.CarControls.ThrottleMod.ReadValue<float>();
-            float throttleModifier = Mathf.Pow(rawTrigger, 0.9f);
-            float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
-            smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
-        }
+
+        float inputValue = currentControlScheme == "Gamepad"
+            ? Controls.CarControls.ThrottleMod.ReadValue<float>()
+            : Mathf.Abs(moveInput);
+
+        float power = currentControlScheme == "Gamepad" ? 0.9f : 0.1f;
+
+        float throttle = Mathf.Pow(inputValue, power);
+        float targetMaxAcc = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttle);
+
+        smoothedMaxAcceleration = Mathf.MoveTowards(
+            smoothedMaxAcceleration,
+            targetMaxAcc,
+            Time.deltaTime * 250f
+        );
+
+        if (moveInput > 0f)
+            targetTorque =  smoothedMaxAcceleration;
+        else if (moveInput < 0f)
+            targetTorque = -smoothedMaxAcceleration;
         else
-        {
-            float keyboardThrottle = Mathf.Abs(moveInput);
-            float throttleModifier = Mathf.Pow(keyboardThrottle, 0.1f);
-            float modifiedMaxAcceleration = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttleModifier);
-            smoothedMaxAcceleration = Mathf.MoveTowards(smoothedMaxAcceleration, modifiedMaxAcceleration, Time.deltaTime * 250f);
-        }
-        if (moveInput > 0) {
-            targetTorque = 1 * smoothedMaxAcceleration;
-        } else if (moveInput < 0) {
-            targetTorque = -1 * smoothedMaxAcceleration;
-        } else {
-            targetTorque = 0.0f;
-        }
+            targetTorque = 0f;
+
         if (!isDrifting)
         {
-            maxspeed = Mathf.Lerp(maxspeed, isTurboActive ? Turbesped : basespeed, Time.deltaTime);
+            float targetMaxSpeed = isTurboActive ? Turbesped : basespeed;
+            maxspeed = Mathf.Lerp(maxspeed, targetMaxSpeed, Time.deltaTime);
         }
     }
 
@@ -432,7 +442,7 @@ public class CarController : MonoBehaviour
 
     private void AdjustSpeedForGrass()
     {
-        if (IsOnGrass() && !isDrifting)
+        if (IsOnGrassCached() && !isDrifting)
         {
             targetTorque *= grassSpeedMultiplier;
             maxspeed = Mathf.Lerp(maxspeed, grassSpeedMultiplier, Time.deltaTime);
@@ -496,11 +506,7 @@ public class CarController : MonoBehaviour
             Debug.Log("Drift Sharpness: " + sharpness);
             // arvot vaihtuu ja huonotuu driftin ajaksi
             maxAcceleration = perusMaxAccerelation * 0.7f;
-            //random shit
-            float speed = carRb.linearVelocity.magnitude * 3.6f;
             float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
-            float driftMultiplier = 1.0f;
-
             foreach (var wheel in wheels)
             {
                 if (wheel.wheelCollider == null) continue;
@@ -515,10 +521,7 @@ public class CarController : MonoBehaviour
 
             }
             //laittaa jousitukset driftiä varten
-            AdjustdriftSuspension();
-            AdjustDriftForwardFriction();
-
-
+            AdjustWheelsForDrift();
             WheelEffects(true);
         };
         Controls.CarControls.Drift.canceled += ctx =>
@@ -541,11 +544,10 @@ public class CarController : MonoBehaviour
             return angle;  
         }
         //checks the angle between the car's forward direction and its velocity vector constantly while drifting
-
         return 0.0f;
     }
 
-    private void AdjustdriftSuspension()
+    private void AdjustWheelsForDrift()
     {
         foreach (var wheel in wheels)
         {
@@ -555,10 +557,6 @@ public class CarController : MonoBehaviour
             wheel.wheelCollider.suspensionSpring = suspensionSpring;
         }
 
-    }
-
-    private void AdjustDriftForwardFriction()
-    {
         foreach (var wheel in wheels)
         {
             WheelFrictionCurve forwardFriction = wheel.wheelCollider.forwardFriction;
@@ -569,18 +567,17 @@ public class CarController : MonoBehaviour
             forwardFriction.stiffness = 3f;
             wheel.wheelCollider.forwardFriction = forwardFriction;
         }
+
     }
 
     void StopDrifting()
     {
-        //varmistaa drift loppuu
         activedrift = 0;
         isDrifting = false;
-        //laittaa arvot takaisin normaaleihin
         maxAcceleration = perusMaxAccerelation;
 
-        RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-        if (racerScript != null && racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
+        if (racerScript != null &&
+            (racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f))
         {
             GameManager.instance.StopAddingPoints();
             return;
@@ -612,10 +609,6 @@ public class CarController : MonoBehaviour
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rot;
         }
-        Controls.CarControls.Move.canceled += ctx =>
-        {
-            steerInput = 0.0f;
-        };
     }
 
 
@@ -771,5 +764,46 @@ public class CarController : MonoBehaviour
                 StopCoroutine("turbeRegenerate");
                 break;
         }
+    }
+
+
+    void OnDriftPerformed(InputAction.CallbackContext ctx)
+    {
+        if (isDrifting || GameManager.instance.isPaused) return;
+
+        activedrift++;
+        isDrifting = true;
+        float sharpness = GetDriftSharpness();
+        Debug.Log("Drift Sharpness: " + sharpness);
+
+        maxAcceleration = perusMaxAccerelation * 0.7f;
+
+        float speed = carRb.linearVelocity.magnitude * 3.6f;
+        float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
+        float driftMultiplier = 1.0f;
+
+        foreach (var wheel in wheels)
+        {
+            if (wheel.wheelCollider == null) continue;
+            WheelFrictionCurve sideways = wheel.wheelCollider.sidewaysFriction;
+            sideways.extremumSlip   = 2.0f * speedFactor * driftMultiplier;
+            sideways.asymptoteSlip  = 2.5f * speedFactor * driftMultiplier;
+            sideways.extremumValue  = 0.75f / (speedFactor * driftMultiplier);
+            sideways.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
+            sideways.stiffness      = 3f;
+            wheel.wheelCollider.sidewaysFriction = sideways;
+        }
+
+        AdjustWheelsForDrift();
+        WheelEffects(true);
+    }
+
+    void OnDriftCanceled(InputAction.CallbackContext ctx)
+    {
+        StopDrifting();
+        AdjustForwardFrictrion();
+        maxAcceleration = perusMaxAccerelation;
+        targetTorque = perusTargetTorque;
+        WheelEffects(false);
     }
 }
