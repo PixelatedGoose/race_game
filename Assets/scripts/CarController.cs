@@ -48,7 +48,7 @@ public class CarController : MonoBehaviour
     public float targetTorque;
     public Material grassMaterial, roadMaterial, driftmaterial;
     public Rigidbody carRb;
-    bool isTurboActive = false;
+    public bool isTurboActive = false;
     private float activedrift = 0.0f;
     public float Turbesped = 150.0f, basespeed = 100.0f, grassmaxspeed = 50.0f, driftMaxSpeed = 40f;
     [Header("Drift asetukset")]
@@ -174,7 +174,7 @@ public class CarController : MonoBehaviour
         isOnGrassCachedValid = false;
 
         if (!IsCarActive()) return;
-
+        
         UpdateDriftSpeed();
         StopDriftIfRaceFinished();
 
@@ -330,6 +330,8 @@ public class CarController : MonoBehaviour
 
     void TURBE()
     {
+        //uskon että tää on tarpeeton; viittauksia KOMMENTEISSA yhessä scriptis, ei missää muualla
+        //tätä ei myöskää muuteta koskaan...
         if (isTurnedDown)
         {
             isTurboActive = false;
@@ -769,7 +771,7 @@ public class CarController : MonoBehaviour
 
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
-        if (isDrifting || GameManager.instance.isPaused) return;
+        if (isDrifting || GameManager.instance.isPaused || !canDrift) return;
 
         activedrift++;
         isDrifting = true;
