@@ -18,13 +18,13 @@ MonoBehaviour:
     m_Value: 0
   threshold:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 1.32
   intensity:
     m_OverrideState: 1
-    m_Value: 0.25
+    m_Value: 0.19
   scatter:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.094
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -34,15 +34,18 @@ MonoBehaviour:
   highQualityFiltering:
     m_OverrideState: 1
     m_Value: 1
-  downscale:
+  filter:
     m_OverrideState: 0
     m_Value: 0
+  downscale:
+    m_OverrideState: 1
+    m_Value: 1
   maxIterations:
     m_OverrideState: 0
     m_Value: 6
   dirtTexture:
     m_OverrideState: 0
-    m_Value: {fileID: 0}
+    m_Value: {fileID: 2800000, guid: 2c143257f0a6bb341bca4f69bd004fa3, type: 3}
     dimension: 1
   dirtIntensity:
     m_OverrideState: 0
@@ -64,13 +67,13 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {r: 0, g: 0, b: 0, a: 1}
   center:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 0.314
   smoothness:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.2
   rounded:
     m_OverrideState: 0
@@ -107,7 +110,7 @@ MonoBehaviour:
   active: 1
   mode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   neutralHDRRangeReductionMode:
     m_OverrideState: 0
     m_Value: 2
@@ -153,7 +156,7 @@ MonoBehaviour:
     m_Value: 2
   intensity:
     m_OverrideState: 1
-    m_Value: 0.6
+    m_Value: 1
   clamp:
     m_OverrideState: 0
     m_Value: 0.05
