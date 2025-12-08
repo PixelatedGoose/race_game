@@ -1,81 +1,120 @@
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class musicControl : MonoBehaviour
 {
-    public GameObject[] musicList;
-    public AudioSource cirno;
-    public AudioSource cirnodrift;
-    public AudioSource cirnoturbo;
+    public GameObject[] musicObjects;
+    public AudioSource[] musicTracks;
+    private enum CarMusicState {Main, Drift, Turbo};
+    private CarMusicState CurrentMusState = CarMusicState.Main;
+    private CarMusicState LatestMusState = CarMusicState.Main;
+    private int[] activeTweenIDs;
 
-    //find the cirnos
+    private CarController carController;
+    CarInputActions Controls;
+
+    void Awake()
+    {
+        Controls = new CarInputActions();
+        carController = FindAnyObjectByType<CarController>();
+
+        Controls.CarControls.Drift.performed += DriftCall;
+        Controls.CarControls.Drift.canceled += DriftCanceled;
+        Controls.CarControls.turbo.performed += TurboCall;
+        Controls.CarControls.turbo.canceled += TurboCanceled;
+        Controls.CarControls.pausemenu.performed += ImPauseMenuingIt;
+    }
+
+    private void OnEnable() => Controls.Enable();
+    private void OnDisable() => Controls.Disable();
+    private void OnDestroy() => Controls.Disable();
+
     void Start()
     {
-        musicList = GameObject.FindGameObjectsWithTag("thisisasound");
+        //Ouchies! Double ouchies! Triple? Yes!
+        musicObjects = GameObject.FindGameObjectsWithTag("thisisasound");
+        musicObjects = musicObjects.OrderBy(go => go.name).ToArray();
+        musicTracks = musicObjects.Select(go => go.GetComponent<AudioSource>()).ToArray();
+        //the death of TrackedTween
+        activeTweenIDs = new int[musicTracks.Length];
+    }
 
-        cirnoturbo = GameObject.Find("cirnoturbo").GetComponent<AudioSource>();
-        cirnodrift = GameObject.Find("cirnodrift").GetComponent<AudioSource>();
-        cirno = GameObject.Find("cirno").GetComponent<AudioSource>();
+    //kaikki tarpeelline on täs
+    void DriftCall(InputAction.CallbackContext context)
+    {
+        //condition ? true : false
+        CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Drift;
+        FadeTracks();
+    }
+    void DriftCanceled(InputAction.CallbackContext context)
+    {
+        CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Main;
+        FadeTracks();
+    }
+    void TurboCall(InputAction.CallbackContext context)
+    {
+        CurrentMusState = CarMusicState.Turbo;
+        FadeTracks();
+    }
+    void TurboCanceled(InputAction.CallbackContext context)
+    {
+        CurrentMusState = carController.isDrifting ? CarMusicState.Drift : CarMusicState.Main;
+        FadeTracks();
+    }
+
+    private void FadeTracks()
+    {
+        //tarkistaa staten ku funktio alkaa, ei tarvi muualla
+        if (CurrentMusState == LatestMusState) return;
+
+
+
+        int stateIndex = (int)CurrentMusState; //current on oikeesti se viimeisin lol
+        int previousStateIndex = (int)LatestMusState;
+        AudioSource NextTrack = musicTracks[stateIndex];
+        AudioSource PreviousTrack = musicTracks[previousStateIndex];
+
+        // Cancel any existing tweens on these tracks
+        LeanTween.cancel(activeTweenIDs[stateIndex]);
+        LeanTween.cancel(activeTweenIDs[previousStateIndex]);
+
+        // Start new tweens and store their IDs
+        activeTweenIDs[stateIndex] =
+        LeanTween.value(NextTrack.volume, 0.34f, 1.0f)
+            .setOnUpdate(val => NextTrack.volume = val)
+            .id;
+        activeTweenIDs[previousStateIndex] =
+        LeanTween.value(PreviousTrack.volume, 0.0f, 1.0f)
+            .setOnUpdate(val => PreviousTrack.volume = val)
+            .id;
+        
+        LatestMusState = CurrentMusState;
     }
 
     public void StartMusicTracks()
     {
-        foreach (GameObject musicTrack in musicList)
+        foreach (AudioSource track in musicTracks)
         {
-            musicTrack.GetComponent<AudioSource>().Play();
+            track.Play();
         }
     }
-    
-    void Update()
+
+    public void ImPauseMenuingIt(InputAction.CallbackContext context)
     {
-        if (GameManager.instance.turbeActive)
+        //tämä se vasta on erittäin ronny
+        PausedMusicHandler();
+    }
+    public void PausedMusicHandler()
+    {
+        foreach (AudioSource track in musicTracks)
         {
-            if (cirnoturbo.volume <= 0.340f)
-            {
-                cirnoturbo.volume = Mathf.MoveTowards(cirnoturbo.volume, 0.5f, 1.0f * Time.deltaTime);
-                cirnodrift.volume = Mathf.MoveTowards(cirnodrift.volume, 0.0f, 1.0f * Time.deltaTime);
-                cirno.volume = Mathf.MoveTowards(cirno.volume, 0.0f, 1.0f * Time.deltaTime);
-            }
-        }
-        else
-        {
-            if (GameManager.instance.isAddingPoints)
-            {
-                if (cirnodrift.volume <= 0.340f)
-                {
-                    cirnodrift.volume = Mathf.MoveTowards(cirnodrift.volume, 0.5f, 1.0f * Time.deltaTime);
-                    cirno.volume = Mathf.MoveTowards(cirno.volume, 0.0f, 1.0f * Time.deltaTime);
-                }
-            }
+            //selvä, käytetään YKSI tämmöne if-else. vähä ronny mut se toimii paremmi ku updates
+            if (GameManager.instance.isPaused)
+                track.Pause();
             else
-            {
-                if (cirnodrift.volume > 0.000f)
-                {
-                    cirnodrift.volume = Mathf.MoveTowards(cirnodrift.volume, 0.0f, 1.0f * Time.deltaTime);
-                    cirno.volume = Mathf.MoveTowards(cirno.volume, 0.5f, 1.0f * Time.deltaTime);
-                }
-            }
-            
-            if (cirnoturbo.volume > 0.000f)
-            {
-                cirnoturbo.volume = Mathf.MoveTowards(cirnoturbo.volume, 0.0f, 1.0f * Time.deltaTime);
-                cirno.volume = Mathf.MoveTowards(cirno.volume, 0.5f, 1.0f * Time.deltaTime);
-            }
-        }
-
-
-        if (GameManager.instance.isPaused == true)
-        {
-            foreach (GameObject musicTrack in musicList)
-            {
-                musicTrack.GetComponent<AudioSource>().Pause();
-            }
-        }
-        else if (GameManager.instance.isPaused == false && cirno.isPlaying == false)
-        {
-            foreach (GameObject musicTrack in musicList)
-            {
-                musicTrack.GetComponent<AudioSource>().UnPause();
-            }
+                track.UnPause();
         }
     }
 }

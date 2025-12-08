@@ -29,17 +29,6 @@ public class loadArea : MonoBehaviour
         InputSystem.onDeviceChange -= OnDeviceChange;
     }
 
-
-    /* elikkäs:
-    1. lisää 2 eri dictionarya, vaihtaa niiden välil OnDeviceChangessa
-    2. vaiha kaikki variablet niille jotka käyttää ChangeAnimOverrides()
-    3. en muista ja kello on iha just 3
-    */
-    //TO DO (as stated by copilot):
-    //1. tarkista että kaikki toimii
-    //2. make
-    //3. KORJAA TÄMÄ VITUN PASKA
-
     private void OnDeviceChange(InputDevice device, InputDeviceChange change)
     {
         if (device is Gamepad)

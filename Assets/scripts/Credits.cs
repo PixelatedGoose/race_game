@@ -1,16 +1,21 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Credits : MonoBehaviour
 {
+    int index = -1;
+
     [Header("UI")]
     [SerializeField] private Text thetext;          // Assign in Inspector
     [SerializeField] private Selectable target;     // Default selection (assign in Inspector)
 
     [Header("Data")]
     [TextArea] public string[] tasks;
+
+    [Header("Specific Info Popup")]
+    public string[] whatHeDo;
+    [SerializeField] private Text popupInfo;
 
     private void Awake()
     {
@@ -23,6 +28,15 @@ public class Credits : MonoBehaviour
                 "ThatOneGuy\nCOMPOSER, PROGRAMMER\nall music and sound design, tutorial",
                 "Leobold\nASSISTING PROGRAMMER\ncertain menus, racing mechanics",
                 "rojp\nASSISTING PROGRAMMER\nother help, early 3d models"
+            };
+
+            whatHeDo = new string[]
+            {
+              "He is a great man",
+              "You could say he controlled the car",
+              "Who the fuck is this motherfucker",
+              "Bold Leobold but he's not bold",
+              "Our code is full of rojping" 
             };
         }
 
@@ -60,8 +74,6 @@ public class Credits : MonoBehaviour
         if (selGO == null && target != null && target.IsActive())
             selGO = target.gameObject;
 
-        int index = -1;
-
         if (selGO != null)
         {
             string name = selGO.name;
@@ -78,8 +90,9 @@ public class Credits : MonoBehaviour
             thetext.text = string.Empty;
     }
 
-    public void Back()
+    public void UpdatePopupText()
     {
-        SceneManager.LoadSceneAsync(0);
+        //todo: poista muu input ku se note on näkyvillä
+        popupInfo.text = whatHeDo[index];
     }
 }
