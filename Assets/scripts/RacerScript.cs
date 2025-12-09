@@ -376,6 +376,13 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void ResetRace()
     {
+        // Save race result FIRST, before resetting anything
+        if (RaceResultCollector.instance != null)
+        {
+            RaceResultCollector.instance.SaveRaceResult();
+        }
+
+        // Now reset everything
         currentLap = 1;
         laptime = 0;
         startTimer = false;
@@ -400,7 +407,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             DatapersistenceManager.instance.SaveGame();
             print("data saved");
         }
- 
 
         if (startFinishLine != null)
             startFinishLine.gameObject.SetActive(false);

@@ -379,5 +379,8 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
             if (ScoreTexts[i] != null) ScoreTexts[i].text = s;
     }
 
-    public int GetScoreInt() => Mathf.FloorToInt(scoreFloat);
+    public int GetScoreInt()
+    {
+        return Mathf.FloorToInt(scoreFloat);
+    }
 }

@@ -1,0 +1,88 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.IO;
+
+public class RaceResultCollector : MonoBehaviour
+{
+    public static RaceResultCollector instance;
+
+    [SerializeField] private string fileName = "race_results.json";
+
+    private RaceResultHandler resultHandler;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        resultHandler = new RaceResultHandler(Application.persistentDataPath, fileName);
+        Debug.Log($"Race results will be saved to: {Path.Combine(Application.persistentDataPath, fileName)}");
+    }
+
+    /// <summary>
+    /// Call this method when the player wins the race.
+    /// Collects score, time, and map data and saves it to a file.
+    /// </summary>
+    public void SaveRaceResult()
+    {
+        int score = GetScore();
+        float time = GetTime();
+        string map = GetMap();
+        
+        // Generate racer name with incrementing number
+        int racerNumber = resultHandler.GetNextRacerNumber();
+        string racerName = $"racer_{racerNumber}";
+
+        RaceResultData resultData = new RaceResultData(score, time, map, racerName);
+        resultHandler.Save(resultData);
+
+        Debug.Log($"Race Result Saved - Racer: {racerName}, Score: {score}, Time: {time:F2}, Map: {map}");
+    }
+
+    private int GetScore()
+    {
+        if (ScoreManager.instance != null)
+        {
+            return ScoreManager.instance.GetScoreInt();
+        }
+
+        if (GameManager.instance != null)
+        {
+            return GameManager.instance.score;
+        }
+
+        return 0;
+    }
+
+    private float GetTime()
+    {
+        RacerScript racer = FindFirstObjectByType<RacerScript>();
+        if (racer != null)
+        {
+            // Round to 2 decimal places
+            return Mathf.Round(racer.laptime * 100f) / 100f;
+        }
+
+        return 0f;
+    }
+
+    private string GetMap()
+    {
+        return SceneManager.GetActiveScene().name;
+    }
+
+    /// <summary>
+    /// Load all saved race results.
+    /// </summary>
+    public RaceResultCollection LoadAllRaceResults()
+    {
+        return resultHandler.Load();
+    }
+}
