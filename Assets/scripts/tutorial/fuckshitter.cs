@@ -69,15 +69,15 @@ public class fuckshitter : MonoBehaviour
             {
                 case true:
                     instructionHandler.ShowNextInstructionInCategory(instructionHandler.curCategory, false, 0);
-                    if (instructionHandler.curCategory == "driving" && instructionHandler.index == 2)
+                    if ((instructionHandler.curCategory == "driving"
+                    || instructionHandler.curCategory == "controller_driving")
+                    && instructionHandler.index == 2)
                     {
                         DoSomeFuckShit("begin");
                     }
-                    if (instructionHandler.GetInstruction(
-                        instructionHandler.curCategory,
-                        instructionHandler.index)
-                        == "But first, we'll teach you something more important. Drive to the next zone to continue.")
-                    //unity haista paska jo iha oikeasti ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    if ((instructionHandler.curCategory == "controls"
+                    || instructionHandler.curCategory == "controller_controls")
+                    && instructionHandler.index == 11)
                     {
                         DoSomeFuckShit("predriftfadeout");
                     }

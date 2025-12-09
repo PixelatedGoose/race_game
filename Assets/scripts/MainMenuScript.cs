@@ -124,9 +124,4 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
-
-    public void Credits()
-    {
-        SceneManager.LoadSceneAsync(10);
-    }
 }
