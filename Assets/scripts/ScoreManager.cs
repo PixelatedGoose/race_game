@@ -2,20 +2,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class ScoreManager : MonoBehaviour
+
+public class ScoreManager : MonoBehaviour, IDataPersistence
 {
     [Header("Base score")]
-    [SerializeField] float basePointsPerSecond = 0.1f;   // baseline pts/s
-    [SerializeField] float baseSpeedMultiplier = 0.5f; // extra scaling by forward speed
+    [SerializeField] float basePointsPerSecond = 1.5f;   // was 0.1f  -> MUCH FASTER
+    [SerializeField] float baseSpeedMultiplier = 1.0f;   // was 0.5f  -> more reward for speed
     [SerializeField] float maxForwardSpeedForBase = 40f; // m/s mapped to full bonus
 
     [Header("Drift score")]
-    [SerializeField] float peakSharpness = 120f;          // deg => mapped to 1
-    [SerializeField] float sharpnessExponent = 1.5f;     // non-linear growth
-    [SerializeField] float timeScale = 2f;               // seconds growth for time bonus
-    [SerializeField] float minSharpnessForScoring = 10f; // degrees
-    [SerializeField] float minLateralSpeed = 1f;         // m/s
-    [SerializeField] float minForwardSpeed = 2f;         // m/s
+    [SerializeField] float peakSharpness = 60f;          // was 120f  -> max at smaller angle
+    [SerializeField] float sharpnessExponent = 0.75f;    // was 1.5f  -> low angles are rewarded more
+    [SerializeField] float timeScale = 2f;               
+    [SerializeField] float minSharpnessForScoring = 3f;  // was 10f   -> much easier to start drifting
+    [SerializeField] float minLateralSpeed = 0.5f;       // was 1f    -> needs less side slip
+    [SerializeField] float minForwardSpeed = 1f;         // was 2f    -> works at lower speeds
 
     [Header("Drift multiplicative settings")]
     [Tooltip("How strongly drift's finalMultiplier is applied per second. 1 = multiply by finalMultiplier once per second.")]
@@ -38,17 +39,24 @@ public class ScoreManager : MonoBehaviour
     int lastReportedScore = -1;
     float driftTime;
     CarController cr;
+    RacerScript rc;
     bool OnGrass = false;
     public Text[] ScoreTexts;
 
     // drift-delayed application state
     bool driftingActive = false;
     float driftStartScore = 0f;
+    float driftSessionBaseGain = 0f;   // <- NEW: clean "earned during this drift"
     float driftCompoundMultiplier = 1f;
     float pendingDriftBonusTotal = 0f;
     float bonusApplyProgress = 0f;
     float bonusAddedSoFar = 0f;
     bool applyingBonus = false;
+
+    [Header("Drift caps")]
+    [SerializeField] float maxDriftMultiplier = 10f;
+    [SerializeField] float minDriftBonus = 2000f;        // was 0f   -> MIN 2k
+    [SerializeField] float maxDriftBonus = 100000;        // was 4000 -> CAP ~3k
 
     // expose current drift multiplier for debug
     public float CurrentDriftMultiplier => driftingActive ? driftCompoundMultiplier : 1f;
@@ -56,6 +64,25 @@ public class ScoreManager : MonoBehaviour
     int lastTierLogged = 1;   // 1x, 2x, 3x...
 
     public event Action<int> OnScoreChanged;
+
+
+    //for the data
+    public void LoadData(GameData data)
+    {
+        if (data != null)
+        {
+            return;
+        }
+    }
+    //we need to save the data marvin
+    public void SaveData(ref GameData data)
+    {
+        if (data != null && rc.raceFinished == true) 
+        {
+            data.scored += this.GetScoreInt();
+            print(data.scored);
+        }       
+    }
 
     void Awake()
     {
@@ -66,6 +93,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         cr = FindFirstObjectByType<CarController>();
+        rc = FindFirstObjectByType<RacerScript>();
     }
 
     void Update()
@@ -102,7 +130,7 @@ public class ScoreManager : MonoBehaviour
         float mult = 1f + speedFactor * baseSpeedMultiplier;
         scoreFloat += basePointsPerSecond * mult * dt;
     }
-
+    //are we drifting marvin??
     void UpdateDriftState(float dt, Vector3 vel)
     {
         bool canDriftNow = !OnGrass && cr.isDrifting;
@@ -112,14 +140,21 @@ public class ScoreManager : MonoBehaviour
             if (!driftingActive)
             {
                 driftingActive = true;
-                driftStartScore = scoreFloat;
+                driftStartScore = scoreFloat; // now only for debug
+                driftSessionBaseGain = 0f;     // NEW: start clean per‑drift gain
                 driftCompoundMultiplier = 1f;
                 driftTime = 0f;
             }
 
             float finalMult = ComputeDriftMultiplierIncrement(vel, dt);
             if (finalMult > 0f)
+            {
                 driftCompoundMultiplier *= Mathf.Pow(finalMult, dt * driftMultiplierRate);
+                driftCompoundMultiplier = Mathf.Min(driftCompoundMultiplier, maxDriftMultiplier);
+
+                // NEW: accumulate clean drift "earnings" not polluted by old bonuses
+                driftSessionBaseGain += basePointsPerSecond * dt;
+            }
         }
         else if (driftingActive)
         {
@@ -127,9 +162,11 @@ public class ScoreManager : MonoBehaviour
             driftingActive = false;
             driftTime = 0f;
             driftCompoundMultiplier = 1f;
+            driftSessionBaseGain = 0f;  // reset for next drift
         }
     }
 
+    //marvin we need to animate the bonus so people can get addicted to the score increasing
     void AnimatePendingBonus(float dt)
     {
         if (!applyingBonus || pendingDriftBonusTotal <= 0f) return;
@@ -190,8 +227,11 @@ public class ScoreManager : MonoBehaviour
 
         // passed all gates -> compute multiplier
         driftTime += deltaTime;
-        float norm = Mathf.Clamp01(sharpness / peakSharpness);
-        float sharpBonus = Mathf.Pow(norm, sharpnessExponent);
+
+        // NEW: map [minSharpnessForScoring .. peakSharpness] -> [0..1] more softly
+        float normRaw = Mathf.InverseLerp(minSharpnessForScoring, peakSharpness, sharpness);
+        float sharpBonus = Mathf.Pow(normRaw, sharpnessExponent);
+
         float timeBonus = 1f + driftTime / timeScale;
         float multiplier = 1f + sharpBonus * timeBonus;
 
@@ -202,6 +242,7 @@ public class ScoreManager : MonoBehaviour
         return true;
     }
 
+    //marvin we need to multiply
     void AccumulateDriftMultiplier(float finalMultiplier, float deltaTime)
     {
         float multThisFrame = Mathf.Pow(finalMultiplier, deltaTime * driftMultiplierRate);
@@ -226,8 +267,10 @@ public class ScoreManager : MonoBehaviour
 
         driftTime += dt;
 
-        float norm = Mathf.Clamp01(sharp / peakSharpness);
-        float sharpBonus = Mathf.Pow(norm, sharpnessExponent);
+        // NEW: its easier to get sharpness bonus
+        float normRaw = Mathf.InverseLerp(minSharpnessForScoring, peakSharpness, sharp);
+        float sharpBonus = Mathf.Pow(normRaw, sharpnessExponent);
+
         float timeBonus = 1f + driftTime / timeScale;
         float mult = 1f + sharpBonus * timeBonus;
 
@@ -238,24 +281,35 @@ public class ScoreManager : MonoBehaviour
     }
 
     // called once when drift ends
+    //marvin we need to give the bonus to the player
     void ApplyDriftBonusOnce()
     {
-        float earned = Mathf.Max(0f, scoreFloat - driftStartScore);
-        if (earned <= 0f) return;
+        // must have actually drifted
+        if (driftTime <= 0.2f || driftCompoundMultiplier <= 1.01f)
+            return;
 
-        float effectiveEarned = earned + driftBaseReward;
-        float rawGain = (driftCompoundMultiplier - 1f) * driftBonusStrength;
-        if (rawGain <= 0f) return;
+        // 0..1: how intense the drift was, based on multiplier
+        float intensity = Mathf.InverseLerp(1f, maxDriftMultiplier, driftCompoundMultiplier);
 
-        float bonus = effectiveEarned * rawGain;
-        bonus = Mathf.Clamp(bonus, 0f, effectiveEarned * 40f);
+        // 0..1: how long the drift lasted (3s drift => full)
+        float timeFactor = Mathf.Clamp01(driftTime / 3f);
+
+        // combine: both intensity and time matter
+        float t = Mathf.Clamp01(0.5f * intensity + 0.5f * timeFactor);
+
+        // final bonus between minDriftBonus (≈2k) and maxDriftBonus (≈3k)
+        float bonus = Mathf.Lerp(minDriftBonus, maxDriftBonus, t);
+
+        //marvin ate half of the bonus so the player doesnt get so much score :(
+        bonus *= 0.5f;
 
         pendingDriftBonusTotal = bonus;
-        applyingBonus = bonus > 0f;
+        applyingBonus = true;
         bonusApplyProgress = 0f;
         bonusAddedSoFar = 0f;
     }
 
+    //marvin we need to see the multiplier work
     void DebugDriftMultiplierOncePerTier()
     {
         if (!driftingActive) { lastTierLogged = 1; return; }
@@ -277,7 +331,7 @@ public class ScoreManager : MonoBehaviour
         Debug.Log($"[Drift] NEW TIER: {label} (x{mult:0.00})");
         lastTierLogged = tier;
     }
-
+    //NO MARVIN GET OFF THE GRASS
     public void SetOnGrass(bool isOnGrass)
     {
         if (OnGrass == isOnGrass) return;
@@ -294,7 +348,7 @@ public class ScoreManager : MonoBehaviour
             bonusAddedSoFar = 0f;
         }
     }
-
+    
     void UpdateScoreTexts()
     {
         string s = "Score: " + GetScoreInt().ToString();
