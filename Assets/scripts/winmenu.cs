@@ -1,15 +1,16 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class winmenu : MonoBehaviour
 {
 
     public void RestartGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     
     public void MainMenu()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MainMenu");
     }
 }

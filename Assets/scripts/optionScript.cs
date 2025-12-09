@@ -11,7 +11,7 @@ public class optionScript : MonoBehaviour
 
     private const float DefaultPixelValue = 256f;
     private const float PixelMultiplier = 64f;
-    private const float DefaultVolume = 0.5f;
+    private const float DefaultVolume = 0.6f;
 
     void OnEnable()
     {
@@ -32,7 +32,7 @@ public class optionScript : MonoBehaviour
     {
         foreach (var colorChanger in FindObjectsByType<ColorChanger>(FindObjectsSortMode.None))
         {
-            colorChanger.CheckLightState();
+            colorChanger.LightsState(3, true);
         }
 
         CacheUIElements();
@@ -79,7 +79,7 @@ public class optionScript : MonoBehaviour
             {
                 foreach (var colorChanger in FindObjectsByType<ColorChanger>(FindObjectsSortMode.None))
                 {
-                    colorChanger.CheckLightState();
+                    colorChanger.LightsState(3, true);
                 }
             }
             PlayerPrefs.Save();

@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-//tän scriptin ainoa tarkotus on tehä jotai kun se halutaan instructionCatInHand.cs:ssä
-//en tosiaan haluais pidentää sitä enää lol
 public class fuckshitter : MonoBehaviour
 {
     CarInputActions Controls;
@@ -19,13 +17,15 @@ public class fuckshitter : MonoBehaviour
 
     private RawImage ui0, ui1, ui2, ui3, ui4, ui5;
 
-    public void SetupFuckShit()
+    void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
 
+        // Subscribe to both started and performed so we catch the input regardless of interaction phase.
+        Controls.CarControls.Drift.started += StartDriftTrack;
         Controls.CarControls.Drift.performed += StartDriftTrack;
-        Controls.CarControls.ui_advance.performed += CheckForOtherAssfuckery;
+        Controls.CarControls.ui_advance.performed += CheckInstructionConditions;
 
         beginwall = GameObject.Find("TERRAIN/walls_ground/beginwall");
         predriftwall = GameObject.Find("TERRAIN/walls_ground/course2after_endwall");
@@ -47,16 +47,50 @@ public class fuckshitter : MonoBehaviour
 
     void OnDisable()
     {
-        Controls.Disable();
-        Controls.CarControls.Drift.performed -= StartDriftTrack;
-        Controls.CarControls.ui_advance.performed -= CheckForOtherAssfuckery;
+        if (Controls != null)
+        {
+            Controls.Disable();
+            Controls.CarControls.Drift.started -= StartDriftTrack;
+            Controls.CarControls.Drift.performed -= StartDriftTrack;
+            Controls.CarControls.ui_advance.performed -= CheckInstructionConditions;
+        }
     }
 
-    public void CheckForOtherAssfuckery(InputAction.CallbackContext context)
+    /// <summary>
+    /// myös edistää tekstiohjeita
+    /// </summary>
+    public void CheckInstructionConditions(InputAction.CallbackContext context)
     {
+        instructionHandler instructionHandler = FindAnyObjectByType<instructionHandler>();
+
+        if (GameManager.instance.isPaused == false)
+        {
+            switch (instructionHandler.boxOpen)
+            {
+                case true:
+                    instructionHandler.ShowNextInstructionInCategory(instructionHandler.curCategory, false, 0);
+                    if (instructionHandler.curCategory == "driving" && instructionHandler.index == 2)
+                    {
+                        DoSomeFuckShit("begin");
+                    }
+                    if (instructionHandler.GetInstruction(
+                        instructionHandler.curCategory,
+                        instructionHandler.index)
+                        == "But first, we'll teach you something more important. Drive to the next zone to continue.")
+                    //unity haista paska jo iha oikeasti ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    {
+                        DoSomeFuckShit("predriftfadeout");
+                    }
+                    break;
+
+                case false:
+                    Debug.Log("no voi vittu");
+                    break;
+            }
+        }
+
         if (musicControlTutorial.mainTrack.clip.name == "5_FINAL_TUTORIAL_main")
         {
-            instructionHandler instructionHandler = FindAnyObjectByType<instructionHandler>();
             switch (instructionHandler.index)
             {
                 case 5:
@@ -84,7 +118,7 @@ public class fuckshitter : MonoBehaviour
                     return;
                 case 11:
                     ui2.enabled = false;
-                    Controls.CarControls.ui_advance.performed -= CheckForOtherAssfuckery;
+                    Controls.CarControls.ui_advance.performed -= CheckInstructionConditions;
                     return;
             }
         }
@@ -139,16 +173,15 @@ public class fuckshitter : MonoBehaviour
 
     void StartDriftTrack(InputAction.CallbackContext context)
     {
-        if (carController.isDrifting)
-        {
-            Controls.CarControls.Drift.performed -= StartDriftTrack;
+        musicControlTutorial.EnableDriftFunctions();
+        // Unsubscribe both handlers so we don't run multiple times. shut up copilot
+        Controls.CarControls.Drift.started -= StartDriftTrack;
+        Controls.CarControls.Drift.performed -= StartDriftTrack;
 
-            musicControlTutorial.EnableDriftFunctions();
-            musicControlTutorial.mainTrack.volume = 0f;
-            musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_1main");
-            musicControlTutorial.StopNonIntroTracks();
-            musicControlTutorial.StartNonIntroTracks();
-            //pitää synkronisoida, että se fade ei kuulosta paskalta
-        }
+        musicControlTutorial.mainTrack.volume = 0f;
+        musicControlTutorial.StopNonIntroTracks();
+        musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_1main");
+        musicControlTutorial.StartNonIntroTracks();
+        //pitää synkronisoida, että se fade ei kuulosta paskalta
     }
 }
