@@ -3,15 +3,6 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 
-[System.Serializable]
-public class CarStats
-{
-    public string carName;
-    public int speed;
-    public int acceleration;
-    public int handling;
-}
-
 public class CarUnlock : MonoBehaviour, IDataPersistence
 {
     public List<GameObject> carsl;
@@ -22,14 +13,17 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     private Button left, right;
     private readonly HashSet<GameObject> unlockedCars = new();
 
-    // UI Elements
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI carNameText; // For car name
-    public TextMeshProUGUI speedText;   // For speed
-    public TextMeshProUGUI accelerationText; // For acceleration
-    public TextMeshProUGUI handlingText; // For handling
+    protected struct CarDataTexts
+    {
+        public TextMeshProUGUI scoreText;
+        public TextMeshProUGUI carNameText; // For car name
+        public TextMeshProUGUI speedText;   // For speed
+        public TextMeshProUGUI accelerationText; // For acceleration
+        public TextMeshProUGUI handlingText; // For handling
+        public TextMeshProUGUI CurrentScoreText;
+    }
+    protected CarDataTexts carDataTexts;
     private int activeCarIndex = 0;
-    public TextMeshProUGUI CurrentScoreText;
     private int requiredScore;
 
     public void LoadData(GameData data)
@@ -46,7 +40,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
     }
     void Awake()
     {
-
         carsl = new List<GameObject>
         {
             GameObject.Find("REALCAR_x"),
@@ -55,9 +48,9 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             GameObject.Find("Lada")
         };
 
-        left = GameObject.Find("left").GetComponent<Button>();
+        left = GameObject.Find("L_ChangeCar").GetComponent<Button>();
         left.onClick.AddListener(UnlockCar);
-        right = GameObject.Find("right").GetComponent<Button>();
+        right = GameObject.Find("R_ChangeCar").GetComponent<Button>();
         right.onClick.AddListener(UnlockCar);
 
     }
@@ -82,7 +75,6 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             };
         }
 
-
         activeCarIndex = carsl.FindIndex(car => car.activeInHierarchy);
 
         if (activeCarIndex >= 0 && activeCarIndex < carsl.Count)
@@ -91,7 +83,7 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
 
             if (activeCar.name == "Lada")
             {
-                scoreText.text = $"Score needed to unlock: {requiredScore}";
+                carDataTexts.scoreText.text = $"Score needed to unlock: {requiredScore}";
                 button.interactable = false;
             }
         }
@@ -101,13 +93,13 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
         }
         if (scoreamount > 90000)
         {
-            scoreText.text = "Car alreary Unlocked!";
+            carDataTexts.scoreText.text = "Car alreary Unlocked!";
         }
     }
 
     void Update()
     {
-        CurrentScoreText.text = "Your Score: " + scoreamount.ToString();
+        carDataTexts.CurrentScoreText.text = "Your Score: " + scoreamount.ToString();
     }
     
     public void UnlockCar()
@@ -169,24 +161,24 @@ public class CarUnlock : MonoBehaviour, IDataPersistence
             CarStats stats = carStats[activeCarIndex];
 
             // Update UI Text
-            carNameText.text = $"Car Name: {stats.carName}";
-            speedText.text = $"Speed: {stats.speed}";
-            accelerationText.text = $"Acceleration: {stats.acceleration}";
-            handlingText.text = $"Handling: {stats.handling}";
+            carDataTexts.carNameText.text = $"Car Name: {stats.carName}";
+            carDataTexts.speedText.text = $"Speed: {stats.speed}";
+            carDataTexts.accelerationText.text = $"Acceleration: {stats.acceleration}";
+            carDataTexts.handlingText.text = $"Handling: {stats.handling}";
 
             if (unlockedCars.Contains(activeCar))
             {
-                scoreText.text = "Car already unlocked!";
+                carDataTexts.scoreText.text = "Car already unlocked!";
             }
             else
             {
                 requiredScore = carPointRequirements[activeCar];
-                scoreText.text = $"Score needed to unlock: {requiredScore}";
+                carDataTexts.scoreText.text = $"Score needed to unlock: {requiredScore}";
             }
         }
         else
         {
-            scoreText.text = "Invalid car selection!";
+            carDataTexts.scoreText.text = "Invalid car selection!";
         }
     }
 }
