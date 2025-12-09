@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 [System.Serializable]
 public class CarStats
@@ -30,11 +31,13 @@ public class CarSelection_new : MonoBehaviour
     protected mapSelection mapSelection;
 
     private AudioSource menuMusic;
+    private GameObject carGameObjects;
 
     void Awake()
     {
-        mapSelection = GameObject.Find("mapselect").GetComponent<mapSelection>();
+        mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
+        carGameObjects = GameObject.Find("cars");
 
         cars = new GameObject[]
         {
@@ -91,6 +94,8 @@ public class CarSelection_new : MonoBehaviour
             cars[index].SetActive(true);
         }
         UpdateCarStats();
+        //pitää sallia valitteminen vasta tässä, että ei tuu erroreit
+        select.Select();
 
         menuMusic.Play();
     }
@@ -112,11 +117,11 @@ public class CarSelection_new : MonoBehaviour
         }
 
         activeCarIndex = -1;
-        for (int i = 0; i < cars.Length; i++)
+        foreach (GameObject car in cars)
         {
-            if (cars[i].activeInHierarchy)
+            if (car.activeInHierarchy)
             {
-                activeCarIndex = i;
+                activeCarIndex = Array.IndexOf(cars, car);
                 break;
             }
         }
@@ -167,9 +172,35 @@ public class CarSelection_new : MonoBehaviour
 
     public void ActivateMapSelection()
     {
-        GameObject.Find("cars").SetActive(false);
+        if (activeCarIndex < 0 || activeCarIndex >= cars.Length || cars[activeCarIndex] == null)
+        {
+            Debug.LogWarning($"ActivateMapSelection aborted: invalid activeCarIndex={activeCarIndex}");
+            return;
+        }
+
+        GameObject car = cars[activeCarIndex];
+
+        // Option A: detach the car so disabling the UI container won't stop the tween
+        car.transform.SetParent(null, true);
+
+        // start rotation
+        LeanTween.rotateX(car, 360f, 4f).setLoopClamp();
+
+        // switch UI after a short delay so tween can start (or after rotation finishes)
+        StartCoroutine(SwitchToMapSelectionDelayed(0.1f));
+    }
+
+    private System.Collections.IEnumerator SwitchToMapSelectionDelayed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         csObjects.SetActive(false);
         msObjects.SetActive(true);
+    }
+
+    public void ResetCarTweens()
+    {
+        LeanTween.cancel(cars[activeCarIndex]);
+        LeanTween.rotateLocal(cars[activeCarIndex], new Vector3(0f, 0f, 0f), 0.0001f);
     }
 
     public void Back()
