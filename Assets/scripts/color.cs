@@ -1,15 +1,13 @@
 using UnityEngine;
 
-//tämä on EPÄPYHÄ HELVETTI ja aion korjata valojen toimivuuen lol. oletan et se on jotai PlayerPrefsin kanssa,
-//koska ne valot sai pois päältä ainoastaa jos sen asetuksen laitto päälle ja pois. like seriously wtf
-//HUOM. tein pieniä muutoksia joten jos ne ei toimi nii tuun korjaa tulevina päivinä, oletan vaan kaiken :)))
 public class ColorChanger : MonoBehaviour
 {
     public Light pointLight;
     public Light right;
     public Light left;
-
     public float duration = 1.0f;
+
+    CarInputActions Controls;
 
     void Awake()
     {
@@ -17,14 +15,11 @@ public class ColorChanger : MonoBehaviour
         Controls.Enable();
     }
 
-    CarInputActions Controls;
-
-
-
     private void OnEnable()
     {
-        Controls.Enable();
-    
+        Controls.CarControls.lights.performed += ctx => LightsState(1, false);
+        Controls.CarControls.underglow.performed += ctx => LightsState(2, false);
+
         foreach (Transform child in transform)
         {
             Light childLight = child.GetComponent<Light>();
@@ -62,34 +57,45 @@ public class ColorChanger : MonoBehaviour
 
     private void Update()
     {
-        if (CheckLightState() == true)
-        {
-            if (Controls.CarControls.lights.triggered)
-            {
-                left.enabled = !left.enabled;
-                right.enabled = !right.enabled;
-            }
-
-            if (Controls.CarControls.underglow.triggered)
-            {
-                pointLight.enabled = !pointLight.enabled;
-            }
-        }
-
         if (pointLight.enabled)
         {
             float t = Mathf.PingPong(Time.time / duration, 1.0f);
             pointLight.color = Color.Lerp(Color.red, Color.blue, t);
         }
     }
-
-    public bool CheckLightState()
+    
+    /// <summary>
+    /// tarkistaa, saako valoja vaihtaa. tavallisesti kutsutaan inputin kautta
+    /// </summary>
+    /// <returns></returns>
+    /// <param name="shouldSet">jos funktio kutsutaan, pitäskö sen muuttaa valot asetuksen mukaiseksi?</param>
+    public void LightsState(int lightSelected, bool shouldSet = false)
     {
-        bool lightsEnabled = PlayerPrefs.GetInt("optionTest_value") == 0;
-        pointLight.enabled = lightsEnabled;
-        left.enabled = lightsEnabled;
-        right.enabled = lightsEnabled;
+        bool lightsOptionEnabled = PlayerPrefs.GetInt("optionTest_value") == 1; //lights?
 
-        return lightsEnabled;
+        if (shouldSet) //set?
+        {
+            left.enabled = lightsOptionEnabled;
+            right.enabled = lightsOptionEnabled;
+            pointLight.enabled = lightsOptionEnabled;
+            return;
+        }
+        if (!lightsOptionEnabled) return;
+
+        switch (lightSelected)
+        {
+            case 1:
+                left.enabled = !left.enabled;
+                right.enabled = !right.enabled;
+                break;
+            case 2:
+                pointLight.enabled = !pointLight.enabled;
+                break;
+            case 3:
+                left.enabled = !left.enabled;
+                right.enabled = !right.enabled;
+                pointLight.enabled = !pointLight.enabled;
+                break;
+        }
     }
 }

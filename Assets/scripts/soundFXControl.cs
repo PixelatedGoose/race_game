@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class soundFXControl : MonoBehaviour
@@ -121,6 +122,7 @@ public class soundFXControl : MonoBehaviour
 
     void LateUpdate()
     {
+        if (SceneManager.GetActiveScene().name == "MainMenu") return;
         if (Controls.CarControls.pausemenu.triggered && racerScript.racestarted == true)
         {
             PauseStateHandler();

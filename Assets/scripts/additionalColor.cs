@@ -78,18 +78,10 @@ public class AdditionalColorChanger : MonoBehaviour
 
     public void CheckLightState()
     {
-        Debug.Log("FUNC CALL: " + PlayerPrefs.GetInt("optionTest_value"));
-        if (PlayerPrefs.GetInt("optionTest_value") == 0)
-        {
-            pointLight.enabled = false;
-            left.enabled = false;
-            right.enabled = false;
-        }
-        else
-        {
-            pointLight.enabled = true;
-            left.enabled = true;
-            right.enabled = true;
-        }
+        bool lightsOptionEnabled = PlayerPrefs.GetInt("optionTest_value") == 1; //lights?
+
+        pointLight.enabled = lightsOptionEnabled;
+        left.enabled = lightsOptionEnabled;
+        right.enabled = lightsOptionEnabled;
     }
 }
