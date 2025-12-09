@@ -53,6 +53,8 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     float bonusAddedSoFar = 0f;
     bool applyingBonus = false;
 
+    bool touchedgrasswhiledrifting = false;
+
     [Header("Drift caps")]
     [SerializeField] float maxDriftMultiplier = 10f;
     [SerializeField] float minDriftBonus = 2000f;        // was 0f   -> MIN 2k
@@ -128,6 +130,11 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         float forwardSpeed = Mathf.Max(0f, Vector3.Dot(vel, cr.transform.forward));
         float speedFactor = Mathf.Clamp01(forwardSpeed / Mathf.Max(0.0001f, maxForwardSpeedForBase));
         float mult = 1f + speedFactor * baseSpeedMultiplier;
+
+        // if on grass, heavily nerf base gain (e.g. 10% of normal)
+        if (OnGrass)
+            mult *= 0f;
+
         scoreFloat += basePointsPerSecond * mult * dt;
     }
     //are we drifting marvin??
@@ -144,6 +151,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
                 driftSessionBaseGain = 0f;     // NEW: start clean per‑drift gain
                 driftCompoundMultiplier = 1f;
                 driftTime = 0f;
+                touchedgrasswhiledrifting = false;
             }
 
             float finalMult = ComputeDriftMultiplierIncrement(vel, dt);
@@ -267,7 +275,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
         driftTime += dt;
 
-        // NEW: its easier to get sharpness bonus
+
         float normRaw = Mathf.InverseLerp(minSharpnessForScoring, peakSharpness, sharp);
         float sharpBonus = Mathf.Pow(normRaw, sharpnessExponent);
 
@@ -286,7 +294,24 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     {
         // must have actually drifted
         if (driftTime <= 0.2f || driftCompoundMultiplier <= 1.01f)
+        {
+            touchedgrasswhiledrifting = false;
             return;
+        }
+
+        float minForThisDrift;
+        float maxForThisDrift;
+
+        if (touchedgrasswhiledrifting)
+        {
+            minForThisDrift = 0f;
+            maxForThisDrift = 350f;
+        }
+        else
+        {
+            minForThisDrift = minDriftBonus;
+            maxForThisDrift = maxDriftBonus;
+        }
 
         // 0..1: how intense the drift was, based on multiplier
         float intensity = Mathf.InverseLerp(1f, maxDriftMultiplier, driftCompoundMultiplier);
@@ -297,16 +322,19 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         // combine: both intensity and time matter
         float t = Mathf.Clamp01(0.5f * intensity + 0.5f * timeFactor);
 
-        // final bonus between minDriftBonus (≈2k) and maxDriftBonus (≈3k)
-        float bonus = Mathf.Lerp(minDriftBonus, maxDriftBonus, t);
+        // use the per‑drift min/max
+        float bonus = Mathf.Lerp(minForThisDrift, maxForThisDrift, t);
 
-        //marvin ate half of the bonus so the player doesnt get so much score :(
+        // marvin ate half of the points
         bonus *= 0.5f;
 
         pendingDriftBonusTotal = bonus;
-        applyingBonus = true;
+        applyingBonus = bonus > 0f;
         bonusApplyProgress = 0f;
         bonusAddedSoFar = 0f;
+
+        // prepare for next drift
+        touchedgrasswhiledrifting = false;
     }
 
     //marvin we need to see the multiplier work
@@ -339,13 +367,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
         if (OnGrass)
         {
-            driftingActive = false;
-            driftTime = 0f;
-            driftCompoundMultiplier = 1f;
-            pendingDriftBonusTotal = 0f;
-            applyingBonus = false;
-            bonusApplyProgress = 0f;
-            bonusAddedSoFar = 0f;
+            touchedgrasswhiledrifting = true;
         }
     }
     

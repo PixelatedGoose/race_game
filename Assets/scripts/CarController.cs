@@ -171,7 +171,9 @@ public class CarController : MonoBehaviour
 
     void FixedUpdate()
     {
+        float speed = carRb.linearVelocity.magnitude * 3.6f;
         isOnGrassCachedValid = false;
+        ApplySpeedLimit(speed);
 
         if (!IsCarActive()) return;
         
@@ -183,8 +185,6 @@ public class CarController : MonoBehaviour
         Steer();
 
         Decelerate();
-        float speed = carRb.linearVelocity.magnitude * 3.6f;
-        ApplySpeedLimit(speed);
         Applyturnsensitivity(speed);
         OnGrass();
         HandleTurbo();
@@ -227,26 +227,37 @@ public class CarController : MonoBehaviour
         TURBEmeter();
     }
 
-    void OnGrass()
-    {
-        bool onGrass = IsOnGrassCached();
-
-        foreach(var wheel in wheels)
+        void OnGrass()
         {
-            var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (trailRenderer != null) continue;
+            int wheelsOnGrass = 0;
 
-            if (onGrass)
+            foreach (var wheel in wheels)
             {
-                trailRenderer.material = grassMaterial;
-                
+                if (wheel.wheelEffectobj == null) continue;
+
+                var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
+                if (trailRenderer == null) continue;
+
+                bool wheelOnGrass = IsWheelGrounded(wheel) && IsWheelOnGrass(wheel);
+
+                // per‑wheel line material
+                trailRenderer.material = wheelOnGrass ? grassMaterial : roadMaterial;
+
+                if (wheelOnGrass)
+                    wheelsOnGrass++;
             }
-            else
+
+            // 1 oli liian kiree pisteen vähenemiseen, 2 on parempi
+            const int wheelsNeededForPenalty = 2;   
+
+            bool onGrassForScore = wheelsOnGrass >= wheelsNeededForPenalty;
+
+            if (ScoreManager.instance != null)
             {
-                trailRenderer.material = roadMaterial;
+                ScoreManager.instance.SetOnGrass(onGrassForScore);
             }
         }
-    }
+
 
     private bool IsOnSteepSlope()
     {
@@ -280,23 +291,25 @@ public class CarController : MonoBehaviour
 
     bool IsWheelOnGrass(Wheel wheel)
     {
-        if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
+        if (Physics.Raycast(
+                wheel.wheelCollider.transform.position,
+                -wheel.wheelCollider.transform.up,
+                out RaycastHit hit,
+                wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
         {
-            return ((1 << hit.collider.gameObject.layer) & grass) != 0;
+            // check if hit collider is on a grass layer
+            return (grass.value & (1 << hit.collider.gameObject.layer)) != 0;
         }
         return false;
     }
 
-    private bool IsGrounded()
-    {
-        return Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 0.02f);
-    }
 
     public bool IsOnGrass()
     {
         foreach (var wheel in wheels)
         {
-            if (!IsWheelGrounded(wheel) && !IsWheelOnGrass(wheel))
+            // car is "on grass" if ANY wheel is grounded AND on a grass collider
+            if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
             {
                 return true;
             }
@@ -312,6 +325,11 @@ public class CarController : MonoBehaviour
             isOnGrassCachedValid = true;
         }
         return isOnGrassCached;
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 0.02f);
     }
 
     void ApplySpeedLimit(float speed)
