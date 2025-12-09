@@ -18,7 +18,7 @@ public class mapSelection : MonoBehaviour
 
     void Awake()
     {
-        csObjects = GameObject.Find("carSelectionObj");
+        csObjects = GameObject.Find("CarSelectionNew");
         msObjects = GameObject.Find("mapSelectionObj");
         loadObjects = GameObject.Find("loadObjects");
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
