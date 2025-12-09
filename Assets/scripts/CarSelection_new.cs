@@ -69,7 +69,10 @@ public class CarSelection_new : MonoBehaviour
             GameObject.Find("haukipudasNight")
         };
         mapSelection.MapFallAnimResetPos(); //ashfhjdskfkdshjsdfkjsdhjkfsdh
+
+        scoreText.text = $"Score with this car: {scoreAmount}";
         msObjects.SetActive(false);
+        csObjects.SetActive(true);
         
         index = PlayerPrefs.GetInt("CarIndex", 0);
 
@@ -164,6 +167,7 @@ public class CarSelection_new : MonoBehaviour
 
     public void ActivateMapSelection()
     {
+        GameObject.Find("cars").SetActive(false);
         csObjects.SetActive(false);
         msObjects.SetActive(true);
     }

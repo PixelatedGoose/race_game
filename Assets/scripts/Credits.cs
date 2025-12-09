@@ -48,6 +48,11 @@ public class Credits : MonoBehaviour
         };
     }
 
+    void OnDisable()
+    {
+        Controls.Disable();
+    }
+
     public void UpdateIconSelection()
     {        
         GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
