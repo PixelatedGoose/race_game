@@ -9,6 +9,7 @@ public class mapSelection : MonoBehaviour
     public GameObject msObjects;
     public GameObject[] msObjectsList;
     private float schizophrenia;
+    public Toggle toggle;
     private GameObject loadObjects;
     private AudioSource loadingLoop;
     public GameObject[] maps;
@@ -18,6 +19,7 @@ public class mapSelection : MonoBehaviour
 
     void Awake()
     {
+        toggle = GameObject.Find("ai").GetComponent<Toggle>();
         csObjects = GameObject.Find("CarSelectionNew");
         msObjects = GameObject.Find("mapSelectionObj");
         loadObjects = GameObject.Find("loadObjects");
@@ -97,7 +99,7 @@ public class mapSelection : MonoBehaviour
 
     public void SetAIMaps(string toggleName)
     {
-        Toggle toggle = GameObject.Find(toggleName).GetComponent<Toggle>();
+        toggle = GameObject.Find(toggleName).GetComponent<Toggle>();
         if (toggle.isOn)
         {
             haukipudas = 6;

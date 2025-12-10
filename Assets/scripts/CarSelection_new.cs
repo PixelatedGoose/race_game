@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
+using System.Linq;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public class CarStats
@@ -24,6 +27,8 @@ public class CarSelection_new : MonoBehaviour
     private int activeCarIndex = 0;
     private int index;
 
+    public GameData gameData;
+
     public GameObject csObjects;
     public GameObject msObjects;
 
@@ -33,7 +38,7 @@ public class CarSelection_new : MonoBehaviour
 
     void Awake()
     {
-        mapSelection = GameObject.Find("mapselect").GetComponent<mapSelection>();
+        mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
 
         cars = new GameObject[]
@@ -53,6 +58,7 @@ public class CarSelection_new : MonoBehaviour
     {
         if (data != null)
         {
+            gameData = data;
             scoreAmount = data.scored;
         }
     }
@@ -65,12 +71,10 @@ public class CarSelection_new : MonoBehaviour
     {
         mapSelection.maps = new GameObject[]
         {
-            GameObject.Find("haukipudasDay"),
-            GameObject.Find("haukipudasNight")
+            GameObject.Find("haukipudas"),
+            GameObject.Find("haukipudas_night")
         };
         mapSelection.MapFallAnimResetPos(); //ashfhjdskfkdshjsdfkjsdhjkfsdh
-
-        scoreText.text = $"Score with this car: {scoreAmount}";
         msObjects.SetActive(false);
         csObjects.SetActive(true);
         
@@ -91,6 +95,8 @@ public class CarSelection_new : MonoBehaviour
             cars[index].SetActive(true);
         }
         UpdateCarStats();
+        //pitää sallia valitteminen vasta tässä, että ei tuu erroreit
+        select.Select();
 
         menuMusic.Play();
     }
@@ -112,11 +118,11 @@ public class CarSelection_new : MonoBehaviour
         }
 
         activeCarIndex = -1;
-        for (int i = 0; i < cars.Length; i++)
+        foreach (GameObject car in cars)
         {
-            if (cars[i].activeInHierarchy)
+            if (car.activeInHierarchy)
             {
-                activeCarIndex = i;
+                activeCarIndex = Array.IndexOf(cars, car);
                 break;
             }
         }
@@ -133,6 +139,42 @@ public class CarSelection_new : MonoBehaviour
         }
     }
 
+    public void UpdateScorePerMap()
+    {
+        CarStats activeCarStats = carStats[activeCarIndex];
+
+        string selectedMapIconName = EventSystem.current.currentSelectedGameObject.name;
+        string selectedMap;
+
+        if (mapSelection.toggle.isOn)
+        {
+            selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "night_ai_haukipudas";
+        }
+        else
+        {
+            selectedMap = selectedMapIconName;
+        }
+        selectedMap ??= "haukipudas";
+        
+        Debug.Log(selectedMap);
+
+        float actualTimeOnMap = gameData.besttime;
+
+        //toistaseksi poissa käytöstä kunnes race results juttu korjataan
+        /* var handler = new RaceResultHandler(Application.persistentDataPath, "race_results.json");
+        RaceResultCollection collection = handler.Load();
+        Debug.Log(collection);
+
+        // find entries that match the chosen map (case-insensitive) and pick best
+        var bestResults = collection.results
+            .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(r => r.score)
+            .ToArray();
+
+        int topResultsScore = bestResults[0].score; */
+        scoreText.text = $"Best time with {activeCarStats.carName}: {actualTimeOnMap}";
+    }
+    
     public void RightButton()
     {
         cars[index].SetActive(false);
@@ -167,7 +209,6 @@ public class CarSelection_new : MonoBehaviour
 
     public void ActivateMapSelection()
     {
-        GameObject.Find("cars").SetActive(false);
         csObjects.SetActive(false);
         msObjects.SetActive(true);
     }
