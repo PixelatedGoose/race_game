@@ -319,9 +319,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 441876744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 5, y: -113.5294}
   m_SizeDelta: {x: 950, y: 96}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &69753726
@@ -2791,7 +2791,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Score on this map: example'
+  m_Text: 'Best score with car: score'
 --- !u!222 &430274702
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3517,6 +3517,18 @@ MonoBehaviour:
           m_StringArgument: ai
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 695968980}
+        m_TargetAssemblyTypeName: CarSelection_new, Assembly-CSharp
+        m_MethodName: UpdateScorePerMap
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!114 &909998365
 MonoBehaviour:
@@ -3606,19 +3618,19 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: f8cca903826567f4fae6ee898fca61f4, type: 3}
-    m_FontSize: 64
+    m_FontSize: 72
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 64
+    m_MaxSize: 72
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '"Haukipudas" at night; we turned the lights off, that''s about it. Recommended
-    for those who might actually be able to pay attention.'
+  m_Text: '"Haukipudas" at night; same as the normal map, but with an added challenge
+    of visibility.'
 --- !u!222 &971438834
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3981,21 +3993,19 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: f8cca903826567f4fae6ee898fca61f4, type: 3}
-    m_FontSize: 64
+    m_FontSize: 72
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 64
+    m_MaxSize: 72
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Welcome to "Haukipudas"!
-
-    A race track with harsher curves and water
-    on all edges. Best enjoyed under heavy influence of alcohol.'
+  m_Text: A race track with slight curves and water on all edges, as well as hidden
+    shortcuts. Playable with bots and without.
 --- !u!222 &1057967028
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5298,8 +5308,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -0.00002193451, y: -480.0239}
-  m_SizeDelta: {x: 942, y: 500}
+  m_AnchoredPosition: {x: 0, y: -480.0239}
+  m_SizeDelta: {x: 942, y: 300}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1472674271
 MonoBehaviour:
@@ -5323,8 +5333,8 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 7e5e08c8d1056284c838de09d6ba3596, type: 3}
-    m_FontSize: 112
-    m_FontStyle: 1
+    m_FontSize: 146
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 300
@@ -5449,8 +5459,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -0.00003051758, y: -480.0239}
-  m_SizeDelta: {x: 942, y: 500}
+  m_AnchoredPosition: {x: 0, y: -480.0239}
+  m_SizeDelta: {x: 942, y: 300}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1508260046
 MonoBehaviour:
@@ -5474,11 +5484,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 7e5e08c8d1056284c838de09d6ba3596, type: 3}
-    m_FontSize: 112
-    m_FontStyle: 1
+    m_FontSize: 146
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
-    m_MaxSize: 112
+    m_MaxSize: 146
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -5574,9 +5584,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 441876744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 5, y: -161.7647}
   m_SizeDelta: {x: 950, y: 96}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1664195553
@@ -5980,9 +5990,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 441876744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 5, y: -65.29411}
   m_SizeDelta: {x: 950, y: 96}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1856164964
@@ -6340,7 +6350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1919444584
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6609,9 +6619,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 441876744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 5, y: -5}
   m_SizeDelta: {x: 950, y: 96}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2010328661

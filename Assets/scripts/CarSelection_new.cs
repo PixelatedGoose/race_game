@@ -27,17 +27,20 @@ public class CarSelection_new : MonoBehaviour
     private int activeCarIndex = 0;
     private int index;
 
-    public GameData gameData;
-
     public GameObject csObjects;
     public GameObject msObjects;
 
+    RaceResultHandler handler;
+    RaceResultCollection collection;
     protected mapSelection mapSelection;
 
     private AudioSource menuMusic;
 
     void Awake()
     {
+        handler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
+        collection = handler.Load();
+        
         mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
 
@@ -58,7 +61,6 @@ public class CarSelection_new : MonoBehaviour
     {
         if (data != null)
         {
-            gameData = data;
             scoreAmount = data.scored;
         }
     }
@@ -155,24 +157,28 @@ public class CarSelection_new : MonoBehaviour
             selectedMap = selectedMapIconName;
         }
         selectedMap ??= "haukipudas";
-        
-        Debug.Log(selectedMap);
 
-        float actualTimeOnMap = gameData.besttime;
+        var bestResults = Array.Empty<RaceResultData>();
+        if (collection != null || collection.results.Count != 0)
+        {
+            bestResults = collection.results
+                .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(r => r.score)
+                .ToArray();
+        }
+        else
+        {
+            bestResults = Array.Empty<RaceResultData>();
+        }
 
-        //toistaseksi poissa käytöstä kunnes race results juttu korjataan
-        /* var handler = new RaceResultHandler(Application.persistentDataPath, "race_results.json");
-        RaceResultCollection collection = handler.Load();
-        Debug.Log(collection);
-
-        // find entries that match the chosen map (case-insensitive) and pick best
-        var bestResults = collection.results
-            .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
-            .OrderBy(r => r.score)
-            .ToArray();
-
-        int topResultsScore = bestResults[0].score; */
-        scoreText.text = $"Best time with {activeCarStats.carName}: {actualTimeOnMap}";
+        int topResultsScore = 0;
+        if (bestResults.Length != 0)
+        {
+            topResultsScore = bestResults[0].score;
+            scoreText.text = $"Best score with {activeCarStats.carName}: {topResultsScore}";
+        }
+        else
+            scoreText.text = $"No score yet with {activeCarStats.carName}";
     }
     
     public void RightButton()
