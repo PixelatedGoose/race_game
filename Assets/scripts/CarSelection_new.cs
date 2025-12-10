@@ -73,6 +73,13 @@ public class CarSelection_new : MonoBehaviour
 
     void Start()
     {
+        LeanTween.value(selectACarText.gameObject, selectACarText.color.a, 1f, 1.3f)
+            .setOnUpdate(val =>
+            {
+                var color = selectACarText.color;
+                color.a = val;
+                selectACarText.color = color;
+            });
         LeanTween.value(selectACarText.gameObject, selectACarText.rectTransform.anchoredPosition.x, -380.76f, 2.3f)
             .setOnUpdate((float val) =>
             {
