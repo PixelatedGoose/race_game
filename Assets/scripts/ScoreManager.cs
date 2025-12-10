@@ -6,32 +6,31 @@ using System;
 public class ScoreManager : MonoBehaviour, IDataPersistence
 {
     [Header("Base score")]
-    [SerializeField] float basePointsPerSecond = 1.5f;   // was 0.1f  -> MUCH FASTER
-    [SerializeField] float baseSpeedMultiplier = 1.0f;   // was 0.5f  -> more reward for speed
-    [SerializeField] float maxForwardSpeedForBase = 40f; // m/s mapped to full bonus
+     float basePointsPerSecond = 1.5f;   // was 0.1f  -> MUCH FASTER
+     float baseSpeedMultiplier = 1.0f;   // was 0.5f  -> more reward for speed
+     float maxForwardSpeedForBase = 40f; // m/s mapped to full bonus
 
     [Header("Drift score")]
-    [SerializeField] float peakSharpness = 60f;          // was 120f  -> max at smaller angle
-    [SerializeField] float sharpnessExponent = 0.75f;    // was 1.5f  -> low angles are rewarded more
-    [SerializeField] float timeScale = 2f;               
-    [SerializeField] float minSharpnessForScoring = 3f;  // was 10f   -> much easier to start drifting
-    [SerializeField] float minLateralSpeed = 0.5f;       // was 1f    -> needs less side slip
-    [SerializeField] float minForwardSpeed = 1f;         // was 2f    -> works at lower speeds
+     float peakSharpness = 60f;          // was 120f  -> max at smaller angle
+     float sharpnessExponent = 0.75f;    // was 1.5f  -> low angles are rewarded more
+     float timeScale = 2f;               
+     float minSharpnessForScoring = 3f;  // was 10f   -> much easier to start drifting
+     float minLateralSpeed = 0.5f;       // was 1f    -> needs less side slip
+     float minForwardSpeed = 1f;         // was 2f    -> works at lower speeds
 
     [Header("Drift multiplicative settings")]
     [Tooltip("How strongly drift's finalMultiplier is applied per second. 1 = multiply by finalMultiplier once per second.")]
-    [SerializeField] float driftMultiplierRate = 1f;
+     float driftMultiplierRate = 1f;
 
     [Header("Animated bonus")]
     [Tooltip("How long the drift bonus is animated into the real score (seconds)")]
-    [SerializeField] float bonusApplyDuration = 1.0f; // seconds over which the bonus is added (animated)
+     float bonusApplyDuration = 1.0f; // seconds over which the bonus is added (animated)
 
     // NEW: drift reward tuning
-    [Header("Drift reward tuning")]
-    [Tooltip("Extra base value to treat as 'earned during drift' for bonus calc.")]
-    [SerializeField] float driftBaseReward = 10.0f;
-    [Tooltip("How strong the multiplier is applied to drift earnings.")]
-    [SerializeField] float driftBonusStrength = 2.5f;
+    
+    [Header("Debug")]
+    [Tooltip("Enable detailed drift/score logs in console when each drift ends")]
+     bool debugScoreBreakdown = false;
 
     public static ScoreManager instance;
 
@@ -56,14 +55,15 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     bool touchedgrasswhiledrifting = false;
 
     [Header("Drift caps")]
-    [SerializeField] float maxDriftMultiplier = 10f;
-    [SerializeField] float minDriftBonus = 2000f;        // was 0f   -> MIN 2k
-    [SerializeField] float maxDriftBonus = 100000;        // was 4000 -> CAP ~3k
+     float maxDriftMultiplier = 10f;
+     float minDriftBonus = 300f;        // was 0f   -> MIN 2k
+     float maxDriftBonus = 7500f;        // was 4000 -> CAP ~3k
 
     // expose current drift multiplier for debug
     public float CurrentDriftMultiplier => driftingActive ? driftCompoundMultiplier : 1f;
 
     int lastTierLogged = 1;   // 1x, 2x, 3x...
+    int driftCount = 0; // track total drifts for debug
 
     public event Action<int> OnScoreChanged;
 
@@ -299,6 +299,8 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
             return;
         }
 
+        driftCount++;
+
         float minForThisDrift;
         float maxForThisDrift;
 
@@ -326,12 +328,48 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         float bonus = Mathf.Lerp(minForThisDrift, maxForThisDrift, t);
 
         // marvin ate half of the points
-        bonus *= 0.5f;
+         bonus *= 0.2f;
 
         pendingDriftBonusTotal = bonus;
         applyingBonus = bonus > 0f;
         bonusApplyProgress = 0f;
         bonusAddedSoFar = 0f;
+
+        // DEBUG LOG: detailed breakdown
+        if (debugScoreBreakdown)
+        {
+            float scoreBeforeDrift = driftStartScore;
+            float scoreAfterBonus = scoreFloat + bonus;
+            
+            Debug.Log($"═══════════════════════════════════════════════════════════════");
+            Debug.Log($"[DRIFT #{driftCount}] ENDED - DETAILED BREAKDOWN");
+            Debug.Log($"───────────────────────────────────────────────────────────────");
+            Debug.Log($"TIME & MULTIPLIER:");
+            Debug.Log($"  • Drift Duration: {driftTime:F2}s");
+            Debug.Log($"  • Peak Multiplier: x{driftCompoundMultiplier:F2} (max cap: x{maxDriftMultiplier})");
+            Debug.Log($"───────────────────────────────────────────────────────────────");
+            Debug.Log($"QUALITY FACTORS:");
+            Debug.Log($"  • Intensity (from multiplier): {intensity:P0} [{driftCompoundMultiplier:F2} → {maxDriftMultiplier:F2}]");
+            Debug.Log($"  • Time Factor: {timeFactor:P0} [{driftTime:F2}s → 3.00s]");
+            Debug.Log($"  • Combined Quality (t): {t:P0}");
+            Debug.Log($"───────────────────────────────────────────────────────────────");
+            Debug.Log($"BONUS RANGE:");
+            Debug.Log($"  • Min Possible: {minForThisDrift:N0}");
+            Debug.Log($"  • Max Possible: {maxForThisDrift:N0}");
+            Debug.Log($"  • Grass Touched: {(touchedgrasswhiledrifting ? "YES (reduced range)" : "NO (full range)")}");
+            Debug.Log($"───────────────────────────────────────────────────────────────");
+            Debug.Log($"BONUS CALCULATION:");
+            Debug.Log($"  • Raw Bonus (before Marvin): {bonus:N0}");
+            Debug.Log($"  • Marvin Tax (×0.2): -{(bonus - bonus):N0}");
+            Debug.Log($"  • Final Drift Bonus: +{bonus:N0}");
+            Debug.Log($"───────────────────────────────────────────────────────────────");
+            Debug.Log($"SCORE IMPACT:");
+            Debug.Log($"  • Score Before Drift: {scoreBeforeDrift:N0}");
+            Debug.Log($"  • Score After Bonus: {scoreAfterBonus:N0}");
+            Debug.Log($"  • Total Gain This Drift: +{(scoreAfterBonus - scoreBeforeDrift):N0}");
+            Debug.Log($"  • Current Total Score: {GetScoreInt():N0}");
+            Debug.Log($"═══════════════════════════════════════════════════════════════");
+        }
 
         // prepare for next drift
         touchedgrasswhiledrifting = false;
