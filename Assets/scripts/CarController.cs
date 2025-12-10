@@ -201,7 +201,7 @@ public class CarController : MonoBehaviour
         if (!isDrifting) return;
 
         float sharpness = GetDriftSharpness();
-        Debug.Log("Drift Sharpness: " + sharpness);
+        //Debug.Log("Drift Sharpness: " + sharpness);
 
         if (isTurboActive)
             maxspeed = Mathf.Lerp(maxspeed, Turbesped, Time.deltaTime * 0.5f);
@@ -793,8 +793,6 @@ public class CarController : MonoBehaviour
 
         activedrift++;
         isDrifting = true;
-        float sharpness = GetDriftSharpness();
-        Debug.Log("Drift Sharpness: " + sharpness);
 
         maxAcceleration = perusMaxAccerelation * 0.7f;
 
