@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public bool isAddingPoints = false;
 
-    // Use an array or list to handle multiple Text components
-    public Text[] ScoreTexts; // Array to hold multiple Text components
     public float scoreamount = 0;
 
     [Header("menut")]
@@ -93,8 +91,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
             {
                 foreach (GameObject car in cars)
                 {
-                    //jotta se löytää ne; inaktiivisesta gameobjectista ei pysty löytää mitää
-                    ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
                     car.SetActive(false);
                 }
 
@@ -119,11 +115,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
                         //tää TAPPAA kaikki ne muut että se ei vittuile se unity lol
                     }
                 }
-            }
-
-            else
-            {
-                ScoreTexts[1] = GameObject.Find("Score").GetComponent<Text>();
             }
         }
     }
