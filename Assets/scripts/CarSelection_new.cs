@@ -35,9 +35,11 @@ public class CarSelection_new : MonoBehaviour
     protected mapSelection mapSelection;
 
     private AudioSource menuMusic;
+    private Text selectACarText;
 
     void Awake()
     {
+        selectACarText = GameObject.Find("SelectYoMobile").GetComponent<Text>();
         handler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
         collection = handler.Load();
         
@@ -71,6 +73,13 @@ public class CarSelection_new : MonoBehaviour
 
     void Start()
     {
+        LeanTween.value(selectACarText.gameObject, selectACarText.rectTransform.anchoredPosition.x, -380.76f, 2.3f)
+            .setOnUpdate((float val) =>
+            {
+            selectACarText.rectTransform.anchoredPosition = new Vector2(val, selectACarText.rectTransform.anchoredPosition.y);
+            })
+            .setLoopClamp();
+
         mapSelection.maps = new GameObject[]
         {
             GameObject.Find("haukipudas"),

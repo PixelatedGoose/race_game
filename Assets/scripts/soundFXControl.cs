@@ -123,6 +123,7 @@ public class soundFXControl : MonoBehaviour
     void LateUpdate()
     {
         if (SceneManager.GetActiveScene().name == "MainMenu") return;
+        if (SceneManager.GetActiveScene().name == "Carselectionmenu_VECTORAMA") return;
         if (Controls.CarControls.pausemenu.triggered && racerScript.racestarted == true)
         {
             PauseStateHandler();
