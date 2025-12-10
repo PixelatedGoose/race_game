@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using System.Linq;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public class CarStats
@@ -25,19 +27,19 @@ public class CarSelection_new : MonoBehaviour
     private int activeCarIndex = 0;
     private int index;
 
+    public GameData gameData;
+
     public GameObject csObjects;
     public GameObject msObjects;
 
     protected mapSelection mapSelection;
 
     private AudioSource menuMusic;
-    private GameObject carGameObjects;
 
     void Awake()
     {
         mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
-        carGameObjects = GameObject.Find("cars");
 
         cars = new GameObject[]
         {
@@ -56,6 +58,7 @@ public class CarSelection_new : MonoBehaviour
     {
         if (data != null)
         {
+            gameData = data;
             scoreAmount = data.scored;
         }
     }
@@ -68,12 +71,10 @@ public class CarSelection_new : MonoBehaviour
     {
         mapSelection.maps = new GameObject[]
         {
-            GameObject.Find("haukipudasDay"),
-            GameObject.Find("haukipudasNight")
+            GameObject.Find("haukipudas"),
+            GameObject.Find("haukipudas_night")
         };
         mapSelection.MapFallAnimResetPos(); //ashfhjdskfkdshjsdfkjsdhjkfsdh
-
-        scoreText.text = $"Score with this car: {scoreAmount}";
         msObjects.SetActive(false);
         csObjects.SetActive(true);
         
@@ -138,6 +139,42 @@ public class CarSelection_new : MonoBehaviour
         }
     }
 
+    public void UpdateScorePerMap()
+    {
+        CarStats activeCarStats = carStats[activeCarIndex];
+
+        string selectedMapIconName = EventSystem.current.currentSelectedGameObject.name;
+        string selectedMap;
+
+        if (mapSelection.toggle.isOn)
+        {
+            selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "night_ai_haukipudas";
+        }
+        else
+        {
+            selectedMap = selectedMapIconName;
+        }
+        selectedMap ??= "haukipudas";
+        
+        Debug.Log(selectedMap);
+
+        float actualTimeOnMap = gameData.besttime;
+
+        //toistaseksi poissa käytöstä kunnes race results juttu korjataan
+        /* var handler = new RaceResultHandler(Application.persistentDataPath, "race_results.json");
+        RaceResultCollection collection = handler.Load();
+        Debug.Log(collection);
+
+        // find entries that match the chosen map (case-insensitive) and pick best
+        var bestResults = collection.results
+            .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(r => r.score)
+            .ToArray();
+
+        int topResultsScore = bestResults[0].score; */
+        scoreText.text = $"Best time with {activeCarStats.carName}: {actualTimeOnMap}";
+    }
+    
     public void RightButton()
     {
         cars[index].SetActive(false);
@@ -172,35 +209,8 @@ public class CarSelection_new : MonoBehaviour
 
     public void ActivateMapSelection()
     {
-        if (activeCarIndex < 0 || activeCarIndex >= cars.Length || cars[activeCarIndex] == null)
-        {
-            Debug.LogWarning($"ActivateMapSelection aborted: invalid activeCarIndex={activeCarIndex}");
-            return;
-        }
-
-        GameObject car = cars[activeCarIndex];
-
-        // Option A: detach the car so disabling the UI container won't stop the tween
-        car.transform.SetParent(null, true);
-
-        // start rotation
-        LeanTween.rotateX(car, 360f, 4f).setLoopClamp();
-
-        // switch UI after a short delay so tween can start (or after rotation finishes)
-        StartCoroutine(SwitchToMapSelectionDelayed(0.1f));
-    }
-
-    private System.Collections.IEnumerator SwitchToMapSelectionDelayed(float delay)
-    {
-        yield return new WaitForSeconds(delay);
         csObjects.SetActive(false);
         msObjects.SetActive(true);
-    }
-
-    public void ResetCarTweens()
-    {
-        LeanTween.cancel(cars[activeCarIndex]);
-        LeanTween.rotateLocal(cars[activeCarIndex], new Vector3(0f, 0f, 0f), 0.0001f);
     }
 
     public void Back()

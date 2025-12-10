@@ -91,7 +91,7 @@
 //the beginning and the end: Joonas Kallio
 //the first and the last: Joonas Kallio
 //the eternal one: Joonas Kallio
-//the infinite being: Joonas Kallio
+//the infinite being: Joonas Kallio //HOLY SHIT INFINITE BEING????
 //the omnipotent force: Joonas Kallio
 //the omniscient mind: Joonas Kallio
 //the omnipresent spirit: Joonas Kallio
