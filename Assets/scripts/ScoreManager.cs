@@ -40,7 +40,6 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     CarController cr;
     RacerScript rc;
     bool OnGrass = false;
-    public Text[] ScoreTexts;
 
     // drift-delayed application state
     bool driftingActive = false;
@@ -89,7 +88,6 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     void Awake()
     {
         instance = this;
-        UpdateScoreTexts();
     }
 
     void Start()
@@ -207,7 +205,6 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
         lastReportedScore = intScore;
         OnScoreChanged?.Invoke(intScore);
-        UpdateScoreTexts();
     }
 
     // Single helper that contains all drift gating, returns finalMultiplier only if OK
@@ -407,14 +404,6 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         {
             touchedgrasswhiledrifting = true;
         }
-    }
-    
-    void UpdateScoreTexts()
-    {
-        string s = "Score: " + GetScoreInt().ToString();
-        if (ScoreTexts == null) return;
-        for (int i = 0; i < ScoreTexts.Length; i++)
-            if (ScoreTexts[i] != null) ScoreTexts[i].text = s;
     }
 
     public int GetScoreInt()

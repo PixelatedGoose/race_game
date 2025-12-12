@@ -151,7 +151,12 @@
         "Thank you for playtesting. Your free trial of AmisDrift ends here. (vitsi vitsi)",
         "koitettiin lisätä jokaselle ihmiselle joka koskaan pelaa tätä peliä oma loading teksti",
         "loading screen - placeholder since April 25th, 2025",
-        "do you wanna gamble with ya driving license?"
+        "do you wanna play around with ya driving license?",
+        "who the hell is marvin",
+        "microtransactions don't exist here",
+        "lähtölaskenta alkaa kohta. jos haluut tietää millo, se on heti, ku oot lukenu tän loppuun",
+        "In case you encounter any bugs: our game engine is at fault",
+        "what a ripoff!"
     ],
 
     "uncommon": [
@@ -260,7 +265,7 @@
         "NO MAN CAN OUTRUN THE MACHINE",
         "jos näät tän viestin, saat (ehkä) euron kolikon.",
         "näin rahoitat huonoja elämänpäätöksiä",
-        "esittelemme sinulle RebelWerksin sponsoroiman pelin",
+        "esittelemme sinulle RebelWerksin pelaaman pelin",
         "Sitten, saavuttuani pakastealtaalle... löytyikö... Mars-jäätelöpatukoita?",
         "mietitkö koskaan sitä, että kuinka vaikee tää peli on? se on tarkotuksella",
         "models and shaders by Goose",
@@ -330,7 +335,7 @@
         "we ran out of funny texts, come back later when we have more of them",
         "are you actually going to try getting every single loading text?",
         "If you wish to see every loading text, it may take you about 1 month",
-        ".json my beloved",
+        ".json file type my beloved",
         "koitin joskus kasata autoa. siitä tuli yks toinen peli, tiiät varmaan mikä",
         "Tämä on peli.",
         "Hello Mario",
@@ -375,8 +380,8 @@
         "what's your favorite car?",
         "hän on RebelWerks",
         "Thank you for your contribution to our social experiment.",
-        "The car cannot take Giant Steps",
-        "Our cars are not properly insured, So What?",
+        "Our cars are not for walking and therefore cannot take Giant Steps",
+        "Our cars are not properly insured. So What?",
         "käytätkö TikTokkia? hyvä ei mekää",
         "purple homer simpson!",
         "tän pelin koodi menee helposti kasaan",
@@ -394,7 +399,10 @@
         "kysy mitä haluat meiltä, mut hyvä vastaus voi myös olla vastaamatta",
         "kuin moni uskoo sitä mitä me sanotaa näis latausteksteis?",
         "suahan varmasti innostaa ajamine, vaikkei ois korttia",
-        "saat oottaa hetken"
+        "saat oottaa hetken",
+        "Kevin Hart",
+        "on mahollisuus, että näät tän viestin - sit et tiiä mikä tarkotus täl näytöl on",
+        "We have cars. We have automobiles. We have motors. We have everything."
     ],
 
     "obscure": [

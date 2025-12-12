@@ -29,12 +29,12 @@ public class Credits : MonoBehaviour
         {
             tasks = new string[]
             {
-                "PixelatedGoose\nPROJECT LEAD\ngraphical design, ai coding, 3d models, map design, shaders",
+                "PixelatedGoose\nPROJECT LEAD\ngraphical design, ai coding, map design, shaders",
                 "Vizl87\nLEAD PROGRAMMER\ncar controller, game data handling",
                 "ThatOneGuy\nCOMPOSER, PROGRAMMER\nall music and sound design, tutorial",
                 "Leobold\nASSISTING PROGRAMMER\ncertain menus, racing mechanics",
-                "lamelemon\nPROGRAMMER\nreworking scripts, bug fixing",
-                "rojp\nASSISTING PROGRAMMER\nother help, early 3d models",
+                "lamelemon\nPROGRAMMER\nrefactoring scripts, bug fixing",
+                "rojp\nASSISTING PROGRAMMER\nother help, car textures",
             };
         }
         whatHeDo = new string[]

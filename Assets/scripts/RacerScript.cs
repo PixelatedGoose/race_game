@@ -18,15 +18,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public float besttime;
     public bool racestarted = false; // <-- Add this
     private bool startTimer = false;
-    private Waitbeforestart waitBeforeStart;
 
-    // Lists
-    public List<Text> LtimeTexts;
-    public List<Text> BtimeTexts;
-
-    // Text UI elements
-    public Text rankText;
-    public Text LapCounter;
     public Text resetPrompt;
 
     // Other variables
@@ -65,12 +57,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             else
             {
                 besttime = 0;
-            }
-
-            foreach (var btimeText in BtimeTexts)
-            {
-                if (GameManager.instance.sceneSelected != "tutorial")
-                    btimeText.text = "Record: " + besttime.ToString("F2");
             }
         }
     }
@@ -170,7 +156,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void InitializeRace()
     {
-        LapCounter.text = $"{currentLap}/{totalLaps}";
         resetPrompt.gameObject.SetActive(false);
         lastPosition = transform.position;
         respawnPoint = startFinishLine;
@@ -184,12 +169,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             ResetPosition();
             resetPrompt.gameObject.SetActive(false);
-        }
-
-        foreach (var ltimeText in LtimeTexts)
-        {
-            if (GameManager.instance.sceneSelected != "tutorial")
-                ltimeText.text = laptime.ToString("F2");
         }
 
         if (transform.position.y < -1)
@@ -266,12 +245,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (startTimer)
         {
             laptime += Time.deltaTime;
-
-            foreach (var ltimeText in LtimeTexts)
-            {
-                if (GameManager.instance.sceneSelected != "tutorial")
-                    ltimeText.text = laptime.ToString("F2");
-            }
         }
 
         if (transform.position == lastPosition)
@@ -311,7 +284,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (allCheckpointsPassed)
         {
             currentLap++;
-            LapCounter.text = $"{currentLap}/{totalLaps}";
 
             if (currentLap > totalLaps)
             {
@@ -321,11 +293,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
                 if (besttime == 0 || laptime < besttime)
                 {
                     besttime = laptime;
-                }
-
-                foreach (var btimeText in BtimeTexts)
-                {
-                    btimeText.text = "Record: " + besttime.ToString("F2");
                 }
 
                 ResetRace();
@@ -395,8 +362,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             checkpointStates[i] = false;
         }
 
-        LapCounter.text = $"{currentLap}/{totalLaps}";
-
         if (winMenu != null)
         {
             winMenu.SetActive(true);
@@ -438,12 +403,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             Rank = score / laptime;
 
             string assignedRank = rankManager != null ? rankManager.GetRank(Rank) : "N/A";
-            if (GameManager.instance.sceneSelected != "tutorial")
-                rankText.text = $"Rank: {assignedRank} ({Rank:F2})";
-        }
-        else
-        {
-            rankText.text = "Rank: N/A";
         }
     }
 

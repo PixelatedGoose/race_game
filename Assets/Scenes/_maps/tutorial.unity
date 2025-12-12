@@ -8953,17 +8953,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933222515}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &944576233 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6339661040041763234, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
-  m_PrefabInstance: {fileID: 94686104920615733}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &958925837
 GameObject:
   m_ObjectHideFlags: 0
@@ -13782,9 +13771,6 @@ MonoBehaviour:
   score: 0
   scoreAddWT: 0.01
   isAddingPoints: 0
-  ScoreTexts:
-  - {fileID: 8769863180000212618}
-  - {fileID: 0}
   scoreamount: 0
   isPaused: 0
   chosenMap: 1
@@ -13838,21 +13824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7cc521c740d20c4ea17ef4fa0625788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
-  basePointsPerSecond: 0.1
-  baseSpeedMultiplier: 0.5
-  maxForwardSpeedForBase: 40
-  peakSharpness: 120
-  sharpnessExponent: 1.5
-  timeScale: 2
-  minSharpnessForScoring: 10
-  minLateralSpeed: 1
-  minForwardSpeed: 2
-  driftMultiplierRate: 1
-  bonusApplyDuration: 1
-  driftBaseReward: 10
-  driftBonusStrength: 2.5
   scoreFloat: 0
-  ScoreTexts: []
 --- !u!1 &1456050786
 GameObject:
   m_ObjectHideFlags: 0
@@ -14417,7 +14389,7 @@ PrefabInstance:
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: LapCounter
       value: 
-      objectReference: {fileID: 1701819458}
+      objectReference: {fileID: 0}
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: rankManager
       value: 
@@ -14429,7 +14401,7 @@ PrefabInstance:
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'BtimeTexts.Array.data[0]'
       value: 
-      objectReference: {fileID: 944576233}
+      objectReference: {fileID: 0}
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'BtimeTexts.Array.data[1]'
       value: 
@@ -14437,7 +14409,7 @@ PrefabInstance:
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'LtimeTexts.Array.data[0]'
       value: 
-      objectReference: {fileID: 1953466136}
+      objectReference: {fileID: 0}
     - target: {fileID: 9059760393653632985, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
       propertyPath: 'LtimeTexts.Array.data[1]'
       value: 
@@ -16832,17 +16804,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1677156824}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1701819458 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2734023924507178834, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
-  m_PrefabInstance: {fileID: 94686104920615733}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1753905663
 GameObject:
   m_ObjectHideFlags: 0
@@ -17849,17 +17810,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1950635103}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1953466136 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8295199599214924197, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
-  m_PrefabInstance: {fileID: 94686104920615733}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1964716403
 GameObject:
   m_ObjectHideFlags: 0
@@ -19746,7 +19696,11 @@ PrefabInstance:
       value: UIcanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4920613285401786955, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
+    - {fileID: 3473025952302548383, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
+    - {fileID: 5703499774535885056, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
+    - {fileID: 4314461940942791607, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
@@ -19781,17 +19735,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1043836493288446417, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
   m_PrefabInstance: {fileID: 94686104920615733}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8769863180000212618 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8406305608388607919, guid: 8c7acbe83786ec644b3b402db373fcf0, type: 3}
-  m_PrefabInstance: {fileID: 94686104920615733}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
