@@ -8,7 +8,7 @@ public class Waitbeforestart : MonoBehaviour
     public GameObject s2;
     public GameObject s3;
     public GameObject go;
-    public RacerScript racerScript; // Assign in Inspector!
+    public RacerScript racerScript;
 
     public AudioSource count1;
     public AudioSource count2;
@@ -52,11 +52,12 @@ public class Waitbeforestart : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(0f);
 
-        racerScript.StartRace(); // Start the race!
+        racerScript.StartRace();
     }
 
     IEnumerator ShowS1AfterDelay()
     {
+        yield return new WaitForSecondsRealtime(1.0f);
         Time.timeScale = 0f;
 
         count3.Play();
@@ -76,7 +77,7 @@ public class Waitbeforestart : MonoBehaviour
         go.SetActive(true);
         countGo.Play();
         Time.timeScale = 1f;
-        racerScript.StartRace(); // Start the race!
+        racerScript.StartRace();
 
         LeanTween.alphaText(go.GetComponent<RectTransform>(), 0.0f, 2f).setEaseLinear();
         yield return new WaitForSecondsRealtime(2f);
