@@ -6,7 +6,6 @@ using System.Linq;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
-    // Public variables
     public RankManager rankManager;
     public GameObject winMenu; 
     public GameObject Car1Hud;
@@ -16,12 +15,11 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public float laptime;
     public float Rank;
     public float besttime;
-    public bool racestarted = false; // <-- Add this
+    public bool racestarted = false; 
     private bool startTimer = false;
 
     public Text resetPrompt;
 
-    // Other variables
     public Transform startFinishLine;
     public Transform[] checkpoints;
     public int CurrentLap => currentLap;
@@ -75,7 +73,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
     }
 
-    void Awake() //voi olla ongelmallinen!!!
+    void Awake() 
     {
         Controls = new CarInputActions();
         Controls.Enable();
@@ -114,16 +112,16 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     void Start()
     {
         InitializeRace();
-        racestarted = false; // Ensure race doesn't start until countdown is done
+        racestarted = false; 
     }
 
     void Update()
     {
-        if (!racestarted || raceFinished) return; // Only run race logic if started
+        if (!racestarted || raceFinished) return; 
 
         HandleReset();
         Inactivity();
-        Ranking(); // Continuously update the rank
+        Ranking(); 
     }
 
     void OnTriggerEnter(Collider other)
@@ -132,7 +130,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             HandleStart();
         }
-        else if (other.gameObject.CompareTag("RespawnTrigger")) // Check for the respawn trigger
+        else if (other.gameObject.CompareTag("RespawnTrigger")) 
         {
             RespawnAtLastCheckpoint();
         }
@@ -184,7 +182,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         transform.rotation = respawnPoint != null ? respawnPoint.rotation : startFinishLine.rotation;
 
         Rigidbody rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = Vector3.zero;//stop the car
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         
         //StartCoroutine(TurnDownCarsValues());
@@ -343,13 +341,11 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void ResetRace()
     {
-        // Save race result FIRST, before resetting anything
         if (RaceResultCollector.instance != null)
         {
             RaceResultCollector.instance.SaveRaceResult();
         }
 
-        // Now reset everything
         currentLap = 1;
         laptime = 0;
         startTimer = false;
@@ -366,7 +362,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             winMenu.SetActive(true);
             Button restartButton = winMenu.GetComponentsInChildren<Button>(true)
-                .First(b => b.name == "Back_to_Main_Menu");
+            .First(b => b.name == "Back_to_Main_Menu");
             restartButton.Select();
             raceFinished = true;
             DatapersistenceManager.instance.SaveGame();
@@ -406,11 +402,12 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void StartRace() // <-- Call this from Waitbeforestart
+    public void StartRace()
     {
         racestarted = true;
         if (GameManager.instance.sceneSelected != "tutorial")
             musicControl.StartMusicTracks();
         startTimer = true;
+        Debug.Log("Race started!");
     }
 }
