@@ -113,9 +113,6 @@ public class CarSelection_new : MonoBehaviour
             cars[index].SetActive(true);
         }
         UpdateCarStats();
-        //pitää sallia valitteminen vasta tässä, että ei tuu erroreit
-        select.Select();
-
         menuMusic.Play();
     }
 
@@ -164,6 +161,7 @@ public class CarSelection_new : MonoBehaviour
         string selectedMapIconName = EventSystem.current.currentSelectedGameObject.name;
         string selectedMap;
 
+        //oletetaan toistaseksi vain kahta eri valintaa
         if (mapSelection.toggle.isOn)
         {
             selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "night_ai_haukipudas";
@@ -175,7 +173,7 @@ public class CarSelection_new : MonoBehaviour
         selectedMap ??= "haukipudas";
 
         var bestResults = Array.Empty<RaceResultData>();
-        if (collection != null || collection.results.Count != 0)
+        if (collection != null && collection.results.Count != 0)
         {
             bestResults = collection.results
                 .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
