@@ -37,9 +37,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private Vector3 lastPosition;
 
     private Transform respawnPoint;
-    private CarController carController;
-
     private musicControl musicControl;
+    private soundFXControl soundControl;
 
     public void LoadData(GameData data)
     {
@@ -79,8 +78,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         Controls = new CarInputActions();
         Controls.Enable();
-        carController = GetComponent<CarController>();
         musicControl = FindAnyObjectByType<musicControl>();
+        soundControl = FindAnyObjectByType<soundFXControl>();
     }
 
     private void OnEnable()
@@ -339,6 +338,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             checkpointStates[i] = false;
         }
         respawnPoint = startFinishLine;
+        //uh oh
+        soundControl.soundList[3].GetComponent<AudioSource>().Play();
     }
 
     void ResetRace()

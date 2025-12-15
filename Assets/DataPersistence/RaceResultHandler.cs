@@ -97,6 +97,8 @@ public class RaceResultHandler
         else
         {
             Debug.Log("No race result file found at: " + fullPath);
+            //jotta ei koita lataa tietoja kun niitä ei ole!!!
+            loadedData = null;
         }
 
         return loadedData;
