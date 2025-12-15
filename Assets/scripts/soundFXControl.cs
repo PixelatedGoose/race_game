@@ -79,7 +79,6 @@ public class soundFXControl : MonoBehaviour
     void Awake()
     {
         Controls = new CarInputActions();
-        Controls.Enable();
         racerScript = FindFirstObjectByType<RacerScript>();
     }
 
@@ -178,24 +177,21 @@ public class soundFXControl : MonoBehaviour
     public void PauseStateHandler()
     {
         bool isPaused = GameManager.instance.isPaused;
+        if (isPaused)
+            soundList[4].GetComponent<AudioSource>().Play();
 
-        soundList[2].GetComponent<AudioSource>().volume = isPaused ? 1.0f : 0.0f;
-        
         foreach (GameObject sound in soundList)
         {
-            if (sound.GetComponent<AudioSource>().name != "pausedTrack")
+            AudioSource audioSource = sound.GetComponent<AudioSource>();
+            if (isPaused)
             {
-                AudioSource audioSource = sound.GetComponent<AudioSource>();
-                if (isPaused)
-                {
-                    Debug.Log(sound + " pysäytetty");
-                    audioSource.Pause();
-                }
-                else
-                {
-                    Debug.Log(sound + " ei pysäytetty");
-                    audioSource.UnPause();
-                }
+                Debug.Log(sound + " pysäytetty");
+                audioSource.Pause();
+            }
+            else
+            {
+                Debug.Log(sound + " ei pysäytetty");
+                audioSource.UnPause();
             }
         }
     }
