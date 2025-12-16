@@ -28,7 +28,11 @@ public class musicControl : MonoBehaviour
     }
 
     private void OnEnable() => Controls.Enable();
-    private void OnDisable() => Controls.Disable();
+    private void OnDisable()
+    {
+        LeanTween.cancelAll();
+        Controls.Disable();
+    }
     private void OnDestroy() => Controls.Disable();
 
     void Start()
