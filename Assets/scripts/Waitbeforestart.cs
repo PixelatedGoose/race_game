@@ -57,6 +57,7 @@ public class Waitbeforestart : MonoBehaviour
 
     IEnumerator ShowS1AfterDelay()
     {
+        yield return new WaitForSecondsRealtime(0.6f);
         Time.timeScale = 0f;
 
         count3.Play();
