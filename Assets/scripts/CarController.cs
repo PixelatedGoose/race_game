@@ -150,17 +150,6 @@ public class CarController : MonoBehaviour
     {
         Controls.Disable();
         Controls.Dispose();
-        if (logitechInitialized)
-        {
-            try
-            {
-                LogitechGSDK.LogiSteeringShutdown();
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning($"Error shutting down Logitech SDK: {e.Message}");
-            }
-        }
     }
 
     public float GetSpeed()
@@ -213,7 +202,7 @@ public class CarController : MonoBehaviour
 
     bool IsCarActive()
     {
-        // jos tulee random paskaa kuten peli paussi tai auto kolaroi, LISÄTKÄÄ SE TÄHÄN EI MISSÄÄN NIMESSÄ FIXEDUPDATEEN!!!!!!!!!!!
+        // jos tulee random paskaa kuten peli paussi tai auto kolaroi, LISÄTKÄÄ SE TÄHÄN EI MISSÄN NIMESSÄ FIXEDUPDATEEN!!!!!!!!!!!
         return true;
     }
 
@@ -812,46 +801,17 @@ public class CarController : MonoBehaviour
 
     void InitializeLogitechWheel()
     {
-        // Initialize Logitech wheel
-        if (useLogitechWheel)
-        {
-            try
-            {
-                // Force shutdown first in case it wasn't cleaned up properly
-                try
-                {
-                    LogitechGSDK.LogiSteeringShutdown();
-                }
-                catch { /* Ignore if not initialized */ }
-
-                // Small delay to let the SDK release resources
-                System.Threading.Thread.Sleep(100);
-
-                logitechInitialized = LogitechGSDK.LogiSteeringInitialize(false);
-                if (logitechInitialized)
-                    Debug.Log("Logitech Steering Wheel initialized!");
-                else
-                    Debug.LogWarning("Failed to initialize Logitech Steering Wheel - device may already be in use or disconnected");
-            }
-            catch (DllNotFoundException)
-            {
-                Debug.LogWarning("Logitech DLL not found. Move LogitechSteeringWheelEnginesWrapper.dll to Assets/Plugins/x86_64/");
-                logitechInitialized = false;
-                useLogitechWheel = false;
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning($"Failed to initialize Logitech wheel: {e.Message}. Try restarting Unity or unplugging/replugging the wheel.");
-                logitechInitialized = false;
-            }
-        }
+        if (!useLogitechWheel) return;
+        
+        logitechInitialized = LogitechSDKManager.Initialize();
+        Debug.Log($"[CarController] Logitech initialized: {logitechInitialized}");
     }
-        void GetLogitechInputs()
+
+    void GetLogitechInputs()
     {
         if (!LogitechGSDK.LogiIsConnected(0)) return;
 
         var state = LogitechGSDK.LogiGetStateUnity(0);
-        
         steerInput = state.lX / 32768.0f;
         
         float throttle = Mathf.Clamp01(-state.lY / 32768.0f);
@@ -885,19 +845,23 @@ public class CarController : MonoBehaviour
         else
             LogitechGSDK.LogiStopSlipperyRoadEffect(0);
     }
+
     private void OnApplicationQuit()
     {
-        if (logitechInitialized)
+        // Only shutdown in builds, NOT in Unity Editor
+        #if !UNITY_EDITOR
+        if (logitechGlobalInit)
         {
             try
             {
                 LogitechGSDK.LogiSteeringShutdown();
-                logitechInitialized = false;
+                logitechGlobalInit = false;
             }
             catch (System.Exception e)
             {
-                Debug.LogWarning($"Error shutting down Logitech SDK on quit: {e.Message}");
+                Debug.LogWarning($"Error shutting down Logitech SDK: {e.Message}");
             }
         }
+        #endif
     }
 }
