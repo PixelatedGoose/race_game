@@ -35,15 +35,16 @@ public class RaceResultCollector : MonoBehaviour
         int score = GetScore();
         float time = GetTime();
         string map = GetMap();
+        string carName = GetCarName();
         
         // Generate racer name with incrementing number
         int racerNumber = resultHandler.GetNextRacerNumber();
         string racerName = $"racer_{racerNumber}";
 
-        RaceResultData resultData = new RaceResultData(score, time, map, racerName);
+        RaceResultData resultData = new RaceResultData(score, time, map, racerName, carName);
         resultHandler.Save(resultData);
 
-        Debug.Log($"Race Result Saved - Racer: {racerName}, Score: {score}, Time: {time:F2}, Map: {map}");
+        Debug.Log($"Race Result Saved - Racer: {racerName}, Score: {score}, Time: {time:F2}, Map: {map}, Car: {carName}");
     }
 
     private int GetScore()
@@ -76,6 +77,16 @@ public class RaceResultCollector : MonoBehaviour
     private string GetMap()
     {
         return SceneManager.GetActiveScene().name;
+    }
+
+    private string GetCarName()
+    {
+        if (GameManager.instance != null && GameManager.instance.currentCar != null)
+        {
+            return GameManager.instance.currentCar.name;
+        }
+
+        return "Unknown";
     }
 
     /// <summary>
