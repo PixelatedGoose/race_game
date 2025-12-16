@@ -1,34 +1,47 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Import TextMeshPro namespace
+using TMPro; 
 
 public class GraphicsOpt : MonoBehaviour
 {
-    public TMP_Dropdown resolutionDropdown; // Use TMP_Dropdown instead of Dropdown
-    public TMP_Dropdown qualityDropdown;    // Use TMP_Dropdown for quality levels
+    public TMP_Dropdown resolutionDropdown; 
+    public TMP_Dropdown qualityDropdown;    
     public Toggle fullscreenToggle;
     private Resolution[] resolutions;
+    // Filtered array that contains only unique width x height resolutions
+    private Resolution[] uniqueResolutions;
 
     void Start()
     {
-        // Populate resolution dropdown
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
 
         var resolutionOptions = new System.Collections.Generic.List<string>();
+        var uniqueResList = new System.Collections.Generic.List<Resolution>();
+        var seen = new System.Collections.Generic.HashSet<string>();
+
+        // Build a list of unique width x height combinations (ignore refresh rate duplicates)
         foreach (var res in resolutions)
         {
-            resolutionOptions.Add(res.width + " x " + res.height);
+            string key = res.width + "x" + res.height;
+            if (!seen.Contains(key))
+            {
+                seen.Add(key);
+                uniqueResList.Add(res);
+                resolutionOptions.Add(res.width + " x " + res.height);
+            }
         }
+
+        uniqueResolutions = uniqueResList.ToArray();
         resolutionDropdown.AddOptions(resolutionOptions);
 
-        // Populate quality dropdown
         qualityDropdown.ClearOptions();
         var qualityOptions = new System.Collections.Generic.List<string>(QualitySettings.names);
         qualityDropdown.AddOptions(qualityOptions);
 
-        // Set initial values
-        resolutionDropdown.value = System.Array.FindIndex(resolutions, r => r.width == Screen.currentResolution.width && r.height == Screen.currentResolution.height);
+    // Find currently used resolution in the filtered list (match by width & height only)
+    int currentIndex = System.Array.FindIndex(uniqueResolutions, r => r.width == Screen.currentResolution.width && r.height == Screen.currentResolution.height);
+    resolutionDropdown.value = currentIndex >= 0 ? currentIndex : 0;
         resolutionDropdown.RefreshShownValue();
 
         qualityDropdown.value = QualitySettings.GetQualityLevel();
@@ -36,7 +49,6 @@ public class GraphicsOpt : MonoBehaviour
 
         fullscreenToggle.isOn = Screen.fullScreen;
 
-        // Add listeners
         resolutionDropdown.onValueChanged.AddListener(SetResolutionFromDropdown);
         qualityDropdown.onValueChanged.AddListener(SetQualityFromDropdown);
         fullscreenToggle.onValueChanged.AddListener(ToggleFullscreen);
@@ -44,7 +56,10 @@ public class GraphicsOpt : MonoBehaviour
 
     public void SetResolutionFromDropdown(int index)
     {
-        var resolution = resolutions[index];
+        // Use the filtered unique resolutions array so indices map correctly to the dropdown
+        if (uniqueResolutions == null || index < 0 || index >= uniqueResolutions.Length)
+            return;
+        var resolution = uniqueResolutions[index];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
