@@ -10,14 +10,16 @@ public class RaceResultData
     public string map;
     public string dateTime;
     public string racerName;
+    public string carName;
 
-    public RaceResultData(int score, float time, string map, string racerName)
+    public RaceResultData(int score, float time, string map, string racerName, string carName)
     {
         this.score = score;
         // Round time to 2 decimal places when creating the object
         this.time = Mathf.Round(time * 100f) / 100f;
         this.map = map;
         this.racerName = racerName;
+        this.carName = carName;
         this.dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }
