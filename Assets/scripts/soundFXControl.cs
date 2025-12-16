@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -177,22 +178,26 @@ public class soundFXControl : MonoBehaviour
     public void PauseStateHandler()
     {
         bool isPaused = GameManager.instance.isPaused;
-        if (isPaused)
-            soundList[4].GetComponent<AudioSource>().Play();
+        GameObject[] pausedSoundList = soundList
+        .Where((s, i) => i != 2).ToArray();
 
-        foreach (GameObject sound in soundList)
+        foreach (GameObject sound in pausedSoundList)
         {
             AudioSource audioSource = sound.GetComponent<AudioSource>();
             if (isPaused)
             {
                 Debug.Log(sound + " pysäytetty");
                 audioSource.Pause();
+                soundList[2].GetComponent<AudioSource>().volume = 0.66f;
             }
             else
             {
                 Debug.Log(sound + " ei pysäytetty");
                 audioSource.UnPause();
+                soundList[2].GetComponent<AudioSource>().volume = 0.0f;
             }
         }
+        if (isPaused)
+            soundList[4].GetComponent<AudioSource>().Play();
     }
 }
