@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
 using NUnit.Framework;
+using Logitech;
 
 public class CarController : MonoBehaviour
 {
@@ -97,6 +98,8 @@ public class CarController : MonoBehaviour
         AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
 
         racerScript = FindAnyObjectByType<RacerScript>();
+
+        InitializeLogitechWheel(); 
     }
 
     private void OnControlsChanged(PlayerInput input)
@@ -147,6 +150,17 @@ public class CarController : MonoBehaviour
     {
         Controls.Disable();
         Controls.Dispose();
+        if (logitechInitialized)
+        {
+            try
+            {
+                LogitechGSDK.LogiSteeringShutdown();
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Error shutting down Logitech SDK: {e.Message}");
+            }
+        }
     }
 
     public float GetSpeed()
@@ -164,6 +178,11 @@ public class CarController : MonoBehaviour
     {
         GetInputs();
         Animatewheels();
+        if (logitechInitialized)
+        {
+            LogitechGSDK.LogiUpdate();
+            GetLogitechInputs();
+        }
     }
 
     bool isOnGrassCached;
@@ -188,6 +207,8 @@ public class CarController : MonoBehaviour
         Applyturnsensitivity(speed);
         OnGrass();
         HandleTurbo();
+        if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
+            ApplyForceFeedback();
     }
 
     bool IsCarActive()
@@ -259,15 +280,15 @@ public class CarController : MonoBehaviour
         }
 
 
-    private bool IsOnSteepSlope()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1.5f))
-        {
-            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-            return slopeAngle > 30.0f;
-        }
-        return false;
-    }
+    // private bool IsOnSteepSlope()
+    // {
+    //     if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1.5f))
+    //     {
+    //         float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+    //         return slopeAngle > 30.0f;
+    //     }
+    //     return false;
+    // }
 
     void GetInputs()
     {
@@ -511,48 +532,7 @@ public class CarController : MonoBehaviour
     }
 
 
-    void HandleDrift()
-    {
-        Controls.CarControls.Drift.performed += ctx =>
-        {
 
-
-            if (isDrifting || GameManager.instance.isPaused) return;
-            RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-            //varmistaa että drift tapahtuu
-            activedrift++;
-            isDrifting = true;
-            float sharpness = GetDriftSharpness();
-            Debug.Log("Drift Sharpness: " + sharpness);
-            // arvot vaihtuu ja huonotuu driftin ajaksi
-            maxAcceleration = perusMaxAccerelation * 0.7f;
-            float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
-            foreach (var wheel in wheels)
-            {
-                if (wheel.wheelCollider == null) continue;
-
-                WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-                sidewaysFriction.extremumSlip = 2.0f * speedFactor * driftMultiplier;
-                sidewaysFriction.asymptoteSlip = 2.5f * speedFactor * driftMultiplier;
-                sidewaysFriction.extremumValue = 0.75f / (speedFactor * driftMultiplier);
-                sidewaysFriction.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
-                sidewaysFriction.stiffness = 3f;
-                wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
-
-            }
-            //laittaa jousitukset driftiä varten
-            AdjustWheelsForDrift();
-            WheelEffects(true);
-        };
-        Controls.CarControls.Drift.canceled += ctx =>
-        {
-            StopDrifting();
-            AdjustForwardFrictrion();
-            maxAcceleration = perusMaxAccerelation;
-            targetTorque = perusTargetTorque;
-            WheelEffects(false);
-        };
-    }
 
     public float GetDriftSharpness()
     {
@@ -823,5 +803,101 @@ public class CarController : MonoBehaviour
         maxAcceleration = perusMaxAccerelation;
         targetTorque = perusTargetTorque;
         WheelEffects(false);
+    }
+
+    [Header("Logitech G923 Settings")]
+    public bool useLogitechWheel = true;
+    public float forceFeedbackMultiplier = 1.0f;
+    private bool logitechInitialized = false;
+
+    void InitializeLogitechWheel()
+    {
+        // Initialize Logitech wheel
+        if (useLogitechWheel)
+        {
+            try
+            {
+                // Force shutdown first in case it wasn't cleaned up properly
+                try
+                {
+                    LogitechGSDK.LogiSteeringShutdown();
+                }
+                catch { /* Ignore if not initialized */ }
+
+                // Small delay to let the SDK release resources
+                System.Threading.Thread.Sleep(100);
+
+                logitechInitialized = LogitechGSDK.LogiSteeringInitialize(false);
+                if (logitechInitialized)
+                    Debug.Log("Logitech Steering Wheel initialized!");
+                else
+                    Debug.LogWarning("Failed to initialize Logitech Steering Wheel - device may already be in use or disconnected");
+            }
+            catch (DllNotFoundException)
+            {
+                Debug.LogWarning("Logitech DLL not found. Move LogitechSteeringWheelEnginesWrapper.dll to Assets/Plugins/x86_64/");
+                logitechInitialized = false;
+                useLogitechWheel = false;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Failed to initialize Logitech wheel: {e.Message}. Try restarting Unity or unplugging/replugging the wheel.");
+                logitechInitialized = false;
+            }
+        }
+    }
+        void GetLogitechInputs()
+    {
+        if (!LogitechGSDK.LogiIsConnected(0)) return;
+
+        var state = LogitechGSDK.LogiGetStateUnity(0);
+        
+        steerInput = state.lX / 32768.0f;
+        
+        float throttle = Mathf.Clamp01(-state.lY / 32768.0f);
+        float brake = Mathf.Clamp01(state.lRz / 32768.0f);
+        
+        if (throttle > 0.1f)
+            moveInput = throttle;
+        else if (brake > 0.1f)
+            moveInput = -brake;
+        else
+            moveInput = 0f;
+    }
+
+    void ApplyForceFeedback()
+    {
+        float speed = carRb.linearVelocity.magnitude * 3.6f;
+        
+        int springStrength = Mathf.RoundToInt(Mathf.Lerp(80, 20, speed / maxspeed) * forceFeedbackMultiplier);
+        LogitechGSDK.LogiPlaySpringForce(0, 0, 100, springStrength);
+        
+        int damperStrength = Mathf.RoundToInt(30 * forceFeedbackMultiplier);
+        LogitechGSDK.LogiPlayDamperForce(0, damperStrength);
+        
+        if (IsOnGrassCached())
+            LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(60 * forceFeedbackMultiplier));
+        else
+            LogitechGSDK.LogiStopDirtRoadEffect(0);
+        
+        if (isDrifting)
+            LogitechGSDK.LogiPlaySlipperyRoadEffect(0, Mathf.RoundToInt(40 * forceFeedbackMultiplier));
+        else
+            LogitechGSDK.LogiStopSlipperyRoadEffect(0);
+    }
+    private void OnApplicationQuit()
+    {
+        if (logitechInitialized)
+        {
+            try
+            {
+                LogitechGSDK.LogiSteeringShutdown();
+                logitechInitialized = false;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Error shutting down Logitech SDK on quit: {e.Message}");
+            }
+        }
     }
 }
