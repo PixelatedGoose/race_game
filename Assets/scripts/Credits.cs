@@ -32,19 +32,19 @@ public class Credits : MonoBehaviour
                 "PixelatedGoose\nPROJECT LEAD\ngraphical design, ai coding, map design, shaders",
                 "Vizl87\nLEAD PROGRAMMER\ncar controller, game data handling",
                 "ThatOneGuy\nCOMPOSER, PROGRAMMER\nall music and sound design, tutorial",
-                "Leobold\nASSISTING PROGRAMMER\ncertain menus, racing mechanics",
+                "Leobold\nPROGRAMMER\ncertain menus, racing mechanics",
                 "lamelemon\nPROGRAMMER\nrefactoring scripts, bug fixing",
-                "rojp\nASSISTING PROGRAMMER\nother help, car textures",
+                "rojp\nUNPAID INTERN\nother help, car textures",
             };
         }
         whatHeDo = new string[]
         {
-            "He is a great man",
-            "You could say he controlled the car",
-            "Who the fuck is this motherfucker",
-            "Bold Leobold but he's not bold",
-            "He smoked fentanyl and fixed code",
-            "Our code is full of rojping" 
+            "He is a great man sometimes known as the goose lord",
+            "You could he is a vizlly good programmer",
+            "Who the flip is ThatOneGuy?",
+            "Bold Leobold but he's not bold but he is bald",
+            "He is lemony fresh",
+            "Our code contains 0% rojp" 
         };
     }
 

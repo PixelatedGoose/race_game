@@ -104,7 +104,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Click"",
                     ""type"": ""PassThrough"",
-                    ""id"": ""03ebdae7-654c-4cbe-85d1-9b4288d11dfb"",
+                    ""id"": ""fe8e13b2-34cf-49d3-b084-899033b036c9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -113,7 +113,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Point"",
                     ""type"": ""PassThrough"",
-                    ""id"": ""5dd60aaf-f28c-449e-a591-b550a604b489"",
+                    ""id"": ""daa347fe-b45a-4e5e-961c-5e746d680574"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -273,7 +273,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""0771dc23-b770-455c-a608-48ce21691fed"",
+                    ""id"": ""5d6105c0-3065-4b7e-bac5-e6e580580a5e"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -284,7 +284,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c3ebb474-9cb0-4a3a-aab3-b87a3ad94928"",
+                    ""id"": ""e68734a3-b15d-4667-aef1-4929788f0755"",
                     ""path"": ""<Pen>/tip"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -295,7 +295,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a157fbf6-c4e2-4e18-a323-cd8e41a6f43b"",
+                    ""id"": ""158c82e3-5495-4fdc-ba23-c6ca187ceb02"",
                     ""path"": ""<Touchscreen>/touch*/press"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -306,7 +306,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4b1a6cb1-10c1-4b21-9921-cac1e81fd4ff"",
+                    ""id"": ""8fc95f5b-3711-4d4e-b579-497466046356"",
                     ""path"": ""<XRController>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -317,7 +317,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""f6e672e5-de61-40d4-a89f-36e2c7c61a15"",
+                    ""id"": ""0f5581e8-9646-42c8-8aae-0684d04ea6cc"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -328,7 +328,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7318af75-3501-46aa-a3c7-6982c7db94ce"",
+                    ""id"": ""94e6341a-0382-4dcb-9016-2b3e7e4b2523"",
                     ""path"": ""<Pen>/position"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -339,7 +339,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""dc0cb12c-273a-4bb1-b4b8-daa59dfb4bed"",
+                    ""id"": ""894a20dc-1d87-497d-bb35-b4e07fc6121c"",
                     ""path"": ""<Touchscreen>/touch*/position"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -383,6 +383,28 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""64a14ef7-aba7-4dbe-a5d9-1c85d3a0a0b6"",
+                    ""path"": ""<Joystick>/stick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d61c625f-5497-4969-a7e9-7f40c0d53e62"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""feece66d-d2b1-4c9e-a246-980468f9df6a"",
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
@@ -396,6 +418,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""ecc093f7-c778-4f68-82f5-efddd9743ed3"",
                     ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""turbo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac4ff335-a4de-4736-80a5-1c5814a9850c"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button5"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -515,7 +548,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6c35e7c3-8abd-4106-b086-f55c2cc829e8"",
+                    ""id"": ""38513c61-8492-46db-a338-f0d9ed53e59f"",
                     ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/hat"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -548,8 +581,19 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""00fa6661-d7fd-40a0-8559-5cc057d880af"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""id"": ""973927da-1108-468c-829c-8251bd596c20"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de278431-1c8a-41ce-8407-aa32df7dc12a"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -559,8 +603,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c188250c-c658-4ad9-9dbe-13696a10c8f3"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""id"": ""00fa6661-d7fd-40a0-8559-5cc057d880af"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -592,6 +636,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""f7014dbc-27bc-4ccb-9e17-cf7d34cc77a9"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""respawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""d9221556-f474-4820-8486-de9148715121"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
@@ -605,6 +660,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""e828acfd-2292-4e4c-a293-db0c23ba119c"",
                     ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""pausemenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4817cabb-a312-4b22-9aba-1dcacff8bb77"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button7"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -647,8 +713,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b61b1580-522d-4cae-8ce4-fc4c7971c43d"",
-                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24"",
+                    ""id"": ""74dc149a-4beb-4e23-8f13-f9a4bf4ca5b9"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -658,8 +724,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""58b34634-61bc-4f3f-8a0c-339a9d9d0b6d"",
-                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger"",
+                    ""id"": ""624e396d-3f1c-42d2-ad97-5556ec40d65d"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -702,7 +768,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""01ee1a85-3aaf-45e2-bdda-2194f731c642"",
+                    ""id"": ""30363b48-0f9a-4396-a542-9a63027fd427"",
                     ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button3"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -735,8 +801,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4ed147c6-5cb6-4846-a4c5-6c1cd037afc3"",
-                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger"",
+                    ""id"": ""2f3004b7-caad-4e90-874e-475f5139d1c4"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -746,8 +812,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5657f2f0-4a6a-4c02-a621-58959749a869"",
-                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24"",
+                    ""id"": ""cbf7850f-46af-488c-a167-64e4e7137a4e"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
