@@ -16,8 +16,6 @@ public class BetterNewAiCarController : MonoBehaviour
 
         // --- Path Following ---
     [Header("Path Following Settings")]
-    [Tooltip("The parent object containing all path waypoints as children.")]
-    public Transform path;
     [Tooltip("Distance threshold for reaching a waypoint.")]
     [SerializeField] private float waypointThreshold = 10.0f;
     [Tooltip("Number of points to calculate for Bezier curves (higher = smoother).")]
@@ -87,7 +85,7 @@ public class BetterNewAiCarController : MonoBehaviour
     [SerializeField] private Rigidbody carRb;
     [Tooltip("Reference to the player car.")]
     [SerializeField] private CarController playerCar;
-    [SerializeField] private AiCarManager aiManager;
+    public AiCarManager aiManager;
     private Collider carCollider;
     private float carWidth;
     private float carLength;
@@ -105,20 +103,6 @@ public class BetterNewAiCarController : MonoBehaviour
     private void Awake()
     {
         grassLayerMask = LayerMask.NameToLayer("Grass");
-
-        if (path == null)
-        {
-            Debug.LogError("Path transform is not assigned.");
-            enabled = false;
-            return;
-        }
-
-        waypoints = path.GetComponentsInChildren<Transform>().Where(t => t != path).ToArray();
-        if (waypoints == null)
-        {
-            Debug.Log("Waypoints is empty!");
-            enabled = false;
-        }
 
         if (carRb == null) carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
@@ -166,7 +150,7 @@ public class BetterNewAiCarController : MonoBehaviour
         float steerAngle = Vector3.Angle(
                     transform.forward, 
                     aiManager.BezierPoints[currentWaypointIndex] - transform.position
-            );
+        );
         
         transform.rotation = Quaternion.Lerp(
             transform.rotation,
@@ -174,7 +158,6 @@ public class BetterNewAiCarController : MonoBehaviour
             STEERING_LERP
         );
 
-        Debug.Log(Time.fixedDeltaTime * turnSensitivity);
         foreach (CarController.Wheel wheel in frontWheels)
         {
             wheel.wheelCollider.steerAngle = Mathf.Lerp(

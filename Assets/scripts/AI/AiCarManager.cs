@@ -10,6 +10,7 @@ public class AiCarManager : MonoBehaviour
     public List<Vector3> BezierPoints { get; private set; } = new();
     private BetterNewAiCarController[] aiCars;
     [Header("AI Car Settings")]
+    [SerializeField] private bool enableAiCars = true;
     [Tooltip("Number of AI cars to spawn. Optional.")]
     [Range(1, 100)]
     [SerializeField] private byte spawnedAiCarCount = 0;
@@ -42,7 +43,8 @@ public class AiCarManager : MonoBehaviour
                     0,
                     UnityEngine.Random.Range(-spawnWidth, spawnWidth)
                 );
-                Instantiate(prefab, spawnPosition + randomOffset, transform.rotation);
+                GameObject car = Instantiate(prefab, spawnPosition + randomOffset, transform.rotation);
+                car.GetComponentInChildren<BetterNewAiCarController>().aiManager = this;
             }
         }
         ComputeBezierPoints();
