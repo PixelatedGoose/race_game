@@ -102,6 +102,24 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Click"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""03ebdae7-654c-4cbe-85d1-9b4288d11dfb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""5dd60aaf-f28c-449e-a591-b550a604b489"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Drift"",
                     ""type"": ""Button"",
                     ""id"": ""6130a42d-db6f-4d59-a92f-4084f0915686"",
@@ -250,6 +268,83 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0771dc23-b770-455c-a608-48ce21691fed"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3ebb474-9cb0-4a3a-aab3-b87a3ad94928"",
+                    ""path"": ""<Pen>/tip"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a157fbf6-c4e2-4e18-a323-cd8e41a6f43b"",
+                    ""path"": ""<Touchscreen>/touch*/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b1a6cb1-10c1-4b21-9921-cac1e81fd4ff"",
+                    ""path"": ""<XRController>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6e672e5-de61-40d4-a89f-36e2c7c61a15"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7318af75-3501-46aa-a3c7-6982c7db94ce"",
+                    ""path"": ""<Pen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dc0cb12c-273a-4bb1-b4b8-daa59dfb4bed"",
+                    ""path"": ""<Touchscreen>/touch*/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -420,6 +515,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6c35e7c3-8abd-4106-b086-f55c2cc829e8"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/hat"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8f96008b-6176-4421-b754-a80b307bd979"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
@@ -442,8 +548,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""de278431-1c8a-41ce-8407-aa32df7dc12a"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""id"": ""00fa6661-d7fd-40a0-8559-5cc057d880af"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -453,8 +559,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""00fa6661-d7fd-40a0-8559-5cc057d880af"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""id"": ""c188250c-c658-4ad9-9dbe-13696a10c8f3"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -541,6 +647,28 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""b61b1580-522d-4cae-8ce4-fc4c7971c43d"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menusubmit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58b34634-61bc-4f3f-8a0c-339a9d9d0b6d"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menusubmit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""03e97b75-9de3-424f-9818-ab616675551b"",
                     ""path"": ""<Mouse>/backButton"",
                     ""interactions"": """",
@@ -574,6 +702,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""01ee1a85-3aaf-45e2-bdda-2194f731c642"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menucancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""9f57deab-bbd1-43d0-9024-33b8ebc0d2b8"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
@@ -587,6 +726,28 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""4e3bfa4c-d507-4768-bc59-93dc3be8d3af"",
                     ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ui_advance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4ed147c6-5cb6-4846-a4c5-6c1cd037afc3"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ui_advance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5657f2f0-4a6a-4c02-a621-58959749a869"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -625,6 +786,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         // CarControls
         m_CarControls = asset.FindActionMap("CarControls", throwIfNotFound: true);
         m_CarControls_Brake = m_CarControls.FindAction("Brake", throwIfNotFound: true);
+        m_CarControls_Click = m_CarControls.FindAction("Click", throwIfNotFound: true);
+        m_CarControls_Point = m_CarControls.FindAction("Point", throwIfNotFound: true);
         m_CarControls_Drift = m_CarControls.FindAction("Drift", throwIfNotFound: true);
         m_CarControls_turbo = m_CarControls.FindAction("turbo", throwIfNotFound: true);
         m_CarControls_underglow = m_CarControls.FindAction("underglow", throwIfNotFound: true);
@@ -719,6 +882,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_CarControls;
     private List<ICarControlsActions> m_CarControlsActionsCallbackInterfaces = new List<ICarControlsActions>();
     private readonly InputAction m_CarControls_Brake;
+    private readonly InputAction m_CarControls_Click;
+    private readonly InputAction m_CarControls_Point;
     private readonly InputAction m_CarControls_Drift;
     private readonly InputAction m_CarControls_turbo;
     private readonly InputAction m_CarControls_underglow;
@@ -747,6 +912,14 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CarControls/Brake".
         /// </summary>
         public InputAction @Brake => m_Wrapper.m_CarControls_Brake;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/Click".
+        /// </summary>
+        public InputAction @Click => m_Wrapper.m_CarControls_Click;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/Point".
+        /// </summary>
+        public InputAction @Point => m_Wrapper.m_CarControls_Point;
         /// <summary>
         /// Provides access to the underlying input action "CarControls/Drift".
         /// </summary>
@@ -828,6 +1001,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @Brake.started += instance.OnBrake;
             @Brake.performed += instance.OnBrake;
             @Brake.canceled += instance.OnBrake;
+            @Click.started += instance.OnClick;
+            @Click.performed += instance.OnClick;
+            @Click.canceled += instance.OnClick;
+            @Point.started += instance.OnPoint;
+            @Point.performed += instance.OnPoint;
+            @Point.canceled += instance.OnPoint;
             @Drift.started += instance.OnDrift;
             @Drift.performed += instance.OnDrift;
             @Drift.canceled += instance.OnDrift;
@@ -881,6 +1060,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @Brake.started -= instance.OnBrake;
             @Brake.performed -= instance.OnBrake;
             @Brake.canceled -= instance.OnBrake;
+            @Click.started -= instance.OnClick;
+            @Click.performed -= instance.OnClick;
+            @Click.canceled -= instance.OnClick;
+            @Point.started -= instance.OnPoint;
+            @Point.performed -= instance.OnPoint;
+            @Point.canceled -= instance.OnPoint;
             @Drift.started -= instance.OnDrift;
             @Drift.performed -= instance.OnDrift;
             @Drift.canceled -= instance.OnDrift;
@@ -980,6 +1165,20 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBrake(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Click" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Point" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPoint(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Drift" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
