@@ -30,16 +30,12 @@ public class RaceResultCollector : MonoBehaviour
     /// Call this method when the player wins the race.
     /// Collects score, time, and map data and saves it to a file.
     /// </summary>
-    public void SaveRaceResult()
+    public void SaveRaceResult(string racerName = "Unknown")
     {
         int score = GetScore();
         float time = GetTime();
         string map = GetMap();
         string carName = GetCarName();
-        
-        // Generate racer name with incrementing number
-        int racerNumber = resultHandler.GetNextRacerNumber();
-        string racerName = $"racer_{racerNumber}";
 
         RaceResultData resultData = new RaceResultData(score, time, map, racerName, carName);
         resultHandler.Save(resultData);
@@ -81,11 +77,21 @@ public class RaceResultCollector : MonoBehaviour
 
     private string GetCarName()
     {
+        string tester = GameManager.instance.currentCar.name;
         if (GameManager.instance != null && GameManager.instance.currentCar != null)
         {
-            return GameManager.instance.currentCar.name;
+            switch (tester)
+            {
+                case "REALCAR":
+                    return "Honda";
+                case "REALCAR_y":
+                    return "Subaru";
+                case "REALCAR_x":
+                    return "Toyota";
+                case "Lada":
+                    return "Lada";
+            }
         }
-
         return "Unknown";
     }
 
