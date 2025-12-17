@@ -814,8 +814,10 @@ public class CarController : MonoBehaviour
         var state = LogitechGSDK.LogiGetStateUnity(0);
         steerInput = state.lX / 32768.0f;
         
+        // Logitech pedals: -32768 (fully pressed) to 32767 (not pressed)
+        // Invert and normalize to 0-1 range
         float throttle = Mathf.Clamp01(-state.lY / 32768.0f);
-        float brake = Mathf.Clamp01(state.lRz / 32768.0f);
+        float brake = Mathf.Clamp01(-state.lRz / 32768.0f);
         
         if (throttle > 0.1f)
             moveInput = throttle;
@@ -836,14 +838,10 @@ public class CarController : MonoBehaviour
         LogitechGSDK.LogiPlayDamperForce(0, damperStrength);
         
         if (IsOnGrassCached())
-            LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(60 * forceFeedbackMultiplier));
+            LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(20 * forceFeedbackMultiplier));
         else
             LogitechGSDK.LogiStopDirtRoadEffect(0);
         
-        if (isDrifting)
-            LogitechGSDK.LogiPlaySlipperyRoadEffect(0, Mathf.RoundToInt(40 * forceFeedbackMultiplier));
-        else
-            LogitechGSDK.LogiStopSlipperyRoadEffect(0);
     }
 
     private void OnApplicationQuit()
