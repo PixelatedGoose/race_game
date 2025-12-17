@@ -150,10 +150,6 @@ public class BetterNewAiCarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(Vector3.Angle(
-                    transform.forward, 
-                    waypoints[currentWaypointIndex].position - transform.position
-                    ) );
         // Airborne?
         if (Physics.Raycast(transform.position, Vector3.down, GROUND_RAY_LENGTH))
         {
@@ -162,22 +158,28 @@ public class BetterNewAiCarController : MonoBehaviour
         }
 
         // Set new waypoint if close enough to current
-        if (Vector3.Distance(transform.position, waypoints[currentWaypointIndex].position) < waypointThreshold)
+        if (Vector3.Distance(transform.position, aiManager.BezierPoints[currentWaypointIndex]) < waypointThreshold)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
+            currentWaypointIndex = (currentWaypointIndex + 1) % aiManager.BezierPoints.Count;
         }
 
         float steerAngle = Vector3.Angle(
                     transform.forward, 
-                    waypoints[currentWaypointIndex].position - transform.position
-                    );
-        Debug.Log("Steer Angle Calculation: " + steerAngle);
+                    aiManager.BezierPoints[currentWaypointIndex] - transform.position
+            );
+        
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation,
+            Quaternion.LookRotation(aiManager.BezierPoints[currentWaypointIndex] - transform.position),
+            STEERING_LERP
+        );
+
+        Debug.Log(Time.fixedDeltaTime * turnSensitivity);
         foreach (CarController.Wheel wheel in frontWheels)
         {
-            Debug.Log("Current angle before lerp: " + wheel.wheelCollider.steerAngle);
             wheel.wheelCollider.steerAngle = Mathf.Lerp(
                 wheel.wheelCollider.steerAngle, 
-                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, waypoints[currentWaypointIndex].position - transform.position).y),
+                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, aiManager.BezierPoints[currentWaypointIndex] - transform.position).y),
                 STEERING_LERP
             );
         }
