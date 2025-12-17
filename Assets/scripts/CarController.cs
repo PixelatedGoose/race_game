@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using NUnit.Framework;
 using Logitech;
+using System.Linq;
 
 public class CarController : MonoBehaviour
 {
@@ -501,13 +502,10 @@ public class CarController : MonoBehaviour
 
     void Steer()
     {
-        foreach (var wheel in wheels)
+        foreach (var wheel in wheels.Where(w => w.axel == Axel.Front))
         {
-            if (wheel.axel == Axel.Front)
-            {
                 var _steerAngle = steerInput * turnSensitivty;
-                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
-            }
+                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
 
@@ -760,6 +758,8 @@ public class CarController : MonoBehaviour
     {
         if (isDrifting || GameManager.instance.isPaused || !canDrift) return;
 
+        print("fucker");
+
         activedrift++;
         isDrifting = true;
 
@@ -842,24 +842,5 @@ public class CarController : MonoBehaviour
         else
             LogitechGSDK.LogiStopDirtRoadEffect(0);
         
-    }
-
-    private void OnApplicationQuit()
-    {
-        // Only shutdown in builds, NOT in Unity Editor
-        #if !UNITY_EDITOR
-        if (logitechGlobalInit)
-        {
-            try
-            {
-                LogitechGSDK.LogiSteeringShutdown();
-                logitechGlobalInit = false;
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning($"Error shutting down Logitech SDK: {e.Message}");
-            }
-        }
-        #endif
     }
 }

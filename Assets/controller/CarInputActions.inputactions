@@ -16,6 +16,24 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Click",
+                    "type": "PassThrough",
+                    "id": "fe8e13b2-34cf-49d3-b084-899033b036c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Point",
+                    "type": "PassThrough",
+                    "id": "daa347fe-b45a-4e5e-961c-5e746d680574",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Drift",
                     "type": "Button",
                     "id": "6130a42d-db6f-4d59-a92f-4084f0915686",
@@ -169,6 +187,83 @@
                 },
                 {
                     "name": "",
+                    "id": "5d6105c0-3065-4b7e-bac5-e6e580580a5e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e68734a3-b15d-4667-aef1-4929788f0755",
+                    "path": "<Pen>/tip",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "158c82e3-5495-4fdc-ba23-c6ca187ceb02",
+                    "path": "<Touchscreen>/touch*/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Touch",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8fc95f5b-3711-4d4e-b579-497466046356",
+                    "path": "<XRController>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XR",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0f5581e8-9646-42c8-8aae-0684d04ea6cc",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "94e6341a-0382-4dcb-9016-2b3e7e4b2523",
+                    "path": "<Pen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "894a20dc-1d87-497d-bb35-b4e07fc6121c",
+                    "path": "<Touchscreen>/touch*/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Touch",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "013a987d-d138-47f2-aecb-44b0c311cbad",
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
@@ -202,6 +297,28 @@
                 },
                 {
                     "name": "",
+                    "id": "64a14ef7-aba7-4dbe-a5d9-1c85d3a0a0b6",
+                    "path": "<Joystick>/stick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drift",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d61c625f-5497-4969-a7e9-7f40c0d53e62",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drift",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "feece66d-d2b1-4c9e-a246-980468f9df6a",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
@@ -215,6 +332,17 @@
                     "name": "",
                     "id": "ecc093f7-c778-4f68-82f5-efddd9743ed3",
                     "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "turbo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac4ff335-a4de-4736-80a5-1c5814a9850c",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button5",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -334,6 +462,17 @@
                 },
                 {
                     "name": "",
+                    "id": "38513c61-8492-46db-a338-f0d9ed53e59f",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/hat",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8f96008b-6176-4421-b754-a80b307bd979",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
@@ -347,6 +486,17 @@
                     "name": "",
                     "id": "f6fc425e-c926-4650-b8d3-981714083f7f",
                     "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveForward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "973927da-1108-468c-829c-8251bd596c20",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -400,6 +550,17 @@
                 },
                 {
                     "name": "",
+                    "id": "f7014dbc-27bc-4ccb-9e17-cf7d34cc77a9",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "respawn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d9221556-f474-4820-8486-de9148715121",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
@@ -413,6 +574,17 @@
                     "name": "",
                     "id": "e828acfd-2292-4e4c-a293-db0c23ba119c",
                     "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "pausemenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4817cabb-a312-4b22-9aba-1dcacff8bb77",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button7",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -455,6 +627,28 @@
                 },
                 {
                     "name": "",
+                    "id": "74dc149a-4beb-4e23-8f13-f9a4bf4ca5b9",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menusubmit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "624e396d-3f1c-42d2-ad97-5556ec40d65d",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menusubmit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "03e97b75-9de3-424f-9818-ab616675551b",
                     "path": "<Mouse>/backButton",
                     "interactions": "",
@@ -488,6 +682,17 @@
                 },
                 {
                     "name": "",
+                    "id": "30363b48-0f9a-4396-a542-9a63027fd427",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menucancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9f57deab-bbd1-43d0-9024-33b8ebc0d2b8",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
@@ -501,6 +706,28 @@
                     "name": "",
                     "id": "4e3bfa4c-d507-4768-bc59-93dc3be8d3af",
                     "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ui_advance",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f3004b7-caad-4e90-874e-475f5139d1c4",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ui_advance",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cbf7850f-46af-488c-a167-64e4e7137a4e",
+                    "path": "<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
