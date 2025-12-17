@@ -13,30 +13,39 @@ public class AiCarManager : MonoBehaviour
     [Tooltip("Number of AI cars to spawn. Optional.")]
     [Range(1, 100)]
     [SerializeField] private byte spawnedAiCarCount = 0;
-    [Tooltip("Radius around the manager within which to spawn AI cars.")]
+    [Tooltip("Length around the manager's position to spawn AI cars within.")]
     [Range(1, 100)]
-    [SerializeField] private float spawnRadius = 3;
+    [SerializeField] private float spawnLenght = 3;
+    [Tooltip("Width around the manager's position to spawn AI cars within.")]
+    [Range(1, 100)]
+    [SerializeField] private float spawnWidth = 3;
+    private Vector3 spawnPosition;
     [SerializeField] private Transform path;
     [Tooltip("Number of points to calculate for Bezier curves per every point (higher = smoother).")]
     [Range(1, 500)]
     [SerializeField] private int bezierResolution = 10;
-    [SerializeField] private bool recalculate = true;
+    [SerializeField] private bool spawnOnStart = false;
+    [SerializeField] private GameObject[] aiCarPrefabs;
 
 
     void Start()
     {
-
-        ComputeBezierPoints();
-    }
-
-    void FixedUpdate()
-    {
-        if (recalculate)
+        spawnPosition = Physics.RaycastAll(transform.position + Vector3.up * 50, Vector3.down, 100).OrderBy(hit => hit.distance).First().point;
+        // Get a random prefab from the list
+        if (spawnOnStart)
         {
-            BezierPoints.Clear();
-            ComputeBezierPoints();
-            recalculate = false;
+            for (int i = 0; i < spawnedAiCarCount; i++)
+            {
+                GameObject prefab = aiCarPrefabs[UnityEngine.Random.Range(0, aiCarPrefabs.Length)];
+                Vector3 randomOffset = new(
+                    UnityEngine.Random.Range(-spawnLenght, spawnLenght),
+                    0,
+                    UnityEngine.Random.Range(-spawnWidth, spawnWidth)
+                );
+                Instantiate(prefab, spawnPosition + randomOffset, transform.rotation);
+            }
         }
+        ComputeBezierPoints();
     }
 
     // May get used later
@@ -47,11 +56,11 @@ public class AiCarManager : MonoBehaviour
         int size = waypoints.Length - 1;
         for (int i = 0; i < size; i++)
         {
-            float t = 0.39f;
+            float t = 0.40f;
             do {
                 BezierPoints.Add(BezierMath.CalculateBezierPoint(
                     t,
-                    transform.position.y,
+                    spawnPosition.y,
                     waypoints[(i - 2 + size) % size].position,
                     waypoints[(i - 1 + size) % size].position,
                     waypoints[i % size].position,
@@ -60,41 +69,8 @@ public class AiCarManager : MonoBehaviour
                     )
                 );
                 t += 1f / bezierResolution;
-            } while (t <= 0.61f);
+            } while (t <= 0.60f);
         }
-    }
-
-    List<Vector3> GenerateMultiPointBezierCurve(Vector3[] points)
-    {
-        List<Vector3> curvePoints = new();
-
-        // Using a high resolution may cause issues with navigation
-        int resolution = Mathf.CeilToInt(bezierResolution * points.Length * 2); // Double the resolution
-        for (float t = 0; t <= 1; t += 1.0f / resolution)
-        {
-            curvePoints.Add(CalculateBezierPoint(points, t));
-        }
-
-        // Ensure the final node is included in the curve
-        if (curvePoints.Count == 0 || curvePoints[curvePoints.Count - 1] != points[^1])
-        {
-            curvePoints.Add(points[^1]);
-        }
-
-        return curvePoints;
-    }
-
-    Vector3 CalculateBezierPoint(Vector3[] points, float t)
-    {
-        if (points.Length == 1) return points[0];
-
-        Vector3[] nextPoints = new Vector3[points.Length - 1];
-        for (int i = 0; i < points.Length - 1; i++)
-        {
-            nextPoints[i] = Vector3.Lerp(points[i], points[i + 1], t);
-        }
-
-        return CalculateBezierPoint(nextPoints, t);
     }
 
 #if UNITY_EDITOR
@@ -103,7 +79,7 @@ public class AiCarManager : MonoBehaviour
         // LIGHT GOLDENROD YELLOW /Ö\
         Gizmos.color = Color.lightGoldenRodYellow;
 
-        Gizmos.DrawWireCube(transform.position, new Vector3(spawnRadius * 2, 1, spawnRadius * 2));
+        Gizmos.DrawWireCube(transform.position, new Vector3(spawnLenght * 2, 1, spawnWidth * 2));
 
         for (int i = 0; i < BezierPoints.Count() - 1; i++)
         {
