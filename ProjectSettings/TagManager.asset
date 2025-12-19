@@ -19,6 +19,9 @@ TagManager:
   - pl
   - rl
   - ll
+  - winmenubuttons
+  - mainCredits
+  - winmenuother
   layers:
   - Default
   - TransparentFX

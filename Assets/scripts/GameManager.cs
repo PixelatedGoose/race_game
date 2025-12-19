@@ -10,8 +10,7 @@ using System;
 public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance;
-
-    private CarController carController;
+    public static RacerScript racerscript;
 
     [Header("score systeemi")]
     public int score;
@@ -117,6 +116,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 }
             }
         }
+
+        racerscript = FindAnyObjectByType<RacerScript>();
     }
 
     public void LoadData(GameData data)
@@ -133,6 +134,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             data.scored += this.score;
         }       
+    }
+
+    //temp
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (racerscript.winMenu.activeSelf) return;
+            racerscript.EndRace();
+        }
     }
 
 

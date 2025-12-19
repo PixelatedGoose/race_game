@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using TMPro;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
@@ -39,6 +40,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private Transform respawnPoint;
     private musicControl musicControl;
     private soundFXControl soundControl;
+
+    public GameObject[] endButtons;
+    public GameObject[] otherStuff;
 
     public void LoadData(GameData data)
     {
@@ -144,9 +148,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     void RespawnAtLastCheckpoint()
     {
         Debug.Log("Respawning at the last checkpoint...");
-        transform.position = respawnPoint != null ? respawnPoint.position : startFinishLine.position;
-        transform.rotation = respawnPoint != null ? respawnPoint.rotation : startFinishLine.rotation;
-
+        transform.SetPositionAndRotation(respawnPoint != null ? respawnPoint.position : startFinishLine.position,
+        respawnPoint != null ? respawnPoint.rotation : startFinishLine.rotation);
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -294,7 +297,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
                     besttime = laptime;
                 }
 
-                ResetRace();
+                EndRace();
             }
             else
             {
@@ -325,8 +328,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;
         transform.rotation = Quaternion.Euler(0, 0, 0);
-        startTimer = false;
-        laptime = 0;
     }
 
     void StartNewLap()
@@ -342,20 +343,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         soundControl.soundList[3].GetComponent<AudioSource>().Play();
     }
 
-    void ResetRace()
+    //KUTSU TÄÄ FUNKTIO AINOASTAA SILLO KU KISA LOPPUU!!!
+    public void EndRace()
     {
-        // Save race result FIRST, before resetting anything
-        if (RaceResultCollector.instance != null)
-        {
-            RaceResultCollector.instance.SaveRaceResult();
-        }
-
-        // Now reset everything
-        currentLap = 1;
-        laptime = 0;
-        startTimer = false;
-        raceFinished = true;
-
         respawnPoint = startFinishLine;
 
         for (int i = 0; i < checkpointStates.Length; i++)
@@ -363,23 +353,57 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             checkpointStates[i] = false;
         }
 
-        if (winMenu != null)
-        {
-            winMenu.SetActive(true);
-            Button restartButton = winMenu.GetComponentsInChildren<Button>(true)
-                .First(b => b.name == "Back_to_Main_Menu");
-            restartButton.Select();
-            raceFinished = true;
-            DatapersistenceManager.instance.SaveGame();
-            print("data saved");
-        }
-
         if (startFinishLine != null)
             startFinishLine.gameObject.SetActive(false);
-
         if (Car1Hud != null)
             Car1Hud.SetActive(false);
+        winMenu.SetActive(true);
+        raceFinished = true;
+        startTimer = false;
+
+        endButtons = GameObject.FindGameObjectsWithTag("winmenubuttons")
+            .OrderBy(r => r.name)
+            .ToArray();
+        otherStuff = GameObject.FindGameObjectsWithTag("winmenuother")
+            .OrderBy(r => r.name)
+            .ToArray();
+        TMP_InputField playerInput = otherStuff[1].GetComponent<TMP_InputField>();
+        playerInput.Select();
     }
+
+    //pitää kutsua sillo ku haluaa tallentaa
+    public void FinalizeRaceAndSaveData()
+    {
+        if (winMenu != null)
+        {
+            Button returnButton = endButtons[0].GetComponent<Button>();
+
+            DatapersistenceManager.instance.SaveGame();
+            print("data saved");
+            currentLap = 1;
+            laptime = 0;
+
+            foreach (GameObject go in endButtons)
+            {
+                LeanTween.value(go, go.GetComponent<RectTransform>().anchoredPosition.x, -20.0f, 1.2f)
+                .setOnUpdate((float val) =>
+                {
+                    go.GetComponent<RectTransform>().anchoredPosition = new Vector2(val, go.GetComponent<RectTransform>().anchoredPosition.y);
+                })
+                .setEaseOutBack();
+            }
+            foreach (GameObject go in otherStuff)
+            {
+                LeanTween.value(go, go.GetComponent<RectTransform>().anchoredPosition.y, -110.0f, 0.4f)
+                .setOnUpdate((float val) =>
+                {
+                    go.GetComponent<RectTransform>().anchoredPosition = new Vector2(go.GetComponent<RectTransform>().anchoredPosition.x, val);
+                })
+                .setEaseInOutCirc();
+            }
+            returnButton.Select();
+        }
+    } 
 
     public void RestartRace()
     {
