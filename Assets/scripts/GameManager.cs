@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     //     }
 
     //     if (!isAddingPoints && currentCar.activeSelf && instance != null
-    //     && !GameManager.instance.isPaused)
+    //     && isPaused)
     //     {
     //         StartCoroutine(IncrementScoreWithDelay());
     //     }

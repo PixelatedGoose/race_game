@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
-using NUnit.Framework;
 using Logitech;
 using System.Linq;
 
@@ -145,12 +144,15 @@ public class CarController : MonoBehaviour
         Controls.CarControls.Move.canceled  -= OnMoveCanceled;
         Controls.CarControls.Drift.performed -= OnDriftPerformed;
         Controls.CarControls.Drift.canceled  -= OnDriftCanceled;
+        StopAllForceFeedback();
     }
 
     private void OnDestroy()
     {
         Controls.Disable();
         Controls.Dispose();
+        
+        StopAllForceFeedback();
     }
 
     public float GetSpeed()
@@ -168,10 +170,11 @@ public class CarController : MonoBehaviour
     {
         GetInputs();
         Animatewheels();
-        if (logitechInitialized)
+        if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
         {
             LogitechGSDK.LogiUpdate();
             GetLogitechInputs();
+            ApplyForceFeedback(); 
         }
     }
 
@@ -197,8 +200,6 @@ public class CarController : MonoBehaviour
         Applyturnsensitivity(speed);
         OnGrass();
         HandleTurbo();
-        if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
-            ApplyForceFeedback();
     }
 
     bool IsCarActive()
@@ -211,8 +212,6 @@ public class CarController : MonoBehaviour
     {
         if (!isDrifting) return;
 
-        float sharpness = GetDriftSharpness();
-        //Debug.Log("Drift Sharpness: " + sharpness);
 
         if (isTurboActive)
             maxspeed = Mathf.Lerp(maxspeed, Turbesped, Time.deltaTime * 0.5f);
@@ -758,7 +757,6 @@ public class CarController : MonoBehaviour
     {
         if (isDrifting || GameManager.instance.isPaused || !canDrift) return;
 
-        print("fucker");
 
         activedrift++;
         isDrifting = true;
@@ -827,20 +825,37 @@ public class CarController : MonoBehaviour
             moveInput = 0f;
     }
 
+    void StopAllForceFeedback()
+    {
+        if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0)) return;
+        
+        LogitechGSDK.LogiStopDirtRoadEffect(0);
+    }
+
     void ApplyForceFeedback()
     {
+
+        if (GameManager.instance.isPaused)
+        {
+            LogitechGSDK.LogiStopDirtRoadEffect(0);
+            return;
+        }
+        if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0)) return;
+        
         float speed = carRb.linearVelocity.magnitude * 3.6f;
-        
-        int springStrength = Mathf.RoundToInt(Mathf.Lerp(80, 20, speed / maxspeed) * forceFeedbackMultiplier);
+
+        // Continuously apply spring force (centering)
+        int springStrength = Mathf.RoundToInt(40 * forceFeedbackMultiplier);
         LogitechGSDK.LogiPlaySpringForce(0, 0, 100, springStrength);
-        
-        int damperStrength = Mathf.RoundToInt(30 * forceFeedbackMultiplier);
+
+        // Continuously apply damper force (resistance) for steering
+        int damperStrength = Mathf.RoundToInt(10 * forceFeedbackMultiplier);
         LogitechGSDK.LogiPlayDamperForce(0, damperStrength);
         
-        if (IsOnGrassCached())
+        // Dirt road only when on grass and moving
+        if (IsOnGrassCached() && speed >= 10)
             LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(20 * forceFeedbackMultiplier));
         else
             LogitechGSDK.LogiStopDirtRoadEffect(0);
-        
     }
 }
