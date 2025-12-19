@@ -339,8 +339,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             checkpointStates[i] = false;
         }
         respawnPoint = startFinishLine;
-        //uh oh
-        soundControl.soundList[3].GetComponent<AudioSource>().Play();
     }
 
     //KUTSU TÄÄ FUNKTIO AINOASTAA SILLO KU KISA LOPPUU!!!

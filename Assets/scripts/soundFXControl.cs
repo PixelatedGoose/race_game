@@ -103,7 +103,7 @@ public class soundFXControl : MonoBehaviour
         soundList = GameObject.FindGameObjectsWithTag("soundFX");
         soundList = soundList.OrderBy(a => a.name).ToArray();
 
-        soundClickList = GameObject.FindGameObjectsWithTag("soundFXonClick"); //koska array on vitun paska
+        soundClickList = GameObject.FindGameObjectsWithTag("soundFXonClick");
         soundClickList = soundClickList.OrderBy(a => a.name).ToArray();
     }
 
@@ -121,7 +121,7 @@ public class soundFXControl : MonoBehaviour
         SoundFXHandler("slider", soundSlidersList, soundClickList[2].GetComponent<AudioSource>());
     }
 
-    void LateUpdate()
+    void Update()
     {
         if (SceneManager.GetActiveScene().name == "MainMenu") return;
         if (SceneManager.GetActiveScene().name == "Carselectionmenu_VECTORAMA") return;
@@ -180,7 +180,7 @@ public class soundFXControl : MonoBehaviour
     {
         bool isPaused = GameManager.instance.isPaused;
         GameObject[] pausedSoundList = soundList
-        .Where((s, i) => i != 2).ToArray();
+        .Where((s, i) => i != 4).ToArray();
 
         foreach (GameObject sound in pausedSoundList)
         {
@@ -189,16 +189,16 @@ public class soundFXControl : MonoBehaviour
             {
                 Debug.Log(sound + " pysäytetty");
                 audioSource.Pause();
-                soundList[2].GetComponent<AudioSource>().volume = 0.66f;
+                soundList[4].GetComponent<AudioSource>().volume = 0.66f;
             }
             else
             {
                 Debug.Log(sound + " ei pysäytetty");
                 audioSource.UnPause();
-                soundList[2].GetComponent<AudioSource>().volume = 0.0f;
+                soundList[4].GetComponent<AudioSource>().volume = 0.0f;
             }
         }
         if (isPaused)
-            soundList[4].GetComponent<AudioSource>().Play();
+            soundList[6].GetComponent<AudioSource>().Play();
     }
 }

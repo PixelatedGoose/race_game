@@ -6,6 +6,7 @@ public class ColorChanger : MonoBehaviour
     public Light right;
     public Light left;
     public float duration = 1.0f;
+    [SerializeField] private AudioSource lights;
 
     CarInputActions Controls;
 
@@ -97,5 +98,7 @@ public class ColorChanger : MonoBehaviour
                 pointLight.enabled = !pointLight.enabled;
                 break;
         }
+
+        lights.Play();
     }
 }
