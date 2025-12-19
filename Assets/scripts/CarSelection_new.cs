@@ -177,13 +177,17 @@ public class CarSelection_new : MonoBehaviour
         {
             bestResults = collection.results
                 .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
+                .Where(r => string.Equals(r.carName, activeCarStats.carName, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(r => r.score)
                 .ToArray();
         }
         else
         {
+            Debug.Log("no race results exist; defaulting to empty");
             bestResults = Array.Empty<RaceResultData>();
         }
+
+        Debug.Log(bestResults);
 
         int topResultsScore = 0;
         if (bestResults.Length != 0)

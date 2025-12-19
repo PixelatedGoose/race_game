@@ -39,12 +39,13 @@ public class Credits : MonoBehaviour
         }
         whatHeDo = new string[]
         {
+            //lol
             "He is a great man sometimes known as the goose lord",
             "You could he is a vizlly good programmer",
-            "Who the flip is ThatOneGuy?",
-            "Bold Leobold but he's not bold but he is bald",
+            "Potato composer extraordinaire",
+            "Leobold is Leobalding the competition",
             "He is lemony fresh",
-            "Our code contains 0% rojp" 
+            "He is a rojp off artist", 
         };
     }
 
