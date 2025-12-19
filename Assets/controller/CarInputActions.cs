@@ -482,6 +482,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""fb721821-50de-45c2-bff6-bd26545f80d2"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""lights"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""20b0499c-ed92-44bf-9bbf-152f619212a3"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
@@ -670,7 +681,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4817cabb-a312-4b22-9aba-1dcacff8bb77"",
-                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button7"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button10"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
