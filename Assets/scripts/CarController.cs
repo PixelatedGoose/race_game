@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
-using NUnit.Framework;
 using Logitech;
 using System.Linq;
 
@@ -55,6 +54,9 @@ public class CarController : MonoBehaviour
     public float Turbesped = 150.0f, basespeed = 100.0f, grassmaxspeed = 50.0f, driftMaxSpeed = 40f;
     [Header("Drift asetukset")]
     public float driftMultiplier = 1.0f;
+    public float driftSteeringMultiplier = 5.0f;  // MUCH HIGHER - was 2.5, now 5.0
+    public float driftSteeringResponse = 1.0f;    // INSTANT - was 0.85, now 1.0
+public float driftAngularDrag = 0.5f;
     public bool isTurnedDown = false, isDrifting;
     private float perusMaxAccerelation, perusTargetTorque, throttlemodifier, smoothedMaxAcceleration, modifiedMaxAcceleration;
     //fuck this shit im doing this controller keyboard the fucking lazy/shit way!!!!!!!!!!
@@ -145,12 +147,15 @@ public class CarController : MonoBehaviour
         Controls.CarControls.Move.canceled  -= OnMoveCanceled;
         Controls.CarControls.Drift.performed -= OnDriftPerformed;
         Controls.CarControls.Drift.canceled  -= OnDriftCanceled;
+        StopAllForceFeedback();
     }
 
     private void OnDestroy()
     {
         Controls.Disable();
         Controls.Dispose();
+        
+        StopAllForceFeedback();
     }
 
     public float GetSpeed()
@@ -168,10 +173,11 @@ public class CarController : MonoBehaviour
     {
         GetInputs();
         Animatewheels();
-        if (logitechInitialized)
+        if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
         {
             LogitechGSDK.LogiUpdate();
             GetLogitechInputs();
+            ApplyForceFeedback(); 
         }
     }
 
@@ -197,8 +203,6 @@ public class CarController : MonoBehaviour
         Applyturnsensitivity(speed);
         OnGrass();
         HandleTurbo();
-        if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
-            ApplyForceFeedback();
     }
 
     bool IsCarActive()
@@ -211,8 +215,6 @@ public class CarController : MonoBehaviour
     {
         if (!isDrifting) return;
 
-        float sharpness = GetDriftSharpness();
-        //Debug.Log("Drift Sharpness: " + sharpness);
 
         if (isTurboActive)
             maxspeed = Mathf.Lerp(maxspeed, Turbesped, Time.deltaTime * 0.5f);
@@ -282,6 +284,12 @@ public class CarController : MonoBehaviour
 
     void GetInputs()
     {
+        // Read steering from Move action (for keyboard/gamepad)
+        if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0))
+        {
+            steerInput = Controls.CarControls.Move.ReadValue<Vector2>().x;
+        }
+        
         if (Controls.CarControls.MoveForward.IsPressed())
             moveInput = Controls.CarControls.MoveForward.ReadValue<float>();
         else if (Controls.CarControls.MoveBackward.IsPressed())
@@ -376,7 +384,6 @@ public class CarController : MonoBehaviour
 
     void Move()
     {
-        if (activedrift > 0) return;
         //HandeSteepSlope();
         UpdateTargetTorgue();
         AdjustSpeedForGrass();
@@ -428,8 +435,6 @@ public class CarController : MonoBehaviour
 
     private void UpdateTargetTorgue()
     {
-        if (activedrift > 0) return;
-
         float inputValue = currentControlScheme == "Gamepad"
             ? Controls.CarControls.ThrottleMod.ReadValue<float>()
             : Mathf.Abs(moveInput);
@@ -437,7 +442,10 @@ public class CarController : MonoBehaviour
         float power = currentControlScheme == "Gamepad" ? 0.9f : 0.1f;
 
         float throttle = Mathf.Pow(inputValue, power);
-        float targetMaxAcc = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttle);
+        
+        // Reduce power during drift but don't eliminate it
+        float driftPowerMultiplier = isDrifting ? 0.6f : 1.0f;
+        float targetMaxAcc = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttle) * driftPowerMultiplier;
 
         smoothedMaxAcceleration = Mathf.MoveTowards(
             smoothedMaxAcceleration,
@@ -446,7 +454,7 @@ public class CarController : MonoBehaviour
         );
 
         if (moveInput > 0f)
-            targetTorque =  smoothedMaxAcceleration;
+            targetTorque = smoothedMaxAcceleration;
         else if (moveInput < 0f)
             targetTorque = -smoothedMaxAcceleration;
         else
@@ -502,10 +510,14 @@ public class CarController : MonoBehaviour
 
     void Steer()
     {
+        float steeringMultiplier = isDrifting ? driftSteeringMultiplier : 1.0f;
+        float steeringLerp = isDrifting ? driftSteeringResponse : 0.75f;
+        float sensitivity = isDrifting ? turnSensitivtyAtLowSpeed : turnSensitivty; // Use max sensitivity during drift
+        
         foreach (var wheel in wheels.Where(w => w.axel == Axel.Front))
         {
-                var _steerAngle = steerInput * turnSensitivty;
-                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);            
+            var _steerAngle = steerInput * sensitivity * steeringMultiplier;
+            wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, steeringLerp);
         }
     }
 
@@ -553,8 +565,14 @@ public class CarController : MonoBehaviour
             forwardFriction.asymptoteValue = 1;
             forwardFriction.stiffness = 3f;
             wheel.wheelCollider.forwardFriction = forwardFriction;
+            
+            if (wheel.axel == Axel.Front)
+            {
+                WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
+                sidewaysFriction.stiffness = 1.5f; // LOWER - was 4f, now 1.5f for looser steering
+                wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
+            }
         }
-
     }
 
     void StopDrifting()
@@ -562,6 +580,7 @@ public class CarController : MonoBehaviour
         activedrift = 0;
         isDrifting = false;
         maxAcceleration = perusMaxAccerelation;
+        carRb.angularDamping = 0.05f; // ADD THIS - restore normal rotation
 
         if (racerScript != null &&
             (racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f))
@@ -570,7 +589,6 @@ public class CarController : MonoBehaviour
             return;
         }
         GameManager.instance.StopAddingPoints();
-
 
         foreach (var wheel in wheels)
         {
@@ -758,26 +776,24 @@ public class CarController : MonoBehaviour
     {
         if (isDrifting || GameManager.instance.isPaused || !canDrift) return;
 
-        print("fucker");
-
         activedrift++;
         isDrifting = true;
 
         maxAcceleration = perusMaxAccerelation * 0.7f;
+        carRb.angularDamping = driftAngularDrag;
 
         float speed = carRb.linearVelocity.magnitude * 3.6f;
         float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
-        float driftMultiplier = 1.0f;
 
         foreach (var wheel in wheels)
         {
             if (wheel.wheelCollider == null) continue;
             WheelFrictionCurve sideways = wheel.wheelCollider.sidewaysFriction;
-            sideways.extremumSlip   = 2.0f * speedFactor * driftMultiplier;
-            sideways.asymptoteSlip  = 2.5f * speedFactor * driftMultiplier;
-            sideways.extremumValue  = 0.75f / (speedFactor * driftMultiplier);
-            sideways.asymptoteValue = 0.75f / (speedFactor * driftMultiplier);
-            sideways.stiffness      = 3f;
+            sideways.extremumSlip   = 0.8f;   // LOWER - less grip
+            sideways.asymptoteSlip  = 1.2f;   // LOWER - less grip
+            sideways.extremumValue  = 0.4f;   // LOWER - allows more slip
+            sideways.asymptoteValue = 0.3f;   // LOWER - allows more slip
+            sideways.stiffness      = 1.2f;   // LOWER - much less resistance to sliding
             wheel.wheelCollider.sidewaysFriction = sideways;
         }
 
@@ -827,20 +843,37 @@ public class CarController : MonoBehaviour
             moveInput = 0f;
     }
 
+    void StopAllForceFeedback()
+    {
+        if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0)) return;
+        
+        LogitechGSDK.LogiStopDirtRoadEffect(0);
+    }
+
     void ApplyForceFeedback()
     {
+
+        if (GameManager.instance.isPaused)
+        {
+            LogitechGSDK.LogiStopDirtRoadEffect(0);
+            return;
+        }
+        if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0)) return;
+        
         float speed = carRb.linearVelocity.magnitude * 3.6f;
-        
-        int springStrength = Mathf.RoundToInt(Mathf.Lerp(80, 20, speed / maxspeed) * forceFeedbackMultiplier);
+
+        // Continuously apply spring force (centering)
+        int springStrength = Mathf.RoundToInt(40 * forceFeedbackMultiplier);
         LogitechGSDK.LogiPlaySpringForce(0, 0, 100, springStrength);
-        
-        int damperStrength = Mathf.RoundToInt(30 * forceFeedbackMultiplier);
+
+        // Continuously apply damper force (resistance) for steering
+        int damperStrength = Mathf.RoundToInt(10 * forceFeedbackMultiplier);
         LogitechGSDK.LogiPlayDamperForce(0, damperStrength);
         
-        if (IsOnGrassCached())
+        // Dirt road only when on grass and moving
+        if (IsOnGrassCached() && speed >= 10)
             LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(20 * forceFeedbackMultiplier));
         else
             LogitechGSDK.LogiStopDirtRoadEffect(0);
-        
     }
 }

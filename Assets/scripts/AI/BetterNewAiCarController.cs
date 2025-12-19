@@ -16,8 +16,6 @@ public class BetterNewAiCarController : MonoBehaviour
 
         // --- Path Following ---
     [Header("Path Following Settings")]
-    [Tooltip("The parent object containing all path waypoints as children.")]
-    public Transform path;
     [Tooltip("Distance threshold for reaching a waypoint.")]
     [SerializeField] private float waypointThreshold = 10.0f;
     [Tooltip("Number of points to calculate for Bezier curves (higher = smoother).")]
@@ -87,10 +85,10 @@ public class BetterNewAiCarController : MonoBehaviour
     [SerializeField] private Rigidbody carRb;
     [Tooltip("Reference to the player car.")]
     [SerializeField] private CarController playerCar;
-    [SerializeField] private AiCarManager aiManager;
+    public AiCarManager aiCarManager;
     private Collider carCollider;
-    private float carWidth;
-    private float carLength;
+    public float CarWidth { get; private set; }
+    public float CarLength { get; private set; }
 
     
     private float playerCarWidth;
@@ -102,23 +100,17 @@ public class BetterNewAiCarController : MonoBehaviour
     private float moveInput = 0f;
     private LayerMask grassLayerMask;
     private float steerInput;
+    public void Initialize(AiCarManager aiCarManager, Collider playerCollider)
+    {
+        this.aiCarManager = aiCarManager;
+        playerCar = playerCollider.GetComponent<CarController>();
+        Collider pc = playerCollider.GetComponent<Collider>();
+        playerCarWidth = pc.bounds.size.x;
+        playerCarLength = pc.bounds.size.z;
+    }
     private void Awake()
     {
         grassLayerMask = LayerMask.NameToLayer("Grass");
-
-        if (path == null)
-        {
-            Debug.LogError("Path transform is not assigned.");
-            enabled = false;
-            return;
-        }
-
-        waypoints = path.GetComponentsInChildren<Transform>().Where(t => t != path).ToArray();
-        if (waypoints == null)
-        {
-            Debug.Log("Waypoints is empty!");
-            enabled = false;
-        }
 
         if (carRb == null) carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
@@ -126,23 +118,8 @@ public class BetterNewAiCarController : MonoBehaviour
         carCollider = GetComponent<Collider>();
         if (carCollider != null)
         {
-            carWidth = carCollider.bounds.size.x;
-            carLength = carCollider.bounds.size.z;
-        }
-        
-        GameManager gm = GameManager.instance;
-        if (
-            playerCar == null 
-            && gm != null 
-            && gm.currentCar != null
-            )
-        {
-            playerCar = gm.currentCar.GetComponent<CarController>();
-            Collider playerCollider = gm.currentCar.GetComponent<Collider>();
-            
-            playerCarWidth = playerCollider.bounds.size.x;
-            playerCarLength = playerCollider.bounds.size.z;
-            
+            CarWidth = carCollider.bounds.size.x;
+            CarLength = carCollider.bounds.size.z;
         }
 
         frontWheels = wheels.Where(w => w.axel == CarController.Axel.Front).ToArray();
@@ -158,28 +135,27 @@ public class BetterNewAiCarController : MonoBehaviour
         }
 
         // Set new waypoint if close enough to current
-        if (Vector3.Distance(transform.position, aiManager.BezierPoints[currentWaypointIndex]) < waypointThreshold)
+        if (Vector3.Distance(transform.position, aiCarManager.BezierPoints[currentWaypointIndex]) < waypointThreshold)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % aiManager.BezierPoints.Count;
+            currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.BezierPoints.Count;
         }
 
         float steerAngle = Vector3.Angle(
                     transform.forward, 
-                    aiManager.BezierPoints[currentWaypointIndex] - transform.position
-            );
+                    aiCarManager.BezierPoints[currentWaypointIndex] - transform.position
+        );
         
         transform.rotation = Quaternion.Lerp(
             transform.rotation,
-            Quaternion.LookRotation(aiManager.BezierPoints[currentWaypointIndex] - transform.position),
+            Quaternion.LookRotation(aiCarManager.BezierPoints[currentWaypointIndex] - transform.position),
             STEERING_LERP
         );
 
-        Debug.Log(Time.fixedDeltaTime * turnSensitivity);
         foreach (CarController.Wheel wheel in frontWheels)
         {
             wheel.wheelCollider.steerAngle = Mathf.Lerp(
                 wheel.wheelCollider.steerAngle, 
-                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, aiManager.BezierPoints[currentWaypointIndex] - transform.position).y),
+                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, aiCarManager.BezierPoints[currentWaypointIndex] - transform.position).y),
                 STEERING_LERP
             );
         }
