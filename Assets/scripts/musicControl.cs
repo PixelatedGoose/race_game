@@ -24,7 +24,6 @@ public class musicControl : MonoBehaviour
         Controls.CarControls.Drift.canceled += DriftCanceled;
         Controls.CarControls.turbo.performed += TurboCall;
         Controls.CarControls.turbo.canceled += TurboCanceled;
-        Controls.CarControls.pausemenu.performed += ImPauseMenuingIt;
     }
 
     private void OnEnable() => Controls.Enable();
@@ -105,17 +104,12 @@ public class musicControl : MonoBehaviour
         }
     }
 
-    public void ImPauseMenuingIt(InputAction.CallbackContext context)
-    {
-        //tämä se vasta on erittäin ronny
-        PausedMusicHandler();
-    }
     public void PausedMusicHandler()
     {
+        bool isPaused = GameManager.instance.isPaused;
         foreach (AudioSource track in musicTracks)
         {
-            //selvä, käytetään YKSI tämmöne if-else. vähä ronny mut se toimii paremmi ku updates
-            if (GameManager.instance.isPaused)
+            if (isPaused)
                 track.Pause();
             else
                 track.UnPause();

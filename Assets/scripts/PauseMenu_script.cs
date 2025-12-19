@@ -52,30 +52,28 @@ public class PauseMenu : MonoBehaviour
         LeanTween.cancel(pauseMenuObjects[0]);
         bool isActive = pauseMenuObjects[0].activeSelf;
 
+        SetPausedState(!isActive);
         foreach (GameObject obj in pauseMenuObjects)
         {
             obj.SetActive(!isActive);
         }
-        GameManager.instance.isPaused = !isActive;
-
-        if (isActive)
-        {
-            Time.timeScale = 1;
-        }
-        else
+        if (!isActive)
         {
             pauseMenuObjects[0].transform.localPosition = new Vector3(0.0f, 470.0f, 0.0f);
             GameManager.instance.StopAddingPoints();
-            Time.timeScale = 0;
             LeanTween.moveLocalY(pauseMenuObjects[0], 0.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
         }
     }
 
-    //ronnyinen funktio tääl näi
+    //ERITTÄIN ronnyinen funktio tääl näi
     public void SetPausedState(bool paused)
     {
         Time.timeScale = paused ? 0 : 1;
         GameManager.instance.isPaused = paused;
+
+        musicControl musicCtrl = FindFirstObjectByType<musicControl>();
+        if (musicCtrl != null)
+            musicCtrl.PausedMusicHandler();
     }
 
     public void ContinueGame()
