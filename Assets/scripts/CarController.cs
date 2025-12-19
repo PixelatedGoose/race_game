@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using Logitech;
 using System.Linq;
+using Unity.Mathematics;
 
 public class CarController : MonoBehaviour
 {
@@ -51,13 +52,16 @@ public class CarController : MonoBehaviour
     public Rigidbody carRb;
     public bool isTurboActive = false;
     private float activedrift = 0.0f;
-    public float Turbesped = 150.0f, basespeed = 100.0f, grassmaxspeed = 50.0f, driftMaxSpeed = 40f;
+    public float Turbesped = 150.0f, basespeed = 100.0f, grassmaxspeed = 50.0f, driftMaxSpeed = 75.0f;
     [Header("Drift asetukset")]
-    public float driftMultiplier = 1.0f;
-    public float driftSteeringMultiplier = 5.0f;  // MUCH HIGHER - was 2.5, now 5.0
-    public float driftSteeringResponse = 1.0f;    // INSTANT - was 0.85, now 1.0
-public float driftAngularDrag = 0.5f;
+    public float driftMultiplier = 12.0f;
+    public float driftSteeringMultiplier = 15.0f;  // Increase from 10.0 to 15.0 for MUCH more turning
+    public float driftSteeringResponse = 1.0f;    
+    public float driftAngularDrag = 0.15f;         // Decrease from 0.2 to 0.15 for even more rotation
     public bool isTurnedDown = false, isDrifting;
+
+
+
     private float perusMaxAccerelation, perusTargetTorque, throttlemodifier, smoothedMaxAcceleration, modifiedMaxAcceleration;
     //fuck this shit im doing this controller keyboard the fucking lazy/shit way!!!!!!!!!!
     [SerializeField] private PlayerInput playerInput;
@@ -444,7 +448,7 @@ public float driftAngularDrag = 0.5f;
         float throttle = Mathf.Pow(inputValue, power);
         
         // Reduce power during drift but don't eliminate it
-        float driftPowerMultiplier = isDrifting ? 0.6f : 1.0f;
+        float driftPowerMultiplier = isDrifting ? 0.7f : 1.0f;
         float targetMaxAcc = perusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttle) * driftPowerMultiplier;
 
         smoothedMaxAcceleration = Mathf.MoveTowards(
@@ -569,7 +573,7 @@ public float driftAngularDrag = 0.5f;
             if (wheel.axel == Axel.Front)
             {
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-                sidewaysFriction.stiffness = 1.5f; // LOWER - was 4f, now 1.5f for looser steering
+                sidewaysFriction.stiffness = 1.5f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
         }
@@ -789,11 +793,11 @@ public float driftAngularDrag = 0.5f;
         {
             if (wheel.wheelCollider == null) continue;
             WheelFrictionCurve sideways = wheel.wheelCollider.sidewaysFriction;
-            sideways.extremumSlip   = 0.8f;   // LOWER - less grip
-            sideways.asymptoteSlip  = 1.2f;   // LOWER - less grip
-            sideways.extremumValue  = 0.4f;   // LOWER - allows more slip
-            sideways.asymptoteValue = 0.3f;   // LOWER - allows more slip
-            sideways.stiffness      = 1.2f;   // LOWER - much less resistance to sliding
+            sideways.extremumSlip   = 0.8f;
+            sideways.asymptoteSlip  = 1.2f;
+            sideways.extremumValue  = 0.5f;
+            sideways.asymptoteValue = 0.4f;
+            sideways.stiffness      = 1.2f;
             wheel.wheelCollider.sidewaysFriction = sideways;
         }
 
@@ -809,6 +813,9 @@ public float driftAngularDrag = 0.5f;
         targetTorque = perusTargetTorque;
         WheelEffects(false);
     }
+
+
+
 
     [Header("Logitech G923 Settings")]
     public bool useLogitechWheel = true;
