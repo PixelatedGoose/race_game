@@ -85,10 +85,10 @@ public class BetterNewAiCarController : MonoBehaviour
     [SerializeField] private Rigidbody carRb;
     [Tooltip("Reference to the player car.")]
     [SerializeField] private CarController playerCar;
-    public AiCarManager aiManager;
+    public AiCarManager aiCarManager;
     private Collider carCollider;
-    private float carWidth;
-    private float carLength;
+    public float CarWidth { get; private set; }
+    public float CarLength { get; private set; }
 
     
     private float playerCarWidth;
@@ -100,6 +100,14 @@ public class BetterNewAiCarController : MonoBehaviour
     private float moveInput = 0f;
     private LayerMask grassLayerMask;
     private float steerInput;
+    public void Initialize(AiCarManager aiCarManager, Collider playerCollider)
+    {
+        this.aiCarManager = aiCarManager;
+        playerCar = playerCollider.GetComponent<CarController>();
+        Collider pc = playerCollider.GetComponent<Collider>();
+        playerCarWidth = pc.bounds.size.x;
+        playerCarLength = pc.bounds.size.z;
+    }
     private void Awake()
     {
         grassLayerMask = LayerMask.NameToLayer("Grass");
@@ -110,23 +118,8 @@ public class BetterNewAiCarController : MonoBehaviour
         carCollider = GetComponent<Collider>();
         if (carCollider != null)
         {
-            carWidth = carCollider.bounds.size.x;
-            carLength = carCollider.bounds.size.z;
-        }
-        
-        GameManager gm = GameManager.instance;
-        if (
-            playerCar == null 
-            && gm != null 
-            && gm.currentCar != null
-            )
-        {
-            playerCar = gm.currentCar.GetComponent<CarController>();
-            Collider playerCollider = gm.currentCar.GetComponent<Collider>();
-            
-            playerCarWidth = playerCollider.bounds.size.x;
-            playerCarLength = playerCollider.bounds.size.z;
-            
+            CarWidth = carCollider.bounds.size.x;
+            CarLength = carCollider.bounds.size.z;
         }
 
         frontWheels = wheels.Where(w => w.axel == CarController.Axel.Front).ToArray();
@@ -142,19 +135,19 @@ public class BetterNewAiCarController : MonoBehaviour
         }
 
         // Set new waypoint if close enough to current
-        if (Vector3.Distance(transform.position, aiManager.BezierPoints[currentWaypointIndex]) < waypointThreshold)
+        if (Vector3.Distance(transform.position, aiCarManager.BezierPoints[currentWaypointIndex]) < waypointThreshold)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % aiManager.BezierPoints.Count;
+            currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.BezierPoints.Count;
         }
 
         float steerAngle = Vector3.Angle(
                     transform.forward, 
-                    aiManager.BezierPoints[currentWaypointIndex] - transform.position
+                    aiCarManager.BezierPoints[currentWaypointIndex] - transform.position
         );
         
         transform.rotation = Quaternion.Lerp(
             transform.rotation,
-            Quaternion.LookRotation(aiManager.BezierPoints[currentWaypointIndex] - transform.position),
+            Quaternion.LookRotation(aiCarManager.BezierPoints[currentWaypointIndex] - transform.position),
             STEERING_LERP
         );
 
@@ -162,7 +155,7 @@ public class BetterNewAiCarController : MonoBehaviour
         {
             wheel.wheelCollider.steerAngle = Mathf.Lerp(
                 wheel.wheelCollider.steerAngle, 
-                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, aiManager.BezierPoints[currentWaypointIndex] - transform.position).y),
+                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, aiCarManager.BezierPoints[currentWaypointIndex] - transform.position).y),
                 STEERING_LERP
             );
         }

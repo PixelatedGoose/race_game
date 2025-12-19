@@ -1,68 +1,73 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using UnityEditor.EditorTools;
 using UnityEngine;
+
+// Add AiSpawnPosition prefabs as children 
+// to this manager to set spawn positions for AI cars
+
 
 public class AiCarManager : MonoBehaviour
 {
-    public List<Vector3> BezierPoints { get; private set; } = new();
-    private BetterNewAiCarController[] aiCars;
     [Header("AI Car Settings")]
     [SerializeField] private bool enableAiCars = true;
     [Tooltip("Number of AI cars to spawn. Optional.")]
     [Range(1, 100)]
     [SerializeField] private byte spawnedAiCarCount = 0;
-    [Tooltip("Length around the manager's position to spawn AI cars within.")]
-    [Range(1, 100)]
-    [SerializeField] private float spawnLenght = 3;
-    [Tooltip("Width around the manager's position to spawn AI cars within.")]
-    [Range(1, 100)]
-    [SerializeField] private float spawnWidth = 3;
-    private Vector3 spawnPosition;
     [SerializeField] private Transform path;
-    [Tooltip("Number of points to calculate for Bezier curves per every point (higher = smoother).")]
+    [Tooltip("Density for bezier points (higher = smoother curve).")]
     [Range(1, 500)]
     [SerializeField] private int bezierResolution = 10;
     [SerializeField] private bool spawnOnStart = false;
-    [SerializeField] private GameObject[] aiCarPrefabs;
-
+    [SerializeField] private GameObject[] AiCarPrefabs;
+    private float bezierHeight;
+    public List<Vector3> BezierPoints { get; private set; } = new();
+    private BetterNewAiCarController[] aiCars;
 
     void Start()
     {
-        spawnPosition = Physics.RaycastAll(transform.position + Vector3.up * 50, Vector3.down, 100).OrderBy(hit => hit.distance).First().point;
-        // Get a random prefab from the list
+        // Height for Bezier curves
+        bezierHeight = Physics.RaycastAll(transform.position + Vector3.up * 50, Vector3.down, 100).OrderBy(hit => hit.distance).First().point.y;
+        ComputeBezierPoints();
+
+        GameManager gm = GameManager.instance;
+        if (gm == null || gm.currentCar == null) return;
+
+        // Spawn AI Cars at spawn points
         if (spawnOnStart)
         {
+            // Find Spawn points in children
+            Transform[] spawnPoints = GetComponentsInChildren<Transform>().Where(t => t != transform).ToArray();
+            
+            // Iterate through spawn points
             for (int i = 0; i < spawnedAiCarCount; i++)
             {
-                GameObject prefab = aiCarPrefabs[UnityEngine.Random.Range(0, aiCarPrefabs.Length)];
-                Vector3 randomOffset = new(
-                    UnityEngine.Random.Range(-spawnLenght, spawnLenght),
-                    0,
-                    UnityEngine.Random.Range(-spawnWidth, spawnWidth)
-                );
-                GameObject car = Instantiate(prefab, spawnPosition + randomOffset, transform.rotation);
-                car.GetComponentInChildren<BetterNewAiCarController>().aiManager = this;
+                // Get a random prefab from the list
+                GameObject prefab = AiCarPrefabs[UnityEngine.Random.Range(0, AiCarPrefabs.Length)];
+                
+                // Spawn the AI car
+                BetterNewAiCarController aiCar = Instantiate(prefab, 
+                spawnPoints[i % spawnPoints.Length].position, 
+                transform.rotation)
+                .GetComponentInChildren<BetterNewAiCarController>();
+                aiCar.Initialize(this, gm.currentCar.GetComponentInChildren<Collider>());
             }
         }
-        ComputeBezierPoints();
+
     }
 
     // May get used later
     void ComputeBezierPoints()
     {
-
         Transform[] waypoints = path.GetComponentsInChildren<Transform>().Where(t => t != path).ToArray();
         int size = waypoints.Length - 1;
         for (int i = 0; i < size; i++)
         {
-            float t = 0.40f;
-            do {
+            for (float t = 0.4f; t <= 0.6f; t += 1f / bezierResolution)
+            {
                 BezierPoints.Add(BezierMath.CalculateBezierPoint(
                     t,
-                    spawnPosition.y,
+                    bezierHeight,
                     waypoints[(i - 2 + size) % size].position,
                     waypoints[(i - 1 + size) % size].position,
                     waypoints[i % size].position,
@@ -70,8 +75,7 @@ public class AiCarManager : MonoBehaviour
                     waypoints[(i + 2) % size].position
                     )
                 );
-                t += 1f / bezierResolution;
-            } while (t <= 0.60f);
+            }
         }
     }
 
@@ -80,8 +84,6 @@ public class AiCarManager : MonoBehaviour
     {
         // LIGHT GOLDENROD YELLOW /Ö\
         Gizmos.color = Color.lightGoldenRodYellow;
-
-        Gizmos.DrawWireCube(transform.position, new Vector3(spawnLenght * 2, 1, spawnWidth * 2));
 
         for (int i = 0; i < BezierPoints.Count() - 1; i++)
         {
