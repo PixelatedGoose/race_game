@@ -507,8 +507,16 @@ public class CarController : MonoBehaviour
         }
     }
 
+    float GetSteeringInput()
+    {
+        if (currentControlScheme == "Keyboard" && Mathf.Abs(steerInput) > 0f)
+            return Mathf.Sign(steerInput) * Mathf.Pow(Mathf.Abs(steerInput), 0.8f);
+        return steerInput;
+    }
+
     void Steer()
     {
+        float effectiveInput = GetSteeringInput();
         foreach (var wheel in wheels.Where(w => w.axel == Axel.Front))
         {
                 var _steerAngle = steerInput * turnSensitivty * 0.5f;
@@ -785,13 +793,14 @@ public class CarController : MonoBehaviour
             if (wheel.wheelCollider == null) continue;
             WheelFrictionCurve sideways = wheel.wheelCollider.sidewaysFriction;
             sideways.extremumSlip   = 0.7f;
-            sideways.asymptoteSlip  = 1.1f;
-            sideways.extremumValue  = 1.1f;
-            sideways.asymptoteValue = 1.3f;
-            sideways.stiffness      = 2.1f;
+            sideways.asymptoteSlip  = 1.05f;
+            sideways.extremumValue  = 1f;
+            sideways.asymptoteValue = 1.2f;
+            sideways.stiffness      = 2f;
             wheel.wheelCollider.sidewaysFriction = sideways;
         }
 
+        carRb.angularDamping = 0.01f;
         AdjustWheelsForDrift();
         WheelEffects(true);
     }
