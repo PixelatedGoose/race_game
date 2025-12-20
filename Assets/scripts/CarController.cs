@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using Logitech;
 using System.Linq;
-using Unity.Mathematics;
 
 public class CarController : MonoBehaviour
 {
@@ -52,16 +51,10 @@ public class CarController : MonoBehaviour
     public Rigidbody carRb;
     public bool isTurboActive = false;
     private float activedrift = 0.0f;
-    public float Turbesped = 150.0f, basespeed = 100.0f, grassmaxspeed = 50.0f, driftMaxSpeed = 75.0f;
+    public float Turbesped = 150.0f, basespeed = 100.0f, grassmaxspeed = 50.0f, driftMaxSpeed = 40f;
     [Header("Drift asetukset")]
-    public float driftMultiplier = 12.0f;
-    public float driftSteeringMultiplier = 15.0f;  // Increase from 10.0 to 15.0 for MUCH more turning
-    public float driftSteeringResponse = 1.0f;    
-    public float driftAngularDrag = 0.15f;         // Decrease from 0.2 to 0.15 for even more rotation
+    public float driftMultiplier = 1.0f;
     public bool isTurnedDown = false, isDrifting;
-
-
-
     private float perusMaxAccerelation, perusTargetTorque, throttlemodifier, smoothedMaxAcceleration, modifiedMaxAcceleration;
     //fuck this shit im doing this controller keyboard the fucking lazy/shit way!!!!!!!!!!
     [SerializeField] private PlayerInput playerInput;
@@ -81,6 +74,8 @@ public class CarController : MonoBehaviour
 
     public bool canDrift = false;
     public bool canUseTurbo = false;
+
+    
 
     void Awake()
     {
@@ -512,19 +507,24 @@ public class CarController : MonoBehaviour
         }
     }
 
+    float GetSteeringInput()
+    {
+        if (currentControlScheme == "Keyboard" && Mathf.Abs(steerInput) > 0f)
+            return Mathf.Sign(steerInput) * Mathf.Pow(Mathf.Abs(steerInput), 0.8f);
+        return steerInput;
+    }
+
     void Steer()
     {
-        float steeringMultiplier = isDrifting ? driftSteeringMultiplier : 1.0f;
-        float steeringLerp = isDrifting ? driftSteeringResponse : 0.75f;
-        float sensitivity = isDrifting ? turnSensitivtyAtLowSpeed : turnSensitivty; // Use max sensitivity during drift
-        
+        float effectiveInput = GetSteeringInput();
         foreach (var wheel in wheels.Where(w => w.axel == Axel.Front))
         {
-            var _steerAngle = steerInput * sensitivity * steeringMultiplier;
-            wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, steeringLerp);
+                var _steerAngle = steerInput * turnSensitivty * 0.5f;
+                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
 
+    
     void ApplyGravity()
     {
         if (!IsGrounded())
@@ -573,7 +573,7 @@ public class CarController : MonoBehaviour
             if (wheel.axel == Axel.Front)
             {
                 WheelFrictionCurve sidewaysFriction = wheel.wheelCollider.sidewaysFriction;
-                sidewaysFriction.stiffness = 1.5f;
+                sidewaysFriction.stiffness = 2.0f;
                 wheel.wheelCollider.sidewaysFriction = sidewaysFriction;
             }
         }
@@ -775,7 +775,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-
+    //i hate this so much
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
         if (isDrifting || GameManager.instance.isPaused || !canDrift) return;
@@ -783,8 +783,7 @@ public class CarController : MonoBehaviour
         activedrift++;
         isDrifting = true;
 
-        maxAcceleration = perusMaxAccerelation * 0.7f;
-        carRb.angularDamping = driftAngularDrag;
+        maxAcceleration = perusMaxAccerelation * 0.6f;
 
         float speed = carRb.linearVelocity.magnitude * 3.6f;
         float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
@@ -793,14 +792,15 @@ public class CarController : MonoBehaviour
         {
             if (wheel.wheelCollider == null) continue;
             WheelFrictionCurve sideways = wheel.wheelCollider.sidewaysFriction;
-            sideways.extremumSlip   = 0.8f;
-            sideways.asymptoteSlip  = 1.2f;
-            sideways.extremumValue  = 0.5f;
-            sideways.asymptoteValue = 0.4f;
-            sideways.stiffness      = 1.2f;
+            sideways.extremumSlip   = 0.7f;
+            sideways.asymptoteSlip  = 1.05f;
+            sideways.extremumValue  = 1f;
+            sideways.asymptoteValue = 1.2f;
+            sideways.stiffness      = 2f;
             wheel.wheelCollider.sidewaysFriction = sideways;
         }
 
+        carRb.angularDamping = 0.01f;
         AdjustWheelsForDrift();
         WheelEffects(true);
     }
