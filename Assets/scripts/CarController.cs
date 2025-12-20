@@ -511,7 +511,7 @@ public class CarController : MonoBehaviour
     {
         foreach (var wheel in wheels.Where(w => w.axel == Axel.Front))
         {
-                var _steerAngle = steerInput * turnSensitivty;
+                var _steerAngle = steerInput * turnSensitivty * 0.5f;
                 wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
@@ -767,7 +767,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-
+    //i hate this so much
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
         if (isDrifting || GameManager.instance.isPaused || !canDrift) return;
@@ -784,11 +784,11 @@ public class CarController : MonoBehaviour
         {
             if (wheel.wheelCollider == null) continue;
             WheelFrictionCurve sideways = wheel.wheelCollider.sidewaysFriction;
-            sideways.extremumSlip   = 0.3f;
-            sideways.asymptoteSlip  = 0.65f;
-            sideways.extremumValue  = 0.85f;
-            sideways.asymptoteValue = 0.7f;
-            sideways.stiffness      = 2.2f;
+            sideways.extremumSlip   = 0.7f;
+            sideways.asymptoteSlip  = 1.1f;
+            sideways.extremumValue  = 1.1f;
+            sideways.asymptoteValue = 1.3f;
+            sideways.stiffness      = 2.1f;
             wheel.wheelCollider.sidewaysFriction = sideways;
         }
 
