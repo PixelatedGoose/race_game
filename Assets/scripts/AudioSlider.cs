@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class AudioSlider : MonoBehaviour
@@ -9,13 +10,13 @@ public class AudioSlider : MonoBehaviour
     {
         if (volumeSlider != null)
         {
+            //init
             volumeSlider.value = AudioListener.volume;
-            volumeSlider.onValueChanged.AddListener(SetVolume);
         }
     }
 
-    public void SetVolume(float value)
+    public void SetVolume()
     {
-        AudioListener.volume = value;
+        AudioListener.volume = volumeSlider.value;
     }
 }

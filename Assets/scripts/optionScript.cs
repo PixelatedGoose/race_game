@@ -21,10 +21,10 @@ public class optionScript : MonoBehaviour
             Debug.Log("pixel_value not found; set to default: " + DefaultPixelValue);
         }
 
-        if (!PlayerPrefs.HasKey("volume"))
+        if (!PlayerPrefs.HasKey("audio_value"))
         {
-            PlayerPrefs.SetFloat("volume", DefaultVolume);
-            Debug.Log("volume not found; set to default: " + DefaultVolume);
+            PlayerPrefs.SetFloat("audio_value", DefaultVolume);
+            Debug.Log("audio_value not found; set to default: " + DefaultVolume);
         }
     }
 
@@ -36,9 +36,10 @@ public class optionScript : MonoBehaviour
         }
 
         CacheUIElements();
-        InitializeSliderValues();
-        InitializeToggleValues();
         UpdateLabels();
+
+        //'audio_value' ei siis oo olemassa, vaan se on 'volume'... mielenkiintosta
+        Debug.Log(PlayerPrefs.GetFloat("audio_value"));
     }
 
     private void CacheUIElements()
@@ -48,23 +49,25 @@ public class optionScript : MonoBehaviour
         pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
     }
 
-    private void InitializeSliderValues()
+    public void InitializeSliderValues()
     {
         foreach (var slider in sliders)
         {
             if (PlayerPrefs.HasKey(slider.Key + "_value"))
             {
+                Debug.Log(PlayerPrefs.GetFloat(slider.Key + "_value"));
                 slider.Value.value = PlayerPrefs.GetFloat(slider.Key + "_value");
             }
         }
     }
     
-    private void InitializeToggleValues()
+    public void InitializeToggleValues()
     {
         foreach (var toggle in toggles)
         {
             if (PlayerPrefs.HasKey(toggle.Key + "_value"))
             {
+                Debug.Log(PlayerPrefs.GetFloat(toggle.Key + "_value"));
                 toggle.Value.isOn = PlayerPrefs.GetInt(toggle.Key + "_value") == 1;
             }
         }
@@ -97,6 +100,7 @@ public class optionScript : MonoBehaviour
             }
             UpdateLabels();
             PlayerPrefs.Save();
+            Debug.Log($"saved: {sliderName}, with value of {slider.value}");
         }
     }
 
