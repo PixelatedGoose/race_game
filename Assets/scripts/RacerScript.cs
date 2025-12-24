@@ -399,6 +399,15 @@ public class RacerScript : MonoBehaviour, IDataPersistence
                 })
                 .setEaseInOutCirc();
             }
+            GameObject leaderboard = GameObject.Find("leaderboardholder");
+            LeanTween.value(leaderboard, leaderboard.GetComponent<RectTransform>().anchoredPosition.y, 0.0f, 2f)
+            .setOnUpdate((float val) =>
+            {
+                leaderboard.GetComponent<RectTransform>().anchoredPosition
+                = new Vector2(leaderboard.GetComponent<RectTransform>().anchoredPosition.x, val);
+            })
+            .setEaseInOutCirc();
+
             returnButton.Select();
         }
     } 
