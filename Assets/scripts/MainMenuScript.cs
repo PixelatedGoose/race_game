@@ -69,10 +69,6 @@ public class MainMenu : MonoBehaviour
                 menuMusic.Play();
             });
         }
-
-        //hell nah
-        OptionScript.InitializeSliderValues();
-        OptionScript.InitializeToggleValues();
     }
 
     // changed: show the play-confirm UI instead of immediately loading

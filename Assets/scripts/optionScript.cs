@@ -55,7 +55,6 @@ public class optionScript : MonoBehaviour
         {
             if (PlayerPrefs.HasKey(slider.Key + "_value"))
             {
-                Debug.Log(PlayerPrefs.GetFloat(slider.Key + "_value"));
                 slider.Value.value = PlayerPrefs.GetFloat(slider.Key + "_value");
             }
         }
@@ -67,7 +66,6 @@ public class optionScript : MonoBehaviour
         {
             if (PlayerPrefs.HasKey(toggle.Key + "_value"))
             {
-                Debug.Log(PlayerPrefs.GetFloat(toggle.Key + "_value"));
                 toggle.Value.isOn = PlayerPrefs.GetInt(toggle.Key + "_value") == 1;
             }
         }
@@ -100,8 +98,8 @@ public class optionScript : MonoBehaviour
             }
             UpdateLabels();
             PlayerPrefs.Save();
-            Debug.Log($"saved: {sliderName}, with value of {slider.value}");
         }
+        Debug.Log($"saved: {sliderName}, with value of {slider.value}");
     }
 
     private void UpdateLabels()
