@@ -979,8 +979,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5417276863330404371}
   - component: {fileID: 3491762022365506067}
-  - component: {fileID: 2060991357935706088}
   - component: {fileID: 8600956616470010803}
+  - component: {fileID: 1217313124927105348}
   m_Layer: 0
   m_Name: aicar
   m_TagString: TrailerTarget
@@ -1038,22 +1038,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2060991357935706088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5418244439486811708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf77673f73d573c489fdc8dfb2a2c314, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointLight: {fileID: 3371394255748310501}
-  right: {fileID: 7606487385863759937}
-  left: {fileID: 5079768978144600480}
-  duration: 3
 --- !u!114 &8600956616470010803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1066,7 +1050,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b3f1c5f0941fa43ba555320de64573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BetterNewAiCarController
-  path: {fileID: 0}
   waypointThreshold: 10
   bezierCurveResolution: 10
   angleThreshold: 35
@@ -1109,7 +1092,23 @@ MonoBehaviour:
     axel: 0
   carRb: {fileID: 3491762022365506067}
   playerCar: {fileID: 0}
-  aiManager: {fileID: 0}
+  aiCarManager: {fileID: 0}
+--- !u!114 &1217313124927105348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5418244439486811708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bfe7bf0717e3094096be35665d584e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColorChangerAI
+  pointLight: {fileID: 3371394255748310501}
+  right: {fileID: 5079768978144600480}
+  left: {fileID: 7606487385863759937}
+  duration: 3
 --- !u!1 &5644659112388404549
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,20 +3,23 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel;
+using UnityEngine.UI;
 
 public class LeaderBoard : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI[] positionTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] racerNameTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] timeTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] scoreTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] mapTexts = new TextMeshProUGUI[5];
+    [SerializeField] private TextMeshProUGUI[] carTexts = new TextMeshProUGUI[5];
 
     [Header("Settings")]
     [SerializeField] private float updateInterval = 7f;
     [SerializeField] private bool showMapColumn = true;
     [SerializeField] private bool showScoreColumn = true;
+    [SerializeField] private bool loadCar = false;
 
     private RaceResultHandler resultHandler;
     private Coroutine updateCoroutine;
@@ -26,6 +29,14 @@ public class LeaderBoard : MonoBehaviour
         resultHandler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
         UpdateLeaderboard();
         updateCoroutine = StartCoroutine(UpdateLeaderboardRoutine());
+
+        if (loadCar)
+        {
+            foreach (TextMeshProUGUI text in carTexts)
+            {
+                text.gameObject.SetActive(true);
+            }
+        }
     }
 
     void OnDestroy()
@@ -75,11 +86,6 @@ public class LeaderBoard : MonoBehaviour
 
     private void DisplayResult(int index, RaceResultData result)
     {
-        if (positionTexts[index] != null)
-        {
-            positionTexts[index].text = GetPositionSuffix(index + 1);
-        }
-
         if (racerNameTexts[index] != null)
         {
             racerNameTexts[index].text = result.racerName;
@@ -99,13 +105,15 @@ public class LeaderBoard : MonoBehaviour
         {
             mapTexts[index].text = result.map;
         }
+
+        if (loadCar)
+        {
+            carTexts[index].text = result.carName;
+        }
     }
 
     private void ClearSlot(int index)
     {
-        if (positionTexts[index] != null)
-            positionTexts[index].text = "";
-
         if (racerNameTexts[index] != null)
             racerNameTexts[index].text = "---";
 
@@ -124,17 +132,6 @@ public class LeaderBoard : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             ClearSlot(i);
-        }
-    }
-
-    private string GetPositionSuffix(int position)
-    {
-        switch (position)
-        {
-            case 1: return "1st";
-            case 2: return "2nd";
-            case 3: return "3rd";
-            default: return position + "th";
         }
     }
 }
