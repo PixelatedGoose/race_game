@@ -7,7 +7,6 @@ using System.Linq;
 public class LeaderBoard : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI[] positionTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] racerNameTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] timeTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] scoreTexts = new TextMeshProUGUI[5];
@@ -75,11 +74,6 @@ public class LeaderBoard : MonoBehaviour
 
     private void DisplayResult(int index, RaceResultData result)
     {
-        if (positionTexts[index] != null)
-        {
-            positionTexts[index].text = GetPositionSuffix(index + 1);
-        }
-
         if (racerNameTexts[index] != null)
         {
             racerNameTexts[index].text = result.racerName;
@@ -103,9 +97,6 @@ public class LeaderBoard : MonoBehaviour
 
     private void ClearSlot(int index)
     {
-        if (positionTexts[index] != null)
-            positionTexts[index].text = "";
-
         if (racerNameTexts[index] != null)
             racerNameTexts[index].text = "---";
 
