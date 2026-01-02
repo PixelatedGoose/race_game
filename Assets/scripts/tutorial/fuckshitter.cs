@@ -22,8 +22,6 @@ public class fuckshitter : MonoBehaviour
         Controls = new CarInputActions();
         Controls.Enable();
 
-        // Subscribe to both started and performed so we catch the input regardless of interaction phase.
-        Controls.CarControls.Drift.started += StartDriftTrack;
         Controls.CarControls.Drift.performed += StartDriftTrack;
         Controls.CarControls.ui_advance.performed += CheckInstructionConditions;
 
@@ -51,7 +49,6 @@ public class fuckshitter : MonoBehaviour
         if (Controls != null)
         {
             Controls.Disable();
-            Controls.CarControls.Drift.started -= StartDriftTrack;
             Controls.CarControls.Drift.performed -= StartDriftTrack;
             Controls.CarControls.ui_advance.performed -= CheckInstructionConditions;
         }
@@ -177,18 +174,15 @@ public class fuckshitter : MonoBehaviour
         }
     }
 
-    //tää näyttää iha vitun vakavalta ja mun pitää kattoa tälle joku parempi tapa
     void StartDriftTrack(InputAction.CallbackContext context)
     {
-        musicControlTutorial.EnableDriftFunctions();
-        // Unsubscribe both handlers so we don't run multiple times. shut up copilot
-        Controls.CarControls.Drift.started -= StartDriftTrack;
-        Controls.CarControls.Drift.performed -= StartDriftTrack;
+        Debug.Log("FUCK YOU");
+        if (!carController.canDrift) return;
 
-        musicControlTutorial.mainTrack.volume = 0f;
-        musicControlTutorial.StopNonIntroTracks();
-        musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_1main");
-        musicControlTutorial.StartNonIntroTracks();
+        Debug.Log("actually i'll take that back");
+        musicControlTutorial.EnableDriftFunctions();
+        Controls.CarControls.Drift.performed -= StartDriftTrack;
+        musicControlTutorial.BeginDriftSection();
         //pitää synkronisoida, että se fade ei kuulosta paskalta
     }
 }

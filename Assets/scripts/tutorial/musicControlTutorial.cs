@@ -75,7 +75,7 @@ public class musicControlTutorial : MonoBehaviour
 
     void TurboCall(InputAction.CallbackContext context)
     {
-        if (variants.Count < 3) //|| GameManager.instance.turbeActive)
+        if (variants.Count < 3) //koska näit voi olla ainoastaa kolme kun voi käyttää turboa
             return;
 
         CancelTweens();
@@ -87,7 +87,7 @@ public class musicControlTutorial : MonoBehaviour
     }
     void TurboCanceled(InputAction.CallbackContext context)
     {
-        if (variants.Count < 3) //!GameManager.instance.turbeActive)
+        if (variants.Count < 3)
             return;
 
         if (GameManager.instance.isAddingPoints)
@@ -259,7 +259,8 @@ public class musicControlTutorial : MonoBehaviour
         TrackedTween_Start(mainTrack.volume, 0.28f, 0.6f, val => mainTrack.volume = val);
         TrackedTween_Start(previousMain.volume, 0.0f, 0.6f, val => previousMain.volume = val);
 
-        //the worst
+        //TODO: rewrite tälle jotta tätä PASKAA ei tarvita.
+        //liian monimutkanen, varsinki verrattuna nykyseen musiikkisysteemii
         if (driftTrack != null && carController.isDrifting)
             TrackedTween_Start(driftTrack.volume, 0.28f, 0.6f, val => driftTrack.volume = val);
         if (previousDrift != null)
@@ -309,6 +310,15 @@ public class musicControlTutorial : MonoBehaviour
 
         tweenIds.Add(tweenId);
         return tweenId;
+    }
+
+    //jotta fuckshitter.cs ei callaa tätä scriptii 5 kertaa
+    public void BeginDriftSection()
+    {
+        mainTrack.volume = 0f;
+        StopNonIntroTracks();
+        MusicSections("6_FINAL_TUTORIAL_1main");
+        StartNonIntroTracks();
     }
 
     public IEnumerator End()

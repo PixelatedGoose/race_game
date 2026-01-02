@@ -27,7 +27,7 @@ namespace Unity.Splines.Examples
                 foreach (var width in m_Widths)
                 {
                     if (width.DefaultValue == 0)
-                        width.DefaultValue = 1f;
+                        width.DefaultValue = 8f;
                 }
 
                 return m_Widths;
@@ -168,7 +168,7 @@ namespace Unity.Splines.Examples
 #if  UNITY_EDITOR
                     Undo.RecordObject(this, "Modifying Widths SplineData");
 #endif
-                    m_Widths.Add(new SplineData<float>() { DefaultValue = 1f });
+                    m_Widths.Add(new SplineData<float>() { DefaultValue = 8f });
                 }
             }
 

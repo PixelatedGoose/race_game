@@ -39,7 +39,7 @@
         "Nice job! Hopefully you did alright.",
         "If you did well, you can notice that you accumulated some score from it.",
         "Your time and score determine your rank, given at the end of an map.",
-        "If you got a good time, it'll be saved to the leaderboard.",
+        "If you got a good time, it'll be placed the leaderboard.",
         "You're gonna see that after clearing a race.",
         "Now it's finally time to talk about turbo."
     ],
@@ -97,7 +97,7 @@
         "Nice job! Hopefully you did alright.",
         "If you did well, you can notice that you accumulated some score from it.",
         "Your time and score determine your rank, given at the end of an map.",
-        "If you got a good time, it'll be saved to the leaderboard.",
+        "If you got a good time, it'll be placed on the leaderboard.",
         "You're gonna see that after clearing a race.",
         "Now it's finally time to talk about turbo."
     ],
