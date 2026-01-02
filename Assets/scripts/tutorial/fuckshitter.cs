@@ -35,13 +35,14 @@ public class fuckshitter : MonoBehaviour
         carController = FindAnyObjectByType<CarController>();
 
         //oh good heavens
+        //tälle paskalle on VARMASTI parempi tapa
         ui0 = GameObject.Find("UIcanvas/uiShowcase/ui0").GetComponent<RawImage>();
         ui1 = GameObject.Find("UIcanvas/uiShowcase/ui1").GetComponent<RawImage>(); //speedometer
         ui2 = GameObject.Find("UIcanvas/uiShowcase/ui2").GetComponent<RawImage>(); //turbe meter
         ui3 = GameObject.Find("UIcanvas/uiShowcase/ui3").GetComponent<RawImage>(); //score
         ui4 = GameObject.Find("UIcanvas/uiShowcase/ui4").GetComponent<RawImage>(); //time
         ui5 = GameObject.Find("UIcanvas/uiShowcase/ui5").GetComponent<RawImage>(); //laps
-
+        
         foreach (var ui in new[] { ui0, ui1, ui2, ui3, ui4, ui5 }) ui.enabled = false;
     }
 
@@ -93,6 +94,11 @@ public class fuckshitter : MonoBehaviour
         {
             switch (instructionHandler.index)
             {
+                //huomio itelleni: KORJAA TÄMÄ VITUN SYSTEEMI PAREMMAKSI
+                //esim näin:
+                //ettii 2 ui elementtiä, seuraavan ja edellisen.
+                //jos löytää seuraavan, laittaa sen näkyviin
+                //jos löytää edellisen, laittaa sen poissa näkyvistä
                 case 5:
                     ui0.enabled = true;
                     return;
@@ -171,6 +177,7 @@ public class fuckshitter : MonoBehaviour
         }
     }
 
+    //tää näyttää iha vitun vakavalta ja mun pitää kattoa tälle joku parempi tapa
     void StartDriftTrack(InputAction.CallbackContext context)
     {
         musicControlTutorial.EnableDriftFunctions();
