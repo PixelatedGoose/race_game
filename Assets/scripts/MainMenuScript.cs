@@ -69,11 +69,6 @@ public class MainMenu : MonoBehaviour
                 menuMusic.Play();
             });
         }
-
-        //koska tää tapahtuu aina ennen optionScriptin Start() funktiota.
-        OptionScript.CacheUIElements();
-        OptionScript.InitializeSliderValues();
-        OptionScript.InitializeToggleValues();
     }
 
     // changed: show the play-confirm UI instead of immediately loading

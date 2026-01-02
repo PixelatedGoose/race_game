@@ -35,6 +35,10 @@ public class optionScript : MonoBehaviour
 
     void Start()
     {
+        CacheUIElements();
+        InitializeSliderValues();
+        InitializeToggleValues();
+
         foreach (var colorChanger in FindObjectsByType<ColorChanger>(FindObjectsSortMode.None))
         {
             colorChanger.LightsState(3, true);
