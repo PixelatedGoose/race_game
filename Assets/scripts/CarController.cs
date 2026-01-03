@@ -97,7 +97,7 @@ public class CarController : MonoBehaviour
             canDrift = true;
             canUseTurbo = true;
         }
-        AdjustTurboForEachCar(carsParent: GameObject.Find("cars"));
+        BoostsForEachCar(carsParent: GameObject.Find("cars"));
 
         racerScript = FindAnyObjectByType<RacerScript>();
 
@@ -621,7 +621,7 @@ public class CarController : MonoBehaviour
     }
 
 
-    void AdjustTurboForEachCar(GameObject carsParent)
+    void BoostsForEachCar(GameObject carsParent)
     {
         int childCount = carsParent.transform.childCount;
         for (int i = 0; i < childCount; i++)
@@ -632,15 +632,22 @@ public class CarController : MonoBehaviour
                 string carName = car.name;
                 switch (carName)
                 {
+                    //blue car  
                     case "REALCAR":
                         turbepush = 15.0f;
                         break;
+                    //gray car
                     case "REALCAR_x":
+                        turbeMax = 75.0f;
+                        turbeRegen = 25.0f;
                         turbepush = 10.0f;
                         break;
+                    //purple car
                     case "REALCAR_y":
                         turbepush = 7.0f;
+                        ScoreManager.instance.SetScoreMultiplier(2.0f);
                         break;
+                    //da Lada
                     case "Lada":
                         turbepush = 50.0f;
                         break;
