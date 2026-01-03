@@ -34,7 +34,7 @@ public class Credits : MonoBehaviour
                 "ThatOneGuy\nCOMPOSER, PROGRAMMER\nall music and sound design, tutorial",
                 "Leobold\nPROGRAMMER\ncertain menus, racing mechanics",
                 "lamelemon\nPROGRAMMER\nrefactoring scripts, bug fixing",
-                "rojp\nUNPAID INTERN\nother help, car textures",
+                "rojp\nDESIGNER\nother help, car textures",
             };
         }
         whatHeDo = new string[]
