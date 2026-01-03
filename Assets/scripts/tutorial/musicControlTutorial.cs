@@ -27,6 +27,7 @@ public class musicControlTutorial : MonoBehaviour
         Controls.Enable();
 
         carController = FindAnyObjectByType<CarController>();
+        Controls.CarControls.pausemenu.performed += PauseMenuCheck;
     }
     public void EnableDriftFunctions()
     {
@@ -271,19 +272,21 @@ public class musicControlTutorial : MonoBehaviour
             TrackedTween_Start(previousTurbo.volume, 0.0f, 0.6f, val => previousTurbo.volume = val);
     }
 
+    
 
-
-    void Update()
+    void PauseMenuCheck(InputAction.CallbackContext context)
     {
         if (GameManager.instance.isPaused == true)
         {
+            Debug.Log("yes");
             foreach (AudioSource musicTrack in musicListSources)
             {
                 musicTrack.Pause();
             }
         }
-        else if (GameManager.instance.isPaused == false && mainTrack.isPlaying == false)
+        else if (GameManager.instance.isPaused == false)
         {
+            Debug.Log("no");
             foreach (AudioSource musicTrack in musicListSources)
             {
                 musicTrack.UnPause();
@@ -319,11 +322,5 @@ public class musicControlTutorial : MonoBehaviour
         StopNonIntroTracks();
         MusicSections("6_FINAL_TUTORIAL_1main");
         StartNonIntroTracks();
-    }
-
-    public IEnumerator End()
-    {
-        SceneManager.LoadSceneAsync(0);
-        yield return null;
     }
 }
