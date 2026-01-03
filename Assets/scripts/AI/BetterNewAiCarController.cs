@@ -135,30 +135,30 @@ public class BetterNewAiCarController : MonoBehaviour
         }
 
         // Set new waypoint if close enough to current
-        if (Vector3.Distance(transform.position, aiCarManager.BezierPoints[currentWaypointIndex]) < waypointThreshold)
+        if (Vector3.Distance(transform.position, aiCarManager.waypoints[currentWaypointIndex].position) < waypointThreshold)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.BezierPoints.Count;
+            currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.waypoints.Length;
         }
 
         float steerAngle = Vector3.Angle(
                     transform.forward, 
-                    aiCarManager.BezierPoints[currentWaypointIndex] - transform.position
+                    aiCarManager.waypoints[currentWaypointIndex].position - transform.position
         );
         
-        transform.rotation = Quaternion.Lerp(
-            transform.rotation,
-            Quaternion.LookRotation(aiCarManager.BezierPoints[currentWaypointIndex] - transform.position),
-            STEERING_LERP
-        );
-
         foreach (CarController.Wheel wheel in frontWheels)
         {
             wheel.wheelCollider.steerAngle = Mathf.Lerp(
                 wheel.wheelCollider.steerAngle, 
-                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, aiCarManager.BezierPoints[currentWaypointIndex] - transform.position).y),
-                STEERING_LERP
+                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, aiCarManager.waypoints[currentWaypointIndex].position - transform.position).y),
+                STEERING_LERP * Time.fixedDeltaTime / 2
             );
         }
+
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation,
+            Quaternion.LookRotation(aiCarManager.waypoints[currentWaypointIndex].position - transform.position),
+            STEERING_LERP * Time.fixedDeltaTime
+        );
 
         ApplyDriveInputs();
     }
