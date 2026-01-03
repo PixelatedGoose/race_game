@@ -63,6 +63,7 @@ public class LeaderBoard : MonoBehaviour
         if (collection == null || collection.results.Count == 0)
         {
             ClearLeaderboard();
+            Debug.LogWarning("leaderboard failed to load data, or no race results exist!");
             return;
         }
 

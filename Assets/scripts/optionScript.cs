@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class optionScript : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class optionScript : MonoBehaviour
     private const float PixelMultiplier = 64f;
     private const float DefaultVolume = 0.6f;
 
+    [SerializeField] private Toggle optionTestRef;
+    [SerializeField] private Slider pixelRef, audioRef;
+    [SerializeField] private Text LabelPARef;
+
     void OnEnable()
     {
         if (!PlayerPrefs.HasKey("pixel_value"))
@@ -21,58 +26,65 @@ public class optionScript : MonoBehaviour
             Debug.Log("pixel_value not found; set to default: " + DefaultPixelValue);
         }
 
-        if (!PlayerPrefs.HasKey("volume"))
+        if (!PlayerPrefs.HasKey("audio_value"))
         {
-            PlayerPrefs.SetFloat("volume", DefaultVolume);
-            Debug.Log("volume not found; set to default: " + DefaultVolume);
+            PlayerPrefs.SetFloat("audio_value", DefaultVolume);
+            Debug.Log("audio_value not found; set to default: " + DefaultVolume);
         }
     }
 
     void Start()
     {
+        CacheUIElements();
+        InitializeSliderValues();
+        InitializeToggleValues();
+
         foreach (var colorChanger in FindObjectsByType<ColorChanger>(FindObjectsSortMode.None))
         {
             colorChanger.LightsState(3, true);
         }
 
-        CacheUIElements();
-        InitializeSliderValues();
-        InitializeToggleValues();
-        UpdateLabels();
+        //vaikka meillä ei pitäs tehä näin...
+        UpdateLabels(PlayerPrefs.GetFloat("pixel_value"));
     }
 
-    private void CacheUIElements()
+    public void CacheUIElements()
     {
-        toggles["optionTest"] = GameObject.Find("optionTest").GetComponent<Toggle>();
-        sliders["pixel"] = GameObject.Find("pixel").GetComponent<Slider>();
-        pixelCountLabel = GameObject.Find("LabelPA").GetComponent<Text>();
+        toggles["optionTest"] = optionTestRef;
+        sliders["pixel"] = pixelRef;
+        sliders["audio"] = audioRef;
+        pixelCountLabel = LabelPARef;
     }
 
-    private void InitializeSliderValues()
+    public void InitializeSliderValues()
     {
-        foreach (var slider in sliders)
+        foreach (var entry in sliders)
         {
-            if (PlayerPrefs.HasKey(slider.Key + "_value"))
+            //key on pelkkä nimi, value on viittaus ite objektiin
+            //mahollisesti vois tehä rewriten dictionaryjen poistamista varten
+            if (PlayerPrefs.HasKey(entry.Key + "_value"))
             {
-                slider.Value.value = PlayerPrefs.GetFloat(slider.Key + "_value");
+                entry.Value.value = PlayerPrefs.GetFloat(entry.Key + "_value");
+                Debug.Log($"slider {entry.Key} init; value: {entry.Value.value}");
             }
         }
     }
     
-    private void InitializeToggleValues()
+    public void InitializeToggleValues()
     {
-        foreach (var toggle in toggles)
+        foreach (var entry in toggles)
         {
-            if (PlayerPrefs.HasKey(toggle.Key + "_value"))
+            if (PlayerPrefs.HasKey(entry.Key + "_value"))
             {
-                toggle.Value.isOn = PlayerPrefs.GetInt(toggle.Key + "_value") == 1;
+                entry.Value.isOn = PlayerPrefs.GetInt(entry.Key + "_value") == 1;
+                Debug.Log($"toggle {entry.Key} init; value: {entry.Value.isOn}");
             }
         }
     }
 
     public void UpdateTogglePreference(string toggleName)
     {
-        if (toggles.TryGetValue(toggleName, out var toggle))
+        if (toggles.TryGetValue(toggleName, out Toggle toggle))
         {
             PlayerPrefs.SetInt(toggleName + "_value", toggle.isOn ? 1 : 0);
             if (toggleName == "optionTest")
@@ -82,26 +94,33 @@ public class optionScript : MonoBehaviour
                     colorChanger.LightsState(3, true);
                 }
             }
-            PlayerPrefs.Save();
+            Debug.Log($"changed: {toggleName}, with value of {toggle.isOn}");
         }
     }
 
     public void UpdateSliderPreference(string sliderName)
     {
-        if (sliders.TryGetValue(sliderName, out var slider))
+        if (sliders.TryGetValue(sliderName, out Slider slider))
         {
             PlayerPrefs.SetFloat(sliderName + "_value", slider.value);
             if (sliderName == "pixel")
             {
                 pixelCount.SetFloat("_pixelcount", slider.value * PixelMultiplier);
+                UpdateLabels(slider.value);
             }
-            UpdateLabels();
-            PlayerPrefs.Save();
+            Debug.Log($"changed: {sliderName}, with value of {slider.value}");
         }
     }
 
-    private void UpdateLabels()
+    private void UpdateLabels(float pixelvalue)
     {
-        pixelCountLabel.text = (PlayerPrefs.GetFloat("pixel_value") * PixelMultiplier).ToString();
+        pixelCountLabel.text = (pixelvalue * PixelMultiplier).ToString();
+    }
+
+    public void SavePlayerPrefs()
+    {
+        //yep
+        PlayerPrefs.Save();
+        Debug.Log("settings saved!");
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class loadArea : MonoBehaviour
 {
@@ -56,19 +57,6 @@ public class loadArea : MonoBehaviour
         Debug.Log("Hello! My name is Gustavo, but you can call me Gus");
         switch (prefix)
         {
-            //eri animaatiot
-            case "01":
-                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
-                StartCoroutine(FadeDeath(1.0f));
-                break;
-            case "02":
-                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 2);
-                StartCoroutine(FadeDeath(1.0f));
-                break;
-            case "03":
-                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 3);
-                StartCoroutine(FadeDeath(1.0f));
-                break;
             case "11":
                 musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
                 musicControlTutorial.StartNonIntroTracks();
@@ -100,7 +88,8 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "26":
+            //drift
+            case "DD":
                 CarController carController = FindAnyObjectByType<CarController>();
                 carController.canDrift = true;
                 break;
@@ -116,7 +105,8 @@ public class loadArea : MonoBehaviour
                         instructionHandler.index));
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "18":
+            //turbe
+            case "TT":
                 CarController carController3 = FindAnyObjectByType<CarController>();
                 carController3.canUseTurbo = true;
 
@@ -133,12 +123,7 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "50":
-                //AIKA VITTU LOPPUU JA KELLO ON 2 yöllä EI SAATANA EI PERKELE EI VITTEJFSFKJGERGDREDOK
-                instructionHandler.ShowInstruction("You've passed a checkpoint. They change where you respawn upon reset (press R [keyboard] / D-Pad Left [controller] to test).");
-                StartCoroutine(FadeDeath(1.0f));
-                break;
-            case "51":
+            case "CU":
                 CameraFollow cameraFollowRead = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
                 LeanTween.value(cameraFollowRead.rotOffset.y, 3.0f, 1f)
                 .setOnUpdate((float val) =>
@@ -149,7 +134,7 @@ public class loadArea : MonoBehaviour
                 })
                 .setEaseInOutSine();
                 break;
-            case "52":
+            case "CD":
                 CameraFollow cameraFollow3 = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
                 LeanTween.value(cameraFollow3.rotOffset.y, 1.7f, 1f)
                 .setOnUpdate((float val) =>
@@ -161,7 +146,11 @@ public class loadArea : MonoBehaviour
                 .setEaseInOutSine();
                 break;
             case "53":
-                StartCoroutine(musicControlTutorial.End());
+                //alkuperäsesti oli musicControlTutorialissa (mitä vittua)
+                SceneManager.LoadSceneAsync(0);
+                break;
+            case "99":
+                Debug.Log("respawn (ei implementattu viel)");
                 break;
             default:
                 Debug.LogError($"prefix {prefix} not defined");

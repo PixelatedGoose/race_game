@@ -27,6 +27,7 @@ public class musicControlTutorial : MonoBehaviour
         Controls.Enable();
 
         carController = FindAnyObjectByType<CarController>();
+        Controls.CarControls.pausemenu.performed += PauseMenuCheck;
     }
     public void EnableDriftFunctions()
     {
@@ -75,7 +76,7 @@ public class musicControlTutorial : MonoBehaviour
 
     void TurboCall(InputAction.CallbackContext context)
     {
-        if (variants.Count < 3) //|| GameManager.instance.turbeActive)
+        if (variants.Count < 3) //koska näit voi olla ainoastaa kolme kun voi käyttää turboa
             return;
 
         CancelTweens();
@@ -87,7 +88,7 @@ public class musicControlTutorial : MonoBehaviour
     }
     void TurboCanceled(InputAction.CallbackContext context)
     {
-        if (variants.Count < 3) //!GameManager.instance.turbeActive)
+        if (variants.Count < 3)
             return;
 
         if (GameManager.instance.isAddingPoints)
@@ -259,7 +260,8 @@ public class musicControlTutorial : MonoBehaviour
         TrackedTween_Start(mainTrack.volume, 0.28f, 0.6f, val => mainTrack.volume = val);
         TrackedTween_Start(previousMain.volume, 0.0f, 0.6f, val => previousMain.volume = val);
 
-        //the worst
+        //TODO: rewrite tälle jotta tätä PASKAA ei tarvita.
+        //liian monimutkanen, varsinki verrattuna nykyseen musiikkisysteemii
         if (driftTrack != null && carController.isDrifting)
             TrackedTween_Start(driftTrack.volume, 0.28f, 0.6f, val => driftTrack.volume = val);
         if (previousDrift != null)
@@ -270,19 +272,21 @@ public class musicControlTutorial : MonoBehaviour
             TrackedTween_Start(previousTurbo.volume, 0.0f, 0.6f, val => previousTurbo.volume = val);
     }
 
+    
 
-
-    void Update()
+    void PauseMenuCheck(InputAction.CallbackContext context)
     {
         if (GameManager.instance.isPaused == true)
         {
+            Debug.Log("yes");
             foreach (AudioSource musicTrack in musicListSources)
             {
                 musicTrack.Pause();
             }
         }
-        else if (GameManager.instance.isPaused == false && mainTrack.isPlaying == false)
+        else if (GameManager.instance.isPaused == false)
         {
+            Debug.Log("no");
             foreach (AudioSource musicTrack in musicListSources)
             {
                 musicTrack.UnPause();
@@ -311,9 +315,12 @@ public class musicControlTutorial : MonoBehaviour
         return tweenId;
     }
 
-    public IEnumerator End()
+    //jotta fuckshitter.cs ei callaa tätä scriptii 5 kertaa
+    public void BeginDriftSection()
     {
-        SceneManager.LoadSceneAsync(0);
-        yield return null;
+        mainTrack.volume = 0f;
+        StopNonIntroTracks();
+        MusicSections("6_FINAL_TUTORIAL_1main");
+        StartNonIntroTracks();
     }
 }
