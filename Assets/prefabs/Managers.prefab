@@ -191,7 +191,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7cc521c740d20c4ea17ef4fa0625788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
-  scoreFloat: 0
+  basePointsPerSecond: 1.5
+  baseSpeedMultiplier: 1
+  maxForwardSpeedForBase: 40
+  peakSharpness: 120
+  sharpnessExponent: 0.75
+  timeScale: 2
+  minSharpnessForScoring: 3
+  minLateralSpeed: 0.5
+  minForwardSpeed: 1
+  driftMultiplierRate: 1.5
+  maxDriftMultiplier: 10
+  minDriftBonus: 300
+  midDriftBonus: 2000
+  maxDriftBonus: 7500
+  midTierThreshold: 0.4
+  grassMaxBonus: 350
+  bonusApplyDuration: 1
+  debugScoreBreakdown: 0
+  multCounter: {fileID: 0}
 --- !u!1 &8652714450798268608
 GameObject:
   m_ObjectHideFlags: 0
