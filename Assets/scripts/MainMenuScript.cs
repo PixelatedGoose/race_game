@@ -114,6 +114,22 @@ public class MainMenu : MonoBehaviour
         onHidePlayMenu?.Invoke();
     }
 
+    public void MainMenuMusic(bool active)
+    {
+        switch (active)
+        {
+            case true:
+                menuMusic.volume = 0.0f;
+                LeanTween.value(menuMusic.volume, 0.27f, 0.9f)
+                .setOnUpdate(val => menuMusic.volume = val);
+                break;
+            case false:
+                LeanTween.value(menuMusic.volume, 0.0f, 0.9f)
+                .setOnUpdate(val => menuMusic.volume = val);;
+                break;
+        }
+    }
+
     public void PlayTutorial()
     {
         SceneManager.LoadSceneAsync(5);

@@ -17,6 +17,7 @@ public class Credits : MonoBehaviour
     [Header("Specific Info Popup")]
     public string[] whatHeDo;
     [SerializeField] private Text popupInfo;
+    [SerializeField] private AudioSource creditsTrack;
 
     CarInputActions Controls;
 
@@ -75,6 +76,25 @@ public class Credits : MonoBehaviour
         if (index >= 0 && index < whatHeDo.Length)
         {
             popupInfo.text = whatHeDo[index];
+        }
+    }
+
+    public void CreditsMusic(bool active)
+    {
+        switch (active)
+        {
+            case true:
+                creditsTrack.volume = 0.0f;
+                creditsTrack.Stop();
+
+                creditsTrack.Play();
+                LeanTween.value(creditsTrack.volume, 0.27f, 0.9f)
+                .setOnUpdate(val => creditsTrack.volume = val);
+                break;
+            case false:
+                LeanTween.value(creditsTrack.volume, 0.0f, 0.9f)
+                .setOnUpdate(val => creditsTrack.volume = val);
+                break;
         }
     }
 }
