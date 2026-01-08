@@ -31,6 +31,11 @@ public class MainMenu : MonoBehaviour
             playConfirmPanel.SetActive(false);
 
         randomChance = Random.Range(1, 3334);
+
+        //hei nimeni on main menu ja tykkään vittuilla koodaajille
+        OptionScript.CacheUIElements();
+        OptionScript.InitializeSliderValues();
+        OptionScript.InitializeToggleValues();
     }
 
     void OnEnable()
@@ -112,6 +117,22 @@ public class MainMenu : MonoBehaviour
 
         // signal camera to move back to start
         onHidePlayMenu?.Invoke();
+    }
+
+    public void MainMenuMusic(bool active)
+    {
+        switch (active)
+        {
+            case true:
+                menuMusic.volume = 0.0f;
+                LeanTween.value(menuMusic.volume, 0.27f, 0.9f)
+                .setOnUpdate(val => menuMusic.volume = val);
+                break;
+            case false:
+                LeanTween.value(menuMusic.volume, 0.0f, 0.9f)
+                .setOnUpdate(val => menuMusic.volume = val);;
+                break;
+        }
     }
 
     public void PlayTutorial()
