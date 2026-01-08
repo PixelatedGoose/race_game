@@ -7,11 +7,8 @@ public class AudioSlider : MonoBehaviour
 
     void Start()
     {
-        if (volumeSlider != null)
-        {
-            //init
-            volumeSlider.value = AudioListener.volume;
-        }
+        //init
+        volumeSlider.value = PlayerPrefs.GetFloat("audio_value");
     }
 
     public void SetVolume()

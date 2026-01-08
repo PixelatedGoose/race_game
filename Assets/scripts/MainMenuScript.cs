@@ -31,6 +31,11 @@ public class MainMenu : MonoBehaviour
             playConfirmPanel.SetActive(false);
 
         randomChance = Random.Range(1, 3334);
+
+        //hei nimeni on main menu ja tykkään vittuilla koodaajille
+        OptionScript.CacheUIElements();
+        OptionScript.InitializeSliderValues();
+        OptionScript.InitializeToggleValues();
     }
 
     void OnEnable()
