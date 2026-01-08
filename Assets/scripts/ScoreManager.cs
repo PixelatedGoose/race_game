@@ -90,6 +90,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         {
             int finalScore = GetScoreInt() + Mathf.FloorToInt(TimeStartPoint);
             data.scored += finalScore;
+            Debug.Log($"ScoreManager: Saved final score {finalScore} to GameData.");
         }       
     }
 
@@ -114,7 +115,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         float deltaTime = Time.deltaTime;
         Vector3 velocity = GetVelocity();
 
-        if (racerScript != null && racerScript.racestarted)
+        if (racerScript != null && racerScript.racestarted && !racerScript.raceFinished)
         {
             RaceTimer += deltaTime;
             UpdateTimePoints();
