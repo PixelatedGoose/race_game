@@ -47,7 +47,6 @@ public class musicControl : MonoBehaviour
     //kaikki tarpeelline on täs
     void DriftCall(InputAction.CallbackContext context)
     {
-        //condition ? true : false
         CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Drift;
         FadeTracks();
     }
