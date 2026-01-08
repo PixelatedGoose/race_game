@@ -15,10 +15,6 @@ public class Waitbeforestart : MonoBehaviour
     public AudioSource count3;
     public AudioSource countGo;
 
-    void OnEnable()
-    {
-        Time.timeScale = 0f;
-    }
     void Start()
     {
         s1 = GameObject.Find("s1");
@@ -26,6 +22,7 @@ public class Waitbeforestart : MonoBehaviour
         s3 = GameObject.Find("s3");
         go = GameObject.Find("go");
         
+        s3.SetActive(false);
         s2.SetActive(false);
         s1.SetActive(false);
         go.SetActive(false);
@@ -41,6 +38,7 @@ public class Waitbeforestart : MonoBehaviour
             countGo = GameObject.Find("countGo").GetComponent<AudioSource>();
 
             StartCoroutine(ShowS1AfterDelay());
+            Time.timeScale = 0f;
         }
         else
         {
@@ -71,6 +69,7 @@ public class Waitbeforestart : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.0f);
 
         // 3 - LEDs at 33%
+        s3.SetActive(true);
         LogitechLedController.SetNormalized(0.33f);
         count3.Play();
         yield return new WaitForSecondsRealtime(1.0f);
@@ -96,8 +95,8 @@ public class Waitbeforestart : MonoBehaviour
         Time.timeScale = 1f;
         racerScript.StartRace();
 
-        // Flash LEDs 3 times
-        StartCoroutine(FlashLeds(3, 0.1f));
+        // Flash LEDs leobold times
+        StartCoroutine(FlashLeds(8, 0.2f));
 
         LeanTween.alphaText(go.GetComponent<RectTransform>(), 0.0f, 2f).setEaseLinear();
         yield return new WaitForSecondsRealtime(2f);
