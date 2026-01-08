@@ -64,6 +64,9 @@ public class Waitbeforestart : MonoBehaviour
 
     IEnumerator ShowS1AfterDelay()
     {
+        //odota hetki että puut kääntyy
+        yield return new WaitForSecondsRealtime(1.0f);
+
         Time.timeScale = 0f;
 
         // 3 - LEDs at 33%
