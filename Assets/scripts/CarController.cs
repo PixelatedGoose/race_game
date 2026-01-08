@@ -57,7 +57,7 @@ public class CarController : MonoBehaviour
     public bool isTurnedDown = false, isDrifting;
     private float perusMaxAccerelation, perusTargetTorque, throttlemodifier, smoothedMaxAcceleration, modifiedMaxAcceleration;
     //fuck this shit im doing this controller keyboard the fucking lazy/shit way!!!!!!!!!!
-    [SerializeField] private PlayerInput playerInput;
+    private PlayerInput playerInput;
     private string currentControlScheme = "Keyboard";
 
 
@@ -270,17 +270,6 @@ public class CarController : MonoBehaviour
             }
         }
 
-
-    // private bool IsOnSteepSlope()
-    // {
-    //     if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1.5f))
-    //     {
-    //         float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-    //         return slopeAngle > 30.0f;
-    //     }
-    //     return false;
-    // }
-
     void GetInputs()
     {
         // Read steering from Move action (for keyboard/gamepad)
@@ -326,7 +315,6 @@ public class CarController : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-            // car is "on grass" if ANY wheel is grounded AND on a grass collider
             if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
             {
                 return true;
@@ -399,6 +387,7 @@ public class CarController : MonoBehaviour
             }
         }
     }
+
     //kommentoin tämän pois koska jos meille tulee se mistä aarre puhu eli autot menee ylös ja alas tiellä niin tämähän estää sen
     // private void HandeSteepSlope()
     // {
@@ -408,6 +397,7 @@ public class CarController : MonoBehaviour
     //         carRb.linearVelocity = Vector3.ClampMagnitude(carRb.linearVelocity, maxspeed / 3.6f);
     //     }
     // }
+
     private void AdjustSuspension()
     {
         foreach (var wheel in wheels)
@@ -418,6 +408,7 @@ public class CarController : MonoBehaviour
             wheel.wheelCollider.suspensionSpring = suspensionSpring;
         }
     }
+
     private void AdjustForwardFrictrion()
     {
         foreach (var wheel in wheels)
@@ -427,7 +418,7 @@ public class CarController : MonoBehaviour
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteSlip = 1.0f;
             forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 5f;
+            forwardFriction.stiffness = 3.5f;
             wheel.wheelCollider.forwardFriction = forwardFriction;
         }
     }
@@ -519,8 +510,8 @@ public class CarController : MonoBehaviour
         float effectiveInput = GetSteeringInput();
         foreach (var wheel in wheels.Where(w => w.axel == Axel.Front))
         {
-                var _steerAngle = steerInput * turnSensitivty * 0.5f;
-                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);            
+            var _steerAngle = steerInput * turnSensitivty * 0.55f;
+            wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
 
@@ -584,7 +575,7 @@ public class CarController : MonoBehaviour
         activedrift = 0;
         isDrifting = false;
         maxAcceleration = perusMaxAccerelation;
-        carRb.angularDamping = 0.05f; // ADD THIS - restore normal rotation
+        carRb.angularDamping = 0.05f; 
 
         if (racerScript != null &&
             (racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f))
@@ -635,6 +626,7 @@ public class CarController : MonoBehaviour
                     //blue car  
                     case "REALCAR":
                         turbepush = 15.0f;
+                        //seriously what kind of boost are we going to give to this fucking car, drift related? turbe related? or score related? or fucking all of them? make that shit OP as fuck
                         break;
                     //gray car
                     case "REALCAR_x":
@@ -649,7 +641,8 @@ public class CarController : MonoBehaviour
                         break;
                     //da Lada
                     case "Lada":
-                        turbepush = 50.0f;
+                        turbeMax = 15.0f;
+                        turbepush = 1000.0f;
                         break;
                     default:
                         Debug.LogWarning($"Unknown car name: {carName}");
@@ -792,9 +785,6 @@ public class CarController : MonoBehaviour
 
         maxAcceleration = perusMaxAccerelation * 0.6f;
 
-        float speed = carRb.linearVelocity.magnitude * 3.6f;
-        float speedFactor = Mathf.Clamp(maxspeed / 100.0f, 0.5f, 2.0f);
-
         foreach (var wheel in wheels)
         {
             if (wheel.wheelCollider == null) continue;
@@ -886,7 +876,7 @@ public class CarController : MonoBehaviour
         
         // Dirt road only when on grass and moving
         if (IsOnGrassCached() && speed >= 10)
-            LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(20 * forceFeedbackMultiplier));
+            LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(12.5f * forceFeedbackMultiplier));
         else
             LogitechGSDK.LogiStopDirtRoadEffect(0);
     }
