@@ -64,9 +64,12 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     private int driftCount = 0;
 
-
     //all this for the purple car
     private float scoreMultiplier = 1.0f;
+
+    [SerializeField] private AudioSource driftMultLost;
+
+
 
     public void LoadData(GameData data)
     {
@@ -94,6 +97,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     {
         carController = FindFirstObjectByType<CarController>();
         racerScript = FindFirstObjectByType<RacerScript>();
+        multCounter = FindFirstObjectByType<MultCounter>();
         print(scoreMultiplier);
     }
 
@@ -371,15 +375,23 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     }
 
     public void SetOnGrass(bool grassContact)
-    {
-        if (isOnGrass == grassContact) return;
-        isOnGrass = grassContact;
+{
+    if (isOnGrass == grassContact) return;
+    isOnGrass = grassContact;
 
-        if (isOnGrass)
+    if (isOnGrass)
+    {
+        touchedGrassWhileDrifting = true;
+
+        // Print when grass causes an active drift's multiplier to be lost
+        if (isDriftingActive && driftCompoundMultiplier > 1.01f)
         {
-            touchedGrassWhileDrifting = true;
+            Debug.Log($"[ScoreManager] Drift multiplier reset by grass - peak mult: x{driftCompoundMultiplier:F2}, driftTime: {driftTime:F2}s");
+            multCounter.UpdateMultiplierText(1f);
+            driftMultLost.Play();
         }
     }
+}
 
     public int GetScoreInt()
     {
