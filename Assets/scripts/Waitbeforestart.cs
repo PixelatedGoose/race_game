@@ -15,6 +15,10 @@ public class Waitbeforestart : MonoBehaviour
     public AudioSource count3;
     public AudioSource countGo;
 
+    void OnEnable()
+    {
+        Time.timeScale = 0f;
+    }
     void Start()
     {
         s1 = GameObject.Find("s1");
@@ -64,7 +68,7 @@ public class Waitbeforestart : MonoBehaviour
 
     IEnumerator ShowS1AfterDelay()
     {
-        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(1.0f);
 
         // 3 - LEDs at 33%
         LogitechLedController.SetNormalized(0.33f);

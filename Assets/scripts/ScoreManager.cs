@@ -64,6 +64,11 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     private int driftCount = 0;
 
+    //Points - aika
+    private float TimeStartPoint = 5000f;
+    private float RaceTimer = 0f;
+    private const float PointsDecayTime = 300f; // nyt on 5min ennenkuin 0 aika pointtia
+
     //all this for the purple car
     private float scoreMultiplier = 1.0f;
 
@@ -83,8 +88,8 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     {
         if (data != null && racerScript.raceFinished == true) 
         {
-            data.scored += this.GetScoreInt();
-            print(data.scored);
+            int finalScore = GetScoreInt() + Mathf.FloorToInt(TimeStartPoint);
+            data.scored += finalScore;
         }       
     }
 
@@ -103,10 +108,17 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     void Update()
     {
+        //print(TimeStartPoint);
         if (!EnsureCarController()) return;
 
         float deltaTime = Time.deltaTime;
         Vector3 velocity = GetVelocity();
+
+        if (racerScript != null && racerScript.racestarted)
+        {
+            RaceTimer += deltaTime;
+            UpdateTimePoints();
+        }
 
         UpdateBaseScore(deltaTime, velocity);
         UpdateDriftState(deltaTime, velocity);
@@ -124,6 +136,11 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     Vector3 GetVelocity()
     {
         return (carController.carRb != null) ? carController.carRb.linearVelocity : Vector3.zero;
+    }
+
+    void UpdateTimePoints()
+    {
+        TimeStartPoint = Mathf.Max(0f, 5000f * (1f - RaceTimer / PointsDecayTime));
     }
 
     public void SetScoreMultiplier(float multiplier)
@@ -375,23 +392,23 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     }
 
     public void SetOnGrass(bool grassContact)
-{
-    if (isOnGrass == grassContact) return;
-    isOnGrass = grassContact;
-
-    if (isOnGrass)
     {
-        touchedGrassWhileDrifting = true;
+        if (isOnGrass == grassContact) return;
+        isOnGrass = grassContact;
 
-        // Print when grass causes an active drift's multiplier to be lost
-        if (isDriftingActive && driftCompoundMultiplier > 1.01f)
+        if (isOnGrass)
         {
-            Debug.Log($"[ScoreManager] Drift multiplier reset by grass - peak mult: x{driftCompoundMultiplier:F2}, driftTime: {driftTime:F2}s");
-            multCounter.UpdateMultiplierText(1f);
-            driftMultLost.Play();
+            touchedGrassWhileDrifting = true;
+
+            // Print when grass causes an active drift's multiplier to be lost
+            if (isDriftingActive && driftCompoundMultiplier > 1.01f)
+            {
+                Debug.Log($"[ScoreManager] Drift multiplier reset by grass - peak mult: x{driftCompoundMultiplier:F2}, driftTime: {driftTime:F2}s");
+                multCounter.UpdateMultiplierText(1f);
+                driftMultLost.Play();
+            }
         }
     }
-}
 
     public int GetScoreInt()
     {
