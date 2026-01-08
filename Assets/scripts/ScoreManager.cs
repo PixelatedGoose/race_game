@@ -64,6 +64,11 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     private int driftCount = 0;
 
+    //Points - aika
+    private float TimeStartPoint = 5000f;
+    private float RaceTimer = 0f;
+    private const float PointsDecayTime = 300f; // nyt on 5min ennenkuin 0 aika pointtia
+    private bool raceStarted = false;
 
     //all this for the purple car
     private float scoreMultiplier = 1.0f;
@@ -80,8 +85,8 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     {
         if (data != null && racerScript.raceFinished == true) 
         {
-            data.scored += this.GetScoreInt();
-            print(data.scored);
+            int finalScore = this.GetScoreInt() + Mathf.FloorToInt(TimeStartPoint);
+            data.scored += finalScore;
         }       
     }
 
@@ -99,10 +104,18 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     void Update()
     {
+        print(TimeStartPoint);
         if (!EnsureCarController()) return;
 
         float deltaTime = Time.deltaTime;
         Vector3 velocity = GetVelocity();
+
+        if (racerScript != null && !racerScript.raceFinished)
+        {
+            raceStarted = true;
+            RaceTimer += deltaTime;
+            UpdateTimePoints();
+        }
 
         UpdateBaseScore(deltaTime, velocity);
         UpdateDriftState(deltaTime, velocity);
@@ -120,6 +133,11 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     Vector3 GetVelocity()
     {
         return (carController.carRb != null) ? carController.carRb.linearVelocity : Vector3.zero;
+    }
+
+    void UpdateTimePoints()
+    {
+        TimeStartPoint = Mathf.Max(0f, 5000f * (1f - RaceTimer / PointsDecayTime));
     }
 
     public void SetScoreMultiplier(float multiplier)
