@@ -9,7 +9,6 @@ public class BetterNewAiCarController : MonoBehaviour
     // --- Constants ---
     private const float GROUND_RAY_LENGTH = 0.5f;
     private const float STEERING_DEAD_ZONE = 0.05f;
-    private const float STEERING_LERP = 0.6f;
     private const float NODE_GIZMO_RADIUS = 0.5f;
     private static readonly Vector3 DEFAULT_CENTER_OF_MASS = new(0, -0.0f, 0);
 
@@ -38,6 +37,8 @@ public class BetterNewAiCarController : MonoBehaviour
     [SerializeField] private float rightTurnRadius = 30.0f;
     [Tooltip("Current turn sensitivity.")]
     [SerializeField] private float turnSensitivity = 30.0f;
+    private float turnStrength = 2.5f;
+
     [SerializeField] private int lookAheadIndex = 5;
 
     // --- Physics ---
@@ -135,31 +136,24 @@ public class BetterNewAiCarController : MonoBehaviour
         }
 
         // Set new waypoint if close enough to current
-        if (Vector3.Distance(transform.position, aiCarManager.waypoints[currentWaypointIndex].position) < waypointThreshold)
+        if (Vector3.Distance(transform.position, aiCarManager.Waypoints[currentWaypointIndex]) < waypointThreshold)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.waypoints.Length;
-        }
-
-        float steerAngle = Vector3.Angle(
-                    transform.forward, 
-                    aiCarManager.waypoints[currentWaypointIndex].position - transform.position
-        );
-        
-        foreach (CarController.Wheel wheel in frontWheels)
-        {
-            wheel.wheelCollider.steerAngle = Mathf.Lerp(
-                wheel.wheelCollider.steerAngle, 
-                steerAngle * Mathf.Sign(Vector3.Cross(transform.forward, aiCarManager.waypoints[currentWaypointIndex].position - transform.position).y),
-                STEERING_LERP * Time.fixedDeltaTime / 2
-            );
+            currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.Waypoints.Count();
         }
 
         transform.rotation = Quaternion.Lerp(
             transform.rotation,
-            Quaternion.LookRotation(aiCarManager.waypoints[currentWaypointIndex].position - transform.position),
-            STEERING_LERP * Time.fixedDeltaTime
+            Quaternion.LookRotation(aiCarManager.Waypoints[currentWaypointIndex] - transform.position),
+            turnStrength * Time.fixedDeltaTime
         );
 
+        
+        foreach (CarController.Wheel wheel in frontWheels)
+        {
+            wheel.wheelCollider.steerAngle = transform.rotation.y;
+        }
+
+        
         ApplyDriveInputs();
     }
 
