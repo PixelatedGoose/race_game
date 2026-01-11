@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour
     public GameObject fullMenu;
     private AudioSource menuMusic;
     public VideoPlayer videoPlayer;
+    private int musictweenIDstart = -1;
+    private int musictweenIDend = -1;
 
     // new: assign in inspector (or the script will try to find "PlayPanel")
     [SerializeField] private GameObject playConfirmPanel;
@@ -121,16 +123,21 @@ public class MainMenu : MonoBehaviour
 
     public void MainMenuMusic(bool active)
     {
+        //jotta ei oo pelkästää truena tai falsena olemassa
         switch (active)
         {
             case true:
-                menuMusic.volume = 0.0f;
-                LeanTween.value(menuMusic.volume, 0.27f, 0.9f)
-                .setOnUpdate(val => menuMusic.volume = val);
+                if (musictweenIDend != -1)
+                    LeanTween.cancel(musictweenIDend);
+
+                musictweenIDstart = LeanTween.value(menuMusic.volume, 0.27f, 0.9f)
+                .setOnUpdate(val => menuMusic.volume = val).id;
                 break;
             case false:
-                LeanTween.value(menuMusic.volume, 0.0f, 0.9f)
-                .setOnUpdate(val => menuMusic.volume = val);;
+                if (musictweenIDstart != -1)
+                    LeanTween.cancel(musictweenIDstart);
+                musictweenIDend = LeanTween.value(menuMusic.volume, 0.0f, 0.9f)
+                .setOnUpdate(val => menuMusic.volume = val).id;
                 break;
         }
     }

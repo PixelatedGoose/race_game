@@ -19,6 +19,9 @@ public class Credits : MonoBehaviour
     [SerializeField] private Text popupInfo;
     [SerializeField] private AudioSource creditsTrack;
 
+    private int musictweenIDstart = -1;
+    private int musictweenIDend = -1;
+
     CarInputActions Controls;
 
     private void Awake()
@@ -84,16 +87,19 @@ public class Credits : MonoBehaviour
         switch (active)
         {
             case true:
-                creditsTrack.volume = 0.0f;
+                if (musictweenIDend != -1)
+                    LeanTween.cancel(musictweenIDend);
                 creditsTrack.Stop();
-
                 creditsTrack.Play();
-                LeanTween.value(creditsTrack.volume, 0.27f, 0.9f)
-                .setOnUpdate(val => creditsTrack.volume = val);
+
+                musictweenIDstart = LeanTween.value(creditsTrack.volume, 0.27f, 0.9f)
+                .setOnUpdate(val => creditsTrack.volume = val).id;
                 break;
             case false:
-                LeanTween.value(creditsTrack.volume, 0.0f, 0.9f)
-                .setOnUpdate(val => creditsTrack.volume = val);
+                if (musictweenIDstart != -1)
+                    LeanTween.cancel(musictweenIDstart);
+                musictweenIDend = LeanTween.value(creditsTrack.volume, 0.0f, 0.9f)
+                .setOnUpdate(val => creditsTrack.volume = val).id;
                 break;
         }
     }
