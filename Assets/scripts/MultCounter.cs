@@ -212,7 +212,6 @@ public class MultCounter : MonoBehaviour
                 {
                     displayImage.sprite = numberSprites[idleSpriteIndex];
                 }
-                
                 UpdateMultiplierText(1f); // Reset to x1.0
                 
                 Debug.Log("[MultCounter] Cooldown animation complete - back to idle");
@@ -229,8 +228,10 @@ public class MultCounter : MonoBehaviour
     }
 
     // NEW: Update the text with current multiplier
-    void UpdateMultiplierText(float multiplier)
+    public void UpdateMultiplierText(float multiplier)
     {
+        Debug.Log($"text was updated to {multiplier:F1}x");
+
         if (multiplierText == null) return;
         
         multiplierText.text = $"{multiplier:F1}x";
