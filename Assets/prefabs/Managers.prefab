@@ -156,7 +156,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1007106158067370152}
-  - component: {fileID: 2280393662118501300}
+  - component: {fileID: 9163835472619825611}
   m_Layer: 0
   m_Name: ScoreManager
   m_TagString: Untagged
@@ -179,7 +179,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7910035355320451708}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2280393662118501300
+--- !u!114 &9163835472619825611
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -194,13 +194,13 @@ MonoBehaviour:
   basePointsPerSecond: 1.5
   baseSpeedMultiplier: 1
   maxForwardSpeedForBase: 40
-  peakSharpness: 120
+  peakSharpness: 60
   sharpnessExponent: 0.75
   timeScale: 2
   minSharpnessForScoring: 3
   minLateralSpeed: 0.5
   minForwardSpeed: 1
-  driftMultiplierRate: 1.5
+  driftMultiplierRate: 0.6
   maxDriftMultiplier: 10
   minDriftBonus: 300
   midDriftBonus: 2000
@@ -210,6 +210,7 @@ MonoBehaviour:
   bonusApplyDuration: 1
   debugScoreBreakdown: 0
   multCounter: {fileID: 0}
+  driftMultLost: {fileID: 0}
 --- !u!1 &8652714450798268608
 GameObject:
   m_ObjectHideFlags: 0

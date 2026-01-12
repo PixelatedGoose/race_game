@@ -18,8 +18,8 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     [SerializeField] private float minForwardSpeed = 1f;
 
     [Header("Drift Multiplier Settings")]
-    [SerializeField, Tooltip("How strongly drift multiplier is applied per second")]
-    private float driftMultiplierRate = 0.7f; // Changed from 1f to 0.7f - multiplier builds 30% slower
+    [Tooltip("How strongly drift multiplier is applied per second")]
+    public float driftMultiplierRate = 0.60f; 
     [SerializeField] private float maxDriftMultiplier = 10f;
 
     [Header("Drift Bonus Ranges")]
@@ -97,6 +97,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     void Awake()
     {
         instance = this;
+
     }
 
     void Start()
@@ -196,7 +197,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
         if (multCounter != null)
         {
-            multCounter.ShowMultiplier(1f, 0f);
+            multCounter.StartMultiplier(1f, 0f);
         }
     }
 
@@ -222,7 +223,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         // Immediately hide multiplier - no delay
         if (multCounter != null)
         {
-            multCounter.HideMultiplier();
+            multCounter.ResetMultiplier();
         }
     }
 
@@ -310,7 +311,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         float combinedQuality = Mathf.Clamp01(0.5f * intensity + 0.5f * timeFactor);
 
         float bonus = CalculateDriftBonus(combinedQuality);
-        bonus *= 0.2f;
+        bonus *= 0.75f;
         bonus *= scoreMultiplier; //the purple car again
 
         StartBonusAnimation(bonus);
