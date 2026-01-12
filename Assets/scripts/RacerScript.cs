@@ -352,6 +352,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             checkpointStates[i] = false;
         }
 
+        musicControl.StopMusicTracks(true);
+
         if (startFinishLine != null)
             startFinishLine.gameObject.SetActive(false);
         if (Car1Hud != null)

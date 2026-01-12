@@ -67,27 +67,38 @@ public class Waitbeforestart : MonoBehaviour
     IEnumerator ShowS1AfterDelay()
     {
         yield return new WaitForSecondsRealtime(1.0f);
+        Vector3 tweenEndScale = new(0.0f, 0.0f, 0.0f);
 
         // 3 - LEDs at 33%
         s3.SetActive(true);
         LogitechLedController.SetNormalized(0.33f);
         count3.Play();
+        //ei hyvää päivää
+        LeanTween.value(s3, s3.GetComponent<RectTransform>().localScale, tweenEndScale, 1.0f)
+        .setOnUpdate((Vector3 val) => s3.GetComponent<RectTransform>().localScale = val)
+        .setEaseInCirc()
+        .setIgnoreTimeScale(true);
         yield return new WaitForSecondsRealtime(1.0f);
-        s3.SetActive(false);
 
         // 2 - LEDs at 66%
         s2.SetActive(true);
         LogitechLedController.SetNormalized(0.66f);
         count2.Play();
+        LeanTween.value(s2, s2.GetComponent<RectTransform>().localScale, tweenEndScale, 1.0f)
+        .setOnUpdate((Vector3 val) => s2.GetComponent<RectTransform>().localScale = val)
+        .setEaseInCirc()
+        .setIgnoreTimeScale(true);
         yield return new WaitForSecondsRealtime(1.0f);
-        s2.SetActive(false);
 
         // 1 - LEDs at 100%
         s1.SetActive(true);
         LogitechLedController.SetMax();
         count1.Play();
+        LeanTween.value(s1, s1.GetComponent<RectTransform>().localScale, tweenEndScale, 1.0f)
+        .setOnUpdate((Vector3 val) => s1.GetComponent<RectTransform>().localScale = val)
+        .setEaseInCirc()
+        .setIgnoreTimeScale(true);
         yield return new WaitForSecondsRealtime(1.0f);
-        s1.SetActive(false);
 
         // GO! - Flash LEDs then clear
         go.SetActive(true);
@@ -100,6 +111,9 @@ public class Waitbeforestart : MonoBehaviour
 
         LeanTween.alphaText(go.GetComponent<RectTransform>(), 0.0f, 2f).setEaseLinear();
         yield return new WaitForSecondsRealtime(2f);
+        s3.SetActive(false);
+        s2.SetActive(false);
+        s1.SetActive(false);
         go.SetActive(false);
     }
 
