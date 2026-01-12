@@ -11,7 +11,6 @@ public class MultCounter : MonoBehaviour
     private bool isDrifting, isLooping, isCoolingDown, useFullCooldown;
     private float loopTimer, updateTimer, qualityTimer, cooldownTimer;
     private int currentFrame;
-    private float cooldownMultiplier;
 
     void Start()
     {
@@ -21,49 +20,69 @@ public class MultCounter : MonoBehaviour
 
     void Update()
     {
-        if (isCoolingDown)
+        Cooldown();
+        Loop();
+
+
+    }
+
+    public void Cooldown()
+    {
+        if (!isCoolingDown) return;
+
+        cooldownTimer += Time.deltaTime;
+        if (cooldownTimer < 0.1f) return;
+        cooldownTimer = 0f;
+
+        currentFrame += useFullCooldown ? 1 : -1;
+        bool finished = useFullCooldown ? currentFrame > 22 : currentFrame < 0;
+        isCoolingDown = isCoolingDown && !finished;
+
+        currentFrame = Mathf.Clamp(currentFrame, 0, numberSprites.Length - 1);
+        displayImage.sprite = finished ? numberSprites[0] : numberSprites[currentFrame];
+    }
+
+    public void Loop()
+    {
+        if (isCoolingDown) return;
+        if (!isDrifting)
         {
-            if ((cooldownTimer += Time.deltaTime) >= 0.1f)
-            {
-                cooldownTimer = 0;
-                currentFrame += useFullCooldown ? 1 : -1;
-                
-                if ((useFullCooldown && currentFrame > 22) || (!useFullCooldown && currentFrame < 0))
-                {
-                    isCoolingDown = false;
-                    displayImage.sprite = numberSprites[0];
-                }
-                else displayImage.sprite = numberSprites[currentFrame];
-            }
+            displayImage.sprite = numberSprites[0];
+            UpdateMultiplierText(1f);
             return;
         }
 
-        if (!isDrifting) { displayImage.sprite = numberSprites[0]; UpdateMultiplierText(1f); return; }
-
         float mult = ScoreManager.instance.CurrentDriftMultiplier;
         UpdateMultiplierText(mult);
-        // this is bcs for some fucking reason if not this the quality drift loop starts at 4 instead of 7
-        if ((qualityTimer += Time.deltaTime) >= 0.2f)
+
+        qualityTimer += Time.deltaTime;
+        if (qualityTimer >= 0.2f)
         {
-            qualityTimer = 0;
-            if (mult >= 7f && !isLooping) { isLooping = true; currentFrame = 10; loopTimer = 0; }
-            else if (mult < 6.5f && isLooping) isLooping = false;
+            qualityTimer = 0f;
+            bool startLoop = mult >= 7f && !isLooping;
+            bool stopLoop = mult < 6.5f && isLooping;
+            isLooping = startLoop ? true : stopLoop ? false : isLooping;
+            if (startLoop) { currentFrame = 10; loopTimer = 0f; }
         }
 
         if (isLooping && mult >= 7f)
         {
-            if ((loopTimer += Time.deltaTime) >= 0.15f)
+            loopTimer += Time.deltaTime;
+            if (loopTimer >= 0.15f)
             {
-                loopTimer = 0;
+                loopTimer = 0f;
                 currentFrame = currentFrame >= 12 ? 10 : currentFrame + 1;
                 displayImage.sprite = numberSprites[currentFrame];
             }
+            return;
         }
-        else if ((updateTimer += Time.deltaTime) >= 0.1f)
-        {
-            updateTimer = 0;
-            displayImage.sprite = numberSprites[mult <= 1f ? 0 : mult >= 7f ? 9 : Mathf.RoundToInt(((mult - 1f) / 6f) * 9)];
-        }
+
+        updateTimer += Time.deltaTime;
+        if (updateTimer < 0.1f) return;
+        updateTimer = 0f;
+
+        int idx = mult <= 1f ? 0 : (mult >= 7f ? 9 : Mathf.RoundToInt(((mult - 1f) / 6f) * 9));
+        displayImage.sprite = numberSprites[idx];
     }
 
     public void UpdateMultiplierText(float mult)
@@ -84,14 +103,13 @@ public class MultCounter : MonoBehaviour
     {
         isDrifting = isLooping = false;
         isCoolingDown = true;
-        //checks what sprite is showing when drift ends and from there goes either from 9-0 or 13-22 sprite to show cooldown
+        cooldownTimer = 0f;
         UpdateMultiplierText(1f);
-        for (int i = 0; i < numberSprites.Length; i++)
-            if (numberSprites[i] == displayImage.sprite)
-            {
-                useFullCooldown = i >= 10 && i <= 12;
-                currentFrame = useFullCooldown ? 13 : i;
-                break;
-            }
+
+        int idx = System.Array.FindIndex(numberSprites, s => s == displayImage.sprite);
+        idx = Mathf.Clamp(idx, 0, numberSprites.Length - 1);
+        useFullCooldown = idx >= 10 && idx <= 12;
+        currentFrame = useFullCooldown ? 13 : idx;
+        displayImage.sprite = numberSprites[Mathf.Clamp(currentFrame, 0, numberSprites.Length - 1)];
     }
 }
