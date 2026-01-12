@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System;
 
 public class optionScript : MonoBehaviour
 {
@@ -122,5 +121,14 @@ public class optionScript : MonoBehaviour
         //yep
         PlayerPrefs.Save();
         Debug.Log("settings saved!");
+    }
+
+    public void MenuOpenTween()
+    {
+        Vector3 preTweenScale = new(1.0f, 0.0f, 1.0f);
+        gameObject.transform.localScale = preTweenScale;
+
+        LeanTween.scaleY(gameObject, 1.0f, 0.5f)
+        .setEaseOutQuart();
     }
 }

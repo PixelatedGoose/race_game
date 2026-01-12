@@ -5,12 +5,16 @@ using UnityEngine.InputSystem;
 
 public class musicControl : MonoBehaviour
 {
-    public GameObject[] musicObjects;
-    public AudioSource[] musicTracks;
+    //ois pitäny olla private jo alusta alkaen...
+    private GameObject[] musicObjects;
+    private AudioSource[] musicTracks;
+    
     private enum CarMusicState {Main, Drift, Turbo};
     private CarMusicState CurrentMusState = CarMusicState.Main;
     private CarMusicState LatestMusState = CarMusicState.Main;
     private int[] activeTweenIDs;
+
+    public AudioSource resultsTrack;
 
     private CarController carController;
     CarInputActions Controls;
@@ -100,6 +104,22 @@ public class musicControl : MonoBehaviour
         foreach (AudioSource track in musicTracks)
         {
             track.Play();
+        }
+    }
+    //when
+    public void StopMusicTracks(bool endRaceEvent)
+    {
+        foreach (AudioSource track in musicTracks)
+        {
+            track.Stop();
+        }
+        if (endRaceEvent)
+        {
+            Controls.CarControls.Drift.performed -= DriftCall;
+            Controls.CarControls.Drift.canceled -= DriftCanceled;
+            Controls.CarControls.turbo.performed -= TurboCall;
+            Controls.CarControls.turbo.canceled -= TurboCanceled;
+            resultsTrack.Play();
         }
     }
 
