@@ -16,15 +16,12 @@ public class LapCounter : MonoBehaviour
     void Start()
     {
         // Find the active car and its RacerScript
-        GameObject carParent = GameObject.FindGameObjectWithTag("thisisacar");
-        if (carParent != null)
-        {
-            Transform carChild = carParent.transform.Find("car");
-            if (carChild != null)
-            {
-                racer = carChild.GetComponent<RacerScript>();
-            }
-        }
+        GameObject car = GameObject.FindGameObjectWithTag("thisisacar");
+        if (car != null)
+            //tää on keksitty - vittu tervemenoa tolle aiemmalle koodille mitä täs oli
+            racer = car.GetComponentInChildren<RacerScript>();
+        
+        Debug.Log(racer);
 
         // Instantiate digit object and cache its Image component
         digitImages = new Image[digitCount];
