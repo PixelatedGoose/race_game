@@ -1,14 +1,29 @@
+//Pari muutosta et se toimii sen fuckshitter wheelin kaa, mut tää on täysin copilot ku ei oo wheel nyt
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Logitech;
 
 public class CursorAutoHide : MonoBehaviour
 {
-    [SerializeField] private CursorLockMode lockModeWhenHidden = CursorLockMode.Confined; // or Locked
+    [SerializeField] private CursorLockMode lockModeWhenHidden = CursorLockMode.Confined;
+    [SerializeField] private int wheelIndex = 0; // Which controller index to check
+    
     private bool isVisible = true;
+    private bool logitechInitialized = false;
 
     void OnEnable()
     {
         SetCursorVisible(true);
+        logitechInitialized = LogitechGSDK.LogiSteeringInitialize(false);
+    }
+
+    void OnDisable()
+    {
+        if (logitechInitialized)
+        {
+            LogitechGSDK.LogiSteeringShutdown();
+            logitechInitialized = false;
+        }
     }
 
     void Update()
@@ -23,12 +38,11 @@ public class CursorAutoHide : MonoBehaviour
                 Mouse.current.middleButton.wasPressedThisFrame
             );
 
+        bool wheelButtonUsed = CheckLogitechWheelButtons();
+
         var gp = Gamepad.current;
         bool gamepadUsed =
             gp != null && (
-                gp.leftStick.ReadValue().sqrMagnitude > 0f ||
-                gp.rightStick.ReadValue().sqrMagnitude > 0f ||
-                gp.dpad.ReadValue().sqrMagnitude > 0f ||
                 gp.buttonSouth.wasPressedThisFrame ||
                 gp.buttonNorth.wasPressedThisFrame ||
                 gp.buttonWest.wasPressedThisFrame ||
@@ -38,17 +52,47 @@ public class CursorAutoHide : MonoBehaviour
                 gp.leftShoulder.wasPressedThisFrame ||
                 gp.rightShoulder.wasPressedThisFrame ||
                 gp.leftStickButton.wasPressedThisFrame ||
-                gp.rightStickButton.wasPressedThisFrame ||
-                gp.leftTrigger.ReadValue() > 0.5f ||
-                gp.rightTrigger.ReadValue() > 0.5f
+                gp.rightStickButton.wasPressedThisFrame
             );
 
         bool keyboardUsed = Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
 
-        bool nonMouseUsed = gamepadUsed || keyboardUsed;
+        bool nonMouseUsed = gamepadUsed || keyboardUsed || wheelButtonUsed;
 
         if (mouseUsed && !isVisible) SetCursorVisible(true);
         else if (nonMouseUsed && isVisible) SetCursorVisible(false);
+    }
+
+    private bool CheckLogitechWheelButtons()
+    {
+        if (!logitechInitialized) return false;
+        
+        LogitechGSDK.LogiUpdate();
+        
+        if (!LogitechGSDK.LogiIsConnected(wheelIndex)) return false;
+
+        // Check wheel buttons (0-23 covers most Logitech wheels)
+        // LogiButtonTriggered only returns true on the frame the button is pressed
+        for (int i = 0; i < 24; i++)
+        {
+            if (LogitechGSDK.LogiButtonTriggered(wheelIndex, i))
+            {
+                return true;
+            }
+        }
+
+        // Check POV hat/D-pad changes
+        var state = LogitechGSDK.LogiGetStateUnity(wheelIndex);
+        if (state.rgdwPOV != null && state.rgdwPOV.Length > 0)
+        {
+            // POV returns 0-35999 for directions, 0xFFFFFFFF (-1) when centered
+            if (state.rgdwPOV[0] != 0xFFFFFFFF)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void SetCursorVisible(bool visible)

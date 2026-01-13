@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using UnityEditor.EditorTools;
 using UnityEngine;
 
+// Change to .cs if you want to use these scripts
+
 // Add AiSpawnPosition prefabs as children to this manager to set spawn positions for AI cars
 
 

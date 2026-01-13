@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+// Change to .cs if you want to use these scripts
+
 public class BunnyAiCars : MonoBehaviour
 {
     
