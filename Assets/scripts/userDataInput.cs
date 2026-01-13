@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class userDataInput : MonoBehaviour
 {
@@ -27,16 +28,22 @@ public class userDataInput : MonoBehaviour
         jsonText = Resources.Load<TextAsset>("bannedNames");
         bannedNamesArray = JsonUtility.FromJson<BannedNames>(jsonText.text).names.ToArray();
         jsonRegexText = Resources.Load<TextAsset>("regexReplacementValues");
-        Dictionary<char, string> regexReplacements = JsonUtility.FromJson<Dictionary<char, string>>(jsonRegexText.text);
+        string regexReplacements = JsonConvert.DeserializeObject<string>("regexReplacementValues");
         bannedNamePopups = new string[]
         {
             "Name cannot be empty!",
             "Invalid name!"
         };
 
+        foreach (string name in bannedNamesArray)
+        {
+            Debug.Log(name);
+        }
+
+
         racerscript = FindFirstObjectByType<RacerScript>();
 
-        bannedRegexWords = AddRegexToHashset(bannedNamesArray, regexReplacements);
+        //bannedRegexWords = AddRegexToHashset(bannedNamesArray, regexReplacements);
     }
     
     [Serializable]

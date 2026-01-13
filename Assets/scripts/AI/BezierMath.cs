@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+// Funny bezier maths :D
 public static class BezierMath
 {
+    // quadratic bezier point
     public static Vector3 CalculateBezierPoint(float t, float y, Vector3 p0, Vector3 p1, Vector3 p2)
     {
         return new(
@@ -14,6 +16,7 @@ public static class BezierMath
         );
     }
     
+    // Cubic bezier point
     public static Vector3 CalculateBezierPoint(float t, float y, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
     {
         return new(
@@ -23,6 +26,7 @@ public static class BezierMath
         );
     }
 
+    // Quartic bezier point
     public static Vector3 CalculateBezierPoint(float t, float y, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
     {
         return new(
@@ -32,48 +36,58 @@ public static class BezierMath
         );
     }
 
-        // May get used later
-    public static Vector3[] ComputeBezierPoints(int bezierResolution, Transform path)
+    // De casteljau's algorithm for finding a point inside any amount of control points
+    public static Vector3 CalculateBezierPoint(float t, float y, Vector3[] controlPoints)
+    {
+        if (controlPoints == null || controlPoints.Count() == 0) return Vector3.zero;
+
+        List<Vector3> points = new(controlPoints);
+
+        while (points.Count() > 1)
+        {
+            for (int i = 0; i < points.Count() - 1; i++)
+            {
+                points[i] = Vector3.Lerp(points[i], points[i + 1], t);
+            }
+            points.RemoveAt(points.Count() - 1);
+        }
+
+        return points[0];
+    }
+
+    // May get used later
+    public static Vector3[] ComputeBezierPoints(int bezierResolution,  Transform path)
     {
         long startTime = DateTime.Now.Ticks;
 
         List<Vector3> bezierPoints = new();
-        Transform[] waypoints = path
+        Vector3[] waypoints = path
             .GetComponentsInChildren<Transform>()
-            .Where(t => t != path)
+            .Where(t => t != path).Select(t => t.position)
             .ToArray();
 
-        int size = waypoints.Length;
-        
-        for (int i = 0; i < waypoints.Length - 1; i++)
+        int size = waypoints.Count();
+        float inverseResolution = Mathf.Pow(bezierResolution, -1);
+
+        for (int i = 0; i < waypoints.Count(); i++)
         {
-            Vector3 p0 = waypoints[Mathf.Max(i - 1, 0)].position;
-            Vector3 p1 = waypoints[i].position;
-            Vector3 p2 = waypoints[i + 1].position;
-            Vector3 p3 = waypoints[Mathf.Min(i + 2, waypoints.Length - 1)].position;
+            int lastGroupIndex = bezierPoints.Count();
 
-            Vector3 b0 = p1;
-            Vector3 b1 = p1 + (p2 - p0) / 6f;
-            Vector3 b2 = p2 - (p3 - p1) / 6f;
-            Vector3 b3 = p2;
-
-            bezierPoints.Add(b0);
-
-            for (int j = 0; j < bezierResolution; j++)
+            for (float t = 0.4f; t <= 0.6f; t += inverseResolution)
             {
-                // Skip duplicate start points
-                if (i > 0 && j == 0) continue;
-
-                float t = j / (float)bezierResolution;
-
                 bezierPoints.Add(
-                    BezierMath.CalculateBezierPoint(t, path.position.y, b0, b1, b2, b3)
+                    CalculateBezierPoint(
+                        t, 
+                        path.position.y, 
+                        waypoints[i >= 2 ? i - 2: i - 2 + size],
+                        waypoints[i >= 1 ? i - 1: i - 1 + size],
+                        waypoints[i],
+                        waypoints[(i + 1) % size],
+                        waypoints[(i + 2) % size]
+                        )
                 );
             }
         }
-
-        // Final endpoint
-        bezierPoints.Add(waypoints[^1].position);
 
         Debug.Log($"Bezier points computed in {(DateTime.Now.Ticks - startTime) / TimeSpan.TicksPerMillisecond} ms");
 
