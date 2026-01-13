@@ -510,7 +510,7 @@ public class CarController : MonoBehaviour
         float effectiveInput = GetSteeringInput();
         foreach (var wheel in wheels.Where(w => w.axel == Axel.Front))
         {
-            var _steerAngle = steerInput * turnSensitivty * 0.55f;
+            var _steerAngle = steerInput * turnSensitivty * (isDrifting ? 0.65f : 0.55f);
             wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }

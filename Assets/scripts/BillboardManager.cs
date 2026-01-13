@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,13 +16,20 @@ public class BillboardManager : MonoBehaviour
     void Awake()
     {
         if (billboardCamera == null)
+            StartCoroutine(FindCameraDelayed());
+    }
+
+    IEnumerator FindCameraDelayed()
+    {
+        yield return new WaitForSeconds(0.05f); // Wait 50ms before retrying
+        if (billboardCamera == null)
             billboardCamera = Camera.main;
     }
 
     void Update()
     {
         timer += Time.deltaTime;
-        if (timer < updateInterval) return;
+        if (timer < updateInterval) return; 
         timer = 0f;
 
         if (billboardCamera == null)

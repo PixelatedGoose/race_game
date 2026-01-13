@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using Logitech;
+using UnityEngine.InputSystem.HID;
 
 [System.Serializable]
 public class instructionListClass
@@ -22,6 +24,14 @@ public class instructionListClass
     public string[] controller_drifting;
     public string[] controller_turbe;
     public string[] controller_final;
+
+    public string[] wheel_intro;
+    public string[] wheel_driving;
+    public string[] wheel_driving_2;
+    public string[] wheel_controls;
+    public string[] wheel_drifting;
+    public string[] wheel_turbe;
+    public string[] wheel_final;
 }
 
 public class instructionHandler : MonoBehaviour
@@ -79,22 +89,32 @@ public class instructionHandler : MonoBehaviour
 
     private void OnDeviceChange(InputDevice device, InputDeviceChange change)
     {
+        Debug.Log(device.name);
+        int categoryDifference = 7;
+        
         if (device is Gamepad)
         {
-            if (change == InputDeviceChange.Added)
+            Debug.Log("give me your controller");
+            categoryDifference = 7;
+        }
+        if (device.name == "Logitech G923 Racing Wheel for PlayStation and PC")
+        {
+            Debug.Log("give me your wheel");
+            categoryDifference = 14;
+        }
+        if (change == InputDeviceChange.Added)
+        {
+            instructionText.text = GetInstruction(categories[idx + categoryDifference], index);
+        }
+        else if (change == InputDeviceChange.Removed)
+        {
+            try
             {
-                instructionText.text = GetInstruction(categories[idx + 7], index);
+                instructionText.text = GetInstruction(categories[idx - categoryDifference], index);
             }
-            else if (change == InputDeviceChange.Removed)
+            catch (System.IndexOutOfRangeException ex)
             {
-                try
-                {
-                    instructionText.text = GetInstruction(categories[idx - 7], index);
-                }
-                catch (System.IndexOutOfRangeException ex)
-                {
-                    Debug.LogWarning("controller disconnected during incorrect text display: " + ex.Message);
-                }
+                Debug.LogWarning("controller disconnected during incorrect text display: " + ex.Message);
             }
         }
     }
@@ -102,11 +122,6 @@ public class instructionHandler : MonoBehaviour
     void Start()
     {
         ShowNextInstructionInCategory("intro", false, 1);
-
-        if (Gamepad.all.Count > 0)
-        {
-            instructionText.text = GetInstruction(categories[idx + 7], index);
-        }
     }
 
 
@@ -122,7 +137,12 @@ public class instructionHandler : MonoBehaviour
         { "controller_driving:3", 2 }, //
         { "controller_driving_2:3", 2 }, //
         { "controller_drifting:1", 2 }, //hasu kohta
-        { "controller_final:2", 4 }
+        { "controller_final:2", 4 },
+        { "wheel_intro:2", 4 }, //
+        { "wheel_driving:3", 2 }, //
+        { "wheel_driving_2:3", 2 }, //
+        { "wheel_drifting:1", 2 }, //hasu kohta
+        { "wheel_final:2", 4 }
     };
     
     /// <summary>
@@ -303,6 +323,22 @@ public class instructionHandler : MonoBehaviour
                     return instructionListData.controller_turbe;
                 case "controller_final":
                     return instructionListData.controller_final;
+
+                case "wheel_intro":
+                    return instructionListData.wheel_intro;
+                case "wheel_driving":
+                    return instructionListData.wheel_driving;
+                case "wheel_driving_2":
+                    return instructionListData.wheel_driving_2;
+                case "wheel_controls":
+                    return instructionListData.wheel_controls;
+                case "wheel_drifting":
+                    return instructionListData.wheel_drifting;
+                case "wheel_turbe":
+                    return instructionListData.wheel_turbe;
+                case "wheel_final":
+                    return instructionListData.wheel_final;
+                
                 default:
                     Debug.LogError($"Category '{category}' not found");
                     return null;

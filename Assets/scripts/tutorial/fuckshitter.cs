@@ -121,7 +121,7 @@ public class fuckshitter : MonoBehaviour
                     return;
                 case 11:
                     ui2.enabled = false;
-                    Controls.CarControls.ui_advance.performed -= CheckInstructionConditions;
+                    //Controls.CarControls.ui_advance.performed -= CheckInstructionConditions;
                     return;
             }
         }
