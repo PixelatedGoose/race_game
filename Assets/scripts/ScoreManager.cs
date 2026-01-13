@@ -196,7 +196,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
         if (multCounter != null)
         {
-            multCounter.StartMultiplier(1f, 0f);
+            multCounter.StartMultiplier(1f, 0f, 1);
         }
     }
 
