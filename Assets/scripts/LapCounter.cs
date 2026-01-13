@@ -20,8 +20,6 @@ public class LapCounter : MonoBehaviour
         if (car != null)
             //tää on keksitty - vittu tervemenoa tolle aiemmalle koodille mitä täs oli
             racer = car.GetComponentInChildren<RacerScript>();
-        
-        Debug.Log(racer);
 
         // Instantiate digit object and cache its Image component
         digitImages = new Image[digitCount];

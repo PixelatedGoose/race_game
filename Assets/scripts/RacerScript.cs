@@ -288,6 +288,13 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             currentLap++;
 
+            //FINAL LAP CHECK
+            if (currentLap == totalLaps)
+            {
+                Debug.Log("final lap!!21384r3985rt5y4w8e");
+                musicControl.StartFinalLapTrack();
+            }
+
             if (currentLap > totalLaps)
             {
                 raceFinished = true;
