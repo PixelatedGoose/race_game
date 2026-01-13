@@ -122,18 +122,17 @@ public class musicControl : MonoBehaviour
         finalLapTrack.Play();
     }
     //when 2
-    public void StopMusicTracks(bool endRaceEvent = false)
+    public void StopMusicTracks(bool endRaceEvent = false, bool stopFinalLap = false)
     {
         foreach (AudioSource track in musicTracks)
         {
             track.Stop();
         }
 
-        if (endRaceEvent)
-        {
+        if (endRaceEvent || stopFinalLap && finalLapTrack != null)
             finalLapTrack.Stop();
+        if (endRaceEvent)
             resultsTrack.Play();
-        }
     }
 
     public void PausedMusicHandler()
