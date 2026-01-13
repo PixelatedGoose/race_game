@@ -14,7 +14,11 @@ public class musicControl : MonoBehaviour
     private CarMusicState LatestMusState = CarMusicState.Main;
     private int[] activeTweenIDs;
 
+    //uniikkeja yksittäisiä biisejä, siksi en laita näille tageja tai arrayta.
+    //vectoraman demossa se tulee valittemaan kolmen eri biisin välillä
+    //ja se vaatii sit enemmän paskaa
     public AudioSource resultsTrack;
+    public AudioSource finalLapTrack;
 
     private CarController carController;
     CarInputActions Controls;
@@ -107,20 +111,28 @@ public class musicControl : MonoBehaviour
         }
     }
     //when
-    public void StopMusicTracks(bool endRaceEvent)
+    public void StartFinalLapTrack()
+    {
+        Debug.Log("jos näitä logeja on enemmän ku yks jokin on paskana.");
+        Controls.CarControls.Drift.performed -= DriftCall;
+        Controls.CarControls.Drift.canceled -= DriftCanceled;
+        Controls.CarControls.turbo.performed -= TurboCall;
+        Controls.CarControls.turbo.canceled -= TurboCanceled;
+        StopMusicTracks();
+        finalLapTrack.Play();
+    }
+    //when 2
+    public void StopMusicTracks(bool endRaceEvent = false, bool stopFinalLap = false)
     {
         foreach (AudioSource track in musicTracks)
         {
             track.Stop();
         }
+
+        if (endRaceEvent || stopFinalLap && finalLapTrack != null)
+            finalLapTrack.Stop();
         if (endRaceEvent)
-        {
-            Controls.CarControls.Drift.performed -= DriftCall;
-            Controls.CarControls.Drift.canceled -= DriftCanceled;
-            Controls.CarControls.turbo.performed -= TurboCall;
-            Controls.CarControls.turbo.canceled -= TurboCanceled;
             resultsTrack.Play();
-        }
     }
 
     public void PausedMusicHandler()

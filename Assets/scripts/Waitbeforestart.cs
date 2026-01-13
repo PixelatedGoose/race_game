@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using Logitech;
+using UnityEngine.UI;
 
 public class Waitbeforestart : MonoBehaviour
 {
@@ -67,37 +68,53 @@ public class Waitbeforestart : MonoBehaviour
     IEnumerator ShowS1AfterDelay()
     {
         yield return new WaitForSecondsRealtime(1.0f);
-        Vector3 tweenEndScale = new(0.0f, 0.0f, 0.0f);
 
         // 3 - LEDs at 33%
         s3.SetActive(true);
         LogitechLedController.SetNormalized(0.33f);
         count3.Play();
-        //ei hyvää päivää
-        LeanTween.value(s3, s3.GetComponent<RectTransform>().localScale, tweenEndScale, 1.0f)
-        .setOnUpdate((Vector3 val) => s3.GetComponent<RectTransform>().localScale = val)
-        .setEaseInCirc()
-        .setIgnoreTimeScale(true);
+        LeanTween.value(s3.GetComponent<RawImage>().color.a, 0.0f, 0.9f)
+        .setOnUpdate((float val) =>
+        {
+            var img = s3.GetComponent<RawImage>();
+            Color c = img.color;
+            c.a = val;
+            img.color = c;
+        })
+        .setIgnoreTimeScale(true)
+        .setEaseLinear();
         yield return new WaitForSecondsRealtime(1.0f);
 
         // 2 - LEDs at 66%
         s2.SetActive(true);
         LogitechLedController.SetNormalized(0.66f);
         count2.Play();
-        LeanTween.value(s2, s2.GetComponent<RectTransform>().localScale, tweenEndScale, 1.0f)
-        .setOnUpdate((Vector3 val) => s2.GetComponent<RectTransform>().localScale = val)
-        .setEaseInCirc()
-        .setIgnoreTimeScale(true);
+        LeanTween.value(s2.GetComponent<RawImage>().color.a, 0.0f, 0.9f)
+        .setOnUpdate((float val) =>
+        {
+            var img = s2.GetComponent<RawImage>();
+            Color c = img.color;
+            c.a = val;
+            img.color = c;
+        })
+        .setIgnoreTimeScale(true)
+        .setEaseLinear();
         yield return new WaitForSecondsRealtime(1.0f);
 
         // 1 - LEDs at 100%
         s1.SetActive(true);
         LogitechLedController.SetMax();
         count1.Play();
-        LeanTween.value(s1, s1.GetComponent<RectTransform>().localScale, tweenEndScale, 1.0f)
-        .setOnUpdate((Vector3 val) => s1.GetComponent<RectTransform>().localScale = val)
-        .setEaseInCirc()
-        .setIgnoreTimeScale(true);
+        LeanTween.value(s1.GetComponent<RawImage>().color.a, 0.0f, 0.9f)
+        .setOnUpdate((float val) =>
+        {
+            var img = s1.GetComponent<RawImage>();
+            Color c = img.color;
+            c.a = val;
+            img.color = c;
+        })
+        .setIgnoreTimeScale(true)
+        .setEaseLinear();
         yield return new WaitForSecondsRealtime(1.0f);
 
         // GO! - Flash LEDs then clear
@@ -109,7 +126,15 @@ public class Waitbeforestart : MonoBehaviour
         // Flash LEDs leobold times
         StartCoroutine(FlashLeds(8, 0.2f));
 
-        LeanTween.alphaText(go.GetComponent<RectTransform>(), 0.0f, 2f).setEaseLinear();
+        LeanTween.value(go, go.GetComponent<RawImage>().color.a, 0.0f, 2f)
+        .setOnUpdate((float val) =>
+        {
+            var img = go.GetComponent<RawImage>();
+            Color c = img.color;
+            c.a = val;
+            img.color = c;
+        })
+        .setEaseLinear();
         yield return new WaitForSecondsRealtime(2f);
         s3.SetActive(false);
         s2.SetActive(false);

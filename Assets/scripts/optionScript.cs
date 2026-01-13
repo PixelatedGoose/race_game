@@ -129,6 +129,7 @@ public class optionScript : MonoBehaviour
         gameObject.transform.localScale = preTweenScale;
 
         LeanTween.scaleY(gameObject, 1.0f, 0.5f)
+        .setIgnoreTimeScale(true)
         .setEaseOutQuart();
     }
 }

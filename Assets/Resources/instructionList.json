@@ -30,7 +30,7 @@
         "Regardless, here you can also see your score.",
         "This dashboard also has a timer. The red numbers are the milliseconds.",
         "These two will show the laps during a race, it's why you can't see it yet.",
-        "This gauge here tells you how much turbo you have left. You'll learn about it soon.",
+        "This green gauge here tells you how much turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
@@ -39,14 +39,14 @@
         "Nice job! Hopefully you did alright.",
         "If you did well, you can notice that you accumulated some score from it.",
         "Your time and score determine your rank, given at the end of an map.",
-        "If you got a good time, it'll be placed the leaderboard.",
+        "If you got a good time, it'll be placed on the leaderboard.",
         "You're gonna see that after clearing a race.",
         "Now it's finally time to talk about turbo."
     ],
 
     "turbe": [
         "You can use turbo by holding [left] CTRL.",
-        "We have a limited supply of that stuff per car; the amount's on the dashboard, as said before.",
+        "We have a limited supply of that stuff per car; the amount's on the green gauge, as said before.",
         "The supply does regenerate after letting it rest for a while.",
         "Try using it here to gain more speed and get past the final course."
     ],
@@ -88,7 +88,7 @@
         "Regardless, here you can also see your score.",
         "This dashboard also has a timer. The red numbers are the milliseconds.",
         "These two will show the laps during a race, it's why you can't see it yet.",
-        "This gauge here tells you how much turbo you have left. You'll learn about it soon.",
+        "This green gauge here tells you how much turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
@@ -110,6 +110,64 @@
     ],
 
     "controller_final": [
+        "Congratulations on clearing the tutorial!",
+        "I have nothing else to explain, so get outta here.",
+        "Drive on top of that platform to exit."
+    ],
+
+    "wheel_intro": [
+        "Hello, welcome to AmisDrift! (PRESS X TO ADVANCE TEXT)",
+        "This tutorial's gonna guide you through the mechanics of the game.",
+        "Drive forward to that blue glowing zone to start."
+    ],
+
+    "wheel_driving": [
+        "Use the right pedal to drive forward; steer to turn your car.",
+        "Holding the left pedal enables the handbrake.",
+        "To make sure you've understood, go ahead and clear this first course.",
+        "Well done."
+    ],
+
+    "wheel_driving_2": [
+        "Driving away from grass is recommended, as the grass slows ya down.",
+        "Any bodies of water will instantly respawn you at the nearest checkpoint.",
+        "For now though, just avoid the grass and pass the second course without touching it.",
+        "Great!"
+    ],
+
+    "wheel_controls": [
+        "Here's some more info you might wanna know.",
+        "You don't need to drive anywhere yet, you'll be able to continue after this.",
+        "Pressing the light icon toggles the headlights.",
+        "You can pause the game with the menu icon, if it wasn't obvious.",
+        "Take a moment to look at the bottom left corner.",
+        "This is a sorta dashboard for your UI.",
+        "Some info is already displayed in the top corners for convenience.",
+        "Regardless, here you can also see your score.",
+        "This dashboard also has a timer. The red numbers are the milliseconds.",
+        "These two will show the laps during a race, it's why you can't see it yet.",
+        "This green gauge here tells you how much turbo you have left. You'll learn about it soon.",
+        "But first, we'll teach you something more important. Drive to the next zone to continue."
+    ],
+
+    "wheel_drifting": [
+        "To drift, hold the left trigger while driving. Good luck on the third course.",
+        "Nice job! Hopefully you did alright.",
+        "If you did well, you can notice that you accumulated some score from it.",
+        "Your time and score determine your rank, given at the end of an map.",
+        "If you got a good time, it'll be placed on the leaderboard.",
+        "You're gonna see that after clearing a race.",
+        "Now it's finally time to talk about turbo."
+    ],
+
+    "wheel_turbe": [
+        "You can use turbo by holding the right trigger.",
+        "We have a limited supply of that stuff per car; the amount's on the green gauge, as said before.",
+        "The supply does regenerate after letting it rest for a while.",
+        "Try using it here to gain more speed and get past the final course."
+    ],
+
+    "wheel_final": [
         "Congratulations on clearing the tutorial!",
         "I have nothing else to explain, so get outta here.",
         "Drive on top of that platform to exit."
