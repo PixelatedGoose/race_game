@@ -56,7 +56,7 @@ public static class BezierMath
     }
 
     // May get used later
-    public static Vector3[] ComputeBezierPoints(int bezierResolution, Transform path)
+    public static Vector3[] ComputeBezierPoints(int bezierResolution, int sampleSize,  Transform path)
     {
         long startTime = DateTime.Now.Ticks;
 
@@ -65,20 +65,26 @@ public static class BezierMath
             .GetComponentsInChildren<Transform>()
             .Where(t => t != path).Select(t => t.position)
             .ToArray();
-        
-        for (int i = 0; i < waypoints.Length - 1; i++)
+        float inverseResolution = Mathf.Pow(bezierResolution, -1);
+        int midpoint = sampleSize / 2;
+        float startPosition = Mathf.Max(midpoint - inverseResolution, 0f);
+        float endPosition = midpoint + inverseResolution;
+        for (int i = 0; i < waypoints.Count(); i++)
         {
-            bezierPoints.Add(waypoints[0]);
+            int lastGroupIndex = bezierPoints.Count();
 
-            for (int j = 0; j < bezierResolution; j++)
+            for (float t = startPosition; t <= endPosition; t += inverseResolution)
             {
                 Debug.Log("Calculating bezier point");
 
-                float t = j / (float)bezierResolution;
-
                 bezierPoints.Add(
-                    CalculateBezierPoint(t, path.position.y, waypoints.AsSpan(i - 3, 6).ToArray())
+                    CalculateBezierPoint(t, path.position.y, waypoints.Skip(i - sampleSize / 2).Take(sampleSize).ToArray())
                 );
+            }
+
+            if (bezierPoints.Count() > 1)
+            { // Insert midpoint to fill gaps
+                bezierPoints.Insert(lastGroupIndex, (bezierPoints[lastGroupIndex - 1] + bezierPoints[lastGroupIndex]) / 2);
             }
         }
 

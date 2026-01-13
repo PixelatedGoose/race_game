@@ -14,6 +14,7 @@ public class AiCarManager : MonoBehaviour
     [Tooltip("Parent transform containing waypoints for the AI path.")]
     [SerializeField] private Transform path;
     [SerializeField] private int bezierCurveResolution = 10;
+    [SerializeField] private int sampleSize = 5;
 
 
     [Header("AI Car Settings")]
@@ -45,7 +46,7 @@ public class AiCarManager : MonoBehaviour
     void Start()
     {
         if (path == null) return;
-        Waypoints = BezierMath.ComputeBezierPoints(bezierCurveResolution, path);
+        Waypoints = BezierMath.ComputeBezierPoints(bezierCurveResolution, sampleSize,  path);
 
         GameManager gm = GameManager.instance;
         if (gm == null || gm.currentCar == null) return;
