@@ -52,12 +52,6 @@ public class Waitbeforestart : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        LogitechGSDK.LogiUpdate();
-    }
-
-    //tutorial map ei tykänny alottaa kisaa ilman delayta jostai syystä
     IEnumerator NoCountdown()
     {
         yield return new WaitForSecondsRealtime(0f);
@@ -69,7 +63,7 @@ public class Waitbeforestart : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1.0f);
 
-        // 3 - LEDs at 33%
+        // 3 - LEDs at 33% (lowest amount of lights)
         s3.SetActive(true);
         LogitechLedController.SetNormalized(0.33f);
         count3.Play();
@@ -85,7 +79,7 @@ public class Waitbeforestart : MonoBehaviour
         .setEaseLinear();
         yield return new WaitForSecondsRealtime(1.0f);
 
-        // 2 - LEDs at 66%
+        // 2 - LEDs at 66% (more lights)
         s2.SetActive(true);
         LogitechLedController.SetNormalized(0.66f);
         count2.Play();
@@ -101,7 +95,7 @@ public class Waitbeforestart : MonoBehaviour
         .setEaseLinear();
         yield return new WaitForSecondsRealtime(1.0f);
 
-        // 1 - LEDs at 100%
+        // 1 - LEDs at 100% (all lights)
         s1.SetActive(true);
         LogitechLedController.SetMax();
         count1.Play();
@@ -117,14 +111,16 @@ public class Waitbeforestart : MonoBehaviour
         .setEaseLinear();
         yield return new WaitForSecondsRealtime(1.0f);
 
-        // GO! - Flash LEDs then clear
+        // Hold full lights for a moment before GO
+        LogitechLedController.SetMax();
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        // GO!
         go.SetActive(true);
         countGo.Play();
+        LogitechLedController.Clear();
         Time.timeScale = 1f;
         racerScript.StartRace();
-
-        // Flash LEDs leobold times
-        StartCoroutine(FlashLeds(8, 0.2f));
 
         LeanTween.value(go, go.GetComponent<RawImage>().color.a, 0.0f, 2f)
         .setOnUpdate((float val) =>
@@ -140,16 +136,5 @@ public class Waitbeforestart : MonoBehaviour
         s2.SetActive(false);
         s1.SetActive(false);
         go.SetActive(false);
-    }
-
-    IEnumerator FlashLeds(int times, float interval)
-    {
-        for (int i = 0; i < times; i++)
-        {
-            LogitechLedController.SetMax();
-            yield return new WaitForSecondsRealtime(interval);
-            LogitechLedController.Clear();
-            yield return new WaitForSecondsRealtime(interval);
-        }
     }
 }
