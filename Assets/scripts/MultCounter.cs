@@ -53,7 +53,7 @@ public class MultCounter : MonoBehaviour
         }
 
         float mult = ScoreManager.instance.CurrentDriftMultiplier;
-        UpdateMultiplierText(mult);
+        UpdateMultiplierText(Mathf.RoundToInt(mult));
 
         qualityTimer += Time.deltaTime;
         if (qualityTimer >= 0.2f)
@@ -87,15 +87,15 @@ public class MultCounter : MonoBehaviour
 
     public void UpdateMultiplierText(float mult)
     {
-        multiplierText.text = $"{mult:F1}x";
+        multiplierText.text = $"{mult}";
         multiplierText.color = mult >= 7f ? Color.red : mult >= 4f ? new Color(1f, 0.5f, 0f) : mult >= 2f ? Color.yellow : Color.white;
     }
 
-    public void StartMultiplier(float multiplier, float quality)
+    public void StartMultiplier(float multiplier, float quality, int mulplierInInt)
     {
         isDrifting = true;
         isCoolingDown = false;
-        UpdateMultiplierText(multiplier);
+        UpdateMultiplierText(Mathf.RoundToInt(multiplier));
     }
 
     // its the great reset of 2026 
