@@ -7,16 +7,9 @@ using UnityEngine;
 // Add AiSpawnPosition prefabs as children 
 // to this manager to set spawn positions for AI cars
 
-
+[RequireComponent(typeof(BezierBaker))]
 public class AiCarManager : MonoBehaviour
 {
-    [Header("Path Settings")]
-    [Tooltip("Parent transform containing waypoints for the AI path.")]
-    [SerializeField] private Transform path;
-    [SerializeField] private int bezierCurveResolution = 10;
-    [SerializeField] private int sampleSize = 5;
-
-
     [Header("AI Car Settings")]
     [Tooltip("Number of AI cars to spawn. 0 = no AI cars.")]
     [Range(0, 100)]
@@ -45,8 +38,8 @@ public class AiCarManager : MonoBehaviour
 
     void Start()
     {
-        if (path == null) return;
-        Waypoints = BezierMath.ComputeBezierPoints(bezierCurveResolution, sampleSize,  path);
+        BezierBaker bezierBaker = GetComponent<BezierBaker>();
+        Waypoints = bezierBaker.GetCachedPoints();
 
         GameManager gm = GameManager.instance;
         if (gm == null || gm.currentCar == null) return;
@@ -72,17 +65,5 @@ public class AiCarManager : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
-    void OnDrawGizmosSelected()
-    {
-        if (Waypoints.Count() <= 1) return;
 
-        for (int i = 0; i < Waypoints.Count(); i++)
-        {
-            Gizmos.DrawSphere(Waypoints[i], 0.2f);
-            Gizmos.DrawLine(Waypoints[i], Waypoints[(i+1) % Waypoints.Count()]);
-        }
-    }
-
-#endif
 }
