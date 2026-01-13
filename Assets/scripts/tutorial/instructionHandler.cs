@@ -277,6 +277,8 @@ public class instructionHandler : MonoBehaviour
         }
     }
 
+    //add category by device
+
     //lazy
     private string[] GetInstructionListByCategory(string category)
     {
