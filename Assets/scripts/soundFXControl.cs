@@ -179,6 +179,9 @@ public class soundFXControl : MonoBehaviour
     public void PauseStateHandler()
     {
         bool isPaused = GameManager.instance.isPaused;
+        GameObject menu = GameObject.Find("menu");
+        optionScript optionScript = menu.GetComponentInChildren<optionScript>(true);
+
         GameObject[] pausedSoundList = soundList
         .Where((s, i) => i != 4).ToArray();
 
@@ -198,7 +201,7 @@ public class soundFXControl : MonoBehaviour
                 soundList[4].GetComponent<AudioSource>().volume = 0.0f;
             }
         }
-        if (isPaused)
+        if (isPaused && !optionScript.gameObject.activeSelf)
             soundList[6].GetComponent<AudioSource>().Play();
     }
 }

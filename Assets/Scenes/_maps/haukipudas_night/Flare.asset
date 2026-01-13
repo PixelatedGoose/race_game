@@ -24,8 +24,8 @@ MonoBehaviour:
     noiseAmplitude: 1
     noiseFrequency: 1
     noiseSpeed: 0
-    shapeCutOffSpeed: -0.4
-    shapeCutOffRadius: 1.03
+    shapeCutOffSpeed: 0.15
+    shapeCutOffRadius: 1.34
     m_LocalIntensity: 1.03
     lensFlareTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
     uniformScale: 8.43
@@ -35,7 +35,7 @@ MonoBehaviour:
     preserveAspectRatio: 0
     rotation: 0
     tintColorType: 0
-    tint: {r: 1, g: 1, b: 1, a: 0.50980395}
+    tint: {r: 1, g: 0.99313, b: 0.5518868, a: 0.50980395}
     tintGradient:
       <textureSize>k__BackingField: 4
       m_Gradient:
@@ -73,7 +73,7 @@ MonoBehaviour:
     blendMode: 0
     autoRotate: 0
     flareType: 1
-    modulateByLightColor: 0
+    modulateByLightColor: 1
     isFoldOpened: 1
     distribution: 0
     lengthSpread: 1
@@ -239,7 +239,7 @@ MonoBehaviour:
     preserveAspectRatio: 0
     rotation: 0
     tintColorType: 0
-    tint: {r: 1, g: 0.8535939, b: 0, a: 0.50980395}
+    tint: {r: 1, g: 0.854902, b: 0, a: 0.50980395}
     tintGradient:
       <textureSize>k__BackingField: 4
       m_Gradient:
@@ -280,7 +280,7 @@ MonoBehaviour:
     modulateByLightColor: 0
     isFoldOpened: 1
     distribution: 1
-    lengthSpread: 1
+    lengthSpread: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
@@ -294,14 +294,14 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.12247133
-        value: 0.06629724
-        inSlope: 0.23790696
-        outSlope: 0.23790696
+        time: 0.10628939
+        value: 0.12064905
+        inSlope: 0.9099016
+        outSlope: 0.9099016
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.18260628
-        outWeight: 0.33333334
+        outWeight: 0.0314609
       - serializedVersion: 3
         time: 0.9708252
         value: 0.004760742
@@ -402,8 +402,8 @@ MonoBehaviour:
     distortionRelativeToCenter: 0
     m_FallOff: 0.483
     m_EdgeOffset: 0.859
-    m_SideCount: 7
-    m_SdfRoundness: 0.279
+    m_SideCount: 8
+    m_SdfRoundness: 0.264
     inverseSDF: 0
     uniformAngle: 0
     uniformAngleCurve:

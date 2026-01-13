@@ -66,6 +66,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
+        //outdated
         if (besttime > 0)
         {
             string currentSceneName = SceneManager.GetActiveScene().name;
@@ -91,7 +92,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Controls.Enable();
         
         GameObject[] checkpointObjects = GameObject.FindGameObjectsWithTag("checkpointTag");
-        List<Transform> checkpointsToMove = new List<Transform>();
+        List<Transform> checkpointsToMove = new();
 
         foreach (GameObject checkpoint in checkpointObjects)
         {
@@ -350,6 +351,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             checkpointStates[i] = false;
         }
+
+        musicControl.StopMusicTracks(true);
 
         if (startFinishLine != null)
             startFinishLine.gameObject.SetActive(false);

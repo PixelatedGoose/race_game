@@ -3,7 +3,17 @@ guid: 302351cd6aba3c74ab71f3066a428746
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shit texture
+    second: {fileID: 2100000, guid: 3ff72706365ad014584a72f1e4a92488, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shit texture.001
+    second: {fileID: 2100000, guid: fa32cbce8d0278e4f8c66a1af3a0d145, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

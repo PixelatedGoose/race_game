@@ -742,7 +742,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4631801101680827200}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1.5
+  m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:
@@ -758,6 +758,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: audio
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8115813495693976893}
+        m_TargetAssemblyTypeName: AudioSlider, Assembly-CSharp
+        m_MethodName: SetVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &8819196712334076898
@@ -1852,7 +1864,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 436554d7e53355744aeaf295f9fb63e2, type: 3}
+  m_Texture: {fileID: 2800000, guid: 4f59441612d63d140a8b376eb1a5537b, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -2770,6 +2782,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 7235799923018272578}
+        m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
+        m_MethodName: SavePlayerPrefs
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &2222565807332456276
 GameObject:
   m_ObjectHideFlags: 0
@@ -3170,6 +3194,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 7235799923018272578}
+        m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
+        m_MethodName: SavePlayerPrefs
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &2426110538130312306
 GameObject:
   m_ObjectHideFlags: 0
@@ -3342,6 +3378,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7235799923018272578}
+        m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
+        m_MethodName: MenuOpenTween
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5526,6 +5574,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
+  optionTestRef: {fileID: 0}
+  pixelRef: {fileID: 0}
+  audioRef: {fileID: 0}
+  LabelPARef: {fileID: 0}
 --- !u!114 &8115813495693976893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9693,6 +9745,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 7235799923018272578}
+        m_TargetAssemblyTypeName: optionScript, Assembly-CSharp
+        m_MethodName: SavePlayerPrefs
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

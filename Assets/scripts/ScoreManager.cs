@@ -68,10 +68,13 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     private float TimeStartPoint = 5000f;
     private float RaceTimer = 0f;
     private const float PointsDecayTime = 300f; // nyt on 5min ennenkuin 0 aika pointtia
-    private bool raceStarted = false;
 
     //all this for the purple car
     private float scoreMultiplier = 1.0f;
+
+    [SerializeField] private AudioSource driftMultLost;
+
+
 
     public void LoadData(GameData data)
     {
@@ -85,8 +88,9 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     {
         if (data != null && racerScript.raceFinished == true) 
         {
-            int finalScore = this.GetScoreInt() + Mathf.FloorToInt(TimeStartPoint);
+            int finalScore = GetScoreInt() + Mathf.FloorToInt(TimeStartPoint);
             data.scored += finalScore;
+            Debug.Log($"ScoreManager: Saved final score {finalScore} to GameData.");
         }       
     }
 
@@ -99,20 +103,20 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     {
         carController = FindFirstObjectByType<CarController>();
         racerScript = FindFirstObjectByType<RacerScript>();
+        multCounter = FindFirstObjectByType<MultCounter>();
         print(scoreMultiplier);
     }
 
     void Update()
     {
-        print(TimeStartPoint);
+        //print(TimeStartPoint);
         if (!EnsureCarController()) return;
 
         float deltaTime = Time.deltaTime;
         Vector3 velocity = GetVelocity();
 
-        if (racerScript != null && !racerScript.raceFinished)
+        if (racerScript != null && racerScript.racestarted && !racerScript.raceFinished)
         {
-            raceStarted = true;
             RaceTimer += deltaTime;
             UpdateTimePoints();
         }
@@ -396,6 +400,14 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         if (isOnGrass)
         {
             touchedGrassWhileDrifting = true;
+
+            // Print when grass causes an active drift's multiplier to be lost
+            if (isDriftingActive && driftCompoundMultiplier > 1.01f)
+            {
+                Debug.Log($"[ScoreManager] Drift multiplier reset by grass - peak mult: x{driftCompoundMultiplier:F2}, driftTime: {driftTime:F2}s");
+                multCounter.UpdateMultiplierText(1f);
+                driftMultLost.Play();
+            }
         }
     }
 
