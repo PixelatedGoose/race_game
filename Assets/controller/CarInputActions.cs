@@ -383,18 +383,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""64a14ef7-aba7-4dbe-a5d9-1c85d3a0a0b6"",
-                    ""path"": ""<Joystick>/stick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Drift"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d61c625f-5497-4969-a7e9-7f40c0d53e62"",
+                    ""id"": ""e7bd0406-5148-47f2-a1a6-316c393d6bd3"",
                     ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button6"",
                     ""interactions"": """",
                     ""processors"": """",
