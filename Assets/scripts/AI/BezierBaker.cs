@@ -20,7 +20,7 @@ public class BezierBaker : MonoBehaviour
 
     public Vector3[] GetCachedPoints()
     {
-        if (cachedPoints == null)
+        if (cachedPoints == null || cachedPoints[0] == Vector3.zero)
         {
             Bake();
         }

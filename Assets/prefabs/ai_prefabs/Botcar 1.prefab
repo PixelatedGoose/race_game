@@ -979,7 +979,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5417276863330404371}
   - component: {fileID: 3491762022365506067}
-  - component: {fileID: 8600956616470010803}
   - component: {fileID: 2018198217309589805}
   m_Layer: 0
   m_Name: aicar
@@ -1038,61 +1037,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8600956616470010803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5418244439486811708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b3f1c5f0941fa43ba555320de64573, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BetterNewAiCarController
-  waypointThreshold: 10
-  bezierCurveResolution: 10
-  angleThreshold: 35
-  maxAcceleration: 300
-  maxSpeed: 100
-  leftTurnRadius: 10
-  rightTurnRadius: 30
-  turnSensitivity: 30
-  lookAheadIndex: 5
-  gravityMultiplier: 1.5
-  grassSpeedMultiplier: 0.5
-  slowdownThreshold: 30
-  maxSlowdownAngle: 90
-  minSlowdown: 0.35
-  detectionRadius: 7
-  curveTolerance: 2
-  avoidanceBuffer: 2
-  avoidanceLateralOffset: 2
-  boostMultiplier: 1.25
-  wheels:
-  - wheelModel: {fileID: 2480497655319108271}
-    wheelCollider: {fileID: 8226038361239439730}
-    wheelEffectobj: {fileID: 4815937886979789559}
-    smokeParticle: {fileID: 8375895737432743733}
-    axel: 0
-  - wheelModel: {fileID: 3144801104615171818}
-    wheelCollider: {fileID: 3133544218236099077}
-    wheelEffectobj: {fileID: 2375104774844005760}
-    smokeParticle: {fileID: 2334615181226230212}
-    axel: 0
-  - wheelModel: {fileID: 4381428712381846278}
-    wheelCollider: {fileID: 3392321435618256846}
-    wheelEffectobj: {fileID: 3627151734244984521}
-    smokeParticle: {fileID: 4522420571162533016}
-    axel: 0
-  - wheelModel: {fileID: 494362406291348668}
-    wheelCollider: {fileID: 1684521221934789367}
-    wheelEffectobj: {fileID: 162235566843196}
-    smokeParticle: {fileID: 304971687747636552}
-    axel: 0
-  carRb: {fileID: 3491762022365506067}
-  playerCar: {fileID: 0}
-  aiCarManager: {fileID: 0}
 --- !u!114 &2018198217309589805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1153,6 +1097,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8083196335441218656}
+  - component: {fileID: 785530171147995368}
   m_Layer: 0
   m_Name: Botcar 1
   m_TagString: Untagged
@@ -1176,6 +1121,61 @@ Transform:
   - {fileID: 5417276863330404371}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 92.405, z: 0}
+--- !u!114 &785530171147995368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6265147186453089306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b3f1c5f0941fa43ba555320de64573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BetterNewAiCarController
+  waypointThreshold: 10
+  bezierCurveResolution: 10
+  angleThreshold: 35
+  maxAcceleration: 300
+  maxSpeed: 100
+  leftTurnRadius: 10
+  rightTurnRadius: 30
+  turnSensitivity: 30
+  lookAheadIndex: 5
+  gravityMultiplier: 1.5
+  grassSpeedMultiplier: 0.5
+  slowdownThreshold: 30
+  maxSlowdownAngle: 90
+  minSlowdown: 0.35
+  detectionRadius: 7
+  curveTolerance: 2
+  avoidanceBuffer: 2
+  avoidanceLateralOffset: 2
+  boostMultiplier: 1.25
+  wheels:
+  - wheelModel: {fileID: 2480497655319108271}
+    wheelCollider: {fileID: 8226038361239439730}
+    wheelEffectobj: {fileID: 4815937886979789559}
+    smokeParticle: {fileID: 8375895737432743733}
+    axel: 0
+  - wheelModel: {fileID: 3144801104615171818}
+    wheelCollider: {fileID: 3133544218236099077}
+    wheelEffectobj: {fileID: 2375104774844005760}
+    smokeParticle: {fileID: 2334615181226230212}
+    axel: 0
+  - wheelModel: {fileID: 4381428712381846278}
+    wheelCollider: {fileID: 3392321435618256846}
+    wheelEffectobj: {fileID: 3627151734244984521}
+    smokeParticle: {fileID: 4522420571162533016}
+    axel: 0
+  - wheelModel: {fileID: 494362406291348668}
+    wheelCollider: {fileID: 1684521221934789367}
+    wheelEffectobj: {fileID: 162235566843196}
+    smokeParticle: {fileID: 304971687747636552}
+    axel: 0
+  carRb: {fileID: 3491762022365506067}
+  playerCar: {fileID: 0}
+  aiCarManager: {fileID: 0}
 --- !u!1 &6333829925512713852
 GameObject:
   m_ObjectHideFlags: 0
