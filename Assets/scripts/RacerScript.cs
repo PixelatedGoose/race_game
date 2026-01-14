@@ -21,8 +21,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public bool racestarted = false; // <-- Add this
     private bool startTimer = false;
 
-    public Text resetPrompt;
-
     // Other variables
     public Transform startFinishLine;
     public Transform[] checkpoints;
@@ -163,8 +161,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void InitializeRace()
     {
-        resetPrompt.gameObject.SetActive(false);
-        lastPosition = transform.position;
         respawnPoint = startFinishLine;
 
         checkpointStates = new bool[checkpoints.Length];
@@ -175,7 +171,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (Controls.CarControls.respawn.triggered)
         {
             ResetPosition();
-            resetPrompt.gameObject.SetActive(false);
         }
 
         if (transform.position.y < -1)
@@ -253,22 +248,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             laptime += Time.deltaTime;
         }
-
-        if (transform.position == lastPosition)
-        {
-            inactivityTimer += Time.deltaTime;
-            if (inactivityTimer >= inactivityThreshold)
-            {
-                resetPrompt.gameObject.SetActive(true);
-            }
-        }
-        else
-        {
-            inactivityTimer = 0f;
-            resetPrompt.gameObject.SetActive(false);
-        }
-
-        lastPosition = transform.position;
     }
 
     void HandleStart()
