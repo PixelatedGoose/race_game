@@ -97,7 +97,7 @@ public class Waitbeforestart : MonoBehaviour
 
         // 1 - LEDs at 100% (all lights)
         s1.SetActive(true);
-        LogitechLedController.SetMax();
+        LogitechLedController.SetNormalized(1.0f);
         count1.Play();
         LeanTween.value(s1.GetComponent<RawImage>().color.a, 0.0f, 0.9f)
         .setOnUpdate((float val) =>
@@ -110,10 +110,6 @@ public class Waitbeforestart : MonoBehaviour
         .setIgnoreTimeScale(true)
         .setEaseLinear();
         yield return new WaitForSecondsRealtime(1.0f);
-
-        // Hold full lights for a moment before GO
-        LogitechLedController.SetMax();
-        yield return new WaitForSecondsRealtime(0.5f);
 
         // GO!
         go.SetActive(true);
