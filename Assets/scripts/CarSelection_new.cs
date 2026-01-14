@@ -122,11 +122,6 @@ public class CarSelection_new : MonoBehaviour
         {
             if (car.activeInHierarchy)
             {
-                if (car.name == "Lada")
-                {
-                    select.interactable = false;
-                    continue;
-                }
                 car.SetActive(true);
                 select.interactable = true;
             }
