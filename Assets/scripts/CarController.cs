@@ -626,22 +626,24 @@ public class CarController : MonoBehaviour
                     //blue car  
                     case "REALCAR":
                         turbepush = 15.0f;
+                        ScoreManager.instance.SetScoreMultiplier(1.5f);
                         break;
                     //gray car
                     case "REALCAR_x":
                         turbeMax = 75.0f;
-                        turbeRegen = 25.0f;
-                        turbepush = 10.0f;
+                        turbeRegen = 30.0f;
+                        turbepush = 20.0f;
                         break;
                     //purple car
                     case "REALCAR_y":
                         turbepush = 7.0f;
-                        ScoreManager.instance.SetScoreMultiplier(2.0f);
+                        ScoreManager.instance.SetScoreMultiplier(1.0f);
                         break;
                     //da Lada
                     case "Lada":
                         turbeMax = 30.0f;
                         turbepush = 500.0f;
+                        ScoreManager.instance.SetScoreMultiplier(0.75f);
                         break;
                     default:
                         Debug.LogWarning($"Unknown car name: {carName}");
@@ -836,12 +838,14 @@ public class CarController : MonoBehaviour
         // Logitech pedals: -32768 (fully pressed) to 32767 (not pressed)
         // Invert and normalize to 0-1 range
         float throttle = Mathf.Clamp01(-state.lY / 32768.0f);
-        float brake = Mathf.Clamp01(-state.lRz / 32768.0f);
+        
+        // Clutch pedal for reverse - rglSlider is an array, index 0 is clutch
+        float clutch = Mathf.Clamp01(-state.rglSlider[0] / 32768.0f);
         
         if (throttle > 0.1f)
             moveInput = throttle;
-        else if (brake > 0.1f)
-            moveInput = -brake * 1.5f;
+        else if (clutch > 0.1f)
+            moveInput = -clutch;
         else
             moveInput = 0f;
     }
