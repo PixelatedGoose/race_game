@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
 using UnityEngine.UI;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class LeaderBoard : MonoBehaviour
 {
@@ -29,14 +30,6 @@ public class LeaderBoard : MonoBehaviour
         resultHandler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
         UpdateLeaderboard();
         updateCoroutine = StartCoroutine(UpdateLeaderboardRoutine());
-
-        if (loadCar)
-        {
-            foreach (TextMeshProUGUI text in carTexts)
-            {
-                text.gameObject.SetActive(true);
-            }
-        }
     }
 
     void OnDestroy()
@@ -68,7 +61,7 @@ public class LeaderBoard : MonoBehaviour
         }
 
         List<RaceResultData> sortedResults = collection.results
-            .OrderBy(r => r.time)
+            .OrderBy(r => r.score)
             .Take(5)
             .ToList();
 
@@ -126,6 +119,12 @@ public class LeaderBoard : MonoBehaviour
 
         if (mapTexts[index] != null)
             mapTexts[index].text = "---";
+
+        if (loadCar)
+        {
+            if (carTexts[index] != null)
+                carTexts[index].text = "---";
+        }
     }
 
     private void ClearLeaderboard()

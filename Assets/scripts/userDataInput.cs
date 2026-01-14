@@ -39,11 +39,12 @@ public class userDataInput : MonoBehaviour
         {
             Debug.Log(name);
         }
-
-
-        racerscript = FindFirstObjectByType<RacerScript>();
-
         //bannedRegexWords = AddRegexToHashset(bannedNamesArray, regexReplacements);
+    }
+
+    void Start()
+    {
+        racerscript = FindFirstObjectByType<RacerScript>();
     }
     
     [Serializable]
@@ -97,7 +98,7 @@ public class userDataInput : MonoBehaviour
 
     public void CheckForInvalidName()
     {
-        foreach (string bannedName in bannedRegexWords)
+        /* foreach (string bannedName in bannedRegexWords)
         {
             //huom. tää jo toimii
             if (Regex.IsMatch(userName, bannedName))
@@ -107,7 +108,7 @@ public class userDataInput : MonoBehaviour
                 enter.interactable = false;
                 return;
             }
-        }
+        } */
         if (userName.Length == 0)
         {
             bannedPopup.text = bannedNamePopups[0];

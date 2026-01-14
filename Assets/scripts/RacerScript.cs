@@ -43,6 +43,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     public GameObject[] endButtons;
     public GameObject[] otherStuff;
+    private GameObject finalLapImg;
 
     public void LoadData(GameData data)
     {
@@ -102,6 +103,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             checkpointsToMove.Add(checkpointTransform);
         }
         checkpoints = checkpointsToMove.ToArray();
+
+        finalLapImg = GameObject.Find("UIcanvas/finalLap");
     }
 
     private void OnDisable()
@@ -291,8 +294,25 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             //FINAL LAP CHECK
             if (currentLap == totalLaps)
             {
-                Debug.Log("final lap!!21384r3985rt5y4w8e");
                 musicControl.StartFinalLapTrack();
+                LeanTween.value(finalLapImg,
+                finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, 0.0f, 0.6f)
+                .setOnUpdate((float val) =>
+                {
+                    finalLapImg.GetComponent<RectTransform>().anchoredPosition = new Vector2(
+                    val, finalLapImg.GetComponent<RectTransform>().anchoredPosition.y);
+                })
+                .setEaseInOutCirc()
+                .setOnComplete(() =>
+                    LeanTween.value(finalLapImg,
+                    finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, -530.0f, 2.4f)
+                    .setOnUpdate((float val) =>
+                    {
+                        finalLapImg.GetComponent<RectTransform>().anchoredPosition = new Vector2(
+                        val, finalLapImg.GetComponent<RectTransform>().anchoredPosition.y);
+                    })
+                    .setEaseInExpo()
+                );
             }
 
             if (currentLap > totalLaps)
