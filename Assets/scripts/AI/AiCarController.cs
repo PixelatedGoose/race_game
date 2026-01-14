@@ -144,12 +144,15 @@ public class BetterNewAiCarController : MonoBehaviour
         if (Vector3.Distance(carRb.position, aiCarManager.Waypoints[currentWaypointIndex]) < waypointThreshold)
         {
             currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.Waypoints.Count();
-            targetPoint = aiCarManager.Waypoints[currentWaypointIndex];
         }
+
+        targetPoint = aiCarManager.Waypoints[currentWaypointIndex];
+
+        AvoidOtherCars();
 
         carRb.rotation = Quaternion.Lerp(
             carRb.rotation,
-            Quaternion.LookRotation(aiCarManager.Waypoints[currentWaypointIndex] - carRb.position),
+            Quaternion.LookRotation(targetPoint - carRb.position),
             turnStrength * Time.fixedDeltaTime
         );
 
@@ -219,13 +222,14 @@ public class BetterNewAiCarController : MonoBehaviour
         return false;
     }
 
-    private float AvoidOtherCars()
+    private void AvoidOtherCars()
     {
         float avoidanceOffset = 0f;
 
         foreach (var other in aiCarManager.AiCars)
         {
             if (other == this) continue;
+            Debug.Log("check other car");
 
             Vector3 toOther = other.carRb.position - carRb.position;
             float distance = toOther.magnitude;
@@ -234,22 +238,57 @@ public class BetterNewAiCarController : MonoBehaviour
 
             if (distance < minSafeDistance && Vector3.Dot(transform.forward, toOther.normalized) > 0.5f)
             {
+                Debug.Log("avoiding");
                 Vector3 myFuturePos = carRb.position + carRb.linearVelocity * 0.5f;
                 Vector3 otherFuturePos = other.carRb.position + other.carRb.linearVelocity * 0.5f;
                 float futureDist = (myFuturePos - otherFuturePos).magnitude;
 
                 if (futureDist < minSafeDistance)
                 {
+                    Debug.Log("maybe avoiding");
                     float steerDirection = Vector3.Cross(transform.forward, toOther).y > 0 ? -1f : 1f;
                     avoidanceOffset += steerDirection * avoidanceLateralOffset * avoidance;
 
                     if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > other.carRb.linearVelocity.magnitude)
+                    {
+                        Debug.Log("def avoiding");
+                        moveInput = 0.7f;
+                    }
+                }
+            }
+        }
+
+        if (playerCar != null && playerCar.carRb != null && playerCar != this)
+        {
+            Vector3 toPlayer = playerCar.transform.position - transform.position;
+            float distance = toPlayer.magnitude;
+            float playerSafeRadius = Mathf.Max(playerCarWidth, playerCarLength) * 0.5f;
+            float minSafeDistance = safeRadius + playerSafeRadius + avoidanceBuffer;
+
+            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toPlayer.normalized) > 0.5f)
+            {
+                Vector3 myFuturePos = transform.position + carRb.linearVelocity * 0.5f;
+                Vector3 playerFuturePos = playerCar.transform.position + playerCar.carRb.linearVelocity * 0.5f;
+                float futureDist = (myFuturePos - playerFuturePos).magnitude;
+
+                if (futureDist < minSafeDistance)
+                {
+                    float steerDirection = Vector3.Cross(transform.forward, toPlayer).y > 0 ? -1f : 1f;
+                    avoidanceOffset += steerDirection * avoidanceLateralOffset;
+
+                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > playerCar.carRb.linearVelocity.magnitude)
                         moveInput = 0.7f;
                 }
             }
         }
 
-        return avoidanceOffset;
+        Vector3 localPosition = carRb.gameObject.transform.InverseTransformPoint(targetPoint);
+        localPosition.x += avoidanceOffset;
+
+        Debug.Log("offset: " + avoidanceOffset);
+
+        targetPoint = carRb.gameObject.transform.TransformPoint(localPosition);
+
     }
 
     private void OffsetTargetPoint(Vector3 avoidancePoint)
