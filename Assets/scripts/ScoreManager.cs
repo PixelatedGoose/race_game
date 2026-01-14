@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class ScoreManager : MonoBehaviour, IDataPersistence
 {
@@ -61,11 +62,14 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     private float bonusApplyProgress = 0f;
     private float bonusAddedSoFar = 0f;
     private bool isApplyingBonus = false;
+    public TextMeshProUGUI TimeScoreText;
+    public TextMeshProUGUI TotalScoreText;
+    public TextMeshProUGUI DriftScoreText;
 
     private int driftCount = 0;
 
     //Points - aika
-    private float TimeStartPoint = 5000f;
+    private float TimeStartPoint = 15000f;
     private float RaceTimer = 0f;
     private const float PointsDecayTime = 300f; // nyt on 5min ennenkuin 0 aika pointtia
 
@@ -105,6 +109,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         carController = FindFirstObjectByType<CarController>();
         racerScript = FindFirstObjectByType<RacerScript>();
         multCounter = FindFirstObjectByType<MultCounter>();
+        
     }
 
     void Update()
@@ -121,10 +126,22 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
             UpdateTimePoints();
         }
 
+        if (racerScript != null && racerScript.raceFinished)
+        {
+            ShowScores();
+        }
+
         UpdateBaseScore(deltaTime, velocity);
         UpdateDriftState(deltaTime, velocity);
         AnimatePendingBonus(deltaTime);
         UpdateScoreUIIfChanged();
+    }
+
+    public void ShowScores()
+    {
+        TotalScoreText.text = "FinalScore: " + GetScoreInt().ToString();
+        TimeScoreText.text = "Time: " + Mathf.FloorToInt(TimeStartPoint).ToString();
+        DriftScoreText.text = "Drift: " + Mathf.FloorToInt(GetScoreInt() - TimeStartPoint).ToString();
     }
 
     bool EnsureCarController()
@@ -141,7 +158,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     void UpdateTimePoints()
     {
-        TimeStartPoint = Mathf.Max(0f, 5000f * (1f - RaceTimer / PointsDecayTime));
+        TimeStartPoint = Mathf.Max(0f, 15000f * (1f - RaceTimer / PointsDecayTime));
     }
 
     public void SetScoreMultiplier(float multiplier)
@@ -156,8 +173,10 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         float forwardSpeed = Mathf.Max(0f, Vector3.Dot(velocity, carController.transform.forward));
         float speedFactor = Mathf.Clamp01(forwardSpeed / Mathf.Max(0.0001f, maxForwardSpeedForBase));
         float speedMultiplier = 1f + speedFactor * baseSpeedMultiplier;
-
-        scoreFloat += basePointsPerSecond * speedMultiplier * scoreMultiplier * deltaTime;
+        if (!racerScript.raceFinished)
+        {
+            scoreFloat += basePointsPerSecond * speedMultiplier * scoreMultiplier * deltaTime;
+        }
     }
 
     void UpdateDriftState(float deltaTime, Vector3 velocity)
@@ -414,7 +433,14 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     public int GetScoreInt()
     {
-        return Mathf.FloorToInt(scoreFloat);
+        
+        if (racerScript != null && racerScript.raceFinished == true)
+        {
+            return Mathf.FloorToInt(scoreFloat + TimeStartPoint);
+        }else
+        {
+            return Mathf.FloorToInt(scoreFloat);
+        }
     }
 
     public float GetDriftTime()
