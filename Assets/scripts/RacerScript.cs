@@ -274,7 +274,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             //FINAL LAP CHECK
             if (currentLap == totalLaps)
             {
-                musicControl.StartFinalLapTrack();
+                //musicControl.StartFinalLapTrack();
                 LeanTween.value(finalLapImg,
                 finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, 0.0f, 0.6f)
                 .setOnUpdate((float val) =>
