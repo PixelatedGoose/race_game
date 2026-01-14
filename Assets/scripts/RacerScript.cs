@@ -11,6 +11,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public RankManager rankManager;
     public GameObject winMenu; 
     public GameObject Car1Hud;
+    public GameObject Minimap;
 
     CarInputActions Controls;
 
@@ -385,6 +386,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
             startFinishLine.gameObject.SetActive(false);
         if (Car1Hud != null)
             Car1Hud.SetActive(false);
+        if (Minimap != null)
+            Minimap.SetActive(false);
         winMenu.SetActive(true);
         raceFinished = true;
         startTimer = false;
