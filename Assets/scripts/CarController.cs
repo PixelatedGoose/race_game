@@ -510,7 +510,7 @@ public class CarController : MonoBehaviour
         float effectiveInput = GetSteeringInput();
         foreach (var wheel in wheels.Where(w => w.axel == Axel.Front))
         {
-            var _steerAngle = steerInput * turnSensitivty * (isDrifting ? 0.65f : 0.55f);
+            var _steerAngle = steerInput * turnSensitivty * (isDrifting ? 0.45f : 0.35f);
             wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
@@ -626,7 +626,6 @@ public class CarController : MonoBehaviour
                     //blue car  
                     case "REALCAR":
                         turbepush = 15.0f;
-                        //seriously what kind of boost are we going to give to this fucking car, drift related? turbe related? or score related? or fucking all of them? make that shit OP as fuck
                         break;
                     //gray car
                     case "REALCAR_x":
@@ -641,8 +640,8 @@ public class CarController : MonoBehaviour
                         break;
                     //da Lada
                     case "Lada":
-                        turbeMax = 15.0f;
-                        turbepush = 1000.0f;
+                        turbeMax = 30.0f;
+                        turbepush = 500.0f;
                         break;
                     default:
                         Debug.LogWarning($"Unknown car name: {carName}");
@@ -842,7 +841,7 @@ public class CarController : MonoBehaviour
         if (throttle > 0.1f)
             moveInput = throttle;
         else if (brake > 0.1f)
-            moveInput = -brake;
+            moveInput = -brake * 1.5f;
         else
             moveInput = 0f;
     }
