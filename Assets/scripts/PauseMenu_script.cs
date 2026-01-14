@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject Optionspanel;
     public GameObject[] pauseMenuObjects;
+    public GameObject playButton; // Assign in inspector, or find by name
 
     private bool optionsOpen => Optionspanel != null && Optionspanel.activeSelf;
     private CarInputActions Controls;
@@ -62,7 +64,38 @@ public class PauseMenu : MonoBehaviour
             pauseMenuObjects[0].transform.localPosition = new Vector3(0.0f, 470.0f, 0.0f);
             GameManager.instance.StopAddingPoints();
             LeanTween.moveLocalY(pauseMenuObjects[0], 0.0f, 0.4f).setEaseInOutCirc().setIgnoreTimeScale(true);
+            
+            // Select the Play button for UI navigation
+            SelectPlayButton();
         }
+    }
+
+    private void SelectPlayButton()
+    {
+        // If not assigned in inspector, try to find it
+        if (playButton == null)
+        {
+            playButton = FindPlay(pauseMenuObjects[0].transform, "Play")?.gameObject;
+        }
+
+        if (playButton != null && EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(playButton);
+        }
+    }
+
+    private Transform FindPlay(Transform parent, string name)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == name)
+                return child;
+            
+            Transform result = FindPlay(child, name);
+            if (result != null)
+                return result;
+        }
+        return null;
     }
 
     //ERITTÄIN ronnyinen funktio tääl näi
