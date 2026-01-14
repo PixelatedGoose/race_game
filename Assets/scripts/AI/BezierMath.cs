@@ -89,7 +89,7 @@ public static class BezierMath
             } while (t <= 0.6f);
         }
 
-        Debug.Log($"Bezier points computed in {(DateTime.Now.Ticks - startTime) / TimeSpan.TicksPerMillisecond} ms");
+        Debug.Log($"Bezier points computed in {(DateTime.Now.Ticks - startTime) / 10} microseconds");
 
         return bezierPoints.ToArray();
     }

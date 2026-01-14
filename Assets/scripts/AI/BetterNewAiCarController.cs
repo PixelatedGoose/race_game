@@ -134,34 +134,29 @@ public class BetterNewAiCarController : MonoBehaviour
     private void FixedUpdate()
     {
         // Airborne?
-        if (Physics.Raycast(transform.position, Vector3.down, GROUND_RAY_LENGTH))
+        if (Physics.Raycast(carRb.position, Vector3.down, GROUND_RAY_LENGTH))
         {
             // Apply gravity
             carRb.AddForce(gravityMultiplier * Physics.gravity.magnitude * Vector3.down, ForceMode.Acceleration);
         }
 
         // Set new waypoint if close enough to current
-        Debug.Log("current waypoint: " + aiCarManager.Waypoints[currentWaypointIndex]);
-        Debug.Log(Vector3.Distance(transform.position, aiCarManager.Waypoints[currentWaypointIndex]));
-        if (Vector3.Distance(transform.position, aiCarManager.Waypoints[currentWaypointIndex]) < waypointThreshold)
+        if (Vector3.Distance(carRb.position, aiCarManager.Waypoints[currentWaypointIndex]) < waypointThreshold)
         {
             currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.Waypoints.Count();
             targetPoint = aiCarManager.Waypoints[currentWaypointIndex];
         }
 
-        Debug.Log("target: " + currentWaypointIndex);
-        Debug.Log(transform.localPosition);
-        transform.rotation = Quaternion.Lerp(
-            transform.rotation,
-            Quaternion.LookRotation(aiCarManager.Waypoints[currentWaypointIndex] - transform.position),
+        carRb.rotation = Quaternion.Lerp(
+            carRb.rotation,
+            Quaternion.LookRotation(aiCarManager.Waypoints[currentWaypointIndex] - carRb.position),
             turnStrength * Time.fixedDeltaTime
         );
-        Debug.Log(transform.rotation);
 
         
         foreach (CarController.Wheel wheel in frontWheels)
         {
-            wheel.wheelCollider.steerAngle = transform.rotation.y;
+            wheel.wheelCollider.steerAngle = carRb.rotation.y;
         }
 
         
@@ -232,15 +227,15 @@ public class BetterNewAiCarController : MonoBehaviour
         {
             if (other == this) continue;
 
-            Vector3 toOther = other.transform.position - transform.position;
+            Vector3 toOther = other.carRb.position - carRb.position;
             float distance = toOther.magnitude;
             float otherSafeRadius = Mathf.Max(other.CarWidth, other.CarLength) * 0.5f;
             float minSafeDistance = safeRadius + otherSafeRadius + avoidanceBuffer;
 
             if (distance < minSafeDistance && Vector3.Dot(transform.forward, toOther.normalized) > 0.5f)
             {
-                Vector3 myFuturePos = transform.position + carRb.linearVelocity * 0.5f;
-                Vector3 otherFuturePos = other.transform.position + other.carRb.linearVelocity * 0.5f;
+                Vector3 myFuturePos = carRb.position + carRb.linearVelocity * 0.5f;
+                Vector3 otherFuturePos = other.carRb.position + other.carRb.linearVelocity * 0.5f;
                 float futureDist = (myFuturePos - otherFuturePos).magnitude;
 
                 if (futureDist < minSafeDistance)
@@ -259,6 +254,6 @@ public class BetterNewAiCarController : MonoBehaviour
 
     private void OffsetTargetPoint(Vector3 avoidancePoint)
     {
-        targetPoint = Vector3.RotateTowards(targetPoint, Vector3.Reflect(avoidancePoint, transform.rotation * Vector3.one), 2f, 0f);
+        targetPoint = Vector3.RotateTowards(targetPoint, Vector3.Reflect(avoidancePoint, carRb.rotation * Vector3.one), 2f, 0f);
     }
 }
