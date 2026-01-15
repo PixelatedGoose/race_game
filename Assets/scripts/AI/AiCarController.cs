@@ -65,7 +65,7 @@ public class BetterNewAiCarController : MonoBehaviour
     // --- Avoidance ---
     [Header("Avoidance Settings")]
     [Tooltip("Extra buffer distance added to the safe radius for avoidance checks.")]
-    [SerializeField] private float avoidanceBuffer = 2.0f;
+    [SerializeField] private float avoidanceBuffer = 5.0f;
     [Tooltip("How far to offset laterally when dodging another car.")]
     [SerializeField] private float avoidanceLateralOffset = 2.0f;
     private float avoidanceOffset = 0f;
@@ -120,7 +120,7 @@ public class BetterNewAiCarController : MonoBehaviour
         if (carRb == null) carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
 
-        carCollider = GetComponent<Collider>();
+        carCollider = GetComponentInChildren<Collider>();
         if (carCollider != null)
         {
             CarWidth = carCollider.bounds.size.x;
@@ -229,7 +229,6 @@ public class BetterNewAiCarController : MonoBehaviour
         foreach (var other in aiCarManager.AiCars)
         {
             if (other == this) continue;
-            Debug.Log("check other car");
 
             Vector3 toOther = other.carRb.position - carRb.position;
             float distance = toOther.magnitude;
@@ -238,20 +237,17 @@ public class BetterNewAiCarController : MonoBehaviour
 
             if (distance < minSafeDistance && Vector3.Dot(transform.forward, toOther.normalized) > 0.5f)
             {
-                Debug.Log("avoiding");
                 Vector3 myFuturePos = carRb.position + carRb.linearVelocity * 0.5f;
                 Vector3 otherFuturePos = other.carRb.position + other.carRb.linearVelocity * 0.5f;
                 float futureDist = (myFuturePos - otherFuturePos).magnitude;
 
                 if (futureDist < minSafeDistance)
                 {
-                    Debug.Log("maybe avoiding");
                     float steerDirection = Vector3.Cross(transform.forward, toOther).y > 0 ? -1f : 1f;
                     avoidanceOffset += steerDirection * avoidanceLateralOffset * avoidance;
 
                     if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > other.carRb.linearVelocity.magnitude)
                     {
-                        Debug.Log("def avoiding");
                         moveInput = 0.7f;
                     }
                 }

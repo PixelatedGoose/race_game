@@ -1134,7 +1134,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BetterNewAiCarController
   waypointThreshold: 10
-  bezierCurveResolution: 10
   angleThreshold: 35
   maxAcceleration: 300
   maxSpeed: 100
@@ -1149,8 +1148,8 @@ MonoBehaviour:
   minSlowdown: 0.35
   detectionRadius: 7
   curveTolerance: 2
-  avoidanceBuffer: 2
-  avoidanceLateralOffset: 2
+  avoidanceBuffer: 7
+  avoidanceLateralOffset: 4
   boostMultiplier: 1.25
   wheels:
   - wheelModel: {fileID: 2480497655319108271}
