@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class musicControlTutorial : MonoBehaviour
 {
@@ -13,22 +11,37 @@ public class musicControlTutorial : MonoBehaviour
     public AudioSource mainTrack;
     public AudioSource driftTrack;
     public AudioSource turboTrack;
-    private List<GameObject> variants;
+    public AudioSource[] variants;
 
-    private List<int> tweenIds = new List<int>();
-    private enum MusicState { Main, Drift, Turbo }
-    private MusicState currentState = MusicState.Main;
+    private enum CarMusicState {Main, Drift, Turbo};
+    private CarMusicState CurrentMusState = CarMusicState.Main;
+    private CarMusicState LatestMusState = CarMusicState.Main;
+    private int[] activeTweenIDs;
 
     private CarController carController;
 
-    void Awake()
+    void OnEnable()
     {
         Controls = new CarInputActions();
         Controls.Enable();
 
         carController = FindAnyObjectByType<CarController>();
-        Controls.CarControls.pausemenu.performed += PauseMenuCheck;
+        Controls.CarControls.pausemenu.performed += ctx => PausedMusicHandler();
+
+        //the TRUE death of TrackedTween
+        activeTweenIDs = new int[musicListSources.Length];
     }
+    private void OnDisable()
+    {
+        LeanTween.cancelAll();
+        Controls.CarControls.Drift.performed -= DriftCall;
+        Controls.CarControls.Drift.canceled -= DriftCanceled;
+        Controls.CarControls.turbo.performed -= TurboCall;
+        Controls.CarControls.turbo.canceled -= TurboCanceled;
+        Controls.Disable();
+    }
+    private void OnDestroy() => Controls.Disable();
+
     public void EnableDriftFunctions()
     {
         Controls.CarControls.Drift.performed += DriftCall;
@@ -40,95 +53,45 @@ public class musicControlTutorial : MonoBehaviour
         Controls.CarControls.turbo.canceled += TurboCanceled;
     }
 
+    //kaikki tarpeelline on täs
     void DriftCall(InputAction.CallbackContext context)
     {
-        if (currentState == MusicState.Turbo || variants.Count <= 1) //VOI VITTU IHAN OIKEASTI
-            return;
-
-        CancelTweens();
-        if (GameManager.instance.isAddingPoints)
-        {
-            TrackedTween_Start(mainTrack.volume, 0.0f, 0.6f, val => mainTrack.volume = val);
-            TrackedTween_Start(driftTrack.volume, 0.28f, 0.6f, val => driftTrack.volume = val);
-
-            if (turboTrack != null)
-                TrackedTween_Start(turboTrack.volume, 0.0f, 0.6f, val => turboTrack.volume = val);
-
-            currentState = MusicState.Drift;
-        }
+        CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Drift;
+        FadeLayerTracks();
     }
     void DriftCanceled(InputAction.CallbackContext context)
     {
-        if (currentState == MusicState.Turbo || variants.Count <= 1)
-            return;
-
-        if (!GameManager.instance.isAddingPoints) //turha mut nyt ei oteta riskejä lol
-        {
-            TrackedTween_Start(mainTrack.volume, 0.28f, 0.6f, val => mainTrack.volume = val);
-            TrackedTween_Start(driftTrack.volume, 0.0f, 0.6f, val => driftTrack.volume = val);
-
-            if (turboTrack != null)
-                TrackedTween_Start(turboTrack.volume, 0.0f, 0.6f, val => turboTrack.volume = val);
-
-            currentState = MusicState.Main;
-        }
+        CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Main;
+        FadeLayerTracks();
     }
-
     void TurboCall(InputAction.CallbackContext context)
     {
-        if (variants.Count < 3) //koska näit voi olla ainoastaa kolme kun voi käyttää turboa
-            return;
-
-        CancelTweens();
-        TrackedTween_Start(turboTrack.volume, 0.28f, 0.6f, val => turboTrack.volume = val);
-        TrackedTween_Start(driftTrack.volume, 0.0f, 0.6f, val => driftTrack.volume = val);
-        TrackedTween_Start(mainTrack.volume, 0.0f, 0.6f, val => mainTrack.volume = val);
-
-        currentState = MusicState.Turbo;
+        CurrentMusState = CarMusicState.Turbo;
+        FadeLayerTracks();
     }
     void TurboCanceled(InputAction.CallbackContext context)
     {
-        if (variants.Count < 3)
-            return;
-
-        if (GameManager.instance.isAddingPoints)
-        {
-            TrackedTween_Start(driftTrack.volume, 0.28f, 0.6f, val => driftTrack.volume = val);
-            TrackedTween_Start(mainTrack.volume, 0.0f, 0.6f, val => mainTrack.volume = val);
-            TrackedTween_Start(turboTrack.volume, 0.0f, 0.6f, val => turboTrack.volume = val);
-
-            currentState = MusicState.Drift;
-        }
-        else
-        {
-            TrackedTween_Start(mainTrack.volume, 0.28f, 0.6f, val => mainTrack.volume = val);
-            TrackedTween_Start(driftTrack.volume, 0.0f, 0.6f, val => driftTrack.volume = val);
-            TrackedTween_Start(turboTrack.volume, 0.0f, 0.6f, val => turboTrack.volume = val);
-
-            currentState = MusicState.Main;
-        }
+        CurrentMusState = carController.isDrifting ? CarMusicState.Drift : CarMusicState.Main;
+        FadeLayerTracks();
     }
-    void OnDisable()
-    {
-        Controls.Disable();
-        Controls.CarControls.Drift.performed -= DriftCall;
-        Controls.CarControls.turbo.performed -= TurboCall;
-        Controls.CarControls.Drift.canceled -= DriftCanceled;
-        Controls.CarControls.turbo.canceled -= TurboCanceled;
-    }
+
+
 
     void Start()
     {
         musicList = GameObject.FindGameObjectsWithTag("musicTrack");
         musicListSources = musicList.Select(go => go.GetComponent<AudioSource>()).ToArray();
         TrackVariants();
+
+        //debug
+        StartNonIntroTracks();
+        carController.canDrift = true;
+        carController.canUseTurbo = true;
+        MusicSections("7_FINAL_TUTORIAL_1main");
+        EnableDriftFunctions();
+        EnableTurboFunctions();
     }
 
-    //"track 2" eli se joka alkaa, ku menee ekasta triggeristä läpi
-    //on se, mistä kaikkien muitten pitäs referoida alkukohta.
-    //joudun tän lisäksi tekee tän vielä uudestaa driftin alotustrackkia varten,
-    //mut se sit joudutaa tekee just ja just enne vikoja päiviä. helppo juttu lol
-    //(famous last words)
     public void StartNonIntroTracks()
     {
         foreach (AudioSource musicTrack in musicListSources)
@@ -153,60 +116,28 @@ public class musicControlTutorial : MonoBehaviour
         // Get the prefix (e.g. first two characters)
         string prefix = clipName.Substring(0, 1);
 
-        // Find all AudioSources with the same prefix
-        variants = musicList
+        //updated the fucker jotta se käyttää suoraan soossia eikä gameobjectei
+        variants = musicListSources
             .Select(go => go)
             .Where(a => a.name.StartsWith(prefix))
             .OrderBy(a => a.name)
-            .ToList();
-
-        if (variants.Count == 1)
+            .ToArray();
+            
+        if (set)
         {
-            Debug.LogWarning("no variants found; ignore if intended");
-            if (set)
-            {
-                mainTrack = variants[0].GetComponent<AudioSource>();
-            }
+            mainTrack = variants.Length > 0 ? variants[0] : null;
+            driftTrack = variants.Length > 1 ? variants[1] : null;
+            turboTrack = variants.Length > 2 ? variants[2] : null;
         }
-        //lazy
-        else if (variants.Count == 2)
+        else if (!set)
         {
-            Debug.Log($"Found {variants.Count} variants for prefix {prefix}");
-            if (set)
-            {
-                mainTrack = variants[0].GetComponent<AudioSource>();
-                if (variants[1] != null)
-                    driftTrack = variants[1].GetComponent<AudioSource>();
-            }
-        }
-        else if (variants.Count == 3)
-        {
-            Debug.Log($"Found {variants.Count} variants for prefix {prefix}");
-            if (set)
-            {
-                mainTrack = variants[0].GetComponent<AudioSource>();
-                if (variants[1] != null)
-                    driftTrack = variants[1].GetComponent<AudioSource>();
-                if (variants[2] != null)
-                    turboTrack = variants[2].GetComponent<AudioSource>();
-            }
-        }
-
-        if (set == false)
-        {
-            Debug.Log("assuming track has no variants; removing", mainTrack);
-            driftTrack = null;
-            turboTrack = null;
+            Debug.Log("assuming track has no variants", mainTrack);
         }
     }
 
-    void CancelTweens()
+    void Update()
     {
-        foreach (var tweenId in tweenIds)
-        {
-            LeanTween.cancel(tweenId);
-        }
-        tweenIds.Clear();
+        Debug.Log(mainTrack);
     }
 
     void ChangeTrack(string selectedAudio)
@@ -221,8 +152,6 @@ public class musicControlTutorial : MonoBehaviour
     /// <param name="trackName">koko tiedostonimi, ilman .wav päätettä</param>
     public void MusicSections(string trackName, string mode = "instant") //lisään myöhemmi oikeet fade outit ja transitionit
     {
-        CancelTweens();
-
         float volSet = 0.28f;
 
         switch (mode)
@@ -243,79 +172,57 @@ public class musicControlTutorial : MonoBehaviour
                 if (turboTrack != null)
                     turboTrack.Play();
                 break;
-            case "fade":
-                FadeSections(trackName);
-                break;
         }
     }
 
-    private void FadeSections(string trackName)
+    private void FadeLayerTracks()
     {
-        AudioSource previousMain = mainTrack;
-        AudioSource previousDrift = driftTrack;
-        AudioSource previousTurbo = turboTrack;
+        Debug.Log("begin function");
+        //tarkistaa staten ku funktio alkaa, ei tarvi muualla
+        if (CurrentMusState == LatestMusState) return;
+        Debug.Log("currentmusstate is not latestmusstate");
 
-        ChangeTrack(trackName);
 
-        TrackedTween_Start(mainTrack.volume, 0.28f, 0.6f, val => mainTrack.volume = val);
-        TrackedTween_Start(previousMain.volume, 0.0f, 0.6f, val => previousMain.volume = val);
 
-        //TODO: rewrite tälle jotta tätä PASKAA ei tarvita.
-        //liian monimutkanen, varsinki verrattuna nykyseen musiikkisysteemii
-        if (driftTrack != null && carController.isDrifting)
-            TrackedTween_Start(driftTrack.volume, 0.28f, 0.6f, val => driftTrack.volume = val);
-        if (previousDrift != null)
-            TrackedTween_Start(previousDrift.volume, 0.0f, 0.6f, val => previousDrift.volume = val);
-        if (turboTrack != null && GameManager.instance.turbeActive)
-            TrackedTween_Start(turboTrack.volume, 0.28f, 0.6f, val => turboTrack.volume = val);
-        if (previousTurbo != null)
-            TrackedTween_Start(previousTurbo.volume, 0.0f, 0.6f, val => previousTurbo.volume = val);
+        int stateIndex = (int)CurrentMusState; //current on oikeesti se viimeisin lol
+        int previousStateIndex = (int)LatestMusState;
+        //tein uniikin arrayn näitten säilytykselle
+        AudioSource NextTrack = variants[stateIndex];
+        AudioSource PreviousTrack = variants[previousStateIndex];
+        Debug.Log($"{NextTrack.name} {PreviousTrack.name}");
+
+        // Cancel any existing tweens on these tracks
+        if (activeTweenIDs[stateIndex] != -1)
+            LeanTween.cancel(activeTweenIDs[stateIndex]);
+        if (activeTweenIDs[previousStateIndex] != -1)
+            LeanTween.cancel(activeTweenIDs[previousStateIndex]);
+
+        // Start new tweens and store their IDs
+        activeTweenIDs[stateIndex] =
+        LeanTween.value(NextTrack.volume, 0.3f, 1.0f)
+            .setOnUpdate(val => NextTrack.volume = val)
+            .id;
+        activeTweenIDs[previousStateIndex] =
+        LeanTween.value(PreviousTrack.volume, 0.0f, 1.0f)
+            .setOnUpdate(val => PreviousTrack.volume = val)
+            .id;
+        
+        LatestMusState = CurrentMusState;
     }
 
-    
-
-    void PauseMenuCheck(InputAction.CallbackContext context)
+    public void PausedMusicHandler()
     {
-        if (GameManager.instance.isPaused == true)
+        bool isPaused = GameManager.instance.isPaused;
+        foreach (AudioSource musicTrack in musicListSources)
         {
-            Debug.Log("yes");
-            foreach (AudioSource musicTrack in musicListSources)
-            {
+            if (isPaused)
                 musicTrack.Pause();
-            }
-        }
-        else if (GameManager.instance.isPaused == false)
-        {
-            Debug.Log("no");
-            foreach (AudioSource musicTrack in musicListSources)
-            {
+            else
                 musicTrack.UnPause();
-            }
         }
     }
 
-    public int TrackedTween_Start(float from, float to, float time, System.Action<float> onUpdate, bool yeah = false)
-    {
-        int tweenId;
-
-        if (yeah)
-        {
-            tweenId = LeanTween.value(from, to, time).setOnUpdate(onUpdate)
-            .setOnComplete(() =>
-            {
-                mainTrack.volume = 0f;
-            }).uniqueId;
-        }
-        else
-        {
-            tweenId = LeanTween.value(from, to, time).setOnUpdate(onUpdate).uniqueId;
-        }
-
-        tweenIds.Add(tweenId);
-        return tweenId;
-    }
-
-    //jotta fuckshitter.cs ei callaa tätä scriptii 5 kertaa
+    //jotta instructionCheck.cs ei callaa tätä scriptii 5 kertaa
     public void BeginDriftSection()
     {
         mainTrack.volume = 0f;
