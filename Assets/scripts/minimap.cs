@@ -34,7 +34,7 @@ public class minimap : MonoBehaviour
 
         // Find all active AI cars in the scene
         var aiCars = FindFirstObjectByType<AiCarManager>();
-        if (aiCars.AiCars != null && aiCars.AiCars.Count > 0)
+        if (aiCars != null && aiCars.AiCars != null && aiCars.AiCars.Count > 0)
         {
             foreach (var ai in aiCars.AiCars)
             {
