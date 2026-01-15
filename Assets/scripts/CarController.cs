@@ -120,6 +120,16 @@ public class CarController : MonoBehaviour
         steerInput = 0f;
     }
 
+    void OnApplicationFocus(bool focus)
+    {
+        if (focus){
+            if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
+            {
+                LogitechGSDK.LogiUpdate();
+            }
+        }
+    }
+
 
     private void OnEnable()
     {
@@ -172,6 +182,14 @@ public class CarController : MonoBehaviour
     {
         GetInputs();
         Animatewheels();
+        // detect connection state changes and print once when it changes
+        bool currentlyConnected = logitechInitialized && LogitechGSDK.LogiIsConnected(0);
+        if (currentlyConnected != lastLogiConnected)
+        {
+            lastLogiConnected = currentlyConnected;
+            Debug.Log($"[CarController] Logitech connection status: {(currentlyConnected ? "Connected" : "Disconnected")}");
+        }
+
         if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
         {
             LogitechGSDK.LogiUpdate();
@@ -819,13 +837,21 @@ public class CarController : MonoBehaviour
     public bool useLogitechWheel = true;
     public float forceFeedbackMultiplier = 1.0f;
     private bool logitechInitialized = false;
+    private bool lastLogiConnected = false;
 
     void InitializeLogitechWheel()
     {
-        if (!useLogitechWheel) return;
-        
+        if (!useLogitechWheel)
+        {
+            Debug.Log("[CarController] useLogitechWheel is false — skipping Logitech initialization.");
+            return;
+        }
+
         logitechInitialized = LogitechSDKManager.Initialize();
-        Debug.Log($"[CarController] Logitech initialized: {logitechInitialized}");
+        if (logitechInitialized)
+            Debug.Log("[CarController] Logitech wheel initialized successfully.");
+        else
+            Debug.LogWarning("[CarController] Logitech wheel failed to initialize.");
     }
 
     void GetLogitechInputs()
@@ -842,10 +868,10 @@ public class CarController : MonoBehaviour
         // Clutch pedal for reverse - rglSlider is an array, index 0 is clutch
         float clutch = Mathf.Clamp01(-state.rglSlider[0] / 32768.0f);
         
-        if (throttle > 0.1f)
-            moveInput = throttle;
-        else if (clutch > 0.1f)
+        if (clutch > 0.1f)
             moveInput = -clutch;
+        else if (throttle > 0.1f)
+            moveInput = throttle;
         else
             moveInput = 0f;
     }
@@ -859,6 +885,7 @@ public class CarController : MonoBehaviour
 
     void ApplyForceFeedback()
     {
+        if (!LogitechSDKManager.IsReady) return;
 
         if (GameManager.instance.isPaused)
         {

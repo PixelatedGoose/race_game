@@ -1,5 +1,7 @@
 using UnityEngine;
 using Logitech;
+using NUnit.Framework;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -37,6 +39,24 @@ public static class LogitechSDKManager
             initAttempted = true;
         }
     }
+    public static void ForceReinitialize()
+    {
+        Debug.Log("[LogitechSDK] Forcing SDK reinitialization...");
+        try
+        {
+            LogitechGSDK.LogiSteeringShutdown();
+        }
+        catch
+        {
+            isInitialized = false;
+            initAttempted = false;
+
+            InitializeSDK();
+        }
+    }
+
+    public static bool IsReady =>
+        isInitialized && LogitechGSDK.LogiIsConnected(0);
 
     static void InitializeSDK()
     {
@@ -94,4 +114,5 @@ public static class LogitechSDKManager
         }
         return isInitialized && LogitechGSDK.LogiIsConnected(0);
     }
+
 }
