@@ -139,7 +139,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     public void ShowScores()
     {
-        TotalScoreText.text = "FinalScore: " + GetScoreInt().ToString();
+        TotalScoreText.text = "Final Score: " + GetScoreInt().ToString();
         TimeScoreText.text = "Time: " + Mathf.FloorToInt(TimeStartPoint).ToString();
         DriftScoreText.text = "Drift: " + Mathf.FloorToInt(GetScoreInt() - TimeStartPoint).ToString();
     }

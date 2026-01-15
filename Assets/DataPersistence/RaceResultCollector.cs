@@ -83,13 +83,13 @@ public class RaceResultCollector : MonoBehaviour
             switch (tester)
             {
                 case "REALCAR":
-                    return "Honda";
+                    return "Teimo";
                 case "REALCAR_y":
-                    return "Subaru";
+                    return "Sarieu";
                 case "REALCAR_x":
-                    return "Toyota";
+                    return "Bansku";
                 case "Lada":
-                    return "Lada";
+                    return "Totato";
             }
         }
         return "Unknown";

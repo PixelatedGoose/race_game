@@ -28,16 +28,21 @@ public class musicControl : MonoBehaviour
         Controls = new CarInputActions();
         carController = FindAnyObjectByType<CarController>();
 
-        Controls.CarControls.Drift.performed += DriftCall;
+        //temporarily disabled
+        /* Controls.CarControls.Drift.performed += DriftCall;
         Controls.CarControls.Drift.canceled += DriftCanceled;
         Controls.CarControls.turbo.performed += TurboCall;
-        Controls.CarControls.turbo.canceled += TurboCanceled;
+        Controls.CarControls.turbo.canceled += TurboCanceled; */
     }
 
     private void OnEnable() => Controls.Enable();
     private void OnDisable()
     {
         LeanTween.cancelAll();
+        Controls.CarControls.Drift.performed -= DriftCall;
+        Controls.CarControls.Drift.canceled -= DriftCanceled;
+        Controls.CarControls.turbo.performed -= TurboCall;
+        Controls.CarControls.turbo.canceled -= TurboCanceled;
         Controls.Disable();
     }
     private void OnDestroy() => Controls.Disable();
@@ -92,7 +97,7 @@ public class musicControl : MonoBehaviour
 
         // Start new tweens and store their IDs
         activeTweenIDs[stateIndex] =
-        LeanTween.value(NextTrack.volume, 0.34f, 1.0f)
+        LeanTween.value(NextTrack.volume, 0.3f, 1.0f)
             .setOnUpdate(val => NextTrack.volume = val)
             .id;
         activeTweenIDs[previousStateIndex] =
@@ -114,10 +119,10 @@ public class musicControl : MonoBehaviour
     public void StartFinalLapTrack()
     {
         Debug.Log("jos näitä logeja on enemmän ku yks jokin on paskana.");
-        Controls.CarControls.Drift.performed -= DriftCall;
+        /* Controls.CarControls.Drift.performed -= DriftCall;
         Controls.CarControls.Drift.canceled -= DriftCanceled;
         Controls.CarControls.turbo.performed -= TurboCall;
-        Controls.CarControls.turbo.canceled -= TurboCanceled;
+        Controls.CarControls.turbo.canceled -= TurboCanceled; */
         StopMusicTracks();
         finalLapTrack.Play();
     }

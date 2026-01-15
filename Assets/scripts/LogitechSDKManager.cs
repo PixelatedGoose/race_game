@@ -41,23 +41,42 @@ public static class LogitechSDKManager
     static void InitializeSDK()
     {
         Debug.Log("[LogitechSDK] Initializing...");
-        
+
         try
         {
-            bool result = LogitechGSDK.LogiSteeringInitialize(false);
-            Debug.Log($"[LogitechSDK] LogiSteeringInitialize returned: {result}");
-            
-            bool connected = LogitechGSDK.LogiIsConnected(0);
-            Debug.Log($"[LogitechSDK] LogiIsConnected returned: {connected}");
-            
-            if (result || connected)
+            bool result = false;
+            bool connected = false;
+            bool sdkAvailable = true;
+
+            try
+            {
+                result = LogitechGSDK.LogiSteeringInitialize(false);
+                Debug.Log($"[LogitechSDK] LogiSteeringInitialize returned: {result}");
+
+                connected = LogitechGSDK.LogiIsConnected(0);
+                Debug.Log($"[LogitechSDK] LogiIsConnected returned: {connected}");
+            }
+            catch (System.DllNotFoundException)
+            {
+                sdkAvailable = false;
+                Debug.Log("[LogitechSDK] Logitech SDK DLL not found. Skipping wheel initialization.");
+            }
+            catch (System.Exception e)
+            {
+                sdkAvailable = false;
+                Debug.LogError($"[LogitechSDK] Exception: {e.Message}");
+            }
+
+            if (sdkAvailable && (result || connected))
             {
                 isInitialized = true;
                 Debug.Log("[LogitechSDK] SDK initialized successfully!");
             }
-            else
+            else if (sdkAvailable)
             {
+            #if !UNITY_EDITOR
                 Debug.LogWarning("[LogitechSDK] Failed - restart G Hub and replug wheel, then restart Unity");
+                #endif
             }
         }
         catch (System.Exception e)

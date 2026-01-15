@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class loadArea : MonoBehaviour
@@ -18,38 +17,6 @@ public class loadArea : MonoBehaviour
         collider = GetComponent<Collider>();
         instructionHandler = GameObject.Find("instructionHandler").GetComponent<instructionHandler>();
         musicControlTutorial = GameObject.Find("music").GetComponent<musicControlTutorial>();
-    }
-
-    void OnEnable()
-    {
-        InputSystem.onDeviceChange += OnDeviceChange;
-    }
-
-    void OnDisable()
-    {
-        InputSystem.onDeviceChange -= OnDeviceChange;
-    }
-
-    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
-    {
-        if (device is Gamepad)
-        {
-            if (change == InputDeviceChange.Added)
-            {
-                Debug.Log("controller connect");
-            }
-            else if (change == InputDeviceChange.Removed)
-            {
-                try
-                {
-                    Debug.Log("controller disconnect");
-                }
-                catch (System.IndexOutOfRangeException ex)
-                {
-                    Debug.LogWarning("SOMETHING HAS FUCKED UP" + ex.Message);
-                }
-            }
-        }
     }
 
     private void OnTriggerEnter(Collider other)

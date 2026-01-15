@@ -3,8 +3,6 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using Logitech;
-using UnityEngine.InputSystem.HID;
 
 [System.Serializable]
 public class instructionListClass
@@ -38,6 +36,7 @@ public class instructionHandler : MonoBehaviour
 {
     [Header("kategoriat")]
     public string[] categories;
+    private string[] deviceSpecificCategories;
     [Tooltip("kategorian indeksi")]
     public int idx;
     public string nextCategory;
@@ -79,53 +78,82 @@ public class instructionHandler : MonoBehaviour
             field => field.Name
         );
 
-        InputSystem.onDeviceChange += OnDeviceChange;
+        InputSystem.onDeviceChange += SetCategoriesByDevice;
+        
+        // Find the wheel device if present, otherwise fallback
+        var wheelDevice = InputSystem.devices.FirstOrDefault(d => d.name == "Logitech G923 Racing Wheel for PlayStation and PC");
+        var controllerDevice = InputSystem.devices.FirstOrDefault(d => d is Gamepad);
+        if (wheelDevice != null)
+            SetCategoriesByDevice(wheelDevice, InputDeviceChange.Added);
+        else if (controllerDevice != null)
+            SetCategoriesByDevice(controllerDevice, InputDeviceChange.Added);
+        else
+            SetCategoriesByDevice(InputSystem.devices.FirstOrDefault(), InputDeviceChange.Added);
     }
 
     void OnDisable()
     {
-        InputSystem.onDeviceChange -= OnDeviceChange;
+        InputSystem.onDeviceChange -= SetCategoriesByDevice;
     }
 
-    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    private void SetCategoriesByDevice(InputDevice device, InputDeviceChange change)
     {
-        Debug.Log(device.name);
-        int categoryDifference = 7;
-        
-        if (device is Gamepad)
+        if (change != InputDeviceChange.Added && change != InputDeviceChange.Removed)
+            return;
+
+        if (change is InputDeviceChange.Added)
         {
-            Debug.Log("give me your controller");
-            categoryDifference = 7;
+            if (device is Keyboard)
+                deviceSpecificCategories = categories.Take(7).ToArray();
+            else if (device is Gamepad)
+                deviceSpecificCategories = categories.Skip(7).Take(7).ToArray();
+            else if (device.name == "Logitech G923 Racing Wheel for PlayStation and PC")
+                deviceSpecificCategories = categories.Skip(14).Take(7).ToArray();
+            else
+                deviceSpecificCategories = categories.Take(7).ToArray();
+
+            Debug.Log($"controls added on {device}");
         }
-        if (device.name == "Logitech G923 Racing Wheel for PlayStation and PC")
+        if (change is InputDeviceChange.Removed)
         {
-            Debug.Log("give me your wheel");
-            categoryDifference = 14;
+            var currentDevice = InputSystem.devices.FirstOrDefault();
+            
+            if (currentDevice is Keyboard)
+                deviceSpecificCategories = categories.Take(7).ToArray();
+            else if (currentDevice is Gamepad)
+                deviceSpecificCategories = categories.Skip(7).Take(7).ToArray();
+            else if (currentDevice.name == "Logitech G923 Racing Wheel for PlayStation and PC")
+                deviceSpecificCategories = categories.Skip(14).Take(7).ToArray();
+            else
+                deviceSpecificCategories = categories.Take(7).ToArray();
+
+            Debug.Log($"controls removed on {device}");
+            Debug.Log($"controls have swapped to {currentDevice}");
         }
-        if (change == InputDeviceChange.Added)
+
+        /* päivitä teksti seuraavasti:
+        1. etsi device kategorioista (eli laitetta koskien, KAIKKI)
+        2. idx mukaan (se yks kategoria, missä se itse teksti myös on)
+        3. tekstin index */
+        if (deviceSpecificCategories != null && idx >= 0 && idx < deviceSpecificCategories.Length)
         {
-            instructionText.text = GetInstruction(categories[idx + categoryDifference], index);
+            instructionText.text = GetInstruction(deviceSpecificCategories[idx], index);
         }
-        else if (change == InputDeviceChange.Removed)
+        else
         {
-            try
-            {
-                instructionText.text = GetInstruction(categories[idx - categoryDifference], index);
-            }
-            catch (System.IndexOutOfRangeException ex)
-            {
-                Debug.LogWarning("controller disconnected during incorrect text display: " + ex.Message);
-            }
+            Debug.LogError("Device-specific categories are null or index is out of range.");
+            instructionText.text = "Error: Unable to retrieve instruction.";
         }
     }
 
     void Start()
     {
-        ShowNextInstructionInCategory("intro", false, 1);
+        //OH MY GOD FUCKING FINALLY!!!!!!21
+        ShowNextInstructionInCategory(deviceSpecificCategories[idx], false, 1);
     }
 
 
-
+    //pitää poistaa myöhemmin
     public Dictionary<string, int> instructionAnimOverrides = new Dictionary<string, int>
     {
         { "intro:2", 4 }, //
@@ -277,17 +305,16 @@ public class instructionHandler : MonoBehaviour
         }
     }
 
-    //add category by device
-
     //lazy
     private string[] GetInstructionListByCategory(string category)
     {
         curCategory = category;
-        idx = System.Array.FindIndex(categories, category => category == curCategory);
+        Debug.Log($"{curCategory}, {category}, {deviceSpecificCategories[6]}, {idx}, {nextCategory}");
+        idx = System.Array.FindIndex(deviceSpecificCategories, category => category == curCategory);
 
-        if (!(idx + 1 >= categories.Length))
+        if (!(idx + 1 >= deviceSpecificCategories.Length))
         {
-            nextCategory = categories[idx + 1];
+            nextCategory = deviceSpecificCategories[idx + 1];
         }
         else
         {
@@ -295,55 +322,56 @@ public class instructionHandler : MonoBehaviour
         }
 
         switch (category)
-            {
-                case "intro":
-                    return instructionListData.intro;
-                case "driving":
-                    return instructionListData.driving;
-                case "driving_2":
-                    return instructionListData.driving_2;
-                case "controls":
-                    return instructionListData.controls;
-                case "drifting":
-                    return instructionListData.drifting;
-                case "turbe":
-                    return instructionListData.turbe;
-                case "final":
-                    return instructionListData.final;
+        {
+            //hell
+            case "intro":
+                return instructionListData.intro;
+            case "driving":
+                return instructionListData.driving;
+            case "driving_2":
+                return instructionListData.driving_2;
+            case "controls":
+                return instructionListData.controls;
+            case "drifting":
+                return instructionListData.drifting;
+            case "turbe":
+                return instructionListData.turbe;
+            case "final":
+                return instructionListData.final;
 
-                case "controller_intro":
-                    return instructionListData.controller_intro;
-                case "controller_driving":
-                    return instructionListData.controller_driving;
-                case "controller_driving_2":
-                    return instructionListData.controller_driving_2;
-                case "controller_controls":
-                    return instructionListData.controller_controls;
-                case "controller_drifting":
-                    return instructionListData.controller_drifting;
-                case "controller_turbe":
-                    return instructionListData.controller_turbe;
-                case "controller_final":
-                    return instructionListData.controller_final;
+            case "controller_intro":
+                return instructionListData.controller_intro;
+            case "controller_driving":
+                return instructionListData.controller_driving;
+            case "controller_driving_2":
+                return instructionListData.controller_driving_2;
+            case "controller_controls":
+                return instructionListData.controller_controls;
+            case "controller_drifting":
+                return instructionListData.controller_drifting;
+            case "controller_turbe":
+                return instructionListData.controller_turbe;
+            case "controller_final":
+                return instructionListData.controller_final;
 
-                case "wheel_intro":
-                    return instructionListData.wheel_intro;
-                case "wheel_driving":
-                    return instructionListData.wheel_driving;
-                case "wheel_driving_2":
-                    return instructionListData.wheel_driving_2;
-                case "wheel_controls":
-                    return instructionListData.wheel_controls;
-                case "wheel_drifting":
-                    return instructionListData.wheel_drifting;
-                case "wheel_turbe":
-                    return instructionListData.wheel_turbe;
-                case "wheel_final":
-                    return instructionListData.wheel_final;
-                
-                default:
-                    Debug.LogError($"Category '{category}' not found");
-                    return null;
-            }
+            case "wheel_intro":
+                return instructionListData.wheel_intro;
+            case "wheel_driving":
+                return instructionListData.wheel_driving;
+            case "wheel_driving_2":
+                return instructionListData.wheel_driving_2;
+            case "wheel_controls":
+                return instructionListData.wheel_controls;
+            case "wheel_drifting":
+                return instructionListData.wheel_drifting;
+            case "wheel_turbe":
+                return instructionListData.wheel_turbe;
+            case "wheel_final":
+                return instructionListData.wheel_final;
+            
+            default:
+                Debug.LogError($"Category '{category}' not found");
+                return null;
+        }
     }
 }
