@@ -34,7 +34,12 @@ public class userDataInput : MonoBehaviour
             "Name cannot be empty!",
             "Invalid name!"
         };
-        //bannedRegexWords = AddRegexToHashset(bannedNamesArray, regexReplacements);
+        bannedRegexWords = AddRegexToHashset(bannedNamesArray, regexReplacements);
+
+        foreach (string word in bannedRegexWords)
+        {
+            Debug.Log("word: " + word);
+        }
     }
 
     void Start()
@@ -87,13 +92,13 @@ public class userDataInput : MonoBehaviour
 
     public void UpdateUserName()
     {
-        userName = inputField.text;
+        userName = inputField.text.ToLower();
         Debug.Log($"edited; new name: {userName}");
     }
 
     public void CheckForInvalidName()
     {
-        /* foreach (string bannedName in bannedRegexWords)
+        foreach (string bannedName in bannedRegexWords)
         {
             //huom. tää jo toimii
             if (Regex.IsMatch(userName, bannedName))
@@ -103,7 +108,8 @@ public class userDataInput : MonoBehaviour
                 enter.interactable = false;
                 return;
             }
-        } */
+        } 
+
         if (userName.Length == 0)
         {
             bannedPopup.text = bannedNamePopups[0];
