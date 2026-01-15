@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 
 public class minimap : MonoBehaviour
@@ -32,19 +33,29 @@ public class minimap : MonoBehaviour
             arrows.Add(arrow);
         }
 
-        // Find all active AI cars in the scene
-        var aiCars = FindFirstObjectByType<AiCarManager>();
-        if (aiCars != null && aiCars.AiCars != null && aiCars.AiCars.Count > 0)
-        {
-            foreach (var ai in aiCars.AiCars)
-            {
-                if (!ai.gameObject.activeInHierarchy) continue;
-                if (playerCar != null && ai.gameObject == playerCar) continue;
+        StartCoroutine(WaitForAiCars());
+    }
 
-                carTransforms.Add(ai.carRb.transform);
-                var arrow = Instantiate(aiArrowPrefab, minimapRect);
-                arrows.Add(arrow);
-            }
+    private IEnumerator WaitForAiCars()
+    {
+        var aiCarManager = FindFirstObjectByType<AiCarManager>();
+        
+        while (aiCarManager == null || aiCarManager.AiCars == null || aiCarManager.AiCars.Count == 0)
+        {
+            yield return null;
+        }
+
+        var playerCar = GameManager.instance.currentCar;
+
+        foreach (var ai in aiCarManager.AiCars)
+        {
+            if (ai == null || !ai.gameObject.activeInHierarchy) continue;
+            if (playerCar != null && ai.gameObject == playerCar) continue;
+
+            Transform aiTransform = ai.carRb != null ? ai.carRb.transform : ai.transform;
+            carTransforms.Add(aiTransform);
+            var arrow = Instantiate(aiArrowPrefab, minimapRect);
+            arrows.Add(arrow);
         }
     }
 
@@ -52,7 +63,6 @@ public class minimap : MonoBehaviour
     {
         Vector2 minimapSize = minimapRect.rect.size;
         Vector2 minimapPivot = minimapRect.pivot;
-
         Vector2 offset = new Vector2(arrowOffsetX * minimapSize.x, arrowOffsetY * minimapSize.y);
 
         for (int i = 0; i < carTransforms.Count; i++)
