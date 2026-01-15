@@ -39,21 +39,6 @@ public static class LogitechSDKManager
             initAttempted = true;
         }
     }
-    public static void ForceReinitialize()
-    {
-        Debug.Log("[LogitechSDK] Forcing SDK reinitialization...");
-        try
-        {
-            Debug.Log("[LogitechSDK] SDK shutdown complete.");
-        }
-        catch
-        {
-            isInitialized = false;
-            initAttempted = false;
-            InitializeSDK();
-            Debug.Log("[LogitechSDK] SDK reinitialization complete.");
-        }
-    }
 
     public static bool IsReady =>
         isInitialized && LogitechGSDK.LogiIsConnected(0);
