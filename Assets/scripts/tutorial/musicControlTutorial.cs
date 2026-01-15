@@ -27,9 +27,6 @@ public class musicControlTutorial : MonoBehaviour
 
         carController = FindAnyObjectByType<CarController>();
         Controls.CarControls.pausemenu.performed += ctx => PausedMusicHandler();
-
-        //the TRUE death of TrackedTween
-        activeTweenIDs = new int[musicListSources.Length];
     }
     private void OnDisable()
     {
@@ -79,8 +76,8 @@ public class musicControlTutorial : MonoBehaviour
 
     void Start()
     {
-        musicList = GameObject.FindGameObjectsWithTag("musicTrack");
-        musicListSources = musicList.Select(go => go.GetComponent<AudioSource>()).ToArray();
+        GameObject[] musicTracksList = GameObject.FindGameObjectsWithTag("musicTrack");
+        musicListSources = 
         TrackVariants();
 
         //debug
@@ -90,6 +87,8 @@ public class musicControlTutorial : MonoBehaviour
         MusicSections("7_FINAL_TUTORIAL_1main");
         EnableDriftFunctions();
         EnableTurboFunctions();
+        //the TRUE death of TrackedTween
+        activeTweenIDs = new int[musicListSources.Length];
     }
 
     public void StartNonIntroTracks()
