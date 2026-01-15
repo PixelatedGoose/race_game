@@ -44,6 +44,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public GameObject[] otherStuff;
     private GameObject finalLapImg;
 
+    private CarController carController;
+
     public void LoadData(GameData data)
     {
         if (data != null)
@@ -85,6 +87,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Controls.Enable();
         musicControl = FindAnyObjectByType<musicControl>();
         soundControl = FindAnyObjectByType<soundFXControl>();
+        carController = GetComponent<CarController>();
     }
 
     private void OnEnable()
@@ -171,6 +174,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (Controls.CarControls.respawn.triggered)
         {
             ResetPosition();
+            carController.ClearWheelTrails();
         }
 
         if (transform.position.y < -1)
@@ -193,54 +197,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     }
 
-    // IEnumerator TurnDownCarsValues()
-    // {
-    //     if (carController == null)
-    //     {
-    //         carController_2.isTurnedDown = true;
-
-    //         float BasicMaxAcceleration = carController_2.maxAcceleration;
-    //         float BasicBaseSpeed = carController_2.basespeed;
-    //         float BasicTargetTorque = carController_2.targetTorque;
-
-    //         carController_2.maxAcceleration = 0;
-    //         carController_2.basespeed = 0;
-    //         carController_2.targetTorque = 0;
-    //         GameManager.instance.turbeActive = false;
-
-    //         yield return new WaitForSeconds(0.5f);
-
-    //         carController_2.maxAcceleration = BasicMaxAcceleration;
-    //         carController_2.basespeed = BasicBaseSpeed;
-    //         carController_2.targetTorque = BasicTargetTorque;
-    //         carController_2.isTurnedDown = false;
-    //     }
-    //     else
-    //     {
-    //         carController.isTurnedDown = true;
-
-    //         if (carController.maxAcceleration <= 0 || carController.basespeed <= 0 || carController.targetTorque <= 0)
-    //         {
-               
-    //         }
-
-    //         float BasicMaxAcceleration = carController.maxAcceleration;
-    //         float BasicBaseSpeed = carController.basespeed;
-    //         float BasicTargetTorque = carController.targetTorque;
-
-    //         carController.maxAcceleration = 0;
-    //         carController.basespeed = 0;
-    //         carController.targetTorque = 0;
-    //         GameManager.instance.turbeActive = false;
-
-    //         yield return new WaitForSeconds(0.5f);
-
-    //         carController.maxAcceleration = BasicMaxAcceleration;
-    //         carController.basespeed = BasicBaseSpeed;
-    //         carController.targetTorque = BasicTargetTorque;
-    //         carController.isTurnedDown = false;
-    //     }
-    // }
 
     void Inactivity()
     {
