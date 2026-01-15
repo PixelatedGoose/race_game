@@ -599,7 +599,6 @@ MonoBehaviour:
   Rank: 0
   besttime: 0
   racestarted: 0
-  resetPrompt: {fileID: 0}
   startFinishLine: {fileID: 2912510506377448091}
   checkpoints:
   - {fileID: 0}
@@ -2681,7 +2680,7 @@ PrefabInstance:
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 4a41beaa4d4933548a400bdbad0eb0e7, type: 2}
+      objectReference: {fileID: 2100000, guid: 5438dae53bff01940b9bb1c67c114519, type: 2}
     - target: {fileID: 6913775488181635797, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -2704,7 +2703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7691087905362571268, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9900017
+      value: -2.195
       objectReference: {fileID: 0}
     - target: {fileID: 7691087905362571268, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3465,6 +3464,10 @@ PrefabInstance:
       propertyPath: m_SidewaysFriction.m_AsymptoteValue
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: be0922fd0d015524a880352b58f11275, type: 2}
     - target: {fileID: 6913775488181635797, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -3483,7 +3486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7691087905362571268, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.99
+      value: 0.29
       objectReference: {fileID: 0}
     - target: {fileID: 7691087905362571268, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4208,7 +4211,7 @@ PrefabInstance:
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 46b3a84b1d7bc3b4eac4459c59a7dc5f, type: 2}
+      objectReference: {fileID: 2100000, guid: 0b1064d2cc5bc64459819d2de77a1a29, type: 2}
     - target: {fileID: 6913775488181635797, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Mesh
       value: 
