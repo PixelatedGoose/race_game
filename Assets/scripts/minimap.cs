@@ -33,13 +33,13 @@ public class minimap : MonoBehaviour
         }
 
         // Find all active AI cars in the scene
-        var aiCars = FindObjectsByType<AICarController>(FindObjectsSortMode.None);
-        foreach (var ai in aiCars)
+        var aiCars = FindFirstObjectByType<AiCarManager>();
+        foreach (var ai in aiCars.AiCars)
         {
             if (!ai.gameObject.activeInHierarchy) continue;
             if (playerCar != null && ai.gameObject == playerCar) continue;
 
-            carTransforms.Add(ai.transform);
+            carTransforms.Add(ai.carRb.transform);
             var arrow = Instantiate(aiArrowPrefab, minimapRect);
             arrows.Add(arrow);
         }

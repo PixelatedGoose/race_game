@@ -83,7 +83,7 @@ public class BetterNewAiCarController : MonoBehaviour
     [Tooltip("List of wheels used by the car.")]
     [SerializeField] private List<CarController.Wheel> wheels;
     [Tooltip("Rigidbody component of the car.")]
-    [SerializeField] private Rigidbody carRb;
+    public Rigidbody carRb { get; private set; }
     [Tooltip("Reference to the player car.")]
     [SerializeField] private CarController playerCar;
     public AiCarManager aiCarManager;
@@ -117,7 +117,7 @@ public class BetterNewAiCarController : MonoBehaviour
     {
         grassLayerMask = LayerMask.NameToLayer("Grass");
 
-        if (carRb == null) carRb = GetComponent<Rigidbody>();
+        if (carRb == null) carRb = GetComponentInChildren<Rigidbody>();
         carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
 
         carCollider = GetComponentInChildren<Collider>();
@@ -281,7 +281,6 @@ public class BetterNewAiCarController : MonoBehaviour
         Vector3 localPosition = carRb.gameObject.transform.InverseTransformPoint(targetPoint);
         localPosition.x += avoidanceOffset;
 
-        Debug.Log("offset: " + avoidanceOffset);
 
         targetPoint = carRb.gameObject.transform.TransformPoint(localPosition);
 

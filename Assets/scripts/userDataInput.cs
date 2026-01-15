@@ -28,18 +28,13 @@ public class userDataInput : MonoBehaviour
         jsonText = Resources.Load<TextAsset>("bannedNames");
         bannedNamesArray = JsonUtility.FromJson<BannedNames>(jsonText.text).names.ToArray();
         jsonRegexText = Resources.Load<TextAsset>("regexReplacementValues");
-        string regexReplacements = JsonConvert.DeserializeObject<string>("regexReplacementValues");
+        Dictionary<char, string> regexReplacements = JsonConvert.DeserializeObject<Dictionary<char, string>>(jsonRegexText.text);
         bannedNamePopups = new string[]
         {
             "Name cannot be empty!",
             "Invalid name!"
         };
-
-        foreach (string name in bannedNamesArray)
-        {
-            Debug.Log(name);
-        }
-        //bannedRegexWords = AddRegexToHashset(bannedNamesArray, regexReplacements);
+        bannedRegexWords = AddRegexToHashset(bannedNamesArray, regexReplacements);
     }
 
     void Start()
@@ -70,10 +65,8 @@ public class userDataInput : MonoBehaviour
             string regexWord = "";
             foreach (char letter in word)
             {
-                //tämä ei kuitenkaa toimi
                 if (replacements.Keys.Contains(letter))
                 {
-                    Debug.Log("kyllä on!");
                     regexWord += replacements[letter];
                 }
                 else
@@ -85,20 +78,18 @@ public class userDataInput : MonoBehaviour
             bannedRegex.Add(regexWord);
         }
 
-        foreach (string entrything in bannedRegex)
-            Debug.Log($"THIS IS A BAD NAME!!! {entrything}");
         return bannedRegex;
     }
 
     public void UpdateUserName()
     {
-        userName = inputField.text;
+        userName = inputField.text.ToLower();
         Debug.Log($"edited; new name: {userName}");
     }
 
     public void CheckForInvalidName()
     {
-        /* foreach (string bannedName in bannedRegexWords)
+        foreach (string bannedName in bannedRegexWords)
         {
             //huom. tää jo toimii
             if (Regex.IsMatch(userName, bannedName))
@@ -108,7 +99,8 @@ public class userDataInput : MonoBehaviour
                 enter.interactable = false;
                 return;
             }
-        } */
+        } 
+
         if (userName.Length == 0)
         {
             bannedPopup.text = bannedNamePopups[0];
