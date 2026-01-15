@@ -103,14 +103,16 @@ public class BetterNewAiCarController : MonoBehaviour
     private LayerMask grassLayerMask;
     private float steerInput;
     private float avoidance;
-    public BetterNewAiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, float avoidanceMultiplier)
+    public BetterNewAiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, AiCarManager.DifficultyStats difficultyStats)
     {
         this.aiCarManager = aiCarManager;
         playerCar = playerCollider.GetComponent<CarController>();
         Collider pc = playerCollider.GetComponent<Collider>();
         playerCarWidth = pc.bounds.size.x;
         playerCarLength = pc.bounds.size.z;
-        avoidance = avoidanceMultiplier;
+        maxSpeed = difficultyStats.maxSpeed;
+        maxAcceleration = difficultyStats.maxAccel;
+        avoidance = difficultyStats.avoidance;
         return this;
     }
     private void Awake()

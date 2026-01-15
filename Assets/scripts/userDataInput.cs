@@ -89,6 +89,7 @@ public class userDataInput : MonoBehaviour
 
     public void CheckForInvalidName()
     {
+        long startTime = DateTime.Now.Ticks;
         foreach (string bannedName in bannedRegexWords)
         {
             //huom. tää jo toimii
@@ -97,6 +98,7 @@ public class userDataInput : MonoBehaviour
                 Debug.Log("THIS IS A BAD NAME!!!");
                 bannedPopup.text = bannedNamePopups[1];
                 enter.interactable = false;
+                Debug.Log($"Username censor completed in {(DateTime.Now.Ticks - startTime) / 10} microseconds");
                 return;
             }
         } 
