@@ -44,14 +44,14 @@ public static class LogitechSDKManager
         Debug.Log("[LogitechSDK] Forcing SDK reinitialization...");
         try
         {
-            LogitechGSDK.LogiSteeringShutdown();
+            Debug.Log("[LogitechSDK] SDK shutdown complete.");
         }
         catch
         {
             isInitialized = false;
             initAttempted = false;
-
             InitializeSDK();
+            Debug.Log("[LogitechSDK] SDK reinitialization complete.");
         }
     }
 

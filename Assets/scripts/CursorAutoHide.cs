@@ -11,20 +11,6 @@ public class CursorAutoHide : MonoBehaviour
     private bool isVisible = true;
     private bool logitechInitialized = false;
 
-    void OnEnable()
-    {
-        SetCursorVisible(true);
-        logitechInitialized = LogitechGSDK.LogiSteeringInitialize(false);
-    }
-
-    void OnDisable()
-    {
-        if (logitechInitialized)
-        {
-            LogitechGSDK.LogiSteeringShutdown();
-            logitechInitialized = false;
-        }
-    }
 
     void Update()
     {
