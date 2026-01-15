@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class musicControlTutorial : MonoBehaviour
 {
     CarInputActions Controls;
-    public GameObject[] musicList;
     public AudioSource[] musicListSources;
     public AudioSource mainTrack;
     public AudioSource driftTrack;
@@ -76,8 +75,8 @@ public class musicControlTutorial : MonoBehaviour
 
     void Start()
     {
-        GameObject[] musicTracksList = GameObject.FindGameObjectsWithTag("musicTrack");
-        musicListSources = 
+        musicListSources = gameObject.GetComponents<AudioSource>()
+        .OrderBy(a => a.name).ToArray();
         TrackVariants();
 
         //debug
