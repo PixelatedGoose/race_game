@@ -101,6 +101,7 @@ public class BetterNewAiCarController : MonoBehaviour
     private float targetTorque;
     private float moveInput = 0f;
     private LayerMask grassLayerMask;
+    private LayerMask objectLayerMask;
     private float steerInput;
     private float avoidance;
     public BetterNewAiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, AiCarManager.DifficultyStats difficultyStats)
@@ -117,7 +118,7 @@ public class BetterNewAiCarController : MonoBehaviour
     }
     private void Awake()
     {
-        grassLayerMask = LayerMask.NameToLayer("Grass");
+        
 
         if (carRb == null) carRb = GetComponentInChildren<Rigidbody>();
         carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
@@ -131,6 +132,12 @@ public class BetterNewAiCarController : MonoBehaviour
         }
 
         frontWheels = wheels.Where(w => w.axel == CarController.Axel.Front).ToArray();
+    }
+
+    private void Start()
+    {
+        grassLayerMask = LayerMask.NameToLayer("Grass");
+        objectLayerMask = LayerMask.NameToLayer("roadObjects");
     }
 
     private void FixedUpdate()
@@ -150,7 +157,7 @@ public class BetterNewAiCarController : MonoBehaviour
 
         targetPoint = aiCarManager.Waypoints[currentWaypointIndex];
 
-        AvoidOtherCars();
+        AvoidObstacles();
 
         carRb.rotation = Quaternion.Lerp(
             carRb.rotation,
@@ -224,9 +231,21 @@ public class BetterNewAiCarController : MonoBehaviour
         return false;
     }
 
-    private void AvoidOtherCars()
+    private void AvoidObstacles()
     {
         float avoidanceOffset = 0f;
+        
+        RaycastHit[] hits = Physics.BoxCastAll(center:carRb.transform.forward * CarLength + carRb.position, halfExtents:new Vector3(CarLength * 4, 2, CarWidth), direction:carRb.transform.forward, orientation:carRb.transform.rotation,  maxDistance:CarLength * 2, layerMask:objectLayerMask, QueryTriggerInteraction.Ignore);
+        Debug.Log("max dist: " + CarLength * 4);
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.gameObject.layer != objectLayerMask) continue;
+
+            Debug.Log("distance: " + hit.distance);
+            Debug.Log("hit object: " + hit.collider.gameObject.name);
+            float steerDirection = Vector3.Cross(carRb.transform.forward, hit.point).y > 0 ? -1f : 1f;
+            avoidanceOffset += steerDirection * avoidanceLateralOffset * avoidance;
+        }
 
         foreach (var other in aiCarManager.AiCars)
         {
@@ -237,7 +256,7 @@ public class BetterNewAiCarController : MonoBehaviour
             float otherSafeRadius = Mathf.Max(other.CarWidth, other.CarLength) * 0.5f;
             float minSafeDistance = safeRadius + otherSafeRadius + avoidanceBuffer;
 
-            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toOther.normalized) > 0.5f)
+            if (distance < minSafeDistance && Vector3.Dot(carRb.transform.forward, toOther.normalized) > 0.5f)
             {
                 Vector3 myFuturePos = carRb.position + carRb.linearVelocity * 0.5f;
                 Vector3 otherFuturePos = other.carRb.position + other.carRb.linearVelocity * 0.5f;
@@ -245,7 +264,7 @@ public class BetterNewAiCarController : MonoBehaviour
 
                 if (futureDist < minSafeDistance)
                 {
-                    float steerDirection = Vector3.Cross(transform.forward, toOther).y > 0 ? -1f : 1f;
+                    float steerDirection = Vector3.Cross(carRb.transform.forward, toOther).y > 0 ? -1f : 1f;
                     avoidanceOffset += steerDirection * avoidanceLateralOffset * avoidance;
 
                     if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > other.carRb.linearVelocity.magnitude)
@@ -258,24 +277,23 @@ public class BetterNewAiCarController : MonoBehaviour
 
         if (playerCar != null && playerCar.carRb != null && playerCar != this)
         {
-            Vector3 toPlayer = playerCar.transform.position - transform.position;
+            Vector3 toPlayer = playerCar.transform.position - carRb.transform.position;
             float distance = toPlayer.magnitude;
             float playerSafeRadius = Mathf.Max(playerCarWidth, playerCarLength) * 0.5f;
             float minSafeDistance = safeRadius + playerSafeRadius + avoidanceBuffer;
 
-            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toPlayer.normalized) > 0.5f)
+            if (distance < minSafeDistance && Vector3.Dot(carRb.transform.forward, toPlayer.normalized) > 0.5f)
             {
-                Vector3 myFuturePos = transform.position + carRb.linearVelocity * 0.5f;
+                Vector3 myFuturePos = carRb.transform.position + carRb.linearVelocity * 0.5f;
                 Vector3 playerFuturePos = playerCar.transform.position + playerCar.carRb.linearVelocity * 0.5f;
                 float futureDist = (myFuturePos - playerFuturePos).magnitude;
 
                 if (futureDist < minSafeDistance)
                 {
-                    float steerDirection = Vector3.Cross(transform.forward, toPlayer).y > 0 ? -1f : 1f;
+                    float steerDirection = Vector3.Cross(carRb.transform.forward, toPlayer).y > 0 ? -1f : 1f;
                     avoidanceOffset += steerDirection * avoidanceLateralOffset;
 
-                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > playerCar.carRb.linearVelocity.magnitude)
-                        moveInput = 0.7f;
+                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > playerCar.carRb.linearVelocity.magnitude) moveInput = 0.7f;
                 }
             }
         }
@@ -288,8 +306,9 @@ public class BetterNewAiCarController : MonoBehaviour
 
     }
 
-    private void OffsetTargetPoint(Vector3 avoidancePoint)
+    void OnDrawGizmos()
     {
-        targetPoint = Vector3.RotateTowards(targetPoint, Vector3.Reflect(avoidancePoint, carRb.rotation * Vector3.one), 2f, 0f);
+        Gizmos.DrawLine(carRb.position, carRb.transform.forward * CarLength * 4 + carRb.position);
+        Gizmos.DrawCube(carRb.transform.forward * CarLength + carRb.position, new(CarLength * 4, 2, CarWidth));
     }
 }
