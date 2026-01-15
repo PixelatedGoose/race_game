@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class musicControlTutorial : MonoBehaviour
 {
     CarInputActions Controls;
-    public GameObject[] musicList;
     public AudioSource[] musicListSources;
     public AudioSource mainTrack;
     public AudioSource driftTrack;
@@ -27,9 +26,6 @@ public class musicControlTutorial : MonoBehaviour
 
         carController = FindAnyObjectByType<CarController>();
         Controls.CarControls.pausemenu.performed += ctx => PausedMusicHandler();
-
-        //the TRUE death of TrackedTween
-        activeTweenIDs = new int[musicListSources.Length];
     }
     private void OnDisable()
     {
@@ -79,8 +75,8 @@ public class musicControlTutorial : MonoBehaviour
 
     void Start()
     {
-        musicList = GameObject.FindGameObjectsWithTag("musicTrack");
-        musicListSources = musicList.Select(go => go.GetComponent<AudioSource>()).ToArray();
+        musicListSources = gameObject.GetComponents<AudioSource>()
+        .OrderBy(a => a.name).ToArray();
         TrackVariants();
 
         //debug
@@ -90,6 +86,8 @@ public class musicControlTutorial : MonoBehaviour
         MusicSections("7_FINAL_TUTORIAL_1main");
         EnableDriftFunctions();
         EnableTurboFunctions();
+        //the TRUE death of TrackedTween
+        activeTweenIDs = new int[musicListSources.Length];
     }
 
     public void StartNonIntroTracks()
