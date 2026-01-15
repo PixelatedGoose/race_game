@@ -33,23 +33,23 @@ public class Credits : MonoBehaviour
         {
             tasks = new string[]
             {
-                "PixelatedGoose\nPROJECT LEAD\ngraphical design, ai coding, map design, shaders",
+                "PixelatedGoose\nPROJECT LEAD\ngraphical design, map design, shaders",
                 "Vizl87\nLEAD PROGRAMMER\ncar controller, game data handling",
                 "ThatOneGuy\nCOMPOSER, PROGRAMMER\nall music and sound design, tutorial",
                 "Leobold\nPROGRAMMER\ncertain menus, racing mechanics",
-                "lamelemon\nPROGRAMMER\nrefactoring scripts, bug fixing",
+                "lamelemon\nPROGRAMMER\nai coding, refactoring scripts",
                 "rojp\nDESIGNER\nother help, car textures",
             };
         }
         whatHeDo = new string[]
         {
             //lol
-            "He is a great man sometimes known as the goose lord",
-            "You could he is a vizlly good programmer",
-            "Potato composer extraordinaire",
-            "Leobold is Leobalding the competition",
-            "He is lemony fresh",
-            "He is a rojp off artist", 
+            "- all pixel art graphics\n- all map design\n- all shaders\n- leaderboard",
+            "- car controller\n- save data system\n- wheel support\n- score multiplier\n- car selection",
+            "- tutorial\n- all music and sound effects\n- some graphics assets\n- bug fixing\n- map selecrtion",
+            "- base for options menu\n - score system\n - lap and time system",
+            "- AI car code\n- user input check system",
+            "- car textures\n- ideas",
         };
     }
 

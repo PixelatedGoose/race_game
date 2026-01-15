@@ -6,7 +6,7 @@ public class RaceResultCollector : MonoBehaviour
 {
     public static RaceResultCollector instance;
 
-    [SerializeField] private string fileName = "race_results.json";
+    [SerializeField] private string fileName = "race_result.json";
 
     private RaceResultHandler resultHandler;
 
@@ -72,7 +72,15 @@ public class RaceResultCollector : MonoBehaviour
 
     private string GetMap()
     {
-        return SceneManager.GetActiveScene().name;
+        string tester = SceneManager.GetActiveScene().name;
+        return tester switch
+        {
+            "haukipudas" => "Shoreline",
+            "ai_haukipudas" => "Shoreline [AI]",
+            "haukipudas_night" => "Shoreline Night",
+            "night_ai_haukipudas" => "Shoreline Night [AI]",
+            _ => "Unknown",
+        };
     }
 
     private string GetCarName()
@@ -83,13 +91,13 @@ public class RaceResultCollector : MonoBehaviour
             switch (tester)
             {
                 case "REALCAR":
-                    return "Teimo";
+                    return "Sariua";
                 case "REALCAR_y":
-                    return "Sarieu";
-                case "REALCAR_x":
                     return "Bansku";
+                case "REALCAR_x":
+                    return "Teimo";
                 case "Lada":
-                    return "Totato";
+                    return "Tatato";
             }
         }
         return "Unknown";

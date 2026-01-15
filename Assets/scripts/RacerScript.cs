@@ -8,7 +8,6 @@ using TMPro;
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
     // Public variables
-    public RankManager rankManager;
     public GameObject winMenu; 
     public GameObject Car1Hud;
     public GameObject Minimap;
@@ -365,8 +364,29 @@ public class RacerScript : MonoBehaviour, IDataPersistence
                 {
                     go.GetComponent<RectTransform>().anchoredPosition = new Vector2(go.GetComponent<RectTransform>().anchoredPosition.x, val);
                 })
-                .setEaseInOutCirc();
+                .setEaseInOutQuart();
             }
+
+            GameObject finishedImg, resultsImg;
+            finishedImg = GameObject.Find("Race Finished");
+            resultsImg = GameObject.Find("Race Results");
+
+            LeanTween.value(finishedImg, finishedImg.GetComponent<RectTransform>().anchoredPosition.y, 150.0f, 0.6f)
+            .setOnUpdate((float val) =>
+            {
+                finishedImg.GetComponent<RectTransform>().anchoredPosition
+                = new Vector2(finishedImg.GetComponent<RectTransform>().anchoredPosition.x, val);
+            })
+            .setEaseInOutQuart();
+            //eri kesto tän siirtymiselle, jotta ne ei vaikuta overlappaavan
+            LeanTween.value(resultsImg, resultsImg.GetComponent<RectTransform>().anchoredPosition.y, 0.0f, 0.9f)
+            .setOnUpdate((float val) =>
+            {
+                resultsImg.GetComponent<RectTransform>().anchoredPosition
+                = new Vector2(resultsImg.GetComponent<RectTransform>().anchoredPosition.x, val);
+            })
+            .setEaseInOutQuart();
+
             GameObject leaderboard = GameObject.Find("leaderboardholder");
             LeanTween.value(leaderboard, leaderboard.GetComponent<RectTransform>().anchoredPosition.y, 0.0f, 2f)
             .setOnUpdate((float val) =>
@@ -374,7 +394,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
                 leaderboard.GetComponent<RectTransform>().anchoredPosition
                 = new Vector2(leaderboard.GetComponent<RectTransform>().anchoredPosition.x, val);
             })
-            .setEaseInOutCirc();
+            .setEaseInOutQuart();
 
             returnButton.Select();
         }
@@ -401,8 +421,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             float score = GameManager.instance.score;
             Rank = score / laptime;
-
-            string assignedRank = rankManager != null ? rankManager.GetRank(Rank) : "N/A";
         }
     }
 
