@@ -8,7 +8,6 @@ using TMPro;
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
     // Public variables
-    public RankManager rankManager;
     public GameObject winMenu; 
     public GameObject Car1Hud;
     public GameObject Minimap;
@@ -422,8 +421,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         {
             float score = GameManager.instance.score;
             Rank = score / laptime;
-
-            string assignedRank = rankManager != null ? rankManager.GetRank(Rank) : "N/A";
         }
     }
 
