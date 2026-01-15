@@ -35,11 +35,6 @@ public class userDataInput : MonoBehaviour
             "Invalid name!"
         };
         bannedRegexWords = AddRegexToHashset(bannedNamesArray, regexReplacements);
-
-        foreach (string word in bannedRegexWords)
-        {
-            Debug.Log("word: " + word);
-        }
     }
 
     void Start()
@@ -70,10 +65,8 @@ public class userDataInput : MonoBehaviour
             string regexWord = "";
             foreach (char letter in word)
             {
-                //tämä ei kuitenkaa toimi
                 if (replacements.Keys.Contains(letter))
                 {
-                    Debug.Log("kyllä on!");
                     regexWord += replacements[letter];
                 }
                 else
@@ -85,8 +78,6 @@ public class userDataInput : MonoBehaviour
             bannedRegex.Add(regexWord);
         }
 
-        foreach (string entrything in bannedRegex)
-            Debug.Log($"THIS IS A BAD NAME!!! {entrything}");
         return bannedRegex;
     }
 
