@@ -23,7 +23,7 @@ public class AiCarManager : MonoBehaviour
     
     public enum AIDifficulty { Beginner, Intermediate, Hard } 
  
-    private struct DifficultyStats
+    public struct DifficultyStats
     {
         public float minSpeed, maxSpeed, minAccel, maxAccel, avoidance;
         public DifficultyStats(float minS, float maxS, float minA, float maxA, float avoidanceMultiplier)
@@ -67,7 +67,7 @@ public class AiCarManager : MonoBehaviour
                 GameObject newAI = Instantiate(prefab.gameObject, spawnPoints[i % spawnPoints.Length].position, transform.rotation);
 
                 BetterNewAiCarController controller = newAI.GetComponent<BetterNewAiCarController>();
-                controller.Initialize(this, gm.currentCar.GetComponentInChildren<Collider>(), difficultyRanges[difficulty].avoidance);
+                controller.Initialize(this, gm.currentCar.GetComponentInChildren<Collider>(), difficultyRanges[difficulty]);
                 
                 AiCars.Add(controller);
             }
