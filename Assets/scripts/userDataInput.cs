@@ -28,7 +28,8 @@ public class userDataInput : MonoBehaviour
         jsonText = Resources.Load<TextAsset>("bannedNames");
         bannedNamesArray = JsonUtility.FromJson<BannedNames>(jsonText.text).names.ToArray();
         jsonRegexText = Resources.Load<TextAsset>("regexReplacementValues");
-        string regexReplacements = JsonConvert.DeserializeObject<string>("regexReplacementValues");
+        string regexReplacements = JsonConvert.DeserializeObject<string>(jsonRegexText.text);
+        Debug.Log(regexReplacements);
         bannedNamePopups = new string[]
         {
             "Name cannot be empty!",
