@@ -62,6 +62,7 @@ public class LeaderBoard : MonoBehaviour
 
         List<RaceResultData> sortedResults = collection.results
             .OrderBy(r => r.score)
+            .Reverse()
             .Take(5)
             .ToList();
 

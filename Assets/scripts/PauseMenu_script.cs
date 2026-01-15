@@ -119,10 +119,8 @@ public class PauseMenu : MonoBehaviour
     }
     public void QuitGame()
     {
-        SetPausedState(false);
         musicControl musicCtrl = FindFirstObjectByType<musicControl>();
-        if (musicCtrl != null)
-            musicCtrl.StopMusicTracks(false, true);
+        SetPausedState(false);
         SceneManager.LoadSceneAsync(0);
     }
     public void RestartGame()
