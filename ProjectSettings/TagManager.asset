@@ -22,6 +22,8 @@ TagManager:
   - winmenubuttons
   - mainCredits
   - winmenuother
+  - racefinished
+  - raceresults
   layers:
   - Default
   - TransparentFX
