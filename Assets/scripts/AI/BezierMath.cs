@@ -71,25 +71,25 @@ public static class BezierMath
 
         for (int i = 0; i < waypoints.Count(); i++)
         {
-            int lastGroupIndex = bezierPoints.Count();
-
-            for (float t = 0.4f; t <= 0.6f; t += inverseResolution)
+            float t = 0.4f;
+            do
             {
                 bezierPoints.Add(
                     CalculateBezierPoint(
                         t, 
                         path.position.y, 
                         waypoints[i >= 2 ? i - 2: i - 2 + size],
-                        waypoints[i >= 1 ? i - 1: i - 1 + size],
+                        waypoints[i >= 1 ? i - 1: ^1],
                         waypoints[i],
                         waypoints[(i + 1) % size],
                         waypoints[(i + 2) % size]
                         )
                 );
-            }
+                t += inverseResolution;
+            } while (t <= 0.6f);
         }
 
-        Debug.Log($"Bezier points computed in {(DateTime.Now.Ticks - startTime) / TimeSpan.TicksPerMillisecond} ms");
+        Debug.Log($"Bezier points computed in {(DateTime.Now.Ticks - startTime) / 10} microseconds");
 
         return bezierPoints.ToArray();
     }

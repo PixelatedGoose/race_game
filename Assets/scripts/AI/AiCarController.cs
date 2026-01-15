@@ -17,8 +17,6 @@ public class BetterNewAiCarController : MonoBehaviour
     [Header("Path Following Settings")]
     [Tooltip("Distance threshold for reaching a waypoint.")]
     [SerializeField] private float waypointThreshold = 10.0f;
-    [Tooltip("Number of points to calculate for Bezier curves (higher = smoother).")]
-    [SerializeField] private float bezierCurveResolution = 10f;
     [Tooltip("Angle threshold for switching between straight lines and curves.")]
     [SerializeField] private float angleThreshold = 35.0f;
 
@@ -67,9 +65,11 @@ public class BetterNewAiCarController : MonoBehaviour
     // --- Avoidance ---
     [Header("Avoidance Settings")]
     [Tooltip("Extra buffer distance added to the safe radius for avoidance checks.")]
-    [SerializeField] private float avoidanceBuffer = 2.0f;
+    [SerializeField] private float avoidanceBuffer = 5.0f;
     [Tooltip("How far to offset laterally when dodging another car.")]
     [SerializeField] private float avoidanceLateralOffset = 2.0f;
+    private float avoidanceOffset = 0f;
+    public float safeRadius { get; private set; }
 
     // --- Boost ---
     [Header("Boost Settings")]
@@ -95,19 +95,23 @@ public class BetterNewAiCarController : MonoBehaviour
     private float playerCarWidth;
     private float playerCarLength;
     private Transform[] waypoints;
+    private Vector3 targetPoint;
     private int currentWaypointIndex = 0;
     private CarController.Wheel[] frontWheels = Array.Empty<CarController.Wheel>();
     private float targetTorque;
     private float moveInput = 0f;
     private LayerMask grassLayerMask;
     private float steerInput;
-    public void Initialize(AiCarManager aiCarManager, Collider playerCollider)
+    private float avoidance;
+    public BetterNewAiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, float avoidanceMultiplier)
     {
         this.aiCarManager = aiCarManager;
         playerCar = playerCollider.GetComponent<CarController>();
         Collider pc = playerCollider.GetComponent<Collider>();
         playerCarWidth = pc.bounds.size.x;
         playerCarLength = pc.bounds.size.z;
+        avoidance = avoidanceMultiplier;
+        return this;
     }
     private void Awake()
     {
@@ -116,11 +120,12 @@ public class BetterNewAiCarController : MonoBehaviour
         if (carRb == null) carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
 
-        carCollider = GetComponent<Collider>();
+        carCollider = GetComponentInChildren<Collider>();
         if (carCollider != null)
         {
             CarWidth = carCollider.bounds.size.x;
             CarLength = carCollider.bounds.size.z;
+            safeRadius = Mathf.Max(CarWidth, CarLength) * 0.5f;
         }
 
         frontWheels = wheels.Where(w => w.axel == CarController.Axel.Front).ToArray();
@@ -129,28 +134,32 @@ public class BetterNewAiCarController : MonoBehaviour
     private void FixedUpdate()
     {
         // Airborne?
-        if (Physics.Raycast(transform.position, Vector3.down, GROUND_RAY_LENGTH))
+        if (Physics.Raycast(carRb.position, Vector3.down, GROUND_RAY_LENGTH))
         {
             // Apply gravity
             carRb.AddForce(gravityMultiplier * Physics.gravity.magnitude * Vector3.down, ForceMode.Acceleration);
         }
 
         // Set new waypoint if close enough to current
-        if (Vector3.Distance(transform.position, aiCarManager.Waypoints[currentWaypointIndex]) < waypointThreshold)
+        if (Vector3.Distance(carRb.position, aiCarManager.Waypoints[currentWaypointIndex]) < waypointThreshold)
         {
             currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.Waypoints.Count();
         }
 
-        transform.rotation = Quaternion.Lerp(
-            transform.rotation,
-            Quaternion.LookRotation(aiCarManager.Waypoints[currentWaypointIndex] - transform.position),
+        targetPoint = aiCarManager.Waypoints[currentWaypointIndex];
+
+        AvoidOtherCars();
+
+        carRb.rotation = Quaternion.Lerp(
+            carRb.rotation,
+            Quaternion.LookRotation(targetPoint - carRb.position),
             turnStrength * Time.fixedDeltaTime
         );
 
         
         foreach (CarController.Wheel wheel in frontWheels)
         {
-            wheel.wheelCollider.steerAngle = transform.rotation.y;
+            wheel.wheelCollider.steerAngle = carRb.rotation.y;
         }
 
         
@@ -186,6 +195,7 @@ public class BetterNewAiCarController : MonoBehaviour
             wheel.wheelCollider.brakeTorque = 0f;
         }
 
+        // Apply speed limit
         ApplySpeedLimit(speedLimit);
     }
 
@@ -201,7 +211,7 @@ public class BetterNewAiCarController : MonoBehaviour
     private bool IsOnGrass()
     {
         if (wheels == null) return false;
-        foreach (var wheel in wheels)
+        foreach (CarController.Wheel wheel in wheels)
         {
             if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
             {
@@ -210,5 +220,75 @@ public class BetterNewAiCarController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private void AvoidOtherCars()
+    {
+        float avoidanceOffset = 0f;
+
+        foreach (var other in aiCarManager.AiCars)
+        {
+            if (other == this) continue;
+
+            Vector3 toOther = other.carRb.position - carRb.position;
+            float distance = toOther.magnitude;
+            float otherSafeRadius = Mathf.Max(other.CarWidth, other.CarLength) * 0.5f;
+            float minSafeDistance = safeRadius + otherSafeRadius + avoidanceBuffer;
+
+            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toOther.normalized) > 0.5f)
+            {
+                Vector3 myFuturePos = carRb.position + carRb.linearVelocity * 0.5f;
+                Vector3 otherFuturePos = other.carRb.position + other.carRb.linearVelocity * 0.5f;
+                float futureDist = (myFuturePos - otherFuturePos).magnitude;
+
+                if (futureDist < minSafeDistance)
+                {
+                    float steerDirection = Vector3.Cross(transform.forward, toOther).y > 0 ? -1f : 1f;
+                    avoidanceOffset += steerDirection * avoidanceLateralOffset * avoidance;
+
+                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > other.carRb.linearVelocity.magnitude)
+                    {
+                        moveInput = 0.7f;
+                    }
+                }
+            }
+        }
+
+        if (playerCar != null && playerCar.carRb != null && playerCar != this)
+        {
+            Vector3 toPlayer = playerCar.transform.position - transform.position;
+            float distance = toPlayer.magnitude;
+            float playerSafeRadius = Mathf.Max(playerCarWidth, playerCarLength) * 0.5f;
+            float minSafeDistance = safeRadius + playerSafeRadius + avoidanceBuffer;
+
+            if (distance < minSafeDistance && Vector3.Dot(transform.forward, toPlayer.normalized) > 0.5f)
+            {
+                Vector3 myFuturePos = transform.position + carRb.linearVelocity * 0.5f;
+                Vector3 playerFuturePos = playerCar.transform.position + playerCar.carRb.linearVelocity * 0.5f;
+                float futureDist = (myFuturePos - playerFuturePos).magnitude;
+
+                if (futureDist < minSafeDistance)
+                {
+                    float steerDirection = Vector3.Cross(transform.forward, toPlayer).y > 0 ? -1f : 1f;
+                    avoidanceOffset += steerDirection * avoidanceLateralOffset;
+
+                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > playerCar.carRb.linearVelocity.magnitude)
+                        moveInput = 0.7f;
+                }
+            }
+        }
+
+        Vector3 localPosition = carRb.gameObject.transform.InverseTransformPoint(targetPoint);
+        localPosition.x += avoidanceOffset;
+
+        Debug.Log("offset: " + avoidanceOffset);
+
+        targetPoint = carRb.gameObject.transform.TransformPoint(localPosition);
+
+    }
+
+    private void OffsetTargetPoint(Vector3 avoidancePoint)
+    {
+        targetPoint = Vector3.RotateTowards(targetPoint, Vector3.Reflect(avoidancePoint, carRb.rotation * Vector3.one), 2f, 0f);
     }
 }
