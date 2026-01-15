@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class fuckshitter : MonoBehaviour
+public class instructionCheck : MonoBehaviour
 {
     CarInputActions Controls;
     private GameObject beginwall;
@@ -21,14 +21,10 @@ public class fuckshitter : MonoBehaviour
     {
         Controls = new CarInputActions();
         Controls.Enable();
-
-        Controls.CarControls.Drift.performed += StartDriftTrack;
+        //kokeile alusta lähtien, voiko pelaaja driftaa
+        Controls.CarControls.Drift.performed += DriftTrack;
         Controls.CarControls.ui_advance.performed += CheckInstructionConditions;
 
-        beginwall = GameObject.Find("TERRAIN/walls_ground/beginwall");
-        predriftwall = GameObject.Find("TERRAIN/walls_ground/course2after_endwall");
-        wallMovement_Lower = GameObject.Find("wallMovement_Lower").GetComponent<AudioSource>();
-        wallMovement_End = GameObject.Find("wallMovement_End").GetComponent<AudioSource>();
         musicControlTutorial = FindAnyObjectByType<musicControlTutorial>();
         carController = FindAnyObjectByType<CarController>();
 
@@ -46,12 +42,9 @@ public class fuckshitter : MonoBehaviour
 
     void OnDisable()
     {
-        if (Controls != null)
-        {
-            Controls.Disable();
-            Controls.CarControls.Drift.performed -= StartDriftTrack;
-            Controls.CarControls.ui_advance.performed -= CheckInstructionConditions;
-        }
+        Controls.Disable();
+        Controls.CarControls.Drift.performed -= DriftTrack;
+        Controls.CarControls.ui_advance.performed -= CheckInstructionConditions;
     }
 
     /// <summary>
@@ -61,24 +54,13 @@ public class fuckshitter : MonoBehaviour
     {
         instructionHandler instructionHandler = FindAnyObjectByType<instructionHandler>();
 
-        if (GameManager.instance.isPaused == false)
+        if (!GameManager.instance.isPaused)
         {
             switch (instructionHandler.boxOpen)
             {
                 case true:
-                    instructionHandler.ShowNextInstructionInCategory(instructionHandler.curCategory, false, 0);
-                    if ((instructionHandler.curCategory == "driving"
-                    || instructionHandler.curCategory == "controller_driving")
-                    && instructionHandler.index == 2)
-                    {
-                        DoSomeFuckShit("begin");
-                    }
-                    if ((instructionHandler.curCategory == "controls"
-                    || instructionHandler.curCategory == "controller_controls")
-                    && instructionHandler.index == 11)
-                    {
-                        DoSomeFuckShit("predriftfadeout");
-                    }
+                    instructionHandler.ShowNextInstructionInCategory(
+                    instructionHandler.curCategory, false, 0);
                     break;
 
                 case false:
@@ -121,7 +103,6 @@ public class fuckshitter : MonoBehaviour
                     return;
                 case 11:
                     ui2.enabled = false;
-                    //Controls.CarControls.ui_advance.performed -= CheckInstructionConditions;
                     return;
             }
         }
@@ -131,58 +112,15 @@ public class fuckshitter : MonoBehaviour
         }
     }
 
-    public void DoSomeFuckShit(string value)
-    {
-        switch (value)
-        {
-            case "begin":
-                LeanTween.moveY(beginwall, -5.5f, 2.5f).setEaseLinear().setOnComplete(() =>
-                {
-                    wallMovement_End.Play();
-                    wallMovement_Lower.Stop();
-                });
-                wallMovement_Lower.Play();
-                return;
-            case "predriftfadeout":
-                if (happened)
-                    return;
-                happened = true;
-
-                musicControlTutorial.TrackedTween_Start(
-                    musicControlTutorial.mainTrack.volume, 0.0f, 5.0f, val =>
-                    musicControlTutorial.mainTrack.volume = val, true);
-
-                wallMovement_Lower.transform.position = new Vector3(
-                    predriftwall.transform.position.x,
-                    wallMovement_Lower.transform.position.y,
-                    predriftwall.transform.position.z);
-                wallMovement_End.transform.position = new Vector3(
-                    predriftwall.transform.position.x,
-                    wallMovement_End.transform.position.y,
-                    predriftwall.transform.position.z);
-
-                LeanTween.moveY(predriftwall, -5.5f, 2.5f).setEaseLinear().setOnComplete(() =>
-                {
-                    wallMovement_End.Play();
-                    wallMovement_Lower.Stop();
-                });
-                wallMovement_Lower.Play();
-                return;
-            default:
-                Debug.LogWarning($"case {value} not found");
-                return;
-        }
-    }
-
-    void StartDriftTrack(InputAction.CallbackContext context)
+    void DriftTrack(InputAction.CallbackContext context)
     {
         Debug.Log("FUCK YOU");
         if (!carController.canDrift) return;
 
-        Debug.Log("actually i'll take that back");
         musicControlTutorial.EnableDriftFunctions();
-        Controls.CarControls.Drift.performed -= StartDriftTrack;
-        musicControlTutorial.BeginDriftSection();
+        Debug.Log("actually i'll take that back");
+        Controls.CarControls.Drift.performed -= DriftTrack;
+        //musicControlTutorial.BeginDriftSection();
         //pitää synkronisoida, että se fade ei kuulosta paskalta
     }
 }

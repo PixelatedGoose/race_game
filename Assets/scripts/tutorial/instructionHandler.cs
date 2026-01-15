@@ -3,12 +3,6 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using Logitech;
-using UnityEngine.InputSystem.HID;
-using NUnit.Framework.Internal.Commands;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.iOS;
-using UnityEngine.InputSystem.XInput;
 
 [System.Serializable]
 public class instructionListClass
