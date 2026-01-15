@@ -220,6 +220,8 @@ public class CarController : MonoBehaviour
         Applyturnsensitivity(speed);
         OnGrass();
         HandleTurbo();
+
+        WheelEffects(isDrifting);
     }
 
     bool IsCarActive()
@@ -681,22 +683,57 @@ public class CarController : MonoBehaviour
     {
         foreach (var wheel in wheels)
         {
-            if (wheel.axel == Axel.Rear)
+            if (wheel.axel != Axel.Rear)
+                continue;
+
+            if (wheel.wheelEffectobj == null)
+                continue;
+
+            var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
+            if (trailRenderer == null)
+                continue;
+
+
+            bool wheelGrounded = IsWheelGrounded(wheel);
+            bool shouldEmit = enable && wheelGrounded;
+
+            // Always ensure we can re-enable emitting even if it was previously cleared/disabled.
+            if (shouldEmit)
             {
-                var trailRenderer = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
-                if (trailRenderer != null)
-                {
-                    trailRenderer.emitting = enable;
-                }
-                if (wheel.smokeParticle != null)
-                {
-                    if (enable)
-                        wheel.smokeParticle.Play();
-                    else
-                        wheel.smokeParticle.Stop();
-                }
+                // Force emitting true when we want it on
+                if (!trailRenderer.emitting)
+                    trailRenderer.emitting = true;
+
+                if (wheel.smokeParticle != null && !wheel.smokeParticle.isPlaying)
+                    wheel.smokeParticle.Play();
+            }
+            else
+            {
+                // Turn off when we want it off
+                if (trailRenderer.emitting)
+                    trailRenderer.emitting = false;
+
+                if (wheel.smokeParticle != null && wheel.smokeParticle.isPlaying)
+                    wheel.smokeParticle.Stop();
             }
         }
+    }
+
+    public void ClearWheelTrails()
+    {
+        foreach (var wheel in wheels)
+        {
+            if (wheel.wheelEffectobj == null) continue;
+            var trail = wheel.wheelEffectobj.GetComponentInChildren<TrailRenderer>();
+            if (trail == null) continue;
+
+            // explicitly stop emitting and clear the trail so it can be re-enabled later
+            trail.emitting = false;
+            trail.Clear();
+            // keep the component enabled so emitting can be toggled again
+            trail.enabled = true;
+        }
+        
     }
 
     /// <summary>
