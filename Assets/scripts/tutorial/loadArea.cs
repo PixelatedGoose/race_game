@@ -55,6 +55,9 @@ public class loadArea : MonoBehaviour
             case "DD":
                 CarController carController = FindAnyObjectByType<CarController>();
                 carController.canDrift = true;
+                
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
                 break;
             //uskon että on unused, pidän varmuuden vuoksi
             case "06":

@@ -48,13 +48,13 @@
         "You can use turbo by holding [left] CTRL.",
         "We have a limited supply of that stuff per car; the amount's on the green gauge, as said before.",
         "The supply does regenerate after letting it rest for a while.",
-        "Try using it here to gain more speed and get past the final course."
+        "Try using it here."
     ],
 
     "final": [
         "Congratulations on clearing the tutorial!",
         "I have nothing else to explain, so get outta here.",
-        "Drive on top of that platform to exit."
+        "Drive to the end of the road to exit."
     ],
 
     "controller_intro": [
@@ -106,13 +106,13 @@
         "You can use turbo by holding A.",
         "We have a limited supply of that stuff per car; the amount's on the dashboard, as said before.",
         "The supply does regenerate after letting it rest for a while.",
-        "Try using it here to gain more speed and get past the final course."
+        "Try using it here."
     ],
 
     "controller_final": [
         "Congratulations on clearing the tutorial!",
         "I have nothing else to explain, so get outta here.",
-        "Drive on top of that platform to exit."
+        "Drive to the end of the road to exit."
     ],
 
     "wheel_intro": [
@@ -164,12 +164,12 @@
         "You can use turbo by holding the right trigger.",
         "We have a limited supply of that stuff per car; the amount's on the green gauge, as said before.",
         "The supply does regenerate after letting it rest for a while.",
-        "Try using it here to gain more speed and get past the final course."
+        "Try using it here."
     ],
 
     "wheel_final": [
         "Congratulations on clearing the tutorial!",
         "I have nothing else to explain, so get outta here.",
-        "Drive on top of that platform to exit."
+        "Drive to the end of the road to exit."
     ]
 }

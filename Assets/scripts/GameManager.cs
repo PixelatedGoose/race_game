@@ -137,14 +137,14 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
 
     //temp ja ota se pois sit
-    public void Update()
+    /* public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (racerscript.winMenu.activeSelf) return;
             racerscript.EndRace();
         }
-    }
+    } */
 
 
 

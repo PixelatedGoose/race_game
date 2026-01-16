@@ -274,7 +274,8 @@ public class musicControlTutorial : MonoBehaviour
     {
         mainTrack.volume = 0f;
         StopNonIntroTracks();
-        MusicSections("6_FINAL_TUTORIAL_1main");
+        ChangeTrack("6_FINAL_TUTORIAL_1main");
+        driftTrack.volume = 0.28f;
         StartNonIntroTracks();
     }
 }
