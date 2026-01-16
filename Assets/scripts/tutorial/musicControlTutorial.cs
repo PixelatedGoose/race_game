@@ -135,11 +135,6 @@ public class musicControlTutorial : MonoBehaviour
         turboTrack = variants.Length > 2 ? variants[2] : null;
     }
 
-    void Update()
-    {
-        Debug.Log(mainTrack);
-    }
-
     void ChangeTrack(string selectedAudio)
     {
         mainTrack = GameObject.Find(selectedAudio).GetComponent<AudioSource>();

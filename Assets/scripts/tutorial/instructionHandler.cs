@@ -309,7 +309,7 @@ public class instructionHandler : MonoBehaviour
     private string[] GetInstructionListByCategory(string category)
     {
         curCategory = category;
-        Debug.Log($"{curCategory}, {category}, {deviceSpecificCategories[6]}, {idx}, {nextCategory}");
+        //Debug.Log($"{curCategory}, {category}, {deviceSpecificCategories[6]}, {idx}, {nextCategory}");
         idx = System.Array.FindIndex(deviceSpecificCategories, category => category == curCategory);
 
         if (!(idx + 1 >= deviceSpecificCategories.Length))

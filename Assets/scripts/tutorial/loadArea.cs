@@ -10,7 +10,7 @@ public class loadArea : MonoBehaviour
     private musicControlTutorial musicControlTutorial;
 
 
-
+    
     void Awake()
     {
         prefix = gameObject.name.Substring(0, 2);
@@ -31,9 +31,6 @@ public class loadArea : MonoBehaviour
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "02":
-                StartCoroutine(ChangeAnimOverrides("driving:3", 1)); //manuaalisesti koska fuck this shit
-                instructionHandler.index = 3;
-
                 instructionHandler.ShowInstruction
                 (instructionHandler.GetInstruction("driving", 3)
                 , 1);
@@ -47,7 +44,6 @@ public class loadArea : MonoBehaviour
             case "04":
                 musicControlTutorial.MusicSections("4_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
-
                 StartCoroutine(FadeDeath(1.0f));
                 break;
             case "05":
@@ -60,6 +56,7 @@ public class loadArea : MonoBehaviour
                 CarController carController = FindAnyObjectByType<CarController>();
                 carController.canDrift = true;
                 break;
+            //uskon että on unused, pidän varmuuden vuoksi
             case "06":
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
@@ -86,7 +83,10 @@ public class loadArea : MonoBehaviour
             case "08":
                 musicControlTutorial.StopNonIntroTracks();
                 musicControlTutorial.turboTrack.Stop();
+                //ig just in case?
+                musicControlTutorial.turboTrack.volume = 0f;
                 musicControlTutorial.driftTrack.Stop();
+                musicControlTutorial.driftTrack.volume = 0f;
                 musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_outro");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
@@ -118,27 +118,5 @@ public class loadArea : MonoBehaviour
         LeanTween.alpha(gameObject, 0f, seconds).setEaseLinear();
         yield return new WaitForSeconds(seconds);
         Destroy(gameObject);
-    }
-
-    private IEnumerator ChangeAnimOverrides(string instruction, int value)
-    {
-        if (instruction == null)
-        {
-            Debug.LogError("NO INSTRUCTION WITH NAME: " + instruction, gameObject);
-            yield break;
-        }
-
-        if (instructionHandler.instructionAnimOverrides.ContainsKey(instruction))
-        {
-            instructionHandler.instructionAnimOverrides[instruction] = value;
-            Debug.Log("success! modified: " + instruction + ", " + value);
-        }
-        else
-        {
-            instructionHandler.instructionAnimOverrides.Add(instruction, value);
-            Debug.Log("success! added: " + instruction + ", " + value);
-        }
-
-        yield break;
     }
 } 
