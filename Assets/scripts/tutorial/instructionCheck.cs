@@ -47,14 +47,27 @@ public class instructionCheck : MonoBehaviour
                     instructionHandler.ShowNextInstructionInCategory(
                     instructionHandler.curCategory, false, 0);
 
+                    if (instructionHandler.idx == 1)
+                    {
+                        if (instructionHandler.index == 2)
+                        {
+                            movementWall firstwall = GameObject.Find("MovementWall").GetComponent<movementWall>();
+                            firstwall.MoveWall();
+                        }
+                    }
+
                     //ei kategoriaa - mikään kategoria ei yllä tähän paitsi controls
                     if (instructionHandler.index == 11)
                     {
                         LeanTween.value(musicControlTutorial.mainTrack.volume,
-                        0.0f, 4.0f)
+                        0.0f, 3.5f)
                         .setOnUpdate((float val) => {
                             musicControlTutorial.mainTrack.volume = val;
                         });
+                        movementWall secondwall = GameObject.Find("MovementWall2").GetComponent<movementWall>();
+                        secondwall.beginMove = GameObject.Find("wallMovement_Lower2").GetComponent<AudioSource>();
+                        secondwall.endMove = GameObject.Find("wallMovement_End2").GetComponent<AudioSource>();
+                        secondwall.MoveWall();
                     }
                     break;
 
