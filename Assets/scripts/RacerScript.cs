@@ -150,7 +150,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
     }
 
-    void RespawnAtLastCheckpoint()
+    public void RespawnAtLastCheckpoint()
     {
         Debug.Log("Respawning at the last checkpoint...");
         transform.SetPositionAndRotation(respawnPoint != null ? respawnPoint.position : startFinishLine.position,

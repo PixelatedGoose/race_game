@@ -78,7 +78,7 @@ public class instructionCheck : MonoBehaviour
         musicControlTutorial.EnableDriftFunctions();
         Debug.Log("actually i'll take that back");
         Controls.CarControls.Drift.performed -= DriftTrack;
-        //musicControlTutorial.BeginDriftSection();
+        musicControlTutorial.BeginDriftSection();
         //pitää synkronisoida, että se fade ei kuulosta paskalta
     }
 }

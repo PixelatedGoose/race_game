@@ -87,12 +87,12 @@ public class musicControlTutorial : MonoBehaviour
         SetTrackVariants();
 
         //debug
-        carController.canDrift = true;
-        carController.canUseTurbo = true;
-        StartNonIntroTracks(); //begin all non-intro tracks?
-        MusicSections("2_FINAL_TUTORIAL_main"); //set track to something else?
-        EnableDriftFunctions(); //check for layers on drift?
-        EnableTurboFunctions(); //check for layers on turbo?
+        //carController.canDrift = true;
+        //carController.canUseTurbo = true;
+        //StartNonIntroTracks(); //begin all non-intro tracks?
+        //MusicSections("2_FINAL_TUTORIAL_main"); //set track to something else?
+        //EnableDriftFunctions(); //check for layers on drift?
+        //EnableTurboFunctions(); //check for layers on turbo?
         //end debug
         
         //the TRUE and EVEN MORE PAINFUL death of TrackedTween

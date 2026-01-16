@@ -24,13 +24,13 @@ public class loadArea : MonoBehaviour
         Debug.Log("Hello! My name is Gustavo, but you can call me Gus");
         switch (prefix)
         {
-            case "11":
-                musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
+            case "01":
                 musicControlTutorial.StartNonIntroTracks();
+                musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "12":
+            case "02":
                 StartCoroutine(ChangeAnimOverrides("driving:3", 1)); //manuaalisesti koska fuck this shit
                 instructionHandler.index = 3;
 
@@ -40,17 +40,17 @@ public class loadArea : MonoBehaviour
 
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "13":
+            case "03":
                 musicControlTutorial.MusicSections("3_FINAL_TUTORIAL_main", "fade");
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "14":
+            case "04":
                 musicControlTutorial.MusicSections("4_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
 
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "15":
+            case "05":
                 musicControlTutorial.MusicSections("5_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
@@ -60,11 +60,12 @@ public class loadArea : MonoBehaviour
                 CarController carController = FindAnyObjectByType<CarController>();
                 carController.canDrift = true;
                 break;
-            case "16":
+            case "06":
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "17":
+            //after drift
+            case "07":
                 instructionHandler.index = 1;
                 instructionHandler.ShowInstruction(
                     instructionHandler.GetInstruction(
@@ -82,7 +83,7 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "19":
+            case "08":
                 musicControlTutorial.StopNonIntroTracks();
                 musicControlTutorial.turboTrack.Stop();
                 musicControlTutorial.driftTrack.Stop();
@@ -90,45 +91,17 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "CU":
-                CameraFollow cameraFollowRead = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
-                LeanTween.value(cameraFollowRead.rotOffset.y, 3.0f, 1f)
-                .setOnUpdate((float val) =>
-                {
-                    var rot = cameraFollowRead.rotOffset;
-                    rot.y = val;
-                    cameraFollowRead.rotOffset = rot;
-                })
-                .setEaseInOutSine();
-                break;
-            case "CD":
-                CameraFollow cameraFollow3 = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
-                LeanTween.value(cameraFollow3.rotOffset.y, 1.7f, 1f)
-                .setOnUpdate((float val) =>
-                {
-                    var rot = cameraFollow3.rotOffset;
-                    rot.y = val;
-                    cameraFollow3.rotOffset = rot;
-                })
-                .setEaseInOutSine();
-                break;
-            case "53":
+            case "EX":
                 RaceResultCollector collector = FindFirstObjectByType<RaceResultCollector>();
                 collector.SaveRaceResult("JoonasKallio");
 
                 //alkuperäsesti oli musicControlTutorialissa (mitä vittua)
-                //SceneManager.LoadSceneAsync(0);
+                SceneManager.LoadSceneAsync(0);
                 break;
-            case "99":
-                Debug.Log("respawn (ei implementattu viel)");
-                break;
-            case "t1":
-                musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_1main", "fade");
-                StartCoroutine(FadeDeath(1.0f));
-                break;
-            case "t2":
-                musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_1main", "fade");
-                StartCoroutine(FadeDeath(1.0f));
+            case "RE":
+                RacerScript racerScript = FindFirstObjectByType<RacerScript>();
+                //ensi kerralla korjaamme nää miljoona reset juttua :)
+                racerScript.RespawnAtLastCheckpoint();
                 break;
             default:
                 Debug.LogError($"prefix {prefix} not defined");
