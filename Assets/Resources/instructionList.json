@@ -15,7 +15,7 @@
     "driving_2": [
         "Driving away from grass is recommended, as the grass slows ya down.",
         "Any bodies of water will instantly respawn you at the nearest checkpoint.",
-        "Good luck on this second course. During it, touching grass WILL RESPAWN you.",
+        "Good luck on this second course. Touching grass during it WILL RESPAWN you at the last checkpoint.",
         "Great!"
     ],
 
@@ -26,8 +26,8 @@
         "You can pause the game with ESC, if it wasn't obvious.",
         "Take a moment to look at the bottom left corner.",
         "This is a sorta dashboard for your UI.",
-        "Make sure to memorize it so you don't lose track of useful info.",
         "The lowest empty gray box is for your score.",
+        "The diamond with a number in the middle is your score multiplier. It gets reset when hitting grass.",
         "The middle gray box is your time on a map. The red numbers are the milliseconds.",
         "The highest gray box shows your current lap.",
         "Lastly, the green gauge tells you how much turbo you have left. You'll learn about it soon.",
@@ -73,7 +73,7 @@
     "controller_driving_2": [
         "Driving away from grass is recommended, as the grass slows ya down.",
         "Any bodies of water will instantly respawn you at the nearest checkpoint.",
-        "Good luck on this second course. During it, touching grass WILL RESPAWN you.",
+        "Good luck on this second course. Touching grass during it WILL RESPAWN you at the last checkpoint.",
         "Great!"
     ],
 
@@ -84,8 +84,8 @@
         "You can pause the game with the start button, if it wasn't obvious.",
         "Take a moment to look at the bottom left corner.",
         "This is a sorta dashboard for your UI.",
-        "Make sure to memorize it so you don't lose track of useful info.",
         "The lowest empty gray box is for your score.",
+        "The diamond with a number in the middle is your score multiplier. It gets reset when hitting grass.",
         "The middle gray box is your time on a map. The red numbers are the milliseconds.",
         "The highest gray box shows your current lap.",
         "Lastly, the green gauge tells you how much turbo you have left. You'll learn about it soon.",
@@ -131,7 +131,7 @@
     "wheel_driving_2": [
         "Driving away from grass is recommended, as the grass slows ya down.",
         "Any bodies of water will instantly respawn you at the nearest checkpoint.",
-        "Good luck on this second course. During it, touching grass WILL RESPAWN you.",
+        "Good luck on this second course. Touching grass during it WILL RESPAWN you at the last checkpoint.",
         "Great!"
     ],
 
@@ -142,8 +142,8 @@
         "You can pause the game with the menu icon, if it wasn't obvious.",
         "Take a moment to look at the bottom left corner.",
         "This is a sorta dashboard for your UI.",
-        "Make sure to memorize it so you don't lose track of useful info.",
         "The lowest empty gray box is for your score.",
+        "The diamond with a number in the middle is your score multiplier. It gets reset when hitting grass.",
         "The middle gray box is your time on a map. The red numbers are the milliseconds.",
         "The highest gray box shows your current lap.",
         "Lastly, the green gauge tells you how much turbo you have left. You'll learn about it soon.",

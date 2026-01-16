@@ -29,6 +29,9 @@ public class loadArea : MonoBehaviour
                 musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
+                //koska tää alkaa alusta kun... alotetaan kaikki musiclistsourcessa olevat.
+                //totta kai ne muut ei kuulu koska ne on 0 volume jo
+                musicControlTutorial.musicListSources[0].volume = 0.00f;
                 break;
             case "02":
                 instructionHandler.ShowInstruction
@@ -45,11 +48,17 @@ public class loadArea : MonoBehaviour
                 musicControlTutorial.MusicSections("4_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
+
+                CarController carcontrollerreal1 = FindFirstObjectByType<CarController>();
+                carcontrollerreal1.GrassRespawnActive = true;
                 break;
             case "05":
                 musicControlTutorial.MusicSections("5_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
+
+                CarController carcontrollerreal2 = FindFirstObjectByType<CarController>();
+                carcontrollerreal2.GrassRespawnActive = false;
                 break;
             //drift
             case "DD":
