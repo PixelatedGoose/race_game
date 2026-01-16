@@ -339,7 +339,8 @@ public class CarController : MonoBehaviour
         {
             if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
             {
-                racerScript.RespawnAtLastCheckpoint();
+                if (GrassRespawnActive)
+                    racerScript.RespawnAtLastCheckpoint();
                 return true;
             }
         }
