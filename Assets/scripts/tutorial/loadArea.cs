@@ -10,7 +10,7 @@ public class loadArea : MonoBehaviour
     private musicControlTutorial musicControlTutorial;
 
 
-
+    
     void Awake()
     {
         prefix = gameObject.name.Substring(0, 2);
@@ -24,47 +24,57 @@ public class loadArea : MonoBehaviour
         Debug.Log("Hello! My name is Gustavo, but you can call me Gus");
         switch (prefix)
         {
-            case "11":
-                musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
+            case "01":
                 musicControlTutorial.StartNonIntroTracks();
+                musicControlTutorial.MusicSections("2_FINAL_TUTORIAL_main");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
+                //koska tää alkaa alusta kun... alotetaan kaikki musiclistsourcessa olevat.
+                //totta kai ne muut ei kuulu koska ne on 0 volume jo
+                musicControlTutorial.musicListSources[0].volume = 0.00f;
                 break;
-            case "12":
-                StartCoroutine(ChangeAnimOverrides("driving:3", 1)); //manuaalisesti koska fuck this shit
-                instructionHandler.index = 3;
-
+            case "02":
                 instructionHandler.ShowInstruction
                 (instructionHandler.GetInstruction("driving", 3)
                 , 1);
 
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "13":
+            case "03":
                 musicControlTutorial.MusicSections("3_FINAL_TUTORIAL_main", "fade");
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "14":
+            case "04":
                 musicControlTutorial.MusicSections("4_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
-
                 StartCoroutine(FadeDeath(1.0f));
+
+                CarController carcontrollerreal1 = FindFirstObjectByType<CarController>();
+                carcontrollerreal1.GrassRespawnActive = true;
                 break;
-            case "15":
+            case "05":
                 musicControlTutorial.MusicSections("5_FINAL_TUTORIAL_main", "fade");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
+
+                CarController carcontrollerreal2 = FindFirstObjectByType<CarController>();
+                carcontrollerreal2.GrassRespawnActive = false;
                 break;
             //drift
             case "DD":
                 CarController carController = FindAnyObjectByType<CarController>();
                 carController.canDrift = true;
-                break;
-            case "16":
+                
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "17":
+            //uskon että on unused, pidän varmuuden vuoksi
+            case "06":
+                instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            //after drift
+            case "07":
                 instructionHandler.index = 1;
                 instructionHandler.ShowInstruction(
                     instructionHandler.GetInstruction(
@@ -82,42 +92,28 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "19":
+            case "08":
                 musicControlTutorial.StopNonIntroTracks();
                 musicControlTutorial.turboTrack.Stop();
+                //ig just in case?
+                musicControlTutorial.turboTrack.volume = 0f;
                 musicControlTutorial.driftTrack.Stop();
+                musicControlTutorial.driftTrack.volume = 0f;
                 musicControlTutorial.MusicSections("8_FINAL_TUTORIAL_outro");
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
                 break;
-            case "CU":
-                CameraFollow cameraFollowRead = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
-                LeanTween.value(cameraFollowRead.rotOffset.y, 3.0f, 1f)
-                .setOnUpdate((float val) =>
-                {
-                    var rot = cameraFollowRead.rotOffset;
-                    rot.y = val;
-                    cameraFollowRead.rotOffset = rot;
-                })
-                .setEaseInOutSine();
-                break;
-            case "CD":
-                CameraFollow cameraFollow3 = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
-                LeanTween.value(cameraFollow3.rotOffset.y, 1.7f, 1f)
-                .setOnUpdate((float val) =>
-                {
-                    var rot = cameraFollow3.rotOffset;
-                    rot.y = val;
-                    cameraFollow3.rotOffset = rot;
-                })
-                .setEaseInOutSine();
-                break;
-            case "53":
+            case "EX":
+                RaceResultCollector collector = FindFirstObjectByType<RaceResultCollector>();
+                collector.SaveRaceResult("JoonasKallio");
+
                 //alkuperäsesti oli musicControlTutorialissa (mitä vittua)
                 SceneManager.LoadSceneAsync(0);
                 break;
-            case "99":
-                Debug.Log("respawn (ei implementattu viel)");
+            case "RE":
+                RacerScript racerScript = FindFirstObjectByType<RacerScript>();
+                //ensi kerralla korjaamme nää miljoona reset juttua :)
+                racerScript.RespawnAtLastCheckpoint();
                 break;
             default:
                 Debug.LogError($"prefix {prefix} not defined");
@@ -134,27 +130,5 @@ public class loadArea : MonoBehaviour
         LeanTween.alpha(gameObject, 0f, seconds).setEaseLinear();
         yield return new WaitForSeconds(seconds);
         Destroy(gameObject);
-    }
-
-    private IEnumerator ChangeAnimOverrides(string instruction, int value)
-    {
-        if (instruction == null)
-        {
-            Debug.LogError("NO INSTRUCTION WITH NAME: " + instruction, gameObject);
-            yield break;
-        }
-
-        if (instructionHandler.instructionAnimOverrides.ContainsKey(instruction))
-        {
-            instructionHandler.instructionAnimOverrides[instruction] = value;
-            Debug.Log("success! modified: " + instruction + ", " + value);
-        }
-        else
-        {
-            instructionHandler.instructionAnimOverrides.Add(instruction, value);
-            Debug.Log("success! added: " + instruction + ", " + value);
-        }
-
-        yield break;
     }
 } 

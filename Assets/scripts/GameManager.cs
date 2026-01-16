@@ -136,15 +136,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }       
     }
 
-    //temp
-    public void Update()
+    //temp ja ota se pois sit
+/*     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (racerscript.winMenu.activeSelf) return;
             racerscript.EndRace();
         }
-    }
+    } */
 
 
 

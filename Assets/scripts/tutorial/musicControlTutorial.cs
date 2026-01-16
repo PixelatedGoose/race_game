@@ -6,7 +6,10 @@ using UnityEngine.InputSystem;
 public class musicControlTutorial : MonoBehaviour
 {
     CarInputActions Controls;
-    public AudioSource[] musicListSources;
+    public List<AudioSource> musicListSources;
+    //and here we see the reality of the situation
+    //that i have dragged myself into :)
+    public List<AudioSource> musicListCopies;
     public AudioSource mainTrack;
     public AudioSource driftTrack;
     public AudioSource turboTrack;
@@ -15,7 +18,7 @@ public class musicControlTutorial : MonoBehaviour
     private enum CarMusicState {Main, Drift, Turbo};
     private CarMusicState CurrentMusState = CarMusicState.Main;
     private CarMusicState LatestMusState = CarMusicState.Main;
-    private int[] activeTweenIDs;
+    public int[] activeTweenIDs;
 
     private CarController carController;
 
@@ -75,19 +78,25 @@ public class musicControlTutorial : MonoBehaviour
 
     void Start()
     {
-        musicListSources = gameObject.GetComponents<AudioSource>()
-        .OrderBy(a => a.name).ToArray();
-        TrackVariants();
+        musicListSources = gameObject.GetComponentsInChildren<AudioSource>()
+        .OrderBy(a => a.name)
+        .ToList();
+        musicListCopies = new List<AudioSource>(musicListSources);
+        foreach(AudioSource track in musicListSources)
+            Debug.Log(track);
+        SetTrackVariants();
 
         //debug
-        StartNonIntroTracks();
-        carController.canDrift = true;
-        carController.canUseTurbo = true;
-        MusicSections("7_FINAL_TUTORIAL_1main");
-        EnableDriftFunctions();
-        EnableTurboFunctions();
-        //the TRUE death of TrackedTween
-        activeTweenIDs = new int[musicListSources.Length];
+        //carController.canDrift = true;
+        //carController.canUseTurbo = true;
+        //StartNonIntroTracks(); //begin all non-intro tracks?
+        //MusicSections("2_FINAL_TUTORIAL_main"); //set track to something else?
+        //EnableDriftFunctions(); //check for layers on drift?
+        //EnableTurboFunctions(); //check for layers on turbo?
+        //end debug
+        
+        //the TRUE and EVEN MORE PAINFUL death of TrackedTween
+        activeTweenIDs = new int[musicListCopies.Count];
     }
 
     public void StartNonIntroTracks()
@@ -107,7 +116,7 @@ public class musicControlTutorial : MonoBehaviour
             musicTrack.Stop();
         }
     }
-    void TrackVariants(bool set = false)
+    void SetTrackVariants()
     {
         string clipName = mainTrack.clip.name;
 
@@ -120,28 +129,18 @@ public class musicControlTutorial : MonoBehaviour
             .Where(a => a.name.StartsWith(prefix))
             .OrderBy(a => a.name)
             .ToArray();
-            
-        if (set)
-        {
-            mainTrack = variants.Length > 0 ? variants[0] : null;
-            driftTrack = variants.Length > 1 ? variants[1] : null;
-            turboTrack = variants.Length > 2 ? variants[2] : null;
-        }
-        else if (!set)
-        {
-            Debug.Log("assuming track has no variants", mainTrack);
-        }
-    }
 
-    void Update()
-    {
-        Debug.Log(mainTrack);
+        mainTrack = variants.Length > 0 ? variants[0] : null;
+        driftTrack = variants.Length > 1 ? variants[1] : null;
+        turboTrack = variants.Length > 2 ? variants[2] : null;
     }
 
     void ChangeTrack(string selectedAudio)
     {
         mainTrack = GameObject.Find(selectedAudio).GetComponent<AudioSource>();
-        TrackVariants(true);
+        //ottaa main trackin mukaan, eli ei tartte laittaa mukaan variablee
+        //ei myöskään alota mitään biisiä itse, sitä varten on MusicSections()
+        SetTrackVariants();
     }
 
     /// <summary>
@@ -170,42 +169,92 @@ public class musicControlTutorial : MonoBehaviour
                 if (turboTrack != null)
                     turboTrack.Play();
                 break;
+            
+            case "fade":
+                FadeSections(trackName);
+                break;
         }
     }
 
     private void FadeLayerTracks()
     {
-        Debug.Log("begin function");
-        //tarkistaa staten ku funktio alkaa, ei tarvi muualla
         if (CurrentMusState == LatestMusState) return;
-        Debug.Log("currentmusstate is not latestmusstate");
 
-
-
-        int stateIndex = (int)CurrentMusState; //current on oikeesti se viimeisin lol
+        int stateIndex = (int)CurrentMusState;
         int previousStateIndex = (int)LatestMusState;
-        //tein uniikin arrayn näitten säilytykselle
-        AudioSource NextTrack = variants[stateIndex];
-        AudioSource PreviousTrack = variants[previousStateIndex];
-        Debug.Log($"{NextTrack.name} {PreviousTrack.name}");
+        AudioSource NextTrack = (stateIndex < variants.Length) ? variants[stateIndex] : null;
+        AudioSource PreviousTrack = (previousStateIndex < variants.Length) ? variants[previousStateIndex] : null;
 
-        // Cancel any existing tweens on these tracks
-        if (activeTweenIDs[stateIndex] != -1)
-            LeanTween.cancel(activeTweenIDs[stateIndex]);
-        if (activeTweenIDs[previousStateIndex] != -1)
-            LeanTween.cancel(activeTweenIDs[previousStateIndex]);
+        if (NextTrack != null)
+        {
+            int nextIdx = musicListCopies.IndexOf(NextTrack);
+            int prevIdx = musicListCopies.IndexOf(PreviousTrack);
 
-        // Start new tweens and store their IDs
-        activeTweenIDs[stateIndex] =
-        LeanTween.value(NextTrack.volume, 0.3f, 1.0f)
-            .setOnUpdate(val => NextTrack.volume = val)
-            .id;
-        activeTweenIDs[previousStateIndex] =
-        LeanTween.value(PreviousTrack.volume, 0.0f, 1.0f)
-            .setOnUpdate(val => PreviousTrack.volume = val)
-            .id;
+            // Cancel any existing tweens on these tracks
+            if (nextIdx != -1 && activeTweenIDs[nextIdx] != 0)
+                LeanTween.cancel(activeTweenIDs[nextIdx]);
+            if (prevIdx != -1 && activeTweenIDs[prevIdx] != 0)
+                LeanTween.cancel(activeTweenIDs[prevIdx]);
+
+            // Start new tweens and store their IDs
+            if (nextIdx != -1)
+                activeTweenIDs[nextIdx] =
+                    LeanTween.value(NextTrack.volume, 0.28f, 1.0f)
+                        .setOnUpdate(val => NextTrack.volume = val)
+                        .id;
+            if (prevIdx != -1)
+                activeTweenIDs[prevIdx] =
+                    LeanTween.value(PreviousTrack.volume, 0.0f, 1.0f)
+                        .setOnUpdate(val => PreviousTrack.volume = val)
+                        .id;
+
+            LatestMusState = CurrentMusState;
+        }
+        else
+        {
+            Debug.LogError("yeah so there's not more tracks for this album buddy");
+        }
+    }
+
+    private void RemovePreviousTrack(AudioSource previousTrack)
+    {
+        if (previousTrack != null)
+        {
+            int trackIndex = musicListCopies.IndexOf(previousTrack);
+            if (trackIndex != -1)
+            {
+                if (activeTweenIDs[trackIndex] != 0)
+                    LeanTween.cancel(activeTweenIDs[trackIndex]);
+
+                // Tween volume to 0
+                LeanTween.value(previousTrack.volume, 0.0f, 0.6f)
+                .setOnUpdate(val => previousTrack.volume = val);
+
+                // Remove from list to prevent future tweens
+                musicListSources.Remove(previousTrack);
+                // Optionally, also remove the corresponding tween ID if you want to keep arrays in sync:
+                // activeTweenIDs = musicListSources.Select((_, i) => i < activeTweenIDs.Length ? activeTweenIDs[i] : -1).ToArray();
+            }
+        }
+    }
+
+    private void FadeSections(string newTrackName)
+    {
+        //ota nykyset, assignaa ne vanhoiksi
+
+        AudioSource previousMain = mainTrack;
+        AudioSource previousDrift = driftTrack;
+        AudioSource previousTurbo = turboTrack;
+
+        RemovePreviousTrack(mainTrack);
+        RemovePreviousTrack(driftTrack);
+        RemovePreviousTrack(turboTrack);
         
-        LatestMusState = CurrentMusState;
+        //vaiha uuet nykyset tilalle
+        ChangeTrack(newTrackName);
+
+        LeanTween.value(mainTrack.volume, 0.28f, 0.6f)
+            .setOnUpdate(val => mainTrack.volume = val);
     }
 
     public void PausedMusicHandler()
@@ -225,7 +274,8 @@ public class musicControlTutorial : MonoBehaviour
     {
         mainTrack.volume = 0f;
         StopNonIntroTracks();
-        MusicSections("6_FINAL_TUTORIAL_1main");
+        ChangeTrack("6_FINAL_TUTORIAL_1main");
+        driftTrack.volume = 0.28f;
         StartNonIntroTracks();
     }
 }

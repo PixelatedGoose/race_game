@@ -75,6 +75,8 @@ public class CarController : MonoBehaviour
     public bool canDrift = false;
     public bool canUseTurbo = false;
 
+    public bool GrassRespawnActive = false;
+
     
 
     void Awake()
@@ -337,6 +339,8 @@ public class CarController : MonoBehaviour
         {
             if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
             {
+                if (GrassRespawnActive)
+                    racerScript.RespawnAtLastCheckpoint();
                 return true;
             }
         }

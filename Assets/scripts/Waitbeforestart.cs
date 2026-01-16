@@ -48,7 +48,6 @@ public class Waitbeforestart : MonoBehaviour
             count3 = null;
             countGo = null;
             StartCoroutine(NoCountdown());
-            s3.SetActive(false);
         }
     }
 

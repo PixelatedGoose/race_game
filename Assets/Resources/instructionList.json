@@ -15,7 +15,7 @@
     "driving_2": [
         "Driving away from grass is recommended, as the grass slows ya down.",
         "Any bodies of water will instantly respawn you at the nearest checkpoint.",
-        "For now though, just avoid the grass and pass the second course without touching it.",
+        "Good luck on this second course. Touching grass during it WILL RESPAWN you at the last checkpoint.",
         "Great!"
     ],
 
@@ -26,19 +26,19 @@
         "You can pause the game with ESC, if it wasn't obvious.",
         "Take a moment to look at the bottom left corner.",
         "This is a sorta dashboard for your UI.",
-        "Some info is already displayed in the top corners for convenience.",
-        "Regardless, here you can also see your score.",
-        "This dashboard also has a timer. The red numbers are the milliseconds.",
-        "These two will show the laps during a race, it's why you can't see it yet.",
-        "This green gauge here tells you how much turbo you have left. You'll learn about it soon.",
+        "The lowest empty gray box is for your score.",
+        "The diamond with a number in the middle is your score multiplier. It gets reset when hitting grass.",
+        "The middle gray box is your time on a map. The red numbers are the milliseconds.",
+        "The highest gray box shows your current lap.",
+        "Lastly, the green gauge tells you how much turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
     "drifting": [
         "To drift, hold SPACE while driving. Good luck on the third course.",
         "Nice job! Hopefully you did alright.",
-        "If you did well, you can notice that you accumulated some score from it.",
-        "Your time and score determine your rank, given at the end of an map.",
+        "If you did well, you can notice that you accumulated some points from it.",
+        "Your time and drifting determine your score, given at the end of an map.",
         "If you got a good time, it'll be placed on the leaderboard.",
         "You're gonna see that after clearing a race.",
         "Now it's finally time to talk about turbo."
@@ -48,13 +48,13 @@
         "You can use turbo by holding [left] CTRL.",
         "We have a limited supply of that stuff per car; the amount's on the green gauge, as said before.",
         "The supply does regenerate after letting it rest for a while.",
-        "Try using it here to gain more speed and get past the final course."
+        "Try using it here."
     ],
 
     "final": [
         "Congratulations on clearing the tutorial!",
         "I have nothing else to explain, so get outta here.",
-        "Drive on top of that platform to exit."
+        "Drive to the end of the road to exit."
     ],
 
     "controller_intro": [
@@ -73,7 +73,7 @@
     "controller_driving_2": [
         "Driving away from grass is recommended, as the grass slows ya down.",
         "Any bodies of water will instantly respawn you at the nearest checkpoint.",
-        "For now though, just avoid the grass and pass the second course without touching it.",
+        "Good luck on this second course. Touching grass during it WILL RESPAWN you at the last checkpoint.",
         "Great!"
     ],
 
@@ -84,11 +84,11 @@
         "You can pause the game with the start button, if it wasn't obvious.",
         "Take a moment to look at the bottom left corner.",
         "This is a sorta dashboard for your UI.",
-        "Some info is already displayed in the top corners for convenience.",
-        "Regardless, here you can also see your score.",
-        "This dashboard also has a timer. The red numbers are the milliseconds.",
-        "These two will show the laps during a race, it's why you can't see it yet.",
-        "This green gauge here tells you how much turbo you have left. You'll learn about it soon.",
+        "The lowest empty gray box is for your score.",
+        "The diamond with a number in the middle is your score multiplier. It gets reset when hitting grass.",
+        "The middle gray box is your time on a map. The red numbers are the milliseconds.",
+        "The highest gray box shows your current lap.",
+        "Lastly, the green gauge tells you how much turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
@@ -106,13 +106,13 @@
         "You can use turbo by holding A.",
         "We have a limited supply of that stuff per car; the amount's on the dashboard, as said before.",
         "The supply does regenerate after letting it rest for a while.",
-        "Try using it here to gain more speed and get past the final course."
+        "Try using it here."
     ],
 
     "controller_final": [
         "Congratulations on clearing the tutorial!",
         "I have nothing else to explain, so get outta here.",
-        "Drive on top of that platform to exit."
+        "Drive to the end of the road to exit."
     ],
 
     "wheel_intro": [
@@ -131,7 +131,7 @@
     "wheel_driving_2": [
         "Driving away from grass is recommended, as the grass slows ya down.",
         "Any bodies of water will instantly respawn you at the nearest checkpoint.",
-        "For now though, just avoid the grass and pass the second course without touching it.",
+        "Good luck on this second course. Touching grass during it WILL RESPAWN you at the last checkpoint.",
         "Great!"
     ],
 
@@ -142,11 +142,11 @@
         "You can pause the game with the menu icon, if it wasn't obvious.",
         "Take a moment to look at the bottom left corner.",
         "This is a sorta dashboard for your UI.",
-        "Some info is already displayed in the top corners for convenience.",
-        "Regardless, here you can also see your score.",
-        "This dashboard also has a timer. The red numbers are the milliseconds.",
-        "These two will show the laps during a race, it's why you can't see it yet.",
-        "This green gauge here tells you how much turbo you have left. You'll learn about it soon.",
+        "The lowest empty gray box is for your score.",
+        "The diamond with a number in the middle is your score multiplier. It gets reset when hitting grass.",
+        "The middle gray box is your time on a map. The red numbers are the milliseconds.",
+        "The highest gray box shows your current lap.",
+        "Lastly, the green gauge tells you how much turbo you have left. You'll learn about it soon.",
         "But first, we'll teach you something more important. Drive to the next zone to continue."
     ],
 
@@ -164,12 +164,12 @@
         "You can use turbo by holding the right trigger.",
         "We have a limited supply of that stuff per car; the amount's on the green gauge, as said before.",
         "The supply does regenerate after letting it rest for a while.",
-        "Try using it here to gain more speed and get past the final course."
+        "Try using it here."
     ],
 
     "wheel_final": [
         "Congratulations on clearing the tutorial!",
         "I have nothing else to explain, so get outta here.",
-        "Drive on top of that platform to exit."
+        "Drive to the end of the road to exit."
     ]
 }
