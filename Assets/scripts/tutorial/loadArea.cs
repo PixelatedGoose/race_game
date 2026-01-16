@@ -113,11 +113,22 @@ public class loadArea : MonoBehaviour
                 .setEaseInOutSine();
                 break;
             case "53":
+                RaceResultCollector collector = FindFirstObjectByType<RaceResultCollector>();
+                collector.SaveRaceResult("JoonasKallio");
+
                 //alkuperäsesti oli musicControlTutorialissa (mitä vittua)
-                SceneManager.LoadSceneAsync(0);
+                //SceneManager.LoadSceneAsync(0);
                 break;
             case "99":
                 Debug.Log("respawn (ei implementattu viel)");
+                break;
+            case "t1":
+                musicControlTutorial.MusicSections("6_FINAL_TUTORIAL_1main", "fade");
+                StartCoroutine(FadeDeath(1.0f));
+                break;
+            case "t2":
+                musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_1main", "fade");
+                StartCoroutine(FadeDeath(1.0f));
                 break;
             default:
                 Debug.LogError($"prefix {prefix} not defined");

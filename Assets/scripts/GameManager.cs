@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }       
     }
 
-    //temp
+    //temp ja ota se pois sit
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))

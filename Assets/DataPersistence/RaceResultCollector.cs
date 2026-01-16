@@ -22,8 +22,16 @@ public class RaceResultCollector : MonoBehaviour
             return;
         }
 
-        resultHandler = new RaceResultHandler(Application.persistentDataPath, fileName);
-        Debug.Log($"Race results will be saved to: {Path.Combine(Application.persistentDataPath, fileName)}");
+        //lol
+        if (SceneManager.GetActiveScene().name == "tutorial")
+        {
+            resultHandler = new RaceResultHandler(Application.persistentDataPath, "tutorialMapResult.json");
+        }
+        else
+        {
+            resultHandler = new RaceResultHandler(Application.persistentDataPath, fileName);
+            Debug.Log($"Race results will be saved to: {Path.Combine(Application.persistentDataPath, fileName)}");
+        }
     }
 
     /// <summary>
@@ -79,6 +87,7 @@ public class RaceResultCollector : MonoBehaviour
             "ai_haukipudas" => "Shoreline [AI]",
             "haukipudas_night" => "Shoreline Night",
             "night_ai_haukipudas" => "Shoreline Night [AI]",
+            "tutorial" => "Tutorial",
             _ => "Unknown",
         };
     }
