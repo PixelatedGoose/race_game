@@ -713,7 +713,6 @@ public class CarController : MonoBehaviour
             }
             else
             {
-                // Turn off when we want it off
                 if (trailRenderer.emitting)
                     trailRenderer.emitting = false;
 
