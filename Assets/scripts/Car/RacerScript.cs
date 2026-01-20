@@ -179,6 +179,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (transform.position.y < -1)
         {
             ResetPosition();
+            carController.ClearWheelTrails();
             ResetCarState();
         }
     }
