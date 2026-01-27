@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class AImanager : MonoBehaviour
 {
+    #pragma warning disable 0414
     [Tooltip("List of possible AI car names.")]
     [SerializeField] private List<string> carNames = new List<string> { "Jeff", "Bob", "Bob the 3rd", "egg", "Joonas Kallio" };
 
