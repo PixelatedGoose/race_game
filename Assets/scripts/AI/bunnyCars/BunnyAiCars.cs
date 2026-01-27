@@ -7,6 +7,7 @@ using System;
 
 public class BunnyAiCars : MonoBehaviour
 {
+    #pragma warning disable 0414
     
     // --- Constants ---
     private const float GROUND_RAY_LENGTH = 0.5f;
