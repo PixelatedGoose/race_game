@@ -210,6 +210,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""menunext"",
+                    ""type"": ""Button"",
+                    ""id"": ""69474ab1-04d4-4a19-8c0f-91fb8547d0e9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""menucancel"",
                     ""type"": ""Button"",
                     ""id"": ""c513cf81-1afa-41d8-8baf-26c21fdad2bf"",
@@ -886,6 +895,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ThrottleMod"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90860d41-c4ae-4b41-8588-6c0343a2a266"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""menunext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -919,6 +939,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_respawn = m_CarControls.FindAction("respawn", throwIfNotFound: true);
         m_CarControls_pausemenu = m_CarControls.FindAction("pausemenu", throwIfNotFound: true);
         m_CarControls_menusubmit = m_CarControls.FindAction("menusubmit", throwIfNotFound: true);
+        m_CarControls_menunext = m_CarControls.FindAction("menunext", throwIfNotFound: true);
         m_CarControls_menucancel = m_CarControls.FindAction("menucancel", throwIfNotFound: true);
         m_CarControls_ui_advance = m_CarControls.FindAction("ui_advance", throwIfNotFound: true);
         m_CarControls_ThrottleMod = m_CarControls.FindAction("ThrottleMod", throwIfNotFound: true);
@@ -1015,6 +1036,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_respawn;
     private readonly InputAction m_CarControls_pausemenu;
     private readonly InputAction m_CarControls_menusubmit;
+    private readonly InputAction m_CarControls_menunext;
     private readonly InputAction m_CarControls_menucancel;
     private readonly InputAction m_CarControls_ui_advance;
     private readonly InputAction m_CarControls_ThrottleMod;
@@ -1081,6 +1103,10 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CarControls/menusubmit".
         /// </summary>
         public InputAction @menusubmit => m_Wrapper.m_CarControls_menusubmit;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/menunext".
+        /// </summary>
+        public InputAction @menunext => m_Wrapper.m_CarControls_menunext;
         /// <summary>
         /// Provides access to the underlying input action "CarControls/menucancel".
         /// </summary>
@@ -1158,6 +1184,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @menusubmit.started += instance.OnMenusubmit;
             @menusubmit.performed += instance.OnMenusubmit;
             @menusubmit.canceled += instance.OnMenusubmit;
+            @menunext.started += instance.OnMenunext;
+            @menunext.performed += instance.OnMenunext;
+            @menunext.canceled += instance.OnMenunext;
             @menucancel.started += instance.OnMenucancel;
             @menucancel.performed += instance.OnMenucancel;
             @menucancel.canceled += instance.OnMenucancel;
@@ -1217,6 +1246,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @menusubmit.started -= instance.OnMenusubmit;
             @menusubmit.performed -= instance.OnMenusubmit;
             @menusubmit.canceled -= instance.OnMenusubmit;
+            @menunext.started -= instance.OnMenunext;
+            @menunext.performed -= instance.OnMenunext;
+            @menunext.canceled -= instance.OnMenunext;
             @menucancel.started -= instance.OnMenucancel;
             @menucancel.performed -= instance.OnMenucancel;
             @menucancel.canceled -= instance.OnMenucancel;
@@ -1370,6 +1402,13 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMenusubmit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "menunext" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMenunext(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "menucancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

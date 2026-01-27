@@ -124,6 +124,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "menunext",
+                    "type": "Button",
+                    "id": "69474ab1-04d4-4a19-8c0f-91fb8547d0e9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "menucancel",
                     "type": "Button",
                     "id": "c513cf81-1afa-41d8-8baf-26c21fdad2bf",
@@ -798,6 +807,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ThrottleMod",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90860d41-c4ae-4b41-8588-6c0343a2a266",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "menunext",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

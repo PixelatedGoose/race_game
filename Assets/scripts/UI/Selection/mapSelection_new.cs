@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class mapSelection_new : MonoBehaviour
 {
-    public GameObject csObjects;
-    public GameObject msObjects;
+    public GameObject carSelection;
+    public GameObject mapSelection;
+    public GameObject optionSelection;
     public GameObject[] msObjectsList;
     private float schizophrenia;
-    public Toggle toggle;
     private GameObject loadObjects;
     private AudioSource loadingLoop;
     public GameObject[] maps;
@@ -24,9 +24,8 @@ public class mapSelection_new : MonoBehaviour
         selectText = GameObject.Find("SelectYoMap").GetComponent<Text>();
         //pitää ettiä tekstit jollai array tavalla
         scoreText = GameObject.Find("ScoreOnThaAuto").GetComponent<Text>();
-        toggle = GameObject.Find("ai").GetComponent<Toggle>();
-        csObjects = GameObject.Find("CarSelectionNew");
-        msObjects = GameObject.Find("mapSelectionObj");
+        carSelection = GameObject.Find("CarSelectionNew");
+        mapSelection = GameObject.Find("mapSelectionObj");
         loadObjects = GameObject.Find("loadObjects");
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
@@ -37,8 +36,8 @@ public class mapSelection_new : MonoBehaviour
     public void Back()
     {
         MapFallAnimResetPos();
-        csObjects.SetActive(true);
-        msObjects.SetActive(false);
+        carSelection.SetActive(true);
+        mapSelection.SetActive(false);
     }
 
     public void MapFallAnimResetPos()
@@ -102,23 +101,7 @@ public class mapSelection_new : MonoBehaviour
         Debug.Log("you will now wait for: " + schizophrenia + " seconds");
         yield return new WaitForSeconds(schizophrenia);
 
-        //en tiiä onko performance riski ottaa chosenMap GameManagerista
         SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap"));
-    }
-
-    public void SetAIMaps(string toggleName)
-    {
-        toggle = GameObject.Find(toggleName).GetComponent<Toggle>();
-        if (toggle.isOn)
-        {
-            haukipudas = 6;
-            night_haukipudas = 8;
-        }
-        else
-        {
-            haukipudas = 4;
-            night_haukipudas = 9;
-        }
     }
 
     private IEnumerator MapFallAnimFunc()
