@@ -104,7 +104,7 @@ public class MainMenu : MonoBehaviour
     // called by the "Play Game" button on the playConfirmPanel
     public void ConfirmPlay()
     {
-        SceneManager.LoadSceneAsync(7); //menee ny carselectioniin suoraan
+        SceneManager.LoadSceneAsync("Carselectionmenu_VECTORAMA"); //menee ny carselectioniin suoraan
         DatapersistenceManager.instance.LoadGame();
     }
 
@@ -144,7 +144,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayTutorial()
     {
-        SceneManager.LoadSceneAsync(5);
+        SceneManager.LoadSceneAsync("tutorial");
         DatapersistenceManager.instance.LoadGame();
     }
 

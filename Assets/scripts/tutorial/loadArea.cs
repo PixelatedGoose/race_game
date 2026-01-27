@@ -108,7 +108,7 @@ public class loadArea : MonoBehaviour
                 collector.SaveRaceResult("JoonasKallio");
 
                 //alkuperäsesti oli musicControlTutorialissa (mitä vittua)
-                SceneManager.LoadSceneAsync(0);
+                SceneManager.LoadSceneAsync("MainMenu");
                 break;
             case "RE":
                 RacerScript racerScript = FindFirstObjectByType<RacerScript>();
