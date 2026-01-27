@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-public class mapSelection : MonoBehaviour
+public class mapSelection_new : MonoBehaviour
 {
     public GameObject csObjects;
     public GameObject msObjects;
@@ -22,6 +22,7 @@ public class mapSelection : MonoBehaviour
     void Awake()
     {
         selectText = GameObject.Find("SelectYoMap").GetComponent<Text>();
+        //pitää ettiä tekstit jollai array tavalla
         scoreText = GameObject.Find("ScoreOnThaAuto").GetComponent<Text>();
         toggle = GameObject.Find("ai").GetComponent<Toggle>();
         csObjects = GameObject.Find("CarSelectionNew");
@@ -29,7 +30,6 @@ public class mapSelection : MonoBehaviour
         loadObjects = GameObject.Find("loadObjects");
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
-        Debug.Log("hello");
 
         //mfw kun pitää siirtää koko maps paska car selection scriptiin
     }

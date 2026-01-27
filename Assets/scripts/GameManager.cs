@@ -137,53 +137,14 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
 
     //temp ja ota se pois sit
-/*     public void Update()
+    public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (racerscript.winMenu.activeSelf) return;
             racerscript.EndRace();
         }
-    } */
-
-
-
-    // public void AddPoints()
-    // {
-    //     RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-    //     if (racerScript != null && racerScript.raceFinished)
-    //     {
-    //         return; 
-    //     }
-
-    //     if (!isAddingPoints && currentCar.activeSelf && instance != null
-    //     && isPaused)
-    //     {
-    //         StartCoroutine(IncrementScoreWithDelay());
-    //     }
-    // }
-
-    // private IEnumerator IncrementScoreWithDelay()
-    // {
-    //     isAddingPoints = true;
-    //     float timer = 0f;
-
-    //     while (isAddingPoints)
-    //     {
-    //         timer += Time.deltaTime;
-    //         if (timer >= scoreAddWT)
-    //         {
-    //             score = Mathf.Max(0, score + (scoreAddWT > 0 ? 1 : -1));
-    //             foreach (Text scoreText in ScoreTexts)
-    //             {
-    //                 scoreText.text = "Score: " + score.ToString();
-    //             }
-    //             timer -= scoreAddWT;
-    //         }
-
-    //         yield return null;
-    //     }
-    // }
+    }
 
     public void StopAddingPoints()
     {
