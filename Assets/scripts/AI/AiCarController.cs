@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-public class BetterNewAiCarController : MonoBehaviour
+public class AiCarController : MonoBehaviour
 {
     
     // --- Constants ---
@@ -18,7 +18,9 @@ public class BetterNewAiCarController : MonoBehaviour
     [Tooltip("Distance threshold for reaching a waypoint.")]
     [SerializeField] private float waypointThreshold = 10.0f;
     [Tooltip("Angle threshold for switching between straight lines and curves.")]
+    #pragma warning disable 0414
     [SerializeField] private float angleThreshold = 35.0f;
+    #pragma warning restore 0414
 
     // --- Car Movement ---
     [Header("Car Movement Settings")]
@@ -30,14 +32,18 @@ public class BetterNewAiCarController : MonoBehaviour
     // --- Steering ---
     [Header("Steering Settings")]
     [Tooltip("Left turn radius (how far the front left wheel can rotate).")]
+    #pragma warning disable 0414
     [SerializeField] private float leftTurnRadius = 10.0f;
     [Tooltip("Right turn radius (how far the front right wheel can rotate).")]
     [SerializeField] private float rightTurnRadius = 30.0f;
     [Tooltip("Current turn sensitivity.")]
     [SerializeField] private float turnSensitivity = 30.0f;
+    #pragma warning restore 0414
     private float turnStrength = 2.5f;
 
+    #pragma warning disable 0414
     [SerializeField] private int lookAheadIndex = 5;
+    #pragma warning restore 0414
 
     // --- Physics ---
     [Header("Physics Settings")]
@@ -49,18 +55,22 @@ public class BetterNewAiCarController : MonoBehaviour
     // --- Corner Slowdown ---
     [Header("AI Turn Slowdown Settings")]
     [Tooltip("Degrees: Only slow down for turns sharper than this.")]
+    #pragma warning disable 0414
     [SerializeField] private float slowdownThreshold = 30f;
     [Tooltip("Degrees: Max slowdown at this angle or above.")]
     [SerializeField] private float maxSlowdownAngle = 90f;
     [Tooltip("Minimum speed factor at max angle (e.g. 0.35 = 35% of maxSpeed).")]
     [SerializeField] private float minSlowdown = 0.35f;
+    #pragma warning restore 0414
 
     // --- Turn Detection ---
     [Header("Turn Detection Settings")]
     [Tooltip("Radius of the detection sphere for upcoming turns.")]
+    #pragma warning disable 0414
     [SerializeField] private float detectionRadius = 7.0f;
     [Tooltip("Tolerance for deviation from the Bezier curve.")]
     [SerializeField] private float curveTolerance = 2.0f;
+    #pragma warning restore 0414
 
     // --- Avoidance ---
     [Header("Avoidance Settings")]
@@ -68,7 +78,9 @@ public class BetterNewAiCarController : MonoBehaviour
     [SerializeField] private float avoidanceBuffer = 5.0f;
     [Tooltip("How far to offset laterally when dodging another car.")]
     [SerializeField] private float avoidanceLateralOffset = 2.0f;
+    #pragma warning disable 0414
     private float avoidanceOffset = 0f;
+    #pragma warning restore 0414
     public float safeRadius { get; private set; }
 
     // --- Boost ---
@@ -104,7 +116,7 @@ public class BetterNewAiCarController : MonoBehaviour
     private LayerMask objectLayerMask;
     private float steerInput;
     private float avoidance;
-    public BetterNewAiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, AiCarManager.DifficultyStats difficultyStats)
+    public AiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, AiCarManager.DifficultyStats difficultyStats)
     {
         this.aiCarManager = aiCarManager;
         playerCar = playerCollider.GetComponent<CarController>();
