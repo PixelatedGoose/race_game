@@ -35,7 +35,7 @@ public class Credits : MonoBehaviour
             {
                 "PixelatedGoose\nPROJECT LEAD\ngraphical design, map design, shaders",
                 "Vizl87\nLEAD PROGRAMMER\ncar controller, game data handling",
-                "ThatOneGuy\nCOMPOSER, PROGRAMMER\nall music and sound design, tutorial",
+                "ThatOneGuy\nCOMPOSER, PROGRAMMER\nmusic and sfx, selection menus",
                 "Leobold\nPROGRAMMER\ncertain menus, racing mechanics",
                 "lamelemon\nPROGRAMMER\nai coding, refactoring scripts",
                 "rojp\nDESIGNER\nother help, car textures",
@@ -44,10 +44,10 @@ public class Credits : MonoBehaviour
         whatHeDo = new string[]
         {
             //lol
-            "- all pixel art graphics\n- all map design\n- all shaders\n- leaderboard",
-            "- car controller\n- save data system\n- wheel support\n- score multiplier\n- car selection",
-            "- tutorial\n- all music and sound effects\n- some graphics assets\n- bug fixing\n- map selecrtion",
-            "- base for options menu\n - score system\n - lap and time system",
+            "- all pixel art graphics\n- all map design\n- all shaders\n- leaderboard system",
+            "- car controller\n- save data system\n- wheel support\n- score multiplier",
+            "- all music and sound effects\n- selection menus\n- some graphics assets\n- bug fixing",
+            "- multiplayer\n - score system\n - lap and time system",
             "- AI car code\n- user input check system",
             "- car textures\n- ideas",
         };
