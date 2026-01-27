@@ -93,11 +93,11 @@ public class AiCarController : MonoBehaviour
     // --- References ---
     [Header("References")]
     [Tooltip("List of wheels used by the car.")]
-    [SerializeField] private List<CarController.Wheel> wheels;
+    [SerializeField] private List<PlayerCarController.Wheel> wheels;
     [Tooltip("Rigidbody component of the car.")]
     public Rigidbody carRb { get; private set; }
     [Tooltip("Reference to the player car.")]
-    [SerializeField] private CarController playerCar;
+    [SerializeField] private PlayerCarController playerCar;
     public AiCarManager aiCarManager;
     private Collider carCollider;
     public float CarWidth { get; private set; }
@@ -109,7 +109,7 @@ public class AiCarController : MonoBehaviour
     private Transform[] waypoints;
     private Vector3 targetPoint;
     private int currentWaypointIndex = 0;
-    private CarController.Wheel[] frontWheels = Array.Empty<CarController.Wheel>();
+    private PlayerCarController.Wheel[] frontWheels = Array.Empty<PlayerCarController.Wheel>();
     private float targetTorque;
     private float moveInput = 0f;
     private LayerMask grassLayerMask;
@@ -119,7 +119,7 @@ public class AiCarController : MonoBehaviour
     public AiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, AiCarManager.DifficultyStats difficultyStats)
     {
         this.aiCarManager = aiCarManager;
-        playerCar = playerCollider.GetComponent<CarController>();
+        playerCar = playerCollider.GetComponent<PlayerCarController>();
         Collider pc = playerCollider.GetComponent<Collider>();
         playerCarWidth = pc.bounds.size.x;
         playerCarLength = pc.bounds.size.z;
@@ -143,7 +143,7 @@ public class AiCarController : MonoBehaviour
             safeRadius = Mathf.Max(CarWidth, CarLength) * 0.5f;
         }
 
-        frontWheels = wheels.Where(w => w.axel == CarController.Axel.Front).ToArray();
+        frontWheels = wheels.Where(w => w.Axel == PlayerCarController.Axel.Front).ToArray();
     }
 
     private void Start()
@@ -178,9 +178,9 @@ public class AiCarController : MonoBehaviour
         );
 
         
-        foreach (CarController.Wheel wheel in frontWheels)
+        foreach (PlayerCarController.Wheel wheel in frontWheels)
         {
-            wheel.wheelCollider.steerAngle = carRb.rotation.y;
+            wheel.WheelCollider.steerAngle = carRb.rotation.y;
         }
 
         
@@ -212,8 +212,8 @@ public class AiCarController : MonoBehaviour
 
         foreach (var wheel in wheels)
         {
-            wheel.wheelCollider.motorTorque = targetTorque;
-            wheel.wheelCollider.brakeTorque = 0f;
+            wheel.WheelCollider.motorTorque = targetTorque;
+            wheel.WheelCollider.brakeTorque = 0f;
         }
 
         // Apply speed limit
@@ -232,9 +232,9 @@ public class AiCarController : MonoBehaviour
     private bool IsOnGrass()
     {
         if (wheels == null) return false;
-        foreach (CarController.Wheel wheel in wheels)
+        foreach (PlayerCarController.Wheel wheel in wheels)
         {
-            if (Physics.Raycast(wheel.wheelCollider.transform.position, -wheel.wheelCollider.transform.up, out RaycastHit hit, wheel.wheelCollider.radius + wheel.wheelCollider.suspensionDistance))
+            if (Physics.Raycast(wheel.WheelCollider.transform.position, -wheel.WheelCollider.transform.up, out RaycastHit hit, wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance))
             {
                 if (hit.collider.gameObject.layer == grassLayerMask)
                     return true;
@@ -287,7 +287,7 @@ public class AiCarController : MonoBehaviour
             }
         }
 
-        if (playerCar != null && playerCar.carRb != null && playerCar != this)
+        if (playerCar != null && playerCar.CarRb != null && playerCar != this)
         {
             Vector3 toPlayer = playerCar.transform.position - carRb.transform.position;
             float distance = toPlayer.magnitude;
@@ -297,7 +297,7 @@ public class AiCarController : MonoBehaviour
             if (distance < minSafeDistance && Vector3.Dot(carRb.transform.forward, toPlayer.normalized) > 0.5f)
             {
                 Vector3 myFuturePos = carRb.transform.position + carRb.linearVelocity * 0.5f;
-                Vector3 playerFuturePos = playerCar.transform.position + playerCar.carRb.linearVelocity * 0.5f;
+                Vector3 playerFuturePos = playerCar.transform.position + playerCar.CarRb.linearVelocity * 0.5f;
                 float futureDist = (myFuturePos - playerFuturePos).magnitude;
 
                 if (futureDist < minSafeDistance)
@@ -305,7 +305,7 @@ public class AiCarController : MonoBehaviour
                     float steerDirection = Vector3.Cross(carRb.transform.forward, toPlayer).y > 0 ? -1f : 1f;
                     avoidanceOffset += steerDirection * avoidanceLateralOffset;
 
-                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > playerCar.carRb.linearVelocity.magnitude) moveInput = 0.7f;
+                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > playerCar.CarRb.linearVelocity.magnitude) moveInput = 0.7f;
                 }
             }
         }
