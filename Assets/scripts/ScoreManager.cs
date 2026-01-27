@@ -48,7 +48,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     private float scoreFloat;
     private int lastReportedScore = -1;
     private float driftTime;
-    private CarController carController;
+    private PlayerCarController carController;
     private RacerScript racerScript;
     private bool isOnGrass = false;
 
@@ -106,7 +106,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     void Start()
     {
-        carController = FindFirstObjectByType<CarController>();
+        carController = FindFirstObjectByType<PlayerCarController>();
         racerScript = FindFirstObjectByType<RacerScript>();
         multCounter = FindFirstObjectByType<MultCounter>();
         
@@ -147,13 +147,13 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     bool EnsureCarController()
     {
         if (carController != null) return true;
-        carController = FindFirstObjectByType<CarController>();
+        carController = FindFirstObjectByType<PlayerCarController>();
         return carController != null;
     }
 
     Vector3 GetVelocity()
     {
-        return (carController.carRb != null) ? carController.carRb.linearVelocity : Vector3.zero;
+        return (carController.CarRb != null) ? carController.CarRb.linearVelocity : Vector3.zero;
     }
 
     void UpdateTimePoints()
@@ -181,7 +181,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     void UpdateDriftState(float deltaTime, Vector3 velocity)
     {
-        bool canDriftNow = !isOnGrass && carController.isDrifting;
+        bool canDriftNow = !isOnGrass && carController.IsDrifting;
 
         if (canDriftNow)
         {
@@ -287,7 +287,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     float ComputeDriftMultiplierIncrement(Vector3 velocity, float deltaTime)
     {
-        if (deltaTime <= 0f || carController == null || carController.carRb == null) return 0f;
+        if (deltaTime <= 0f || carController == null || carController.CarRb == null) return 0f;
 
         float speed = velocity.magnitude;
         if (speed < minForwardSpeed) return 0f;

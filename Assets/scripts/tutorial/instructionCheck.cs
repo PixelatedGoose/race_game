@@ -6,7 +6,7 @@ public class instructionCheck : MonoBehaviour
     CarInputActions Controls;
 
     private musicControlTutorial musicControlTutorial;
-    private CarController carController;
+    private PlayerCarController carController;
 
 
     void Awake()
@@ -18,7 +18,7 @@ public class instructionCheck : MonoBehaviour
         Controls.CarControls.ui_advance.performed += CheckInstructionConditions;
 
         musicControlTutorial = FindAnyObjectByType<musicControlTutorial>();
-        carController = FindAnyObjectByType<CarController>();
+        carController = FindAnyObjectByType<PlayerCarController>();
 
         //oh good heavens
         //tälle paskalle on VARMASTI parempi tapa
@@ -86,7 +86,7 @@ public class instructionCheck : MonoBehaviour
     void DriftTrack(InputAction.CallbackContext context)
     {
         Debug.Log("FUCK YOU");
-        if (!carController.canDrift) return;
+        if (!carController.CanDrift) return;
 
         musicControlTutorial.EnableDriftFunctions();
         Debug.Log("actually i'll take that back");

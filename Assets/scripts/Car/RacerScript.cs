@@ -43,7 +43,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     public GameObject[] otherStuff;
     private GameObject finalLapImg;
 
-    private CarController carController;
+    private PlayerCarController carController;
 
     public void LoadData(GameData data)
     {
@@ -86,7 +86,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Controls.Enable();
         musicControl = FindAnyObjectByType<musicControl>();
         soundControl = FindAnyObjectByType<soundFXControl>();
-        carController = GetComponent<CarController>();
+        carController = GetComponent<PlayerCarController>();
     }
 
     private void OnEnable()

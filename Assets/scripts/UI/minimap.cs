@@ -25,7 +25,7 @@ public class minimap : MonoBehaviour
 
         // Player car from GameManager
         var playerCar = GameManager.instance.currentCar;
-        var movingCar = playerCar.GetComponentInChildren<CarController>()?.transform;
+        var movingCar = playerCar.GetComponentInChildren<PlayerCarController>()?.transform;
         if (movingCar != null && movingCar.gameObject.activeInHierarchy)
         {
             carTransforms.Add(movingCar);
