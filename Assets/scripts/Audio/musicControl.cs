@@ -20,13 +20,13 @@ public class musicControl : MonoBehaviour
     public AudioSource resultsTrack;
     public AudioSource finalLapTrack;
 
-    private CarController carController;
+    private PlayerCarController carController;
     CarInputActions Controls;
 
     void Awake()
     {
         Controls = new CarInputActions();
-        carController = FindAnyObjectByType<CarController>();
+        carController = FindAnyObjectByType<PlayerCarController>();
 
         //temporarily disabled
         /* Controls.CarControls.Drift.performed += DriftCall;
@@ -60,12 +60,12 @@ public class musicControl : MonoBehaviour
     //kaikki tarpeelline on täs
     void DriftCall(InputAction.CallbackContext context)
     {
-        CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Drift;
+        CurrentMusState = carController.IsTurboActive ? CarMusicState.Turbo : CarMusicState.Drift;
         FadeTracks();
     }
     void DriftCanceled(InputAction.CallbackContext context)
     {
-        CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Main;
+        CurrentMusState = carController.IsTurboActive ? CarMusicState.Turbo : CarMusicState.Main;
         FadeTracks();
     }
     void TurboCall(InputAction.CallbackContext context)
@@ -75,7 +75,7 @@ public class musicControl : MonoBehaviour
     }
     void TurboCanceled(InputAction.CallbackContext context)
     {
-        CurrentMusState = carController.isDrifting ? CarMusicState.Drift : CarMusicState.Main;
+        CurrentMusState = carController.IsDrifting ? CarMusicState.Drift : CarMusicState.Main;
         FadeTracks();
     }
 

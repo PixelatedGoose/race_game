@@ -20,14 +20,14 @@ public class musicControlTutorial : MonoBehaviour
     private CarMusicState LatestMusState = CarMusicState.Main;
     public int[] activeTweenIDs;
 
-    private CarController carController;
+    private PlayerCarController carController;
 
     void OnEnable()
     {
         Controls = new CarInputActions();
         Controls.Enable();
 
-        carController = FindAnyObjectByType<CarController>();
+        carController = FindAnyObjectByType<PlayerCarController>();
         Controls.CarControls.pausemenu.performed += ctx => PausedMusicHandler();
     }
     private void OnDisable()
@@ -55,12 +55,12 @@ public class musicControlTutorial : MonoBehaviour
     //kaikki tarpeelline on täs
     void DriftCall(InputAction.CallbackContext context)
     {
-        CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Drift;
+        CurrentMusState = carController.IsTurboActive ? CarMusicState.Turbo : CarMusicState.Drift;
         FadeLayerTracks();
     }
     void DriftCanceled(InputAction.CallbackContext context)
     {
-        CurrentMusState = carController.isTurboActive ? CarMusicState.Turbo : CarMusicState.Main;
+        CurrentMusState = carController.IsTurboActive ? CarMusicState.Turbo : CarMusicState.Main;
         FadeLayerTracks();
     }
     void TurboCall(InputAction.CallbackContext context)
@@ -70,7 +70,7 @@ public class musicControlTutorial : MonoBehaviour
     }
     void TurboCanceled(InputAction.CallbackContext context)
     {
-        CurrentMusState = carController.isDrifting ? CarMusicState.Drift : CarMusicState.Main;
+        CurrentMusState = carController.IsDrifting ? CarMusicState.Drift : CarMusicState.Main;
         FadeLayerTracks();
     }
 

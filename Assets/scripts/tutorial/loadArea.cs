@@ -49,7 +49,7 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
 
-                CarController carcontrollerreal1 = FindFirstObjectByType<CarController>();
+                PlayerCarController carcontrollerreal1 = FindFirstObjectByType<PlayerCarController>();
                 carcontrollerreal1.GrassRespawnActive = true;
                 break;
             case "05":
@@ -57,13 +57,13 @@ public class loadArea : MonoBehaviour
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
 
-                CarController carcontrollerreal2 = FindFirstObjectByType<CarController>();
+                PlayerCarController carcontrollerreal2 = FindFirstObjectByType<PlayerCarController>();
                 carcontrollerreal2.GrassRespawnActive = false;
                 break;
             //drift
             case "DD":
-                CarController carController = FindAnyObjectByType<CarController>();
-                carController.canDrift = true;
+                PlayerCarController carController = FindAnyObjectByType<PlayerCarController>();
+                carController.CanDrift = true;
                 
                 instructionHandler.ShowNextInstructionInCategory(instructionHandler.nextCategory, true, 1);
                 StartCoroutine(FadeDeath(1.0f));
@@ -84,8 +84,8 @@ public class loadArea : MonoBehaviour
                 break;
             //turbe
             case "TT":
-                CarController carController3 = FindAnyObjectByType<CarController>();
-                carController3.canUseTurbo = true;
+                PlayerCarController carController3 = FindAnyObjectByType<PlayerCarController>();
+                carController3.CanUseTurbo = true;
 
                 musicControlTutorial.EnableTurboFunctions();
                 musicControlTutorial.MusicSections("7_FINAL_TUTORIAL_1main", "fade");

@@ -12,7 +12,7 @@ public class CameraFollow : MonoBehaviour
     public Transform carTarget;
     
     private Camera Cam;
-    private CarController carController;
+    private PlayerCarController carController;
     float normalFOV = 60;
     float ZoomFOV = 70;
     public float smoothTime = 0.3f;
@@ -23,7 +23,7 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         Cam = GetComponent<Camera>();
-        carController = carTarget.GetComponent<CarController>();
+        carController = carTarget.GetComponent<PlayerCarController>();
     }
 
     private void FixedUpdate()
