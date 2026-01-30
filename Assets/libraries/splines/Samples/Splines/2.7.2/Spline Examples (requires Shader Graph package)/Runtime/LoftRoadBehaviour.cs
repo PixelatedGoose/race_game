@@ -58,6 +58,19 @@ namespace Unity.Splines.Examples
         [SerializeField]
         float m_TextureScale = 1f;
 
+        [SerializeField]
+        float m_RoadHeight = 0.5f;
+
+        public float RoadHeight
+        {
+            get => m_RoadHeight;
+            set
+            {
+                m_RoadHeight = value;
+                LoftAllRoads();
+            }
+        }
+
         public IReadOnlyList<Spline> splines => LoftSplines;
 
         public IReadOnlyList<Spline> LoftSplines
@@ -272,8 +285,11 @@ namespace Unity.Splines.Examples
             var segments = Mathf.CeilToInt(segmentsPerLength);
             var segmentStepT = (1f / SegmentsPerMeter) / length;
             var steps = segments + 1;
-            var vertexCount = steps * 2;
-            var triangleCount = segments * 6;
+            
+            // 4 vertices per step: top-left, top-right, bottom-left, bottom-right
+            var vertexCount = steps * 4;
+            // Top face + bottom face + 2 side faces
+            var triangleCount = segments * 6 * 4; // 4 faces
             var prevVertexCount = m_Positions.Count;
 
             m_Positions.Capacity += vertexCount;
@@ -286,8 +302,6 @@ namespace Unity.Splines.Examples
             {
                 SplineUtility.Evaluate(spline, t, out var pos, out var dir, out var up);
 
-                // If dir evaluates to zero (linear or broken zero length tangents?)
-                // then attempt to advance forward by a small amount and build direction to that point
                 if (math.length(dir) == 0)
                 {
                     var nextPos = spline.GetPointAtLinearDistance(t, 0.01f, out _);
@@ -305,6 +319,7 @@ namespace Unity.Splines.Examples
 
                 var scale = transform.lossyScale;
                 var tangent = math.normalizesafe(math.cross(up, dir)) * new float3(1f / scale.x, 1f / scale.y, 1f / scale.z);
+                var down = -up * m_RoadHeight;
 
                 var w = 1f;
                 if (widthDataIndex < m_Widths.Count)
@@ -317,24 +332,47 @@ namespace Unity.Splines.Examples
                     }
                 }
 
-                m_Positions.Add(pos - (tangent * w));
-                m_Positions.Add(pos + (tangent * w));
-                m_Normals.Add(up);
-                m_Normals.Add(up);
+                // Top vertices
+                m_Positions.Add(pos - (tangent * w));           // top-left
+                m_Positions.Add(pos + (tangent * w));           // top-right
+                // Bottom vertices
+                m_Positions.Add((float3)pos - (tangent * w) + down);  // bottom-left
+                m_Positions.Add((float3)pos + (tangent * w) + down);  // bottom-right
+
+                m_Normals.Add(up);      // top-left
+                m_Normals.Add(up);      // top-right
+                m_Normals.Add(-tangent); // bottom-left (side normal)
+                m_Normals.Add(tangent);  // bottom-right (side normal)
+
+                m_Textures.Add(new Vector2(0f, t * m_TextureScale));
+                m_Textures.Add(new Vector2(1f, t * m_TextureScale));
                 m_Textures.Add(new Vector2(0f, t * m_TextureScale));
                 m_Textures.Add(new Vector2(1f, t * m_TextureScale));
 
                 t = math.min(1f, t + segmentStepT);
             }
 
-            for (int i = 0, n = prevVertexCount; i < triangleCount; i += 6, n += 2)
+            // Build triangles
+            for (int i = 0, n = prevVertexCount; i < segments; i++, n += 4)
             {
-                m_Indices.Add((n + 2) % (prevVertexCount + vertexCount));
-                m_Indices.Add((n + 1) % (prevVertexCount + vertexCount));
-                m_Indices.Add((n + 0) % (prevVertexCount + vertexCount));
-                m_Indices.Add((n + 2) % (prevVertexCount + vertexCount));
-                m_Indices.Add((n + 3) % (prevVertexCount + vertexCount));
-                m_Indices.Add((n + 1) % (prevVertexCount + vertexCount));
+                int tl = n, tr = n + 1, bl = n + 2, br = n + 3;
+                int ntl = n + 4, ntr = n + 5, nbl = n + 6, nbr = n + 7;
+
+                // Top face
+                m_Indices.Add(ntl); m_Indices.Add(tr); m_Indices.Add(tl);
+                m_Indices.Add(ntl); m_Indices.Add(ntr); m_Indices.Add(tr);
+
+                // Bottom face
+                m_Indices.Add(bl); m_Indices.Add(nbr); m_Indices.Add(nbl);
+                m_Indices.Add(bl); m_Indices.Add(br); m_Indices.Add(nbr);
+
+                // Left side
+                m_Indices.Add(tl); m_Indices.Add(bl); m_Indices.Add(nbl);
+                m_Indices.Add(tl); m_Indices.Add(nbl); m_Indices.Add(ntl);
+
+                // Right side
+                m_Indices.Add(ntr); m_Indices.Add(nbr); m_Indices.Add(br);
+                m_Indices.Add(ntr); m_Indices.Add(br); m_Indices.Add(tr);
             }
         }
     }
