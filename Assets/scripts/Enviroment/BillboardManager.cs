@@ -52,7 +52,10 @@ public class BillboardManager : MonoBehaviour
             lookDir.y = 0f;
 
             if (lookDir.sqrMagnitude > 0.001f)
-                obj.transform.rotation = Quaternion.LookRotation(-lookDir);
+            {
+                Quaternion baseRotation = Quaternion.LookRotation(-lookDir);
+                obj.transform.rotation = baseRotation * obj.RotationOffset;
+            }
         }
     }
 
