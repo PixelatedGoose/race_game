@@ -14,6 +14,14 @@ public class PlayerCarController : BaseCarController
 
     RacerScript racerScript;
 
+    // Uskon että AI ei tarvi hitto tietää onko se ruohonpäällä vai ei
+    private float GrassSpeedMultiplier = 0.5f;
+    private LayerMask Grass;
+    private Material GrassMaterial, RoadMaterial;
+    internal bool GrassRespawnActive = false;
+    private bool isOnGrassCached;
+    private bool isOnGrassCachedValid;
+
 
     private PlayerInput PlayerInput;
     private string CurrentControlScheme = "Keyboard";
@@ -47,6 +55,17 @@ public class PlayerCarController : BaseCarController
         racerScript = FindAnyObjectByType<RacerScript>();
 
         InitializeLogitechWheel(); 
+
+        Grass = 1 << 7;
+
+
+        GrassMaterial = Resources.Load<Material>("driftmaterial/GrassMaterial");
+        RoadMaterial = Resources.Load<Material>("driftmaterial/RoadMaterial");
+
+
+
+        if (GrassMaterial == null || RoadMaterial == null)
+            Debug.LogWarning("PlayerCarController: GrassMaterial or RoadMaterial not found in Resources/driftmaterial. Please assign in Inspector or place assets there with expected names.");
     }
 
     private void OnControlsChanged(PlayerInput input)
@@ -235,6 +254,59 @@ public class PlayerCarController : BaseCarController
         return false;
     }
 
+    internal void OnGrass()
+    {
+        int wheelsOnGrass = 0;
+
+        foreach (var wheel in Wheels)
+        {
+            if (wheel.WheelEffectobj == null) continue;
+
+            var trailRenderer = wheel.WheelEffectobj.GetComponentInChildren<TrailRenderer>();
+            if (trailRenderer == null) continue;
+
+            bool wheelOnGrass = IsWheelGrounded(wheel) && IsWheelOnGrass(wheel);
+
+            // per-wheel line material
+            trailRenderer.material = wheelOnGrass ? GrassMaterial : RoadMaterial;
+
+            if (wheelOnGrass)
+                wheelsOnGrass++;
+        }
+
+        const int wheelsNeededForPenalty = 2;
+        bool onGrassForScore = wheelsOnGrass >= wheelsNeededForPenalty;
+
+        if (ScoreManager.instance != null)
+        {
+            ScoreManager.instance.SetOnGrass(onGrassForScore);
+        }
+    }
+
+    public bool IsOnGrass()
+    {
+        foreach (var wheel in Wheels)
+        {
+            if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
+            {
+                if (GrassRespawnActive && racerScript != null)
+                    racerScript.RespawnAtLastCheckpoint();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsOnGrassCached()
+    {
+        if (!isOnGrassCachedValid)
+        {
+            isOnGrassCached = IsOnGrass();
+            isOnGrassCachedValid = true;
+        }
+        return isOnGrassCached;
+    }
+
 
 
 
@@ -359,7 +431,7 @@ public class PlayerCarController : BaseCarController
         if (IsOnGrassCached() && !IsDrifting)
         {
             TargetTorque *= GrassSpeedMultiplier;
-            Maxspeed = Mathf.Lerp(Maxspeed, GrassSpeedMultiplier, Time.deltaTime);
+            Maxspeed = Mathf.Lerp(Maxspeed, Grassmaxspeed, Time.deltaTime);
             if (GameManager.instance.carSpeed < 50.0f)
             {
                 Maxspeed = 50.0f;
