@@ -24,8 +24,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Header("menut")]
     public bool isPaused = false;
 
-    public int chosenMap = 1;
-
     [Header("car selection")]
     public GameObject currentCar;
     public GameObject[] cars;
@@ -35,14 +33,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public string sceneSelected;
     private string[] maps = new string[]
     {
-        "test_mountain",
-        "test_mountain_night",
         "haukipudas",
-        "AItest",
+        "haukipudas_night",
         "ai_haukipudas",
-        "night_ai_haukipudas",
+        "ai_night_haukipudas",
         "tutorial",
-        "haukipudas_night"
+        "canyon"
     };
     
     [Header("auto")]
@@ -82,7 +78,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             currentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
         }
-        chosenMap = PlayerPrefs.GetInt("chosenMap");
 
         if (maps.Contains(sceneSelected))
         {

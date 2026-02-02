@@ -142,9 +142,9 @@ public class CarSelection_newer : MonoBehaviour
         string selectedMap;
 
         //oletetaan toistaseksi vain kahta eri valintaa
-        if (mapSelection.toggle.isOn)
+        if (mapSelection.AItoggle.isOn)
         {
-            selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "night_ai_haukipudas";
+            selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "ai_night_haukipudas";
         }
         else
         {

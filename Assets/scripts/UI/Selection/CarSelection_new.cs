@@ -46,7 +46,9 @@ public class CarSelection_new : MonoBehaviour
         mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
 
-        cars = GameObject.FindGameObjectsWithTag("thisisacar");
+        cars = GameObject.FindGameObjectsWithTag("thisisacar")
+        .OrderBy(a => a.name)
+        .ToArray();
 
         left = GameObject.Find("L_changecar").GetComponent<Button>();
         right = GameObject.Find("R_changecar").GetComponent<Button>();
@@ -151,9 +153,9 @@ public class CarSelection_new : MonoBehaviour
         string selectedMap;
 
         //oletetaan toistaseksi vain kahta eri valintaa
-        if (mapSelection.toggle.isOn)
+        if (mapSelection.AItoggle.isOn)
         {
-            selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "night_ai_haukipudas";
+            selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "ai_night_haukipudas";
         }
         else
         {

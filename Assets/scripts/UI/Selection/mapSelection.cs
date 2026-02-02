@@ -5,31 +5,29 @@ using UnityEngine.UI;
 
 public class mapSelection : MonoBehaviour
 {
-    public GameObject csObjects;
-    public GameObject msObjects;
+    public GameObject carSelectionO;
+    public GameObject mapSelectionO;
+    public GameObject optionSelection;
     public GameObject[] msObjectsList;
     private float schizophrenia;
-    public Toggle toggle;
     private GameObject loadObjects;
     private AudioSource loadingLoop;
     public GameObject[] maps;
     private RectTransform mapRectTransform;
-    private int haukipudas = 6;
-    private int night_haukipudas = 8;
     private Text selectText;
     private Text scoreText;
+    public Toggle AItoggle;
 
     void Awake()
     {
         selectText = GameObject.Find("SelectYoMap").GetComponent<Text>();
+        //pitää ettiä tekstit jollai array tavalla
         scoreText = GameObject.Find("ScoreOnThaAuto").GetComponent<Text>();
-        toggle = GameObject.Find("ai").GetComponent<Toggle>();
-        csObjects = GameObject.Find("CarSelectionNew");
-        msObjects = GameObject.Find("mapSelectionObj");
+        carSelectionO = GameObject.Find("CarSelectionNew");
+        mapSelectionO = GameObject.Find("mapSelectionObj");
         loadObjects = GameObject.Find("loadObjects");
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
-        Debug.Log("hello");
 
         //mfw kun pitää siirtää koko maps paska car selection scriptiin
     }
@@ -37,8 +35,8 @@ public class mapSelection : MonoBehaviour
     public void Back()
     {
         MapFallAnimResetPos();
-        csObjects.SetActive(true);
-        msObjects.SetActive(false);
+        carSelectionO.SetActive(true);
+        mapSelectionO.SetActive(false);
     }
 
     public void MapFallAnimResetPos()
@@ -58,25 +56,18 @@ public class mapSelection : MonoBehaviour
     /// <summary>
     /// käytetään mapin valintaan. ottaa mapin PlayerPrefsistä
     /// </summary>
-    /// <param name="selecta">mappi, jonka haluat ladata</param>
-    public void MapButtonPress(int selecta)
+    /// <param name="selecta">PERUS mappi, jonka haluat ladata</param>
+    public void MapButtonPress(string selecta)
     {
-        switch (selecta)
-        {
-            //ja näin
-            case 1:
-            case 2:
-            case 4:
-                PlayerPrefs.SetInt("chosenMap", selecta);
-                break;
-            case 6:
-                PlayerPrefs.SetInt("chosenMap", haukipudas);
-                break;
-            case 8:
-                PlayerPrefs.SetInt("chosenMap", night_haukipudas);
-                break;
-        }
-        //en usko sitä että tää oli aiemmin KAIKISSA nois caseissa erikseen...
+        string selectedMapTrue;
+        if (AItoggle.isOn)
+            selectedMapTrue = $"ai_{selecta}";
+        else
+            selectedMapTrue = selecta;
+        PlayerPrefs.SetString("SelectedMap", selectedMapTrue);
+        PlayerPrefs.Save();
+        Debug.Log($"onnittelut, voitit lomamatkan kohteeseen: {selectedMapTrue}");
+
         StartCoroutine(MapButtonFunc());
     }
 
@@ -89,8 +80,6 @@ public class mapSelection : MonoBehaviour
     private IEnumerator MapButtonFunc()
     {
         loadingLoop.Play();
-        PlayerPrefs.Save();
-        GameManager.instance.chosenMap = PlayerPrefs.GetInt("chosenMap");
 
         schizophrenia = Random.Range(3.5f, 6.5f);
         LeanTween.moveLocalY(loadObjects.gameObject, -0.5f, 0.8f).setEase(LeanTweenType.easeInOutCubic);
@@ -101,24 +90,8 @@ public class mapSelection : MonoBehaviour
 
         Debug.Log("you will now wait for: " + schizophrenia + " seconds");
         yield return new WaitForSeconds(schizophrenia);
-
-        //en tiiä onko performance riski ottaa chosenMap GameManagerista
-        SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("chosenMap"));
-    }
-
-    public void SetAIMaps(string toggleName)
-    {
-        toggle = GameObject.Find(toggleName).GetComponent<Toggle>();
-        if (toggle.isOn)
-        {
-            haukipudas = 6;
-            night_haukipudas = 8;
-        }
-        else
-        {
-            haukipudas = 4;
-            night_haukipudas = 9;
-        }
+        
+        SceneManager.LoadSceneAsync(PlayerPrefs.GetString("SelectedMap"));
     }
 
     private IEnumerator MapFallAnimFunc()
