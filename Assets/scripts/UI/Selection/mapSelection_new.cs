@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-public class mapSelection : MonoBehaviour
+public class mapSelection_new : MonoBehaviour
 {
     public GameObject carSelectionO;
     public GameObject mapSelectionO;

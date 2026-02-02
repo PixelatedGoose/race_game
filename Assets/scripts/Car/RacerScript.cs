@@ -31,10 +31,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private int totalLaps = 3;
     public bool raceFinished = false;
 
-    private float inactivityTimer = 0f;
-    private float inactivityThreshold = 8f;
-    private Vector3 lastPosition;
-
     private Transform respawnPoint;
     private musicControl musicControl;
     private soundFXControl soundControl;

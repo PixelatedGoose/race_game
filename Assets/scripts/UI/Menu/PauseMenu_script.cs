@@ -121,11 +121,11 @@ public class PauseMenu : MonoBehaviour
     {
         musicControl musicCtrl = FindFirstObjectByType<musicControl>();
         SetPausedState(false);
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadSceneAsync("MainMenu");
     }
     public void RestartGame()
     {
         SetPausedState(false);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
 }

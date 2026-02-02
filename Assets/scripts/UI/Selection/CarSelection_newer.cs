@@ -5,16 +5,7 @@ using System;
 using System.Linq;
 using UnityEngine.EventSystems;
 
-[System.Serializable]
-public class CarStats
-{
-    public string carName;
-    public int speed;
-    public int acceleration;
-    public int handling;
-}
-
-public class CarSelection_new : MonoBehaviour
+public class CarSelection_newer : MonoBehaviour
 {
     public GameObject[] cars;
     public Button left, right, select, back;
@@ -46,9 +37,7 @@ public class CarSelection_new : MonoBehaviour
         mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
 
-        cars = GameObject.FindGameObjectsWithTag("thisisacar")
-        .OrderBy(a => a.name)
-        .ToArray();
+        cars = GameObject.FindGameObjectsWithTag("thisisacar");
 
         left = GameObject.Find("L_changecar").GetComponent<Button>();
         right = GameObject.Find("R_changecar").GetComponent<Button>();

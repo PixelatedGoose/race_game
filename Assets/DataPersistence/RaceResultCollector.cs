@@ -83,12 +83,14 @@ public class RaceResultCollector : MonoBehaviour
         string tester = SceneManager.GetActiveScene().name;
         return tester switch
         {
-            "haukipudas" => "Shoreline",
-            "ai_haukipudas" => "Shoreline [AI]",
+            "haukipudas" => "Shoreline Day",
+            "ai_haukipudas" => "Shoreline Day [AI]",
             "haukipudas_night" => "Shoreline Night",
-            "night_ai_haukipudas" => "Shoreline Night [AI]",
+            "ai_night_haukipudas" => "Shoreline Night [AI]",
+            "canyon" => "Canyon",
+            "ai_canyon" => "Canyon [AI]",
             "tutorial" => "Tutorial",
-            _ => "Unknown",
+            _ => "Unknown"
         };
     }
 
