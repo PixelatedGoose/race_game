@@ -24,8 +24,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Header("menut")]
     public bool isPaused = false;
 
-    public int chosenMap = 1;
-
     [Header("car selection")]
     public GameObject currentCar;
     public GameObject[] cars;
@@ -35,14 +33,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public string sceneSelected;
     private string[] maps = new string[]
     {
-        "test_mountain",
-        "test_mountain_night",
         "haukipudas",
-        "AItest",
+        "haukipudas_night",
         "ai_haukipudas",
-        "night_ai_haukipudas",
+        "ai_night_haukipudas",
         "tutorial",
-        "haukipudas_night"
+        "canyon"
     };
     
     [Header("auto")]
@@ -82,7 +78,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             currentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
         }
-        chosenMap = PlayerPrefs.GetInt("chosenMap");
 
         if (maps.Contains(sceneSelected))
         {
@@ -137,53 +132,14 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
 
     //temp ja ota se pois sit
-/*     public void Update()
+    public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (racerscript.winMenu.activeSelf) return;
             racerscript.EndRace();
         }
-    } */
-
-
-
-    // public void AddPoints()
-    // {
-    //     RacerScript racerScript = FindAnyObjectByType<RacerScript>();
-    //     if (racerScript != null && racerScript.raceFinished)
-    //     {
-    //         return; 
-    //     }
-
-    //     if (!isAddingPoints && currentCar.activeSelf && instance != null
-    //     && isPaused)
-    //     {
-    //         StartCoroutine(IncrementScoreWithDelay());
-    //     }
-    // }
-
-    // private IEnumerator IncrementScoreWithDelay()
-    // {
-    //     isAddingPoints = true;
-    //     float timer = 0f;
-
-    //     while (isAddingPoints)
-    //     {
-    //         timer += Time.deltaTime;
-    //         if (timer >= scoreAddWT)
-    //         {
-    //             score = Mathf.Max(0, score + (scoreAddWT > 0 ? 1 : -1));
-    //             foreach (Text scoreText in ScoreTexts)
-    //             {
-    //                 scoreText.text = "Score: " + score.ToString();
-    //             }
-    //             timer -= scoreAddWT;
-    //         }
-
-    //         yield return null;
-    //     }
-    // }
+    }
 
     public void StopAddingPoints()
     {

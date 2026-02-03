@@ -42,13 +42,10 @@ public class BaseCarController : MonoBehaviour
     [Min(100.0f)]
     internal float Maxspeed  = 100.0f;
     internal float GravityMultiplier  = 1.5f;
-    internal float GrassSpeedMultiplier  = 0.5f;
     internal List<Wheel> Wheels;
     internal float moveInput, steerInput;
     internal Vector3 _CenterofMass;
-    internal LayerMask Grass;
     internal float TargetTorque  = 0.0f;
-    internal Material GrassMaterial, RoadMaterial, DriftMaterial;
     internal Rigidbody CarRb;
     internal bool IsTurboActive = false;
     internal float Activedrift   = 0.0f;
@@ -62,8 +59,8 @@ public class BaseCarController : MonoBehaviour
     [Header("turbe asetukset")]
     internal Image TurbeMeter;
     internal float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 50.0f;
-    internal float TurbeReduce;
-    internal float TurbeRegen;
+    internal float TurbeReduce = 10.0f;
+    internal float TurbeRegen = 10.0f;
 //
 
     internal bool IsRegenerating = false;
@@ -73,7 +70,7 @@ public class BaseCarController : MonoBehaviour
     internal bool CanDrift = false;
     internal bool CanUseTurbo = false;
 
-    internal bool GrassRespawnActive = false;
+    
 
 
 
@@ -95,21 +92,7 @@ public class BaseCarController : MonoBehaviour
         return Maxspeed;
     }
 
-    internal bool isOnGrassCached;
-    internal bool isOnGrassCachedValid;
-
-
-
-
-
-    void StopDriftIfRaceFinished()
-    {
-        if (RacerScript == null) return;
-        if (!RacerScript.raceFinished) return;
-        if (Activedrift <= 0) return;
-
-        StopDrifting();
-    }
+    
 
     internal void HandleTurbo()
     {
@@ -118,80 +101,11 @@ public class BaseCarController : MonoBehaviour
         TURBEmeter();
     }
 
-    internal void OnGrass()
-    {
-        int wheelsOnGrass = 0;
-
-        foreach (var wheel in Wheels)
-        {
-            if (wheel.WheelEffectobj == null) continue;
-
-            var trailRenderer = wheel.WheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (trailRenderer == null) continue;
-
-            bool wheelOnGrass = IsWheelGrounded(wheel) && IsWheelOnGrass(wheel);
-
-            // per‑wheel line material
-            
-            trailRenderer.material = wheelOnGrass ? GrassMaterial : RoadMaterial;
-
-            if (wheelOnGrass)
-                wheelsOnGrass++;
-        }
-
-        // 1 oli liian kiree pisteen vähenemiseen, 2 on parempi
-        const int wheelsNeededForPenalty = 2;   
-
-        bool onGrassForScore = wheelsOnGrass >= wheelsNeededForPenalty;
-
-        if (ScoreManager.instance != null)
-        {
-            ScoreManager.instance.SetOnGrass(onGrassForScore);
-        }
-    }
+    
 
     bool IsWheelGrounded(Wheel wheel)
     {
         return Physics.Raycast(wheel.WheelCollider.transform.position, -wheel.WheelCollider.transform.up, out RaycastHit hit, wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance);
-    }
-
-    bool IsWheelOnGrass(Wheel wheel)
-    {
-        if (Physics.Raycast(
-                wheel.WheelCollider.transform.position,
-                -wheel.WheelCollider.transform.up,
-                out RaycastHit hit,
-                wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance))
-        {
-            // check if hit collider is on a grass layer
-            return (Grass.value & (1 << hit.collider.gameObject.layer)) != 0;
-        }
-        return false;
-    }
-
-
-    public bool IsOnGrass()
-    {
-        foreach (var wheel in Wheels)
-        {
-            if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
-            {
-                if (GrassRespawnActive)
-                    RacerScript.RespawnAtLastCheckpoint();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool IsOnGrassCached()
-    {
-        if (!isOnGrassCachedValid)
-        {
-            isOnGrassCached = IsOnGrass();
-            isOnGrassCachedValid = true;
-        }
-        return isOnGrassCached;
     }
 
     [ContextMenu("Auto Assign Wheels")]
@@ -243,14 +157,6 @@ public class BaseCarController : MonoBehaviour
         CarRb.linearVelocity = CarRb.linearVelocity.normalized * (Maxspeed / 3.6f);
     }
 
-    void Applyturnsensitivity(float speed)
-    {
-        TurnSensitivty = Mathf.Lerp(
-            TurnSensitivtyAtLowSpeed,
-            TurnSensitivtyAtHighSpeed,
-            Mathf.Clamp01(speed / Maxspeed));
-    }
-
     internal void TURBE()
     {
         //uskon että tää on tarpeeton; viittauksia KOMMENTEISSA yhessä scriptis, ei missää muualla
@@ -272,7 +178,6 @@ public class BaseCarController : MonoBehaviour
     {
         //HandeSteepSlope();
         //UpdateTargetTorgue();
-        AdjustSpeedForGrass();
         AdjustSuspension();
         foreach (var wheel in Wheels)
         {
@@ -324,18 +229,7 @@ public class BaseCarController : MonoBehaviour
         wheel.WheelCollider.brakeTorque = 0f;
     }
 
-    private void AdjustSpeedForGrass()
-    {
-        if (IsOnGrassCached() && !IsDrifting)
-        {
-            TargetTorque *= GrassSpeedMultiplier;
-            Maxspeed = Mathf.Lerp(Maxspeed, GrassSpeedMultiplier, Time.deltaTime);
-            if (GameManager.instance.carSpeed < 50.0f)
-            {
-                Maxspeed = 50.0f;
-            }
-        }
-    }
+    
 
     void Decelerate()
     {

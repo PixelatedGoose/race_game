@@ -248,7 +248,7 @@ public class AiCarController : MonoBehaviour
         float avoidanceOffset = 0f;
         
         RaycastHit[] hits = Physics.BoxCastAll(center:carRb.transform.forward * CarLength + carRb.position, halfExtents:new Vector3(CarLength * 4, 2, CarWidth), direction:carRb.transform.forward, orientation:carRb.transform.rotation,  maxDistance:CarLength * 2, layerMask:objectLayerMask, QueryTriggerInteraction.Ignore);
-        Debug.Log("max dist: " + CarLength * 4);
+        //Debug.Log("max dist: " + CarLength * 4);
         foreach (RaycastHit hit in hits)
         {
             if (hit.collider.gameObject.layer != objectLayerMask) continue;

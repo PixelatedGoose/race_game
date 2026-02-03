@@ -46,13 +46,9 @@ public class CarSelection_new : MonoBehaviour
         mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
 
-        cars = new GameObject[]
-        {
-            GameObject.Find("REALCAR_x"),
-            GameObject.Find("REALCAR"),
-            GameObject.Find("REALCAR_y"),
-            GameObject.Find("Lada")
-        };
+        cars = GameObject.FindGameObjectsWithTag("thisisacar")
+        .OrderBy(a => a.name)
+        .ToArray();
 
         left = GameObject.Find("L_changecar").GetComponent<Button>();
         right = GameObject.Find("R_changecar").GetComponent<Button>();
@@ -157,9 +153,9 @@ public class CarSelection_new : MonoBehaviour
         string selectedMap;
 
         //oletetaan toistaseksi vain kahta eri valintaa
-        if (mapSelection.toggle.isOn)
+        if (mapSelection.AItoggle.isOn)
         {
-            selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "night_ai_haukipudas";
+            selectedMap = selectedMapIconName == "haukipudas" ? "ai_haukipudas" : "ai_night_haukipudas";
         }
         else
         {
@@ -181,8 +177,6 @@ public class CarSelection_new : MonoBehaviour
             Debug.Log("no race results exist; defaulting to empty");
             bestResults = Array.Empty<RaceResultData>();
         }
-
-        Debug.Log(bestResults);
 
         int topResultsScore = 0;
         if (bestResults.Length != 0)
@@ -234,6 +228,6 @@ public class CarSelection_new : MonoBehaviour
 
     public void Back()
     {
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadSceneAsync("MainMenu");
     }
 }
