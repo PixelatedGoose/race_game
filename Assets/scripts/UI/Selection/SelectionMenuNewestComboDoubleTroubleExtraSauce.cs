@@ -2,8 +2,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
-public class mapSelection_new : MonoBehaviour
+public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 {
     public GameObject carSelectionO;
     public GameObject mapSelectionO;
@@ -20,23 +22,16 @@ public class mapSelection_new : MonoBehaviour
 
     void Awake()
     {
-        selectText = GameObject.Find("SelectYoMap").GetComponent<Text>();
+        /* selectText = GameObject.Find("SelectYoMap").GetComponent<Text>();
         //pitää ettiä tekstit jollai array tavalla
         scoreText = GameObject.Find("ScoreOnThaAuto").GetComponent<Text>();
         carSelectionO = GameObject.Find("CarSelectionNew");
         mapSelectionO = GameObject.Find("mapSelectionObj");
         loadObjects = GameObject.Find("loadObjects");
         msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
-        loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
+        loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>(); */
 
         //mfw kun pitää siirtää koko maps paska car selection scriptiin
-    }
-
-    public void Back()
-    {
-        MapFallAnimResetPos();
-        carSelectionO.SetActive(true);
-        mapSelectionO.SetActive(false);
     }
 
     public void MapFallAnimResetPos()
@@ -123,5 +118,61 @@ public class mapSelection_new : MonoBehaviour
             });
             yield return new WaitForSeconds(0.3f);
         }
+    }
+
+    private void Update()
+    {
+        //temporary paskaa, lukuunottamatta debug logii
+        GameObject current = EventSystem.current.currentSelectedGameObject;
+        GameObject currentReferenceObject;
+        Debug.LogWarning(EventSystem.current.currentSelectedGameObject);
+        
+        if (current.GetComponent<TMP_Dropdown>() != null)
+        {
+            //what the fuck??
+            Debug.Log("dropdown selected; switching to respective label");
+            currentReferenceObject = GetComponentInChildren<TextMeshProUGUI>().gameObject;
+            Debug.Log(currentReferenceObject);
+        }
+    }
+    private void GetDetailsOfSelection()
+    {
+        GameObject current = EventSystem.current.currentSelectedGameObject;
+
+        //per valittava asia
+        GameObject currentReferenceObject;
+        string currentDetails;
+        //lisää tähän dictionary = GameObject name; string details
+
+        if (current.GetComponent<TMP_Dropdown>() != null)
+        {
+            Debug.Log("dropdown selected; switching to respective label");
+            currentReferenceObject = GetComponentInChildren<TMP_Text>().gameObject;
+            Debug.Log(currentReferenceObject);
+        }
+    }
+
+    //tää pitää muuttaa arrayta tai vastaavaa käyttäväks, joka sisältää:
+    /* 1. map, 2. car, 3. settings, 4. loading :))))
+    vaihtaa sit indeksien mukaan tota
+
+    HUOM. alemman buttonin teksti pitää vaihtaa "exit" kun on ekassa osassa
+    ja ylemmän buttonin teksti pitää vaihtaa "go!" tai jtn samanlaista */
+    public void ActivateMapSelection()
+    {
+        carSelectionO.SetActive(false);
+        mapSelectionO.SetActive(true);
+    }
+
+    /* public void Back()
+    {
+        MapFallAnimResetPos();
+        carSelectionO.SetActive(true);
+        mapSelectionO.SetActive(false);
+    } */
+
+    public void BackToMainMenu()
+    {
+        SceneManager.LoadSceneAsync("MainMenu");
     }
 }
