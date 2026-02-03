@@ -4,6 +4,10 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Collections.Generic;
+using System.Reflection.Emit;
+using Newtonsoft.Json;
+using System.Linq;
 
 public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 {
@@ -20,8 +24,15 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private Text scoreText;
     public Toggle AItoggle;
 
+    private TextAsset selectionDetails;
+    private Dictionary<string, Dictionary<string, string>> details;
+    [SerializeField] private TextMeshProUGUI detailsPanelText;
+
     void Awake()
     {
+        selectionDetails = Resources.Load<TextAsset>("selectionDetails");
+        //i'm dictionarying my dictionary
+        details = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(selectionDetails.text);
         /* selectText = GameObject.Find("SelectYoMap").GetComponent<Text>();
         //pitää ettiä tekstit jollai array tavalla
         scoreText = GameObject.Find("ScoreOnThaAuto").GetComponent<Text>();
@@ -122,33 +133,18 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     private void Update()
     {
-        //temporary paskaa, lukuunottamatta debug logii
+        //tän kaiken pitää executtaa AINOASTAAN kun se vaihtuu jos se on helppoa
         GameObject current = EventSystem.current.currentSelectedGameObject;
-        GameObject currentReferenceObject;
-        Debug.LogWarning(EventSystem.current.currentSelectedGameObject);
+        Debug.LogWarning(current);
         
-        if (current.GetComponent<TMP_Dropdown>() != null)
+        if (current != null)
         {
-            //what the fuck??
-            Debug.Log("dropdown selected; switching to respective label");
-            currentReferenceObject = GetComponentInChildren<TextMeshProUGUI>().gameObject;
-            Debug.Log(currentReferenceObject);
-        }
-    }
-    private void GetDetailsOfSelection()
-    {
-        GameObject current = EventSystem.current.currentSelectedGameObject;
-
-        //per valittava asia
-        GameObject currentReferenceObject;
-        string currentDetails;
-        //lisää tähän dictionary = GameObject name; string details
-
-        if (current.GetComponent<TMP_Dropdown>() != null)
-        {
-            Debug.Log("dropdown selected; switching to respective label");
-            currentReferenceObject = GetComponentInChildren<TMP_Text>().gameObject;
-            Debug.Log(currentReferenceObject);
+            if (details["options"].ContainsKey(current.name))
+                detailsPanelText.text = details["options"][current.name];
+            else if (current.name.StartsWith("Item"))
+                Debug.Log("do nothing lol");
+            else
+                detailsPanelText.text = "";
         }
     }
 
