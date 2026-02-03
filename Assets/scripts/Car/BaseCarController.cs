@@ -32,11 +32,11 @@ public class BaseCarController : MonoBehaviour
 
     [Header("Auton asetukset")]
     internal float MaxAcceleration = 700.0f;
-    internal float BrakeAcceleration { get; set; } = 500.0f;
+    internal float BrakeAcceleration = 500.0f;
     [Header("turn asetukset")]
     internal float TurnSensitivty  = 1.0f;
-    internal float TurnSensitivtyAtHighSpeed  = 14.0f;
-    internal float TurnSensitivtyAtLowSpeed  = 20.0f;
+    internal float TurnSensitivtyAtHighSpeed  = 13.5f;
+    internal float TurnSensitivtyAtLowSpeed  = 24.0f;
     internal float Deceleration  = 1.0f;
     [Min(100.0f)]
     internal float Maxspeed  = 100.0f;
@@ -64,7 +64,7 @@ public class BaseCarController : MonoBehaviour
 
     [Header("turbe asetukset")]
     internal Image TurbeMeter;
-    internal float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 50.0f;
+    internal float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f;
     internal float TurbeReduce = 10.0f;
     internal float TurbeRegen = 10.0f;
 //
@@ -252,7 +252,8 @@ public class BaseCarController : MonoBehaviour
         if (IsTurboActive)
         {
             CarRb.AddForce(transform.forward * Turbepush, ForceMode.Acceleration);
-            TargetTorque *= 1.5f;
+            TargetTorque = PerusTargetTorque * 1.5f;                
+            TargetTorque = Mathf.Min(TargetTorque, MaxAcceleration); 
         }
     }
 
@@ -294,7 +295,7 @@ public class BaseCarController : MonoBehaviour
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteSlip = 1.0f;
             forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 3.5f;
+            forwardFriction.stiffness = 4f;
             wheel.WheelCollider.forwardFriction = forwardFriction;
         }
     }
@@ -335,6 +336,7 @@ public class BaseCarController : MonoBehaviour
     {
         foreach (var wheel in Wheels.Where(w => w.Axel == Axel.Front))
         {
+            
             var _steerAngle = steerInput * TurnSensitivty * (IsDrifting ? 0.45f : 0.35f);
             wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
@@ -363,7 +365,7 @@ public class BaseCarController : MonoBehaviour
             forwardFriction.asymptoteSlip = 0.6f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 3f;
+            forwardFriction.stiffness = 4f;
             wheel.WheelCollider.forwardFriction = forwardFriction;
 
             if (wheel.Axel == Axel.Front)
@@ -399,7 +401,7 @@ public class BaseCarController : MonoBehaviour
             sidewaysFriction.asymptoteSlip = 0.4f;
             sidewaysFriction.extremumValue = 1.0f;
             sidewaysFriction.asymptoteValue = 1f;
-            sidewaysFriction.stiffness = 5f;
+            sidewaysFriction.stiffness = 4f;
             wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
         }
     }
