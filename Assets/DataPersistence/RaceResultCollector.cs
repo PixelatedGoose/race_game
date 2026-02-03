@@ -96,8 +96,8 @@ public class RaceResultCollector : MonoBehaviour
 
     private string GetCarName()
     {
-        string tester = GameManager.instance.currentCar.name;
-        if (GameManager.instance != null && GameManager.instance.currentCar != null)
+        string tester = GameManager.instance.CurrentCar.name;
+        if (GameManager.instance != null && GameManager.instance.CurrentCar != null)
         {
             switch (tester)
             {

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class CameraFollow : MonoBehaviour
 {
     public float moveSmoothness;
@@ -23,7 +24,7 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         Cam = GetComponent<Camera>();
-        carController = carTarget.GetComponent<PlayerCarController>();
+        carController = GameManager.instance.CurrentCar.GetComponentInChildren<PlayerCarController>();
     }
 
     private void FixedUpdate()
@@ -35,7 +36,15 @@ public class CameraFollow : MonoBehaviour
     {
         HandleMovement();
         HandleRotation();
-        CameraFovChanger();
+        Cam.fieldOfView = Mathf.Lerp(
+            Cam.fieldOfView, 
+            Mathf.Lerp(
+                normalFOV, 
+                ZoomFOV, 
+                Mathf.Clamp01(carController.GetSpeed() / carController.GetMaxSpeed())
+            ),
+            Time.deltaTime * moveSmoothness
+        );
     }
 
     void HandleMovement()
@@ -50,17 +59,5 @@ public class CameraFollow : MonoBehaviour
         var direction = carTarget.position - transform.position;
         var rotation = Quaternion.LookRotation(direction + rotOffset, Vector3.up);
         transform.rotation = rotation;
-    }
-    void CameraFovChanger()
-    {
-        float speed;
-        float maxSpeed;
-        speed = carController.GetSpeed();
-        maxSpeed = carController.GetMaxSpeed();
-        float speedRatio = Mathf.Clamp01(speed / maxSpeed);
-        float targetFov = Mathf.Lerp(normalFOV, ZoomFOV, speedRatio);
-        //how did you know i was listening to lorna shore while writing this? 
-        //answer: i didn't, i just know you're a metalhead                           
-        Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, targetFov, Time.deltaTime * moveSmoothness);
     }
 }

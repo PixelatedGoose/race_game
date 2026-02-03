@@ -1152,27 +1152,26 @@ MonoBehaviour:
   avoidanceLateralOffset: 4
   boostMultiplier: 1.25
   wheels:
-  - wheelModel: {fileID: 2480497655319108271}
-    wheelCollider: {fileID: 8226038361239439730}
-    wheelEffectobj: {fileID: 4815937886979789559}
-    smokeParticle: {fileID: 8375895737432743733}
-    axel: 0
-  - wheelModel: {fileID: 3144801104615171818}
-    wheelCollider: {fileID: 3133544218236099077}
-    wheelEffectobj: {fileID: 2375104774844005760}
-    smokeParticle: {fileID: 2334615181226230212}
-    axel: 0
-  - wheelModel: {fileID: 4381428712381846278}
-    wheelCollider: {fileID: 3392321435618256846}
-    wheelEffectobj: {fileID: 3627151734244984521}
-    smokeParticle: {fileID: 4522420571162533016}
-    axel: 0
-  - wheelModel: {fileID: 494362406291348668}
-    wheelCollider: {fileID: 1684521221934789367}
-    wheelEffectobj: {fileID: 162235566843196}
-    smokeParticle: {fileID: 304971687747636552}
-    axel: 0
-  playerCar: {fileID: 0}
+  - WheelModel: {fileID: 2480497655319108271}
+    WheelCollider: {fileID: 8226038361239439730}
+    WheelEffectobj: {fileID: 4815937886979789559}
+    SmokeParticle: {fileID: 8375895737432743733}
+    Axel: 0
+  - WheelModel: {fileID: 3144801104615171818}
+    WheelCollider: {fileID: 3133544218236099077}
+    WheelEffectobj: {fileID: 2375104774844005760}
+    SmokeParticle: {fileID: 2334615181226230212}
+    Axel: 0
+  - WheelModel: {fileID: 4381428712381846278}
+    WheelCollider: {fileID: 3392321435618256846}
+    WheelEffectobj: {fileID: 3627151734244984521}
+    SmokeParticle: {fileID: 4522420571162533016}
+    Axel: 1
+  - WheelModel: {fileID: 494362406291348668}
+    WheelCollider: {fileID: 1684521221934789367}
+    WheelEffectobj: {fileID: 162235566843196}
+    SmokeParticle: {fileID: 304971687747636552}
+    Axel: 1
   aiCarManager: {fileID: 0}
 --- !u!1 &6333829925512713852
 GameObject:

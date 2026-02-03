@@ -102,6 +102,10 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         checkpoints = checkpointsToMove.ToArray();
 
         finalLapImg = GameObject.Find("UIcanvas/finalLap");
+
+        winMenu = GameObject.Find("WinMenu").GetComponentInChildren<Canvas>(true).gameObject;
+        Minimap = GameObject.Find("Minimap");
+        startFinishLine = GameObject.Find("StartFinish").transform;
     }
 
     private void OnDisable()

@@ -25,9 +25,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public bool isPaused = false;
 
     [Header("car selection")]
-    public GameObject currentCar;
-    public GameObject[] cars;
-    public int carIndex;
+    public GameObject CurrentCar { get; private set; }
+    [SerializeField] private Transform playerSpawn;
+    [SerializeField] private GameObject[] cars;
 
     [Header("scene asetukset")]
     public string sceneSelected;
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         "haukipudas",
         "haukipudas_night",
         "ai_haukipudas",
-        "ai_night_haukipudas",
+        "ai_haukipudas_night",
         "tutorial",
         "canyon"
     };
@@ -44,73 +44,42 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Header("auto")]
     public float carSpeed;
     public bool turbeActive = false;
+    void Awake()
+    {
+        instance = this;
+
+        sceneSelected = SceneManager.GetActiveScene().name;
+
+        int carIndex = PlayerPrefs.GetInt("CarIndex");
+        if (sceneSelected == "tutorial") CurrentCar = GameObject.Find("REALCAR");
+        else CurrentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
+
+        if (maps.Contains(sceneSelected)) CurrentCar = Instantiate(CurrentCar, playerSpawn.position, playerSpawn.rotation);
+    }
 
     void OnEnable()
     {
-        if (instance == null)
-        {
-            //Debug.Log("Pasia, olet tehnyt sen!");
-            instance = this;
-            // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        //instance = this;
+        // if (instance == null)
+        // {
+        //     //Debug.Log("Pasia, olet tehnyt sen!");
+        //     // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
+        // }
+        // else
+        // {
+        //     Destroy(gameObject);
+        // }
 
         //etsi autot järjestyksessä (pitäs olla aika ilmiselvää)
-        cars = new GameObject[] 
+        /*cars = new GameObject[] 
         { 
             GameObject.Find("REALCAR_x"), 
             GameObject.Find("REALCAR"), 
             GameObject.Find("REALCAR_y"),
             GameObject.Find("Lada")
-        };
+        };*/
 
-        sceneSelected = SceneManager.GetActiveScene().name;
-
-        carIndex = PlayerPrefs.GetInt("CarIndex");
-        if (sceneSelected == "tutorial")
-        {
-            currentCar = GameObject.Find("REALCAR");
-        }
-        else
-        {
-            currentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
-        }
-
-        if (maps.Contains(sceneSelected))
-        {
-            if (sceneSelected != "tutorial")
-            {
-                foreach (GameObject car in cars)
-                {
-                    car.SetActive(false);
-                }
-
-                if (carIndex >= 0 && carIndex <= cars.Length)
-                {
-                    cars[carIndex].SetActive(true);
-                }
-                else
-                {
-                    Debug.LogError("Car index out of range: " + carIndex);
-                }
-
-                foreach (GameObject car in cars)
-                {
-                    if (car.activeInHierarchy)
-                    {
-                        Debug.Log("onnittelut, voitit paketin hiivaa!: " + car.name);
-                    }
-                    else
-                    {
-                        Destroy(car);
-                        //tää TAPPAA kaikki ne muut että se ei vittuile se unity lol
-                    }
-                }
-            }
-        }
+        
 
         racerscript = FindAnyObjectByType<RacerScript>();
     }

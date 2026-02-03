@@ -49,7 +49,7 @@ public class AiCarManager : MonoBehaviour
         Waypoints = bezierBaker.GetCachedPoints();
 
         gm = GameManager.instance;
-        if (gm == null || gm.currentCar == null) return;
+        if (gm == null || gm.CurrentCar == null) return;
 
         // Spawn AI Cars at spawn points
         if (spawnedAiCarCount > 0)
@@ -67,7 +67,7 @@ public class AiCarManager : MonoBehaviour
                 GameObject newAI = Instantiate(prefab.gameObject, spawnPoints[i % spawnPoints.Length].position, transform.rotation);
 
                 AiCarController controller = newAI.GetComponent<AiCarController>();
-                controller.Initialize(this, gm.currentCar.GetComponentInChildren<Collider>(), difficultyRanges[difficulty]);
+                controller.Initialize(this, gm.CurrentCar.GetComponentInChildren<Collider>(), difficultyRanges[difficulty]);
                 
                 AiCars.Add(controller);
             }

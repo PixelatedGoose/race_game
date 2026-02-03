@@ -36,9 +36,9 @@ public class BunnyAiManager : MonoBehaviour
         ComputeBezierPoints();
 
         GameManager gm = GameManager.instance;
-        if (gm == null || gm.currentCar == null) return;
+        if (gm == null || gm.CurrentCar == null) return;
 
-        Collider playerCollider = gm.currentCar.GetComponentInChildren<Collider>();
+        Collider playerCollider = gm.CurrentCar.GetComponentInChildren<Collider>();
 
         spawnPosition = Physics.RaycastAll(transform.position + Vector3.up * 50, Vector3.down, 100).OrderBy(hit => hit.distance).First().point;
         if (spawnOnStart)

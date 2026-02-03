@@ -93,11 +93,11 @@ public class AiCarController : MonoBehaviour
     // --- References ---
     [Header("References")]
     [Tooltip("List of wheels used by the car.")]
-    [SerializeField] private List<PlayerCarController.Wheel> wheels;
+    [SerializeField] private BaseCarController.Wheel[] wheels;
     [Tooltip("Rigidbody component of the car.")]
     public Rigidbody carRb { get; private set; }
     [Tooltip("Reference to the player car.")]
-    [SerializeField] private PlayerCarController playerCar;
+    private PlayerCarController playerCar;
     public AiCarManager aiCarManager;
     private Collider carCollider;
     public float CarWidth { get; private set; }
@@ -109,17 +109,20 @@ public class AiCarController : MonoBehaviour
     private Transform[] waypoints;
     private Vector3 targetPoint;
     private int currentWaypointIndex = 0;
-    private PlayerCarController.Wheel[] frontWheels = Array.Empty<PlayerCarController.Wheel>();
+    private BaseCarController.Wheel[] frontWheels = Array.Empty<BaseCarController.Wheel>();
     private float targetTorque;
     private float moveInput = 0f;
     private LayerMask grassLayerMask;
     private LayerMask objectLayerMask;
     private float steerInput;
     private float avoidance;
-    public AiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, AiCarManager.DifficultyStats difficultyStats)
+    public AiCarController Initialize(
+        AiCarManager aiCarManager, 
+        Collider playerCollider, 
+        AiCarManager.DifficultyStats difficultyStats
+        )
     {
         this.aiCarManager = aiCarManager;
-        playerCar = playerCollider.GetComponent<PlayerCarController>();
         Collider pc = playerCollider.GetComponent<Collider>();
         playerCarWidth = pc.bounds.size.x;
         playerCarLength = pc.bounds.size.z;
@@ -128,10 +131,12 @@ public class AiCarController : MonoBehaviour
         avoidance = difficultyStats.avoidance;
         return this;
     }
+
     private void Awake()
     {
+        playerCar = GameManager.instance.CurrentCar.GetComponentInChildren<PlayerCarController>();
         
-
+        frontWheels = wheels.Where(w => w.Axel == BaseCarController.Axel.Front).ToArray();
         if (carRb == null) carRb = GetComponentInChildren<Rigidbody>();
         carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
 
@@ -142,8 +147,6 @@ public class AiCarController : MonoBehaviour
             CarLength = carCollider.bounds.size.z;
             safeRadius = Mathf.Max(CarWidth, CarLength) * 0.5f;
         }
-
-        frontWheels = wheels.Where(w => w.Axel == PlayerCarController.Axel.Front).ToArray();
     }
 
     private void Start()
@@ -178,7 +181,7 @@ public class AiCarController : MonoBehaviour
         );
 
         
-        foreach (PlayerCarController.Wheel wheel in frontWheels)
+        foreach (BaseCarController.Wheel wheel in frontWheels)
         {
             wheel.WheelCollider.steerAngle = carRb.rotation.y;
         }
@@ -234,11 +237,15 @@ public class AiCarController : MonoBehaviour
         if (wheels == null) return false;
         foreach (PlayerCarController.Wheel wheel in wheels)
         {
-            if (Physics.Raycast(wheel.WheelCollider.transform.position, -wheel.WheelCollider.transform.up, out RaycastHit hit, wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance))
-            {
-                if (hit.collider.gameObject.layer == grassLayerMask)
-                    return true;
-            }
+            if (
+                Physics.Raycast(
+                    wheel.WheelCollider.transform.position,
+                    -wheel.WheelCollider.transform.up, 
+                    out RaycastHit hit, 
+                    wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance
+                ) 
+                && hit.collider.gameObject.layer == grassLayerMask
+            ) return true;
         }
         return false;
     }
