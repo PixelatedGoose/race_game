@@ -220,7 +220,7 @@ Transform:
   m_GameObject: {fileID: 1380952591434384844}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -104.4, y: 57.7, z: -298.7}
+  m_LocalPosition: {x: 1.9734, y: 10.63647, z: -30.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -539,7 +539,7 @@ Transform:
   m_GameObject: {fileID: 3013609153453077785}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -106.37344, y: 47.06353, z: -267.8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -592,64 +592,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAcceleration: 1000
-  brakeAcceleration: 100
-  turnSensitivty: 10
-  turnSensitivtyAtHighSpeed: 15
-  turnSensitivtyAtLowSpeed: 19.5
-  deceleration: 1
-  maxspeed: 140
-  gravityMultiplier: 0.25
-  grassSpeedMultiplier: 0.5
-  wheels:
-  - wheelModel: {fileID: 3356778135624283465}
-    wheelCollider: {fileID: 1611016019681196766}
-    wheelEffectobj: {fileID: 253234819805006193}
-    smokeParticle: {fileID: 8370427124804131512}
-    axel: 0
-  - wheelModel: {fileID: 2001825485098282248}
-    wheelCollider: {fileID: 4322213742954386768}
-    wheelEffectobj: {fileID: 4233654236648341}
-    smokeParticle: {fileID: 5735925340106288723}
-    axel: 0
-  - wheelModel: {fileID: 742366007508499148}
-    wheelCollider: {fileID: 4594780843961564118}
-    wheelEffectobj: {fileID: 3172822010265455929}
-    smokeParticle: {fileID: 234832648449404130}
-    axel: 1
-  - wheelModel: {fileID: 4416569952393853735}
-    wheelCollider: {fileID: 8795832801714016059}
-    wheelEffectobj: {fileID: 6565481224098539492}
-    smokeParticle: {fileID: 688611208309200021}
-    axel: 1
-  _centerofMass: {x: 0, y: 0, z: 0}
-  grass:
-    serializedVersion: 2
-    m_Bits: 128
-  targetTorque: 0
-  grassMaterial: {fileID: 2100000, guid: 6fd8429b74ab9eb4fae4415c8a29b8e5, type: 2}
-  roadMaterial: {fileID: 2100000, guid: 2078d9428218af54fa6eaa4ae7fdbaa1, type: 2}
-  driftmaterial: {fileID: 2100000, guid: 2078d9428218af54fa6eaa4ae7fdbaa1, type: 2}
-  carRb: {fileID: 0}
-  isTurboActive: 0
-  Turbesped: 170
-  basespeed: 120
-  grassmaxspeed: 50
-  driftMaxSpeed: 40
-  driftMultiplier: 5
-  isTurnedDown: 0
-  isDrifting: 0
-  turbeMeter: {fileID: 0}
-  turbeAmount: 100
-  turbeMax: 100
-  turbepush: 50
-  turbeReduce: 20
-  turbeRegen: 15
-  isRegenerating: 0
-  turbeRegenCoroutineAmount: 0
-  canDrift: 0
-  canUseTurbo: 0
-  GrassRespawnActive: 0
   useLogitechWheel: 1
   forceFeedbackMultiplier: 1
 --- !u!114 &187602521392888673
@@ -1902,11 +1844,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
---- !u!198 &688611208309200021 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 1474361404832501431}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2484262381890563312 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -1977,11 +1914,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
---- !u!198 &234832648449404130 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 2214012694476142272}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2933501743252706439 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -2176,11 +2108,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
---- !u!198 &5735925340106288723 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 5936186763071157361}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7236641332555339318 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -2254,11 +2181,6 @@ PrefabInstance:
 --- !u!4 &6907981249220059869 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 7625210733809598618}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &8370427124804131512 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
   m_PrefabInstance: {fileID: 7625210733809598618}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8361980000268918475
@@ -2447,7 +2369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3621995110324072295, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_Name
-      value: REALCAR 1
+      value: Sairua
       objectReference: {fileID: 0}
     - target: {fileID: 3621995110324072295, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_IsActive

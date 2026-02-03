@@ -194,10 +194,10 @@ public class AICarController : MonoBehaviour
         if (playerCar == null)
         {
             var gm = GameManager.instance;
-            if (gm != null && gm.currentCar != null)
+            if (gm != null && gm.CurrentCar != null)
             {
-                playerCar = gm.currentCar.GetComponent<PlayerCarController>();
-                var playerCollider = gm.currentCar.GetComponent<Collider>();
+                playerCar = gm.CurrentCar.GetComponent<PlayerCarController>();
+                var playerCollider = gm.CurrentCar.GetComponent<Collider>();
                 if (playerCollider != null) {
                     playerCarWidth = playerCollider.bounds.size.x;
                     playerCarLength = playerCollider.bounds.size.z;

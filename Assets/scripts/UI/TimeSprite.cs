@@ -34,10 +34,10 @@ public class TimeSprite : MonoBehaviour
         // Try to fetch the RacerScript if not already cached
         if (racerScript == null)
         {
-            if (GameManager.instance == null || GameManager.instance.currentCar == null)
+            if (GameManager.instance == null || GameManager.instance.CurrentCar == null)
                 return;
 
-            racerScript = GameManager.instance.currentCar.GetComponentInChildren<RacerScript>();
+            racerScript = GameManager.instance.CurrentCar.GetComponentInChildren<RacerScript>();
             if (racerScript == null)
                 return;
         }
