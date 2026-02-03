@@ -9,13 +9,7 @@ public class PlayerCarController : BaseCarController
 
 
     RacerScript racerScript;
-
-    private float GrassSpeedMultiplier = 0.5f;
-    private LayerMask Grass;
-    private Material GrassMaterial, RoadMaterial;
-    internal bool GrassRespawnActive = false;
-    private bool isOnGrassCached;
-    private bool isOnGrassCachedValid;
+    //LogitechMovement LGM;
 
 
     private PlayerInput PlayerInput;
@@ -29,7 +23,7 @@ public class PlayerCarController : BaseCarController
         Controls = new CarInputActions();
         Controls.Enable();
         TurbeMeter = GameObject.Find("turbeFull").GetComponent<Image>();
-        AutoAssignWheels();
+        AutoAssignWheelsAndMaterials();
     }
 
     void Start()
@@ -47,7 +41,8 @@ public class PlayerCarController : BaseCarController
         }
         racerScript = FindAnyObjectByType<RacerScript>();
 
-        InitializeLogitechWheel(); 
+
+        //LGM.InitializeLogitechWheel(); 
 
 
     }
@@ -67,15 +62,15 @@ public class PlayerCarController : BaseCarController
         steerInput = 0f;
     }
 
-    void OnApplicationFocus(bool focus)
-    {
-        if (focus){
-            if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
-            {
-                LogitechGSDK.LogiUpdate();
-            }
-        }
-    }
+    // void OnApplicationFocus(bool focus)
+    // {
+    //     if (focus){
+    //         if (//LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0))
+    //         {
+    //             LogitechGSDK.LogiUpdate();
+    //         }
+    //     }
+    // }
 
 
     private void OnEnable()
@@ -103,7 +98,7 @@ public class PlayerCarController : BaseCarController
         Controls.CarControls.Move.canceled  -= OnMoveCanceled;
         Controls.CarControls.Drift.performed -= OnDriftPerformed;
         Controls.CarControls.Drift.canceled  -= OnDriftCanceled;
-        StopAllForceFeedback();
+        //LGM.StopAllForceFeedback();
     }
 
     private void OnDestroy()
@@ -111,38 +106,28 @@ public class PlayerCarController : BaseCarController
         Controls.Disable();
         Controls.Dispose();
         
-        StopAllForceFeedback();
+        //LGM.StopAllForceFeedback();
     }
 
-    public new float GetSpeed()
-    {
-        GameManager.instance.carSpeed = CarRb.linearVelocity.magnitude * 3.6f;
-        return CarRb.linearVelocity.magnitude * 3.6f;
-    }
-
-    public new float GetMaxSpeed()
-    {
-        return Maxspeed;
-    }
 
     void Update()
     {
         GetInputs();
         Animatewheels();
         // detect connection state changes and print once when it changes
-        bool currentlyConnected = logitechInitialized && LogitechGSDK.LogiIsConnected(0);
-        if (currentlyConnected != lastLogiConnected)
-        {
-            lastLogiConnected = currentlyConnected;
-            Debug.Log($"[CarController] Logitech connection status: {(currentlyConnected ? "Connected" : "Disconnected")}");
-        }
+    //     bool currentlyConnected = //LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0);
+    //     if (currentlyConnected != //LGM.lastLogiConnected)
+    //     {
+    //         //LGM.lastLogiConnected = currentlyConnected;
+    //         Debug.Log($"[CarController] Logitech connection status: {(currentlyConnected ? "Connected" : "Disconnected")}");
+    //     }
 
-        if (logitechInitialized && LogitechGSDK.LogiIsConnected(0))
-        {
-            LogitechGSDK.LogiUpdate();
-            GetLogitechInputs();
-            ApplyForceFeedback(); 
-        }
+    //     if (//LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0))
+    //     {
+    //         LogitechGSDK.LogiUpdate();
+    //         //LGM.GetLogitechInputs();
+    //         //LGM.ApplyForceFeedback(); 
+    //     }
     }
 
 
@@ -194,10 +179,10 @@ public class PlayerCarController : BaseCarController
     void GetInputs()
     {
         //lukee inputin valuen ja etenee siittä
-        if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0))
-        {
-            steerInput = Controls.CarControls.Move.ReadValue<Vector2>().x;
-        }
+        //LGM.logitechInitialized || !LogitechGSDK.LogiIsConnected(0))
+        
+        steerInput = Controls.CarControls.Move.ReadValue<Vector2>().x;
+        
         
         if (Controls.CarControls.MoveForward.IsPressed())
             moveInput = Controls.CarControls.MoveForward.ReadValue<float>();
@@ -209,84 +194,6 @@ public class PlayerCarController : BaseCarController
         if (!Controls.CarControls.Drift.IsPressed())
             StopDrifting();
     }
-
-    bool IsWheelGrounded(Wheel wheel)
-    {
-        return Physics.Raycast(wheel.WheelCollider.transform.position, -wheel.WheelCollider.transform.up, out RaycastHit hit, wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance);
-    }
-
-    bool IsWheelOnGrass(Wheel wheel)
-    {
-        if (Physics.Raycast(
-                wheel.WheelCollider.transform.position,
-                -wheel.WheelCollider.transform.up,
-                out RaycastHit hit,
-                wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance))
-        {
-            // check if hit collider is on a grass layer
-            return (Grass.value & (1 << hit.collider.gameObject.layer)) != 0;
-        }
-        return false;
-    }
-
-    internal void OnGrass()
-    {
-        int wheelsOnGrass = 0;
-
-        foreach (var wheel in Wheels)
-        {
-            if (wheel.WheelEffectobj == null) continue;
-
-            var trailRenderer = wheel.WheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (trailRenderer == null) continue;
-
-            bool wheelOnGrass = IsWheelGrounded(wheel) && IsWheelOnGrass(wheel);
-
-            // per rear-wheel line material
-            trailRenderer.material = wheelOnGrass ? GrassMaterial : RoadMaterial;
-
-            if (wheelOnGrass)
-                wheelsOnGrass++;
-        }
-
-        const int wheelsNeededForPenalty = 2;
-        bool onGrassForScore = wheelsOnGrass >= wheelsNeededForPenalty;
-
-        if (ScoreManager.instance != null)
-        {
-            ScoreManager.instance.SetOnGrass(onGrassForScore);
-        }
-    }
-
-    public bool IsOnGrass()
-    {
-        foreach (var wheel in Wheels)
-        {
-            if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
-            {
-                if (GrassRespawnActive && racerScript != null)
-                    racerScript.RespawnAtLastCheckpoint();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool IsOnGrassCached()
-    {
-        if (!isOnGrassCachedValid)
-        {
-            isOnGrassCached = IsOnGrass();
-            isOnGrassCachedValid = true;
-        }
-        return isOnGrassCached;
-    }
-
-    private bool IsGrounded()
-    {
-        return Physics.Raycast(transform.position, Vector3.down, 0.02f);
-    }
-
 
     void Applyturnsensitivity(float speed)
     {
@@ -316,40 +223,9 @@ public class PlayerCarController : BaseCarController
         }
     }
 
-    //kommentoin tämän pois koska jos meille tulee se mistä aarre puhu eli autot menee ylös ja alas tiellä niin tämähän estää sen
-    // private void HandeSteepSlope()
-    // {
-    //     if (IsOnSteepSlope())
-    //     {
-    //         targetTorque *= 0.5f;
-    //         carRb.linearVelocity = Vector3.ClampMagnitude(carRb.linearVelocity, maxspeed / 3.6f);
-    //     }
-    // }
 
-    private void AdjustSuspension()
-    {
-        foreach (var wheel in Wheels)
-        {
-            JointSpring suspensionSpring = wheel.WheelCollider.suspensionSpring;
-            suspensionSpring.spring = 8000.0f;
-            suspensionSpring.damper = 5000.0f;
-            wheel.WheelCollider.suspensionSpring = suspensionSpring;
-        }
-    }
 
-    private void AdjustForwardFrictrion()
-    {
-        foreach (var wheel in Wheels)
-        {
-            WheelFrictionCurve forwardFriction = wheel.WheelCollider.forwardFriction;
-            forwardFriction.extremumSlip = 0.6f;
-            forwardFriction.extremumValue = 1;
-            forwardFriction.asymptoteSlip = 1.0f;
-            forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 3.5f;
-            wheel.WheelCollider.forwardFriction = forwardFriction;
-        }
-    }
+
 
     private void UpdateTargetTorgue()
     {
@@ -385,57 +261,9 @@ public class PlayerCarController : BaseCarController
         }
     }
 
-    private void Brakes(Wheel wheel)
-    {
-        GameManager.instance.StopAddingPoints();
-        wheel.WheelCollider.brakeTorque = BrakeAcceleration * 15f;
-    }
 
-    private void MotorTorgue(Wheel wheel)
-    {
-        wheel.WheelCollider.motorTorque = TargetTorque;
-        wheel.WheelCollider.brakeTorque = 0f;
-    }
 
-    private void AdjustSpeedForGrass()
-    {
-        if (IsOnGrassCached() && !IsDrifting)
-        {
-            TargetTorque *= GrassSpeedMultiplier;
-            Maxspeed = Mathf.Lerp(Maxspeed, Grassmaxspeed, Time.deltaTime);
-            if (GameManager.instance.carSpeed < 50.0f)
-            {
-                Maxspeed = 50.0f;
-            }
-        }
-    }
-
-    void Decelerate()
-    {
-        if (moveInput == 0)
-        {
-            Vector3 velocity = CarRb.linearVelocity;
-
-            velocity -= velocity.normalized * Deceleration * 2.0f * Time.deltaTime;
-
-            if (velocity.magnitude < 0.1f)
-            {
-                velocity = Vector3.zero;
-            }
-            CarRb.linearVelocity = velocity;
-        }
-    }
-    
-    void ApplyGravity()
-    {
-        if (!IsGrounded())
-        {
-            CarRb.AddForce(Vector3.down * GravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
-        }
-
-    }
-
-    public new float GetDriftSharpness()
+    public float GetDriftSharpness()
     {
         //Checks the drifts sharpness so scoremanager can see how good of a drift you're doing
         if (IsDrifting)
@@ -447,67 +275,6 @@ public class PlayerCarController : BaseCarController
         }
         return 0.0f;
     }
-
-    private void AdjustWheelsForDrift()
-    {
-        foreach (var wheel in Wheels)
-        {
-            JointSpring suspensionSpring = wheel.WheelCollider.suspensionSpring;
-            suspensionSpring.spring = 4000.0f;
-            suspensionSpring.damper = 1000.0f;
-            wheel.WheelCollider.suspensionSpring = suspensionSpring;
-        }
-
-        foreach (var wheel in Wheels)
-        {
-            WheelFrictionCurve forwardFriction = wheel.WheelCollider.forwardFriction;
-            forwardFriction.extremumSlip = 0.4f;
-            forwardFriction.asymptoteSlip = 0.6f;
-            forwardFriction.extremumValue = 1;
-            forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 3f;
-            wheel.WheelCollider.forwardFriction = forwardFriction;
-            
-            if (wheel.Axel == Axel.Front)
-            {
-                WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
-                sidewaysFriction.stiffness = 2.0f;
-                wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
-            }
-        }
-    }
-
-    void StopDrifting()
-    {
-        Activedrift = 0;
-        IsDrifting = false;
-        MaxAcceleration = PerusMaxAccerelation;
-        CarRb.angularDamping = 0.05f; 
-
-        if (racerScript != null &&
-            (racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f))
-        {
-            GameManager.instance.StopAddingPoints();
-            return;
-        }
-        GameManager.instance.StopAddingPoints();
-
-        foreach (var wheel in Wheels)
-        {
-            if (wheel.WheelCollider == null) continue;
-
-            WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
-            sidewaysFriction.extremumSlip = 0.2f;
-            sidewaysFriction.asymptoteSlip = 0.4f;
-            sidewaysFriction.extremumValue = 1.0f;
-            sidewaysFriction.asymptoteValue = 1f;
-            sidewaysFriction.stiffness = 5f;
-            wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
-        }
-    }
-
-
-
 
     //i hate this so much, its always somewhat broken but for now....... its not broken.
     void OnDriftPerformed(InputAction.CallbackContext ctx)
@@ -543,88 +310,5 @@ public class PlayerCarController : BaseCarController
         MaxAcceleration = PerusMaxAccerelation;
         TargetTorque = PerusTargetTorque;
         WheelEffects(false);
-    }
-
-
-
-
-
-    //ill be transfering this to a different script entirely in the near future
-    [Header("Logitech G923 Settings")]
-    public bool useLogitechWheel = true;
-    public float forceFeedbackMultiplier = 1.0f;
-    private bool logitechInitialized = false;
-    private bool lastLogiConnected = false;
-
-    void InitializeLogitechWheel()
-    {
-        if (!useLogitechWheel)
-        {
-            Debug.Log("[CarController] useLogitechWheel is false — skipping Logitech initialization.");
-            return;
-        }
-
-        logitechInitialized = LogitechSDKManager.Initialize();
-        if (logitechInitialized)
-            Debug.Log("[CarController] Logitech wheel initialized successfully.");
-        else
-            Debug.LogWarning("[CarController] Logitech wheel failed to initialize.");
-    }
-
-    void GetLogitechInputs()
-    {
-        if (!LogitechGSDK.LogiIsConnected(0)) return;
-
-        var state = LogitechGSDK.LogiGetStateUnity(0);
-        steerInput = state.lX / 32768.0f;
-        
-        // Logitech pedals: -32768 (fully pressed) to 32767 (not pressed)
-        // Invert and normalize to 0-1 range
-        float throttle = Mathf.Clamp01(-state.lY / 32768.0f);
-        
-        // Clutch pedal for reverse - rglSlider is an array, index 0 is clutch
-        float clutch = Mathf.Clamp01(-state.rglSlider[0] / 32768.0f);
-        
-        if (clutch > 0.1f)
-            moveInput = -clutch;
-        else if (throttle > 0.1f)
-            moveInput = throttle;
-        else
-            moveInput = 0f;
-    }
-
-    void StopAllForceFeedback()
-    {
-        if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0)) return;
-        
-        LogitechGSDK.LogiStopDirtRoadEffect(0);
-    }
-
-    void ApplyForceFeedback()
-    {
-        if (!LogitechSDKManager.IsReady) return;
-
-        if (GameManager.instance.isPaused)
-        {
-            LogitechGSDK.LogiStopDirtRoadEffect(0);
-            return;
-        }
-        if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0)) return;
-        
-        float speed = CarRb.linearVelocity.magnitude * 3.6f;
-
-        // Continuously apply spring force (centering)
-        int springStrength = Mathf.RoundToInt(40 * forceFeedbackMultiplier);
-        LogitechGSDK.LogiPlaySpringForce(0, 0, 100, springStrength);
-
-        // Continuously apply damper force (resistance) for steering
-        int damperStrength = Mathf.RoundToInt(10 * forceFeedbackMultiplier);
-        LogitechGSDK.LogiPlayDamperForce(0, damperStrength);
-        
-        // Dirt road only when on grass and moving
-        if (IsOnGrassCached() && speed >= 10)
-            LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(12.5f * forceFeedbackMultiplier));
-        else
-            LogitechGSDK.LogiStopDirtRoadEffect(0);
     }
 }

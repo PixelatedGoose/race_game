@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using System.Collections;
-using Logitech;
 using System.Linq;
+
 
 public class BaseCarController : MonoBehaviour
 {
@@ -43,6 +42,13 @@ public class BaseCarController : MonoBehaviour
     internal float Maxspeed  = 100.0f;
     internal float GravityMultiplier  = 1.5f;
     internal List<Wheel> Wheels;
+    WheelHit hit;
+    internal float GrassSpeedMultiplier = 0.5f;
+    internal LayerMask Grass;
+    internal Material GrassMaterial, RoadMaterial;
+    internal bool GrassRespawnActive = false;
+    internal bool isOnGrassCached;
+    internal bool isOnGrassCachedValid;
     internal float moveInput, steerInput;
     internal Vector3 _CenterofMass;
     internal float TargetTorque  = 0.0f;
@@ -81,13 +87,13 @@ public class BaseCarController : MonoBehaviour
     
     }
 
-    public float GetSpeed()
+    internal float GetSpeed()
     {
         GameManager.instance.carSpeed = CarRb.linearVelocity.magnitude * 3.6f;
         return CarRb.linearVelocity.magnitude * 3.6f;
     }
 
-    public float GetMaxSpeed()
+    internal float GetMaxSpeed()
     {
         return Maxspeed;
     }
@@ -103,13 +109,13 @@ public class BaseCarController : MonoBehaviour
 
     
 
-    bool IsWheelGrounded(Wheel wheel)
+    internal bool IsWheelGrounded(Wheel wheel)
     {
-        return Physics.Raycast(wheel.WheelCollider.transform.position, -wheel.WheelCollider.transform.up, out RaycastHit hit, wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance);
+        return wheel.WheelCollider.GetGroundHit(out hit);
     }
 
     [ContextMenu("Auto Assign Wheels")]
-    internal void AutoAssignWheels()
+    internal void AutoAssignWheelsAndMaterials()
     {
         if (Wheels == null) Wheels = new List<Wheel>();
         Wheels.Clear();
@@ -141,15 +147,91 @@ public class BaseCarController : MonoBehaviour
            
             var n = wc.name.ToLowerInvariant();
             w.Axel = n.Contains("front") ? Axel.Front : Axel.Rear;
+            
+            Grass = 1 << 7;
 
+            RoadMaterial = Resources.Load<Material>("DriftMaterial/RoadMaterial");
+            GrassMaterial = Resources.Load<Material>("DriftMaterial/GrassMaterial");
+            
             Wheels.Add(w);
         }
     }
 
-    private bool IsGrounded()
+    bool IsWheelOnGrass(Wheel wheel)
     {
-        return Physics.Raycast(transform.position, Vector3.down, 0.02f);
+        if (wheel.WheelCollider.GetGroundHit(out hit))
+        {
+            return (Grass.value & (1 << hit.collider.gameObject.layer)) != 0;
+        }
+        return false;
     }
+
+    internal void OnGrass()
+    {
+        int wheelsOnGrass = 0;
+
+        foreach (var wheel in Wheels)
+        {
+            if (wheel.WheelEffectobj == null) continue;
+
+            var trailRenderer = wheel.WheelEffectobj.GetComponentInChildren<TrailRenderer>();
+            if (trailRenderer == null) continue;
+
+            bool wheelOnGrass = IsWheelGrounded(wheel) && IsWheelOnGrass(wheel);
+
+            // per rear-wheel line material
+            trailRenderer.material = wheelOnGrass ? GrassMaterial : RoadMaterial;
+
+            if (wheelOnGrass)
+                wheelsOnGrass++;
+        }
+
+        const int wheelsNeededForPenalty = 2;
+        bool onGrassForScore = wheelsOnGrass >= wheelsNeededForPenalty;
+
+        if (ScoreManager.instance != null)
+        {
+            ScoreManager.instance.SetOnGrass(onGrassForScore);
+        }
+    }
+
+    internal bool IsOnGrass()
+    {
+        foreach (var wheel in Wheels)
+        {
+            if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
+            {
+                if (GrassRespawnActive && RacerScript != null)
+                RacerScript.RespawnAtLastCheckpoint();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    internal void AdjustSpeedForGrass()
+    {
+        if (IsOnGrassCached() && !IsDrifting)
+        {
+            TargetTorque *= GrassSpeedMultiplier;
+            Maxspeed = Mathf.Lerp(Maxspeed, Grassmaxspeed, Time.deltaTime);
+            if (GameManager.instance.carSpeed < 50.0f)
+            {
+                Maxspeed = 50.0f;
+            }
+        }
+    }
+
+    internal bool IsOnGrassCached()
+    {
+        if (!isOnGrassCachedValid)
+        {
+            isOnGrassCached = IsOnGrass();
+            isOnGrassCachedValid = true;
+        }
+        return isOnGrassCached;
+    }
+
 
     internal void ApplySpeedLimit(float speed)
     {
@@ -192,7 +274,7 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    private void AdjustSuspension()
+    internal void AdjustSuspension()
     {
         foreach (var wheel in Wheels)
         {
@@ -203,7 +285,7 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    private void AdjustForwardFrictrion()
+    internal void AdjustForwardFrictrion()
     {
         foreach (var wheel in Wheels)
         {
@@ -217,13 +299,13 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    private void Brakes(Wheel wheel)
+    internal void Brakes(Wheel wheel)
     {
         GameManager.instance.StopAddingPoints();
         wheel.WheelCollider.brakeTorque = BrakeAcceleration * 15f;
     }
 
-    private void MotorTorgue(Wheel wheel)
+    internal void MotorTorgue(Wheel wheel)
     {
         wheel.WheelCollider.motorTorque = TargetTorque;
         wheel.WheelCollider.brakeTorque = 0f;
@@ -231,7 +313,7 @@ public class BaseCarController : MonoBehaviour
 
     
 
-    void Decelerate()
+    internal void Decelerate()
     {
         if (moveInput == 0)
         {
@@ -259,28 +341,15 @@ public class BaseCarController : MonoBehaviour
     }
 
     
-    void ApplyGravity()
+    internal void ApplyGravity()
     {
-        if (!IsGrounded())
+        if (Wheels.All(w => !IsWheelGrounded(w)))
         {
             CarRb.AddForce(Vector3.down * GravityMultiplier * Physics.gravity.magnitude, ForceMode.Acceleration);
         }
-
-    }
-    public float GetDriftSharpness()
-    {
-        if (IsDrifting)
-        {
-            Vector3 velocity = CarRb.linearVelocity;
-            Vector3 forward = transform.forward;
-            float angle = Vector3.Angle(forward, velocity);
-            return angle;  
-        }
-        //checks the angle between the car's forward direction and its velocity vector constantly while drifting
-        return 0.0f;
     }
 
-    private void AdjustWheelsForDrift()
+    internal void AdjustWheelsForDrift()
     {
         foreach (var wheel in Wheels)
         {
@@ -288,10 +357,7 @@ public class BaseCarController : MonoBehaviour
             suspensionSpring.spring = 4000.0f;
             suspensionSpring.damper = 1000.0f;
             wheel.WheelCollider.suspensionSpring = suspensionSpring;
-        }
 
-        foreach (var wheel in Wheels)
-        {
             WheelFrictionCurve forwardFriction = wheel.WheelCollider.forwardFriction;
             forwardFriction.extremumSlip = 0.4f;
             forwardFriction.asymptoteSlip = 0.6f;
@@ -299,17 +365,17 @@ public class BaseCarController : MonoBehaviour
             forwardFriction.asymptoteValue = 1;
             forwardFriction.stiffness = 3f;
             wheel.WheelCollider.forwardFriction = forwardFriction;
-            
+
             if (wheel.Axel == Axel.Front)
             {
                 WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
                 sidewaysFriction.stiffness = 2.0f;
                 wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
             }
-        }
+        }        
     }
 
-    void StopDrifting()
+    internal void StopDrifting()
     {
         Activedrift = 0;
    
@@ -363,7 +429,6 @@ public class BaseCarController : MonoBehaviour
             bool wheelGrounded = IsWheelGrounded(wheel);
             bool shouldEmit = enable && wheelGrounded;
 
-            // Always ensure we can re-enable emitting even if it was previously cleared/disabled.
             if (shouldEmit)
             {
                 trailRenderer.emitting = true;
@@ -385,7 +450,6 @@ public class BaseCarController : MonoBehaviour
             // explicitly stop emitting and clear the trail so it can be re-enabled later
             trail.emitting = false;
             trail.Clear();
-            // keep the component enabled so emitting can be toggled again
             trail.enabled = true;
         }
     }
