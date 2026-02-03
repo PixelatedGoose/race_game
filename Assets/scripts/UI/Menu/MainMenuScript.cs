@@ -78,6 +78,14 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SceneManager.LoadSceneAsync("Carselectionmenu_VECTORAMA");
+        }
+    }
+
     // changed: show the play-confirm UI instead of immediately loading
     // new: events for camera animation (assign in Inspector)
     [SerializeField] private UnityEvent onShowPlayMenu;
@@ -104,7 +112,7 @@ public class MainMenu : MonoBehaviour
     // called by the "Play Game" button on the playConfirmPanel
     public void ConfirmPlay()
     {
-        SceneManager.LoadSceneAsync("Carselectionmenu_VECTORAMA"); //menee ny carselectioniin suoraan
+        SceneManager.LoadSceneAsync("SelectionMenu");
         DatapersistenceManager.instance.LoadGame();
     }
 

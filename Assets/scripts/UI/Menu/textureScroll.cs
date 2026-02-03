@@ -4,13 +4,22 @@ using UnityEngine.UI;
 public class ScrollingImageEffect : MonoBehaviour
 {
     [SerializeField] private RawImage targetImage;
-    [SerializeField] private Vector2 scrollSpeed = new Vector2(0.1f, 0f);
+    [SerializeField] private float scrollSpeed = 0.17f;
+    private int buttontween;
 
-    private Vector2 offset;
-
-    private void Update()
+    private void Start()
     {
-        offset += scrollSpeed * Time.deltaTime;
-        targetImage.uvRect = new Rect(offset, targetImage.uvRect.size);
+        buttontween = LeanTween.value(0.0f, 0.0f + 1.0f, scrollSpeed)
+        .setOnUpdate((float val) =>
+        {
+            Rect rect = targetImage.uvRect;
+            rect.x = val;
+            targetImage.uvRect = rect;
+        })
+        .setLoopClamp().id;
+    }
+    private void OnDisable()
+    {
+        LeanTween.cancel(buttontween);
     }
 }
