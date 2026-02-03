@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using System.Collections;
 using Logitech;
-using System.Linq;
 
  
 public class PlayerCarController : BaseCarController
@@ -14,7 +10,6 @@ public class PlayerCarController : BaseCarController
 
     RacerScript racerScript;
 
-    // Uskon että AI ei tarvi hitto tietää onko se ruohonpäällä vai ei
     private float GrassSpeedMultiplier = 0.5f;
     private LayerMask Grass;
     private Material GrassMaterial, RoadMaterial;
@@ -50,22 +45,11 @@ public class PlayerCarController : BaseCarController
             CanDrift = true;
             CanUseTurbo = true;
         }
-        BoostsForEachCar(carsParent: GameObject.Find("cars"));
-
         racerScript = FindAnyObjectByType<RacerScript>();
 
         InitializeLogitechWheel(); 
 
-        Grass = 1 << 7;
 
-
-        GrassMaterial = Resources.Load<Material>("driftmaterial/GrassMaterial");
-        RoadMaterial = Resources.Load<Material>("driftmaterial/RoadMaterial");
-
-
-
-        if (GrassMaterial == null || RoadMaterial == null)
-            Debug.LogWarning("PlayerCarController: GrassMaterial or RoadMaterial not found in Resources/driftmaterial. Please assign in Inspector or place assets there with expected names.");
     }
 
     private void OnControlsChanged(PlayerInput input)
@@ -74,7 +58,6 @@ public class PlayerCarController : BaseCarController
     }
 
 
-     // handlers
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
         steerInput = ctx.ReadValue<Vector2>().x;
@@ -169,7 +152,6 @@ public class PlayerCarController : BaseCarController
         isOnGrassCachedValid = false;
         ApplySpeedLimit(speed);
 
-        if (!IsCarActive()) return;
         
         UpdateDriftSpeed();
         StopDriftIfRaceFinished();
@@ -186,11 +168,6 @@ public class PlayerCarController : BaseCarController
         WheelEffects(IsDrifting);
     }
 
-    bool IsCarActive()
-    {
-        // jos tulee random paskaa kuten peli paussi tai auto kolaroi, LISÄTKÄÄ SE TÄHÄN EI MISSÄN NIMESSÄ FIXEDUPDATEEN!!!!!!!!!!!
-        return true;
-    }
 
     void UpdateDriftSpeed()
     {
@@ -216,7 +193,7 @@ public class PlayerCarController : BaseCarController
 
     void GetInputs()
     {
-        // Read steering from Move action (for keyboard/gamepad)
+        //lukee inputin valuen ja etenee siittä
         if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0))
         {
             steerInput = Controls.CarControls.Move.ReadValue<Vector2>().x;
@@ -231,8 +208,6 @@ public class PlayerCarController : BaseCarController
 
         if (!Controls.CarControls.Drift.IsPressed())
             StopDrifting();
-
-        //throttlemodifier = Controls.CarControls.ThrottleMod.ReadValue<float>();
     }
 
     bool IsWheelGrounded(Wheel wheel)
@@ -267,7 +242,7 @@ public class PlayerCarController : BaseCarController
 
             bool wheelOnGrass = IsWheelGrounded(wheel) && IsWheelOnGrass(wheel);
 
-            // per-wheel line material
+            // per rear-wheel line material
             trailRenderer.material = wheelOnGrass ? GrassMaterial : RoadMaterial;
 
             if (wheelOnGrass)
@@ -306,10 +281,6 @@ public class PlayerCarController : BaseCarController
         }
         return isOnGrassCached;
     }
-
-
-
-
 
     private bool IsGrounded()
     {
@@ -454,15 +425,6 @@ public class PlayerCarController : BaseCarController
             CarRb.linearVelocity = velocity;
         }
     }
-
-    float GetSteeringInput()
-    {
-        if (CurrentControlScheme == "Keyboard" && Mathf.Abs(steerInput) > 0f)
-            return Mathf.Sign(steerInput) * Mathf.Pow(Mathf.Abs(steerInput), 0.8f);
-        return steerInput;
-    }
-
-
     
     void ApplyGravity()
     {
@@ -473,11 +435,9 @@ public class PlayerCarController : BaseCarController
 
     }
 
-
-
-
     public new float GetDriftSharpness()
     {
+        //Checks the drifts sharpness so scoremanager can see how good of a drift you're doing
         if (IsDrifting)
         {
             Vector3 velocity = CarRb.linearVelocity;
@@ -485,7 +445,6 @@ public class PlayerCarController : BaseCarController
             float angle = Vector3.Angle(forward, velocity);
             return angle;  
         }
-        //checks the angle between the car's forward direction and its velocity vector constantly while drifting
         return 0.0f;
     }
 
@@ -549,52 +508,8 @@ public class PlayerCarController : BaseCarController
 
 
 
-    void BoostsForEachCar(GameObject carsParent)
-    {
-        int childCount = carsParent.transform.childCount;
-        for (int i = 0; i < childCount; i++)
-        {
-            GameObject car = carsParent.transform.GetChild(i).gameObject;
-            if (car.activeInHierarchy)
-            {
-                string carName = car.name;
-                switch (carName)
-                {
-                    //blue car  
-                    case "REALCAR":
-                        Turbepush = 15.0f;
-                        ScoreManager.instance.SetScoreMultiplier(1.5f);
-                        break;
-                    //gray car
-                    case "REALCAR_x":
-                        TurbeMax = 75.0f;
-                        TurbeRegen = 30.0f;
-                        Turbepush = 20.0f;
-                        break;
-                    //purple car
-                    case "REALCAR_y":
-                        Turbepush = 7.0f;
-                        ScoreManager.instance.SetScoreMultiplier(1.0f);
-                        break;
-                    //da Lada
-                    case "Lada":
-                        TurbeMax = 30.0f;
-                        Turbepush = 500.0f;
-                        ScoreManager.instance.SetScoreMultiplier(0.75f);
-                        break;
-                    default:
-                        Debug.LogWarning($"Unknown car name: {carName}");
-                        break;
-                }
-                CarTurboValues[carName] = Turbepush;
-                return;
-            }
-        }
-    }
-    //bobbing effect
 
-
-    //i hate this so much
+    //i hate this so much, its always somewhat broken but for now....... its not broken.
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
         if (IsDrifting || GameManager.instance.isPaused || !CanDrift) return;
@@ -633,6 +548,8 @@ public class PlayerCarController : BaseCarController
 
 
 
+
+    //ill be transfering this to a different script entirely in the near future
     [Header("Logitech G923 Settings")]
     public bool useLogitechWheel = true;
     public float forceFeedbackMultiplier = 1.0f;
