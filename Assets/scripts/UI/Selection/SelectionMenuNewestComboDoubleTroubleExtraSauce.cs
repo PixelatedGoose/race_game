@@ -8,9 +8,12 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 using System;
+using UnityEngine.InputSystem;
 
 public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 {
+    CarInputActions Controls;
+
     public GameObject[] msObjectsList;
     private float schizophrenia;
     private GameObject loadObjects;
@@ -29,19 +32,17 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private GameObject[] selectionMenus;
 
     public GameObject[] cars;
-    public Button left, right, select, back;
 
     public CarStats[] carStats; 
     public int scoreAmount;
-    public Text carNameText,
-    speedText, accelerationText, handlingText;
-
+    public Text carNameText, speedText, accelerationText, handlingText;
     private int activeCarIndex = 0;
     private int index;
+    private GameObject nextButton;
+    private GameObject backButton;
 
     RaceResultHandler handler;
     RaceResultCollection collection;
-    protected mapSelection mapSelection;
 
     private AudioSource menuMusic;
 
@@ -49,6 +50,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     void Awake()
     {
+        Controls = new CarInputActions();
         selectionDetails = Resources.Load<TextAsset>("selectionDetails");
         //i'm dictionarying my dictionary
         details = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(selectionDetails.text);
@@ -60,11 +62,29 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
         selectionMenus = GameObject.FindGameObjectsWithTag("selectionMenu")
         .OrderBy(go => go.name).ToArray();
+        nextButton = GameObject.Find("Next");
+        backButton = GameObject.Find("Back");
+        nextButton.SetActive(false);
+        backButton.SetActive(false);
         selectionMenus[1].SetActive(false);
         selectionMenus[2].SetActive(false);
 
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
+    }
+    void OnEnable()
+    {
+        Controls.Enable();
+        Controls.CarControls.carskinright.performed += ctx => RightButton();
+        Controls.CarControls.carskinleft.performed += ctx => LeftButton();
+        Controls.CarControls.menucancel.performed += ctx => AltBack();
+    }
+    void OnDisable()
+    {
+        Controls.Disable();
+        Controls.CarControls.carskinright.performed -= ctx => RightButton();
+        Controls.CarControls.carskinleft.performed -= ctx => LeftButton();
+        Controls.CarControls.menucancel.performed -= ctx => AltBack();
     }
 
     void Start()
@@ -73,17 +93,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         {
             car.SetActive(false);
         }
-        if (index >= 0 && index < cars.Length)
-        {
-            cars[index].SetActive(true);
-        }
-        else
-        {
-            Debug.LogError("Car index out of range: " + index);
-            index = 0;
-            cars[index].SetActive(true);
-        }
-        UpdateCarStats();
         menuMusic.Play();
     }
 
@@ -99,9 +108,10 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         selectedGamemode = mode;
     }
 
+    //todo: fix
     public void UpdateCarStats()
     {
-        activeCarIndex = -1;
+        /* activeCarIndex = -1;
         foreach (GameObject car in cars)
         {
             if (car.activeInHierarchy)
@@ -120,7 +130,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             speedText.text = $"Speed: {activeCarStats.speed}";
             accelerationText.text = $"Acceleration: {activeCarStats.acceleration}";
             handlingText.text = $"Handling: {activeCarStats.handling}";
-        }
+        } */
     }
 
     //todo: muuta score timeksi ja ota se per base map
@@ -157,6 +167,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     
     public void RightButton()
     {
+        if (selectionMenus[selectionIndex].name != "B_carSelection") return;
+
         cars[index].SetActive(false);
         index = (index + 1) % cars.Length;
         cars[index].SetActive(true);
@@ -173,6 +185,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     public void LeftButton()
     {
+        if (selectionMenus[selectionIndex].name != "B_carSelection") return;
+        
         cars[index].SetActive(false);
         index = (index - 1 + cars.Length) % cars.Length;
         cars[index].SetActive(true);
@@ -224,13 +238,27 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     }
 
     /* 1. map, 2. car, 3. settings, 4. loading :))))
-    vaihtaa sit indeksien mukaan tota
-    HUOM. ylemmän buttonin teksti vois vaihtaa "go!" kun on viimeses osas */
+    vaihtaa sit indeksien mukaan tota */
     public void Next()
     {
         selectionIndex++;
         selectionMenus[selectionIndex].SetActive(true);
         selectionMenus[selectionIndex - 1].SetActive(false);
+
+        if (selectionMenus[selectionIndex].name == "B_carSelection")
+        {
+            if (index >= 0 && index < cars.Length)
+            {
+                cars[index].SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("Car index out of range: " + index);
+                index = 0;
+                cars[index].SetActive(true);
+            }
+            UpdateCarStats();
+        }
     }
     public void Back()
     {
@@ -240,14 +268,15 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             selectionIndex--;
             selectionMenus[selectionIndex].SetActive(true);
             selectionMenus[selectionIndex + 1].SetActive(false);
-            //jos index == 0 mentyään takasin
-            if (selectionIndex == 0)
+
+            //jos menit mapselectioniin just
+            if (selectionMenus[selectionIndex].name == "A_mapSelection")
             {
                 GameObject shorelineButton = GameObject.Find("Shoreline");
                 shorelineButton.GetComponent<Button>().Select();
-
-                GameObject nextButton = GameObject.Find("Next");
-                GameObject backButton = GameObject.Find("Back");
+            }
+            if (selectionMenus[selectionIndex].name != "C_optionSelection")
+            {
                 nextButton.SetActive(false);
                 backButton.SetActive(false);
             }
@@ -257,8 +286,13 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             SceneManager.LoadSceneAsync("MainMenu");
         }
     }
+    private void AltBack()
+    {
+        if (!backButton.activeSelf)
+            Back();
+    }
 
-    //night mappeja ei lasketa tähän!!!
+    //night mappeja ei lasketa tähän koska ne on täysin samoja!!!
     private string GetFullMapName(string shortName)
     {
         string selectedMap;
@@ -270,10 +304,10 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     }
 
     /// <summary>
-    /// WIP
+    /// käytetään mapin valintaan. suoritetaa ku map iconia painetaa
     /// </summary>
-    /// <param name="selecta">WIP</param>
-    private void OnMapSelected(string selecta)
+    /// <param name="selecta">mapin nimi</param>
+    public void OnMapSelected(string selecta)
     {
         string selectedMap = GetFullMapName(selecta);
 

@@ -158,6 +158,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "carskinright",
+                    "type": "Button",
+                    "id": "c9b08810-786d-48df-b583-df3c1b3e8749",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "carskinleft",
+                    "type": "Button",
+                    "id": "c38339cf-1670-4b00-9a7e-e380e79ad415",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -724,8 +742,8 @@
                 },
                 {
                     "name": "",
-                    "id": "d2f2baac-4b0e-41c8-b7f0-2573ff6f0ab1",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "1153eef7-7782-4cf8-b210-627f7420067d",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -735,8 +753,8 @@
                 },
                 {
                     "name": "",
-                    "id": "a170d9a0-2a2c-40fa-9493-d2287782c6b1",
-                    "path": "<Keyboard>/q",
+                    "id": "d2f2baac-4b0e-41c8-b7f0-2573ff6f0ab1",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -818,6 +836,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "menunext",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "294cee64-05fa-4ed9-af8d-d5cc7017e3aa",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "carskinright",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "470f4036-ebd5-4962-80cd-7cbe865db519",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "carskinright",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8129f213-d5f7-4114-b359-8c2d19f876fc",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "carskinleft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d64ce3d8-01e6-408e-a1da-73647bf2e03e",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "carskinleft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
