@@ -244,6 +244,24 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""carskinright"",
+                    ""type"": ""Button"",
+                    ""id"": ""c9b08810-786d-48df-b583-df3c1b3e8749"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""carskinleft"",
+                    ""type"": ""Button"",
+                    ""id"": ""c38339cf-1670-4b00-9a7e-e380e79ad415"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -810,8 +828,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""d2f2baac-4b0e-41c8-b7f0-2573ff6f0ab1"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""id"": ""1153eef7-7782-4cf8-b210-627f7420067d"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -821,8 +839,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a170d9a0-2a2c-40fa-9493-d2287782c6b1"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""id"": ""d2f2baac-4b0e-41c8-b7f0-2573ff6f0ab1"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -906,6 +924,50 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""menunext"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""294cee64-05fa-4ed9-af8d-d5cc7017e3aa"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""carskinright"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""470f4036-ebd5-4962-80cd-7cbe865db519"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""carskinright"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8129f213-d5f7-4114-b359-8c2d19f876fc"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""carskinleft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d64ce3d8-01e6-408e-a1da-73647bf2e03e"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""carskinleft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -943,6 +1005,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_menucancel = m_CarControls.FindAction("menucancel", throwIfNotFound: true);
         m_CarControls_ui_advance = m_CarControls.FindAction("ui_advance", throwIfNotFound: true);
         m_CarControls_ThrottleMod = m_CarControls.FindAction("ThrottleMod", throwIfNotFound: true);
+        m_CarControls_carskinright = m_CarControls.FindAction("carskinright", throwIfNotFound: true);
+        m_CarControls_carskinleft = m_CarControls.FindAction("carskinleft", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -1040,6 +1104,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_menucancel;
     private readonly InputAction m_CarControls_ui_advance;
     private readonly InputAction m_CarControls_ThrottleMod;
+    private readonly InputAction m_CarControls_carskinright;
+    private readonly InputAction m_CarControls_carskinleft;
     /// <summary>
     /// Provides access to input actions defined in input action map "CarControls".
     /// </summary>
@@ -1120,6 +1186,14 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @ThrottleMod => m_Wrapper.m_CarControls_ThrottleMod;
         /// <summary>
+        /// Provides access to the underlying input action "CarControls/carskinright".
+        /// </summary>
+        public InputAction @carskinright => m_Wrapper.m_CarControls_carskinright;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/carskinleft".
+        /// </summary>
+        public InputAction @carskinleft => m_Wrapper.m_CarControls_carskinleft;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_CarControls; }
@@ -1196,6 +1270,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @ThrottleMod.started += instance.OnThrottleMod;
             @ThrottleMod.performed += instance.OnThrottleMod;
             @ThrottleMod.canceled += instance.OnThrottleMod;
+            @carskinright.started += instance.OnCarskinright;
+            @carskinright.performed += instance.OnCarskinright;
+            @carskinright.canceled += instance.OnCarskinright;
+            @carskinleft.started += instance.OnCarskinleft;
+            @carskinleft.performed += instance.OnCarskinleft;
+            @carskinleft.canceled += instance.OnCarskinleft;
         }
 
         /// <summary>
@@ -1258,6 +1338,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @ThrottleMod.started -= instance.OnThrottleMod;
             @ThrottleMod.performed -= instance.OnThrottleMod;
             @ThrottleMod.canceled -= instance.OnThrottleMod;
+            @carskinright.started -= instance.OnCarskinright;
+            @carskinright.performed -= instance.OnCarskinright;
+            @carskinright.canceled -= instance.OnCarskinright;
+            @carskinleft.started -= instance.OnCarskinleft;
+            @carskinleft.performed -= instance.OnCarskinleft;
+            @carskinleft.canceled -= instance.OnCarskinleft;
         }
 
         /// <summary>
@@ -1430,5 +1516,19 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnThrottleMod(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "carskinright" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCarskinright(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "carskinleft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCarskinleft(InputAction.CallbackContext context);
     }
 }

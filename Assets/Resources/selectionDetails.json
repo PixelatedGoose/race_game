@@ -1,0 +1,22 @@
+{
+    "A_mapSelection":
+    {
+        "Shoreline": "An average-length map surrounded by water. Best suited for beginners and casual players.",
+        "Canyon": "A long map with rises and falls, as well a big hole to fall into. Caution is advised when driving.",
+        "placeholder3": "placeholder stuff for third map",
+        "placeholder4": "placeholder stuff for fourth map"
+    },
+    "B_carSelection":
+    {
+        "Bansku": "It's a minion car! Banana. HAHAHA! IT'S A YELLOW CA",
+        "Sariua": "The default experience. There's nothing more to be said.",
+        "Tatato": "Short and powerful turbo, but reduced score.",
+        "Teimo": "ok i don't know the details here sorry"
+    },
+    "C_optionSelection":
+    {
+        "Laps": "The amount of laps to drive.",
+        "Reverse": "Reverses the direction of driving.",
+        "Time": "Time of day on the map."
+    }
+}
