@@ -24,6 +24,7 @@ TagManager:
   - winmenuother
   - racefinished
   - raceresults
+  - selectionMenu
   layers:
   - Default
   - TransparentFX
