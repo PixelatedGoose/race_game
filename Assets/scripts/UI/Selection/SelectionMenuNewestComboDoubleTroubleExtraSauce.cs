@@ -7,6 +7,7 @@ using TMPro;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
+using System;
 
 public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 {
@@ -14,19 +15,35 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private float schizophrenia;
     private GameObject loadObjects;
     private AudioSource loadingLoop;
-    public GameObject[] maps;
-    private RectTransform mapRectTransform;
-    private Text selectText;
     private Text scoreText;
     public Toggle AItoggle;
+
+    public enum Gamemode {Single, AI, Multi};
+    public Gamemode selectedGamemode;
 
     private TextAsset selectionDetails;
     private Dictionary<string, Dictionary<string, string>> details;
     [SerializeField] private TextMeshProUGUI detailsPanelText;
 
     [SerializeField] private int selectionIndex = 0;
-    [SerializeField] private GameObject[] selectionMenus;
-    [SerializeField] private GameObject detailsPanel;
+    private GameObject[] selectionMenus;
+
+    public GameObject[] cars;
+    public Button left, right, select, back;
+
+    public CarStats[] carStats; 
+    public int scoreAmount;
+    public Text carNameText,
+    speedText, accelerationText, handlingText;
+
+    private int activeCarIndex = 0;
+    private int index;
+
+    RaceResultHandler handler;
+    RaceResultCollection collection;
+    protected mapSelection mapSelection;
+
+    private AudioSource menuMusic;
 
 
 
@@ -35,55 +52,146 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         selectionDetails = Resources.Load<TextAsset>("selectionDetails");
         //i'm dictionarying my dictionary
         details = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(selectionDetails.text);
-        /* selectText = GameObject.Find("SelectYoMap").GetComponent<Text>();
-        //pitää ettiä tekstit jollai array tavalla
-        scoreText = GameObject.Find("ScoreOnThaAuto").GetComponent<Text>();
-        loadObjects = GameObject.Find("loadObjects");
-        msObjectsList = GameObject.FindGameObjectsWithTag("msObj");
-        loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>(); */
+        handler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
+        collection = handler.Load();
+        
+        // mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
+        cars = GameObject.FindGameObjectsWithTag("thisisacar");
 
         selectionMenus = GameObject.FindGameObjectsWithTag("selectionMenu")
         .OrderBy(go => go.name).ToArray();
         selectionMenus[1].SetActive(false);
         selectionMenus[2].SetActive(false);
 
-        //detailsPanel = GameObject.Find("detailsPanel");
+        menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
+        loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
     }
 
-    public void MapFallAnimResetPos()
+    void Start()
     {
-        foreach (GameObject map in maps)
+        foreach (GameObject car in cars)
         {
-            LeanTween.cancel(map);
-            mapRectTransform = map.GetComponent<RectTransform>();
-            mapRectTransform.anchoredPosition = new Vector2(mapRectTransform.anchoredPosition.x, 280.0f);
+            car.SetActive(false);
         }
-        LeanTween.cancel(selectText.gameObject);
-        LeanTween.cancel(scoreText.gameObject);
-        selectText.rectTransform.anchoredPosition = new Vector2(320.0f, selectText.rectTransform.anchoredPosition.y);
-        scoreText.rectTransform.anchoredPosition = new Vector2(520.0f, scoreText.rectTransform.anchoredPosition.y);
+        if (index >= 0 && index < cars.Length)
+        {
+            cars[index].SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("Car index out of range: " + index);
+            index = 0;
+            cars[index].SetActive(true);
+        }
+        UpdateCarStats();
+        menuMusic.Play();
     }
 
-    //selection > singleplayer, ai botit, multiplayer
-    //ai botit on sama ku singleplayer + ai bottien säätö selection (mihi se menee?)
+    //selection alkaa kolmella valinnalla: singleplayer, ai botit, multiplayer
+    //ai botit on sama ku singleplayer; ekana ai asetusten valinta
     //tätä ekaa valintaa käytetään määrittämään arrayn koko
     //(paitsi multiplayer koska se on eri scene)
 
-    //map > car > ai options (?) > options > gaming singleplayeris
+    //ai options > map > car > options > gaming singleplayeris
     //uus scene: lobby > map > car > options > gaming multiplayeris
-
-    //helpottaa asioit ja se on coroutine jo valmiiksi
-    //poistan turhan methodin myöhemmin
-    public void MapFallAnim()
+    public void SelectGamemode(Gamemode mode)
     {
-        MapFallAnimFunc();
+        selectedGamemode = mode;
     }
 
-    private IEnumerator MapButtonPress()
+    public void UpdateCarStats()
+    {
+        activeCarIndex = -1;
+        foreach (GameObject car in cars)
+        {
+            if (car.activeInHierarchy)
+            {
+                activeCarIndex = Array.IndexOf(cars, car);
+                break;
+            }
+        }
+
+        if (activeCarIndex >= 0 && activeCarIndex < cars.Length)
+        {
+            CarStats activeCarStats = carStats[activeCarIndex];
+
+            // Update UI Text
+            carNameText.text = $"{activeCarStats.carName}";
+            speedText.text = $"Speed: {activeCarStats.speed}";
+            accelerationText.text = $"Acceleration: {activeCarStats.acceleration}";
+            handlingText.text = $"Handling: {activeCarStats.handling}";
+        }
+    }
+
+    //todo: muuta score timeksi ja ota se per base map
+    public void UpdateResultsPerMap()
+    {
+        /* CarStats activeCarStats = carStats[activeCarIndex];
+
+        string selectedMap = PlayerPrefs.GetString("SelectedMap");
+
+        var bestResults = Array.Empty<RaceResultData>();
+        if (collection != null && collection.results.Count != 0)
+        {
+            bestResults = collection.results
+                .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
+                .Where(r => string.Equals(r.carName, activeCarStats.carName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(r => r.score)
+                .ToArray();
+        }
+        else
+        {
+            Debug.Log("no race results exist; defaulting to empty");
+            bestResults = Array.Empty<RaceResultData>();
+        }
+
+        int topResultsScore = 0;
+        if (bestResults.Length != 0)
+        {
+            topResultsScore = bestResults[0].score;
+            scoreText.text = $"Best score with {activeCarStats.carName}: {topResultsScore}";
+        }
+        else
+            scoreText.text = $"No score yet with {activeCarStats.carName}"; */
+    }
+    
+    public void RightButton()
+    {
+        cars[index].SetActive(false);
+        index = (index + 1) % cars.Length;
+        cars[index].SetActive(true);
+
+        if (index >= 0 && index < cars.Length)
+        {
+            activeCarIndex = index;
+            UpdateCarStats(); 
+        }
+
+        PlayerPrefs.SetInt("CarIndex", index);
+        PlayerPrefs.Save();
+    }
+
+    public void LeftButton()
+    {
+        cars[index].SetActive(false);
+        index = (index - 1 + cars.Length) % cars.Length;
+        cars[index].SetActive(true);
+
+        if (index >= 0 && index < cars.Length)
+        {
+            activeCarIndex = index;
+            UpdateCarStats(); 
+        }
+
+        PlayerPrefs.SetInt("CarIndex", index);
+        PlayerPrefs.Save();
+    }
+
+    private IEnumerator BeginLoading()
     {
         loadingLoop.Play();
 
-        schizophrenia = Random.Range(3.5f, 6.5f);
+        schizophrenia = UnityEngine.Random.Range(3.5f, 6.5f);
         LeanTween.moveLocalY(loadObjects.gameObject, -0.5f, 0.8f).setEase(LeanTweenType.easeInOutCubic);
         foreach (GameObject theobject in msObjectsList)
         {
@@ -94,23 +202,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         yield return new WaitForSeconds(schizophrenia);
         
         SceneManager.LoadSceneAsync(PlayerPrefs.GetString("SelectedMap"));
-    }
-
-    private void MapFallAnimFunc()
-    {
-        LeanTween.value(selectText.gameObject, selectText.rectTransform.anchoredPosition.x, -20.0f, 2f)
-            .setEase(LeanTweenType.easeOutExpo)
-            .setOnUpdate((float val) =>
-            {
-            selectText.rectTransform.anchoredPosition = new Vector2(val, selectText.rectTransform.anchoredPosition.y);
-            });
-
-        LeanTween.value(scoreText.gameObject, scoreText.rectTransform.anchoredPosition.x, -20.0f, 2f)
-            .setEase(LeanTweenType.easeOutExpo)
-            .setOnUpdate((float val) =>
-            {
-            scoreText.rectTransform.anchoredPosition = new Vector2(val, scoreText.rectTransform.anchoredPosition.y);
-            });
     }
 
     private void Update()
@@ -152,7 +243,13 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             //jos index == 0 mentyään takasin
             if (selectionIndex == 0)
             {
-                detailsPanel.SetActive(false);
+                GameObject shorelineButton = GameObject.Find("Shoreline");
+                shorelineButton.GetComponent<Button>().Select();
+
+                GameObject nextButton = GameObject.Find("Next");
+                GameObject backButton = GameObject.Find("Back");
+                nextButton.SetActive(false);
+                backButton.SetActive(false);
             }
         }
         else
@@ -161,24 +258,34 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         }
     }
 
+    //night mappeja ei lasketa tähän!!!
+    private string GetFullMapName(string shortName)
+    {
+        string selectedMap;
+        if (AItoggle.isOn)
+            selectedMap = $"ai_{shortName}";
+        else
+            selectedMap = shortName;
+        return selectedMap;
+    }
+
     /// <summary>
     /// WIP
     /// </summary>
     /// <param name="selecta">WIP</param>
-    private void SetMapToLoad(string selecta)
+    private void OnMapSelected(string selecta)
     {
-        string selectedMap;
-        if (AItoggle.isOn)
-            selectedMap = $"ai_{selecta}";
-        else
-            selectedMap = selecta;
-        //if (dropdown == night)
-            //selectedmap += $"_night"
-        //else
-            //nothing; valmiiks laitettu jo
+        string selectedMap = GetFullMapName(selecta);
 
         PlayerPrefs.SetString("SelectedMap", selectedMap);
         PlayerPrefs.Save();
         Debug.Log($"onnittelut, voitat lomamatkan kohteeseen: {selectedMap}");
+
+        LeanTween.value(scoreText.gameObject, scoreText.rectTransform.anchoredPosition.x, -20.0f, 2f)
+            .setEase(LeanTweenType.easeOutExpo)
+            .setOnUpdate((float val) =>
+            {
+            scoreText.rectTransform.anchoredPosition = new Vector2(val, scoreText.rectTransform.anchoredPosition.y);
+            });
     }
 }

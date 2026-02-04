@@ -18,7 +18,7 @@ public class ScrollingImageEffect : MonoBehaviour
         })
         .setLoopClamp().id;
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         LeanTween.cancel(buttontween);
     }
