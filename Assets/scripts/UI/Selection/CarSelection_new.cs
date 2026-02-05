@@ -5,15 +5,6 @@ using System;
 using System.Linq;
 using UnityEngine.EventSystems;
 
-[System.Serializable]
-public class CarStats
-{
-    public string carName;
-    public int speed;
-    public int acceleration;
-    public int handling;
-}
-
 public class CarSelection_new : MonoBehaviour
 {
     public GameObject[] cars;

@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,7 +9,7 @@ public class soundFXControl : MonoBehaviour
     //säilyttää KAIKKI äänet, paitsi ne, joita käytetään interactableiden kanssa
     public GameObject[] soundList;
     //kaikki äänet, joita käytetään interactablea käyttäessä
-    public GameObject[] soundClickList;
+    private GameObject[] soundClickList;
     public GameObject[] soundButtonsList;
     public GameObject[] soundSlidersList;
     public GameObject[] soundTogglesList;
@@ -123,8 +121,9 @@ public class soundFXControl : MonoBehaviour
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "MainMenu") return;
-        if (SceneManager.GetActiveScene().name == "Carselectionmenu_VECTORAMA") return;
+        if (SceneManager.GetActiveScene().name == "MainMenu"
+        || SceneManager.GetActiveScene().name == "Carselectionmenu_VECTORAMA"
+        || SceneManager.GetActiveScene().name == "SelectionMenu") return;
         if (Controls.CarControls.pausemenu.triggered && racerScript.racestarted == true)
         {
             PauseStateHandler();
