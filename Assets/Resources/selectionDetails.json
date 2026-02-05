@@ -18,9 +18,5 @@
         "Laps": "The amount of laps to drive.",
         "Reverse": "Reverses the direction of driving.",
         "Time": "Time of day on the map."
-    },
-    "D_loading":
-    {
-        
     }
 }
