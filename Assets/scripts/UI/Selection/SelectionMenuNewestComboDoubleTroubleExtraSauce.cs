@@ -8,36 +8,47 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 using System;
-using UnityEngine.InputSystem;
 
+[Serializable]
+public class CarStats
+{
+    public string carName;
+    public int speed;
+    public int acceleration;
+    public int handling;
+    public float scoreMult;
+    public int turbeBoost;
+    public int turbeAmount;
+}
 public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 {
     CarInputActions Controls;
 
-    public GameObject[] msObjectsList;
     private float schizophrenia;
-    private GameObject loadObjects;
     private AudioSource loadingLoop;
     private Text scoreText;
-    public Toggle AItoggle;
 
     public enum Gamemode {Single, AI, Multi};
-    public Gamemode selectedGamemode;
+    [SerializeField] private Gamemode selectedGamemode; //serializefield on debug
+
+    [SerializeField] private string savedMapBaseName; //serializefield on debug
 
     private TextAsset selectionDetails;
     private Dictionary<string, Dictionary<string, string>> details;
     [SerializeField] private TextMeshProUGUI detailsPanelText;
+    private GameObject carStatsContainer;
 
-    [SerializeField] private int selectionIndex = 0;
+    [SerializeField] private int selectionIndex = 0; //serializefield on debug
     private GameObject[] selectionMenus;
 
-    public GameObject[] cars;
-
-    public CarStats[] carStats; 
+    [SerializeField] private GameObject[] cars; //serializefield on debug
+    public CarStats[] carStats;
     public int scoreAmount;
-    public Text carNameText, speedText, accelerationText, handlingText;
+    public Text carNameText,
+    speedText, accelerationText, handlingText,
+    scoreMultText, turbeBoostText, turbeAmountText;
     private int activeCarIndex = 0;
-    private int index;
+    [SerializeField] private int index; //serializefield on debug
     private GameObject nextButton;
     private GameObject backButton;
 
@@ -51,23 +62,27 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     void Awake()
     {
         Controls = new CarInputActions();
+        
         selectionDetails = Resources.Load<TextAsset>("selectionDetails");
         //i'm dictionarying my dictionary
         details = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(selectionDetails.text);
         handler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
         collection = handler.Load();
+        cars = GameObject.FindGameObjectsWithTag("thisisacar")
+        .OrderBy(c => c.name).ToArray();
         
-        // mapSelection = GameObject.Find("MapSelection").GetComponent<mapSelection>();
-        cars = GameObject.FindGameObjectsWithTag("thisisacar");
-
+        carStatsContainer = GameObject.Find("carStatsContainer");
+        carStatsContainer.SetActive(false);
         selectionMenus = GameObject.FindGameObjectsWithTag("selectionMenu")
         .OrderBy(go => go.name).ToArray();
         nextButton = GameObject.Find("Next");
         backButton = GameObject.Find("Back");
         nextButton.SetActive(false);
         backButton.SetActive(false);
-        selectionMenus[1].SetActive(false);
-        selectionMenus[2].SetActive(false);
+        foreach (var menu in selectionMenus.Skip(1))
+        {
+            menu.SetActive(false);
+        }
 
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
@@ -77,14 +92,14 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         Controls.Enable();
         Controls.CarControls.carskinright.performed += ctx => RightButton();
         Controls.CarControls.carskinleft.performed += ctx => LeftButton();
-        Controls.CarControls.menucancel.performed += ctx => AltBack();
+        Controls.CarControls.menucancel.performed += ctx => Back();
     }
     void OnDisable()
     {
         Controls.Disable();
         Controls.CarControls.carskinright.performed -= ctx => RightButton();
         Controls.CarControls.carskinleft.performed -= ctx => LeftButton();
-        Controls.CarControls.menucancel.performed -= ctx => AltBack();
+        Controls.CarControls.menucancel.performed -= ctx => Back();
     }
 
     void Start()
@@ -103,15 +118,17 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     //ai options > map > car > options > gaming singleplayeris
     //uus scene: lobby > map > car > options > gaming multiplayeris
+
+    //tätä käytetää vain alussa
     public void SelectGamemode(Gamemode mode)
     {
         selectedGamemode = mode;
     }
 
-    //todo: fix
     public void UpdateCarStats()
     {
-        /* activeCarIndex = -1;
+        activeCarIndex = -1;
+        //laita activeCarIndex kuntoon
         foreach (GameObject car in cars)
         {
             if (car.activeInHierarchy)
@@ -121,22 +138,25 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             }
         }
 
+        //indeksin mukaan auton statsit
         if (activeCarIndex >= 0 && activeCarIndex < cars.Length)
         {
             CarStats activeCarStats = carStats[activeCarIndex];
 
-            // Update UI Text
             carNameText.text = $"{activeCarStats.carName}";
             speedText.text = $"Speed: {activeCarStats.speed}";
             accelerationText.text = $"Acceleration: {activeCarStats.acceleration}";
             handlingText.text = $"Handling: {activeCarStats.handling}";
-        } */
+            scoreMultText.text = $"Score mult.: {activeCarStats.scoreMult}x";
+            turbeBoostText.text = $"Turbo boost: {activeCarStats.turbeBoost}";
+            turbeAmountText.text = $"Turbo amount: {activeCarStats.turbeAmount}";
+        }
     }
 
     //todo: muuta score timeksi ja ota se per base map
     public void UpdateResultsPerMap()
     {
-        /* CarStats activeCarStats = carStats[activeCarIndex];
+        /* CarStatsNew activeCarStats = carStats[activeCarIndex];
 
         string selectedMap = PlayerPrefs.GetString("SelectedMap");
 
@@ -172,7 +192,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         cars[index].SetActive(false);
         index = (index + 1) % cars.Length;
         cars[index].SetActive(true);
-
         if (index >= 0 && index < cars.Length)
         {
             activeCarIndex = index;
@@ -190,7 +209,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         cars[index].SetActive(false);
         index = (index - 1 + cars.Length) % cars.Length;
         cars[index].SetActive(true);
-
         if (index >= 0 && index < cars.Length)
         {
             activeCarIndex = index;
@@ -201,26 +219,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    private IEnumerator BeginLoading()
-    {
-        loadingLoop.Play();
-
-        schizophrenia = UnityEngine.Random.Range(3.5f, 6.5f);
-        LeanTween.moveLocalY(loadObjects.gameObject, -0.5f, 0.8f).setEase(LeanTweenType.easeInOutCubic);
-        foreach (GameObject theobject in msObjectsList)
-        {
-            LeanTween.moveLocalY(theobject, theobject.transform.position.y + 451, 0.8f).setEase(LeanTweenType.easeInOutCubic);
-        }
-
-        Debug.Log("you will now wait for: " + schizophrenia + " seconds");
-        yield return new WaitForSeconds(schizophrenia);
-        
-        SceneManager.LoadSceneAsync(PlayerPrefs.GetString("SelectedMap"));
-    }
-
     private void Update()
     {
-        //tän kaiken pitää executtaa AINOASTAAN kun se vaihtuu jos se on helppoa
         GameObject current = EventSystem.current.currentSelectedGameObject;
         //Debug.LogWarning(current);
 
@@ -229,6 +229,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             //vuoden indeksoinnit siitä
             if (details[selectionMenus[selectionIndex].name].ContainsKey(current.name))
                 detailsPanelText.text = details[selectionMenus[selectionIndex].name][current.name];
+            else if (details[selectionMenus[selectionIndex].name].ContainsKey(cars[activeCarIndex].name))
+                detailsPanelText.text
+                = details[selectionMenus[selectionIndex].name][cars[activeCarIndex].name];
             //säilytä edellinen teksti details ruudus jos dropdown on valittuna
             else if (current.name.StartsWith("Item"))
                 return;
@@ -237,16 +240,17 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         }
     }
 
-    /* 1. map, 2. car, 3. settings, 4. loading :))))
-    vaihtaa sit indeksien mukaan tota */
     public void Next()
     {
         selectionIndex++;
         selectionMenus[selectionIndex].SetActive(true);
         selectionMenus[selectionIndex - 1].SetActive(false);
 
+        carStatsContainer.SetActive(false);
+
         if (selectionMenus[selectionIndex].name == "B_carSelection")
         {
+            carStatsContainer.SetActive(true);
             if (index >= 0 && index < cars.Length)
             {
                 cars[index].SetActive(true);
@@ -257,6 +261,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
                 index = 0;
                 cars[index].SetActive(true);
             }
+
             UpdateCarStats();
         }
     }
@@ -268,12 +273,23 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             selectionIndex--;
             selectionMenus[selectionIndex].SetActive(true);
             selectionMenus[selectionIndex + 1].SetActive(false);
+            
+            carStatsContainer.SetActive(false);
 
-            //jos menit mapselectioniin just
             if (selectionMenus[selectionIndex].name == "A_mapSelection")
             {
                 GameObject shorelineButton = GameObject.Find("Shoreline");
                 shorelineButton.GetComponent<Button>().Select();
+
+                foreach (GameObject car in cars)
+                    car.SetActive(false);
+            }
+            else if (selectionMenus[selectionIndex].name == "B_carSelection")
+            {
+                GameObject base1Button = GameObject.Find("Base1");
+                base1Button.GetComponent<Button>().Select();
+
+                carStatsContainer.SetActive(true);
             }
             if (selectionMenus[selectionIndex].name != "C_optionSelection")
             {
@@ -286,40 +302,42 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             SceneManager.LoadSceneAsync("MainMenu");
         }
     }
-    private void AltBack()
-    {
-        if (!backButton.activeSelf)
-            Back();
-    }
 
-    //night mappeja ei lasketa tähän koska ne on täysin samoja!!!
-    private string GetFullMapName(string shortName)
+    private void SetMapToLoad()
     {
-        string selectedMap;
-        if (AItoggle.isOn)
-            selectedMap = $"ai_{shortName}";
-        else
-            selectedMap = shortName;
-        return selectedMap;
-    }
+        string selectedMap = savedMapBaseName;
+        TMP_Dropdown dayOrNight = GameObject.Find("Time").GetComponent<TMP_Dropdown>();
 
-    /// <summary>
-    /// käytetään mapin valintaan. suoritetaa ku map iconia painetaa
-    /// </summary>
-    /// <param name="selecta">mapin nimi</param>
-    public void OnMapSelected(string selecta)
-    {
-        string selectedMap = GetFullMapName(selecta);
-
+        if (selectedGamemode == Gamemode.AI)
+            selectedMap = $"ai_{savedMapBaseName}";
+        if (dayOrNight.value == 1)
+            selectedMap += $"_night";
         PlayerPrefs.SetString("SelectedMap", selectedMap);
         PlayerPrefs.Save();
-        Debug.Log($"onnittelut, voitat lomamatkan kohteeseen: {selectedMap}");
 
-        LeanTween.value(scoreText.gameObject, scoreText.rectTransform.anchoredPosition.x, -20.0f, 2f)
-            .setEase(LeanTweenType.easeOutExpo)
-            .setOnUpdate((float val) =>
-            {
-            scoreText.rectTransform.anchoredPosition = new Vector2(val, scoreText.rectTransform.anchoredPosition.y);
-            });
+        Debug.Log($"onnittelut, voitat lomamatkan kohteeseen: {selectedMap}");
+    }
+
+    public void SaveBaseMapName(string selecta)
+    {
+        savedMapBaseName = selecta;
+    }
+
+    //tarkistan myöhemmin voiko tätä välttää... vitun coroutinet
+    public void StartGame()
+    {
+        SetMapToLoad();
+        StartCoroutine(LoadSelectedMap());
+    }
+    private IEnumerator LoadSelectedMap()
+    {
+        loadingLoop.Play();
+
+        schizophrenia = UnityEngine.Random.Range(3.5f, 6.5f);
+        //tweenaus myöhemmi
+        Debug.Log("you will now wait for: " + schizophrenia + " seconds");
+        yield return new WaitForSeconds(schizophrenia);
+        
+        SceneManager.LoadSceneAsync(PlayerPrefs.GetString("SelectedMap"));
     }
 }
