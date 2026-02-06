@@ -29,10 +29,11 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private Text scoreText;
 
     public enum Gamemode {Single, AI, Multi};
-    [SerializeField] private Gamemode selectedGamemode; //serializefield on debug
+    [SerializeField] private Gamemode selectedGamemode = Gamemode.Single; //serializefield on debug
 
+    //tallennettavia juttui, joita käytetää myöhemmin esim. PlayerPrefsien kautta
     [SerializeField] private string savedMapBaseName; //serializefield on debug
-
+    
     private TextAsset selectionDetails;
     private Dictionary<string, Dictionary<string, string>> details;
     [SerializeField] private TextMeshProUGUI detailsPanelText;
@@ -49,8 +50,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     scoreMultText, turbeBoostText, turbeAmountText;
     private int activeCarIndex = 0;
     [SerializeField] private int index; //serializefield on debug
-    private GameObject nextButton;
-    private GameObject backButton;
+    [SerializeField] private GameObject nextButton;
+    [SerializeField] private GameObject backButton;
 
     RaceResultHandler handler;
     RaceResultCollection collection;
@@ -75,10 +76,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         carStatsContainer.SetActive(false);
         selectionMenus = GameObject.FindGameObjectsWithTag("selectionMenu")
         .OrderBy(go => go.name).ToArray();
-        nextButton = GameObject.Find("Next");
-        backButton = GameObject.Find("Back");
-        nextButton.SetActive(false);
-        backButton.SetActive(false);
         foreach (var menu in selectionMenus.Skip(1))
         {
             menu.SetActive(false);
@@ -120,9 +117,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     //uus scene: lobby > map > car > options > gaming multiplayeris
 
     //tätä käytetää vain alussa
-    public void SelectGamemode(Gamemode mode)
+    public void SelectGamemode(int mode)
     {
-        selectedGamemode = mode;
+        selectedGamemode = (Gamemode)mode;
     }
 
     public void UpdateCarStats()
@@ -278,6 +275,11 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
             if (selectionMenus[selectionIndex].name == "A_mapSelection")
             {
+                //TODO: korjata tämä koska tää systeemi on silti PASKAA TÄYNNÄ
+                //tän sijasta ettii gameobjectin jolla on tietty tag
+                //valittee sen tämän sijasta; helpottaa paljon
+                //myös vois tehä jonku listan josta tarkistaa, mille laittaa päälle buttonit ja ei
+                //koska vihaan miljoonaa if lausetta
                 GameObject shorelineButton = GameObject.Find("Shoreline");
                 shorelineButton.GetComponent<Button>().Select();
 
