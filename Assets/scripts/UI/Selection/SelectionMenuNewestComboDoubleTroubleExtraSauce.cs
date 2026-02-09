@@ -40,7 +40,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private GameObject carStatsContainer;
 
     [SerializeField] private int selectionIndex = 0; //serializefield on debug
-    private GameObject[] selectionMenus;
+    public List<GameObject> selectionMenus;
 
     [SerializeField] private GameObject[] cars; //serializefield on debug
     public CarStats[] carStats;
@@ -57,6 +57,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     RaceResultCollection collection;
 
     private AudioSource menuMusic;
+
+    [SerializeField] protected ScrollRect scrollRect;
+    [SerializeField] protected RectTransform contentPanel;
 
 
 
@@ -75,7 +78,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         carStatsContainer = GameObject.Find("carStatsContainer");
         carStatsContainer.SetActive(false);
         selectionMenus = GameObject.FindGameObjectsWithTag("selectionMenu")
-        .OrderBy(go => go.name).ToArray();
+        .OrderBy(go => go.name).ToList();
         foreach (var menu in selectionMenus.Skip(1))
         {
             menu.SetActive(false);
@@ -120,6 +123,17 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     public void SelectGamemode(int mode)
     {
         selectedGamemode = (Gamemode)mode;
+
+        if (selectedGamemode == Gamemode.AI)
+        {
+            GameObject AImenu = GameObject.Find("1_AIoptionSelection");
+            selectionMenus.Insert(1, AImenu);
+        }
+        else
+        {
+            //huom. pitää ehkä muuttaa multiplayerin implementaatiossa. paskanen hack
+            if (selectionMenus.Count == 5) selectionMenus.RemoveAt(1);
+        }
     }
 
     public void UpdateCarStats()
@@ -244,6 +258,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         selectionMenus[selectionIndex - 1].SetActive(false);
 
         carStatsContainer.SetActive(false);
+        GameObject firstSelected = GameObject.FindGameObjectWithTag("firstSelectable");
+        firstSelected.GetComponent<Selectable>().Select();
 
         if (selectionMenus[selectionIndex].name == "B_carSelection")
         {
@@ -272,25 +288,19 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             selectionMenus[selectionIndex + 1].SetActive(false);
             
             carStatsContainer.SetActive(false);
+            GameObject firstSelected = GameObject.FindGameObjectWithTag("firstSelectable");
+            firstSelected.GetComponent<Selectable>().Select();
 
             if (selectionMenus[selectionIndex].name == "A_mapSelection")
             {
-                //TODO: korjata tämä koska tää systeemi on silti PASKAA TÄYNNÄ
-                //tän sijasta ettii gameobjectin jolla on tietty tag
-                //valittee sen tämän sijasta; helpottaa paljon
-                //myös vois tehä jonku listan josta tarkistaa, mille laittaa päälle buttonit ja ei
+                //TODO: tee lista, josta tarkistetaan, mille laittaa päälle buttonit ja ei
                 //koska vihaan miljoonaa if lausetta
-                GameObject shorelineButton = GameObject.Find("Shoreline");
-                shorelineButton.GetComponent<Button>().Select();
 
                 foreach (GameObject car in cars)
                     car.SetActive(false);
             }
             else if (selectionMenus[selectionIndex].name == "B_carSelection")
             {
-                GameObject base1Button = GameObject.Find("Base1");
-                base1Button.GetComponent<Button>().Select();
-
                 carStatsContainer.SetActive(true);
             }
             if (selectionMenus[selectionIndex].name != "C_optionSelection")
