@@ -24,19 +24,20 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 {
     CarInputActions Controls;
 
-    private float schizophrenia;
     private AudioSource loadingLoop;
+    private AudioSource menuMusic;
 
     public enum Gamemode {Single, AI, Multi};
     [SerializeField] private Gamemode selectedGamemode = Gamemode.Single; //serializefield on debug
+    private float schizophrenia;
 
     [Header("player data")]
     private string savedMapBaseName;
-    //TODO: playerprefs from dropdown shit valuechanged
     private int savedLapCount;
     
     [Header("general selection data")]
     private TextAsset selectionDetails;
+    [SerializeField] private TMP_Dropdown lapCountDropdown; 
     [SerializeField] private GameObject detailsPanel;
     [SerializeField] private GameObject startButton;
     [SerializeField] private GameObject nextButton;
@@ -61,14 +62,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     RaceResultHandler handler;
     RaceResultCollection collection;
 
-    private AudioSource menuMusic;
-
-    [SerializeField] protected ScrollRect scrollRect;
-    [SerializeField] protected RectTransform contentPanel;
 
 
-
-    //TODO: 1. setuppaa start button ja korjaa loading screen
+    //TODO: 1. setuppaa start button ja korjaa loading screen ✅
     //2. setuppaa auton skinien tarkistus paska (mitä sulla näkyy vaihtuu kun valittet basen)
     //3. data handling playerprefs kautta (esim. tällä hetkellä valittu map)
 
@@ -125,6 +121,18 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             car.SetActive(false);
         }
         menuMusic.Play();
+
+        lapCountDropdown.onValueChanged.AddListener(delegate
+        {
+            DropdownValueChanged(lapCountDropdown);
+        });
+    }
+
+    void DropdownValueChanged(TMP_Dropdown change)
+    {
+        Debug.Log(change.value + 1);
+        PlayerPrefs.SetInt("LapCount", change.value + 1);
+        PlayerPrefs.Save();
     }
 
     //selection alkaa kolmella valinnalla: singleplayer, ai botit, multiplayer
