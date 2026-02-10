@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
+using UnityEngine.Analytics;
+using Unity.Splines.Examples;
 
 
 public class BaseCarController : MonoBehaviour
@@ -18,6 +20,7 @@ public class BaseCarController : MonoBehaviour
         Front,
         Rear
     }
+
 
     [Serializable]
     public struct Wheel
@@ -35,8 +38,8 @@ public class BaseCarController : MonoBehaviour
     internal float BrakeAcceleration = 500.0f;
     [Header("turn asetukset")]
     internal float TurnSensitivty  = 1.0f;
-    internal float TurnSensitivtyAtHighSpeed  = 13.5f;
-    internal float TurnSensitivtyAtLowSpeed  = 24.0f;
+    internal float TurnSensitivtyAtHighSpeed  = 17.5f;
+    internal float TurnSensitivtyAtLowSpeed  = 30.0f;
     internal float Deceleration  = 1.0f;
     [Min(100.0f)]
     internal float Maxspeed  = 100.0f;
@@ -55,9 +58,9 @@ public class BaseCarController : MonoBehaviour
     internal Rigidbody CarRb;
     internal bool IsTurboActive = false;
     internal float Activedrift   = 0.0f;
-    internal float Turbesped = 150.0f, BaseSpeed = 180f, Grassmaxspeed = 50.0f, DriftMaxSpeed = 40f;
+    internal float Turbesped = 60.0f, BaseSpeed = 180f, Grassmaxspeed = 50.0f, DriftMaxSpeed = 140f;
     [Header("Drift asetukset")]
-    internal float DriftMultiplier = 1.0f;
+    //internal float DriftMultiplier = 1.0f;
     internal bool IsTurnedDown = false, IsDrifting;
     internal float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
 
@@ -67,7 +70,6 @@ public class BaseCarController : MonoBehaviour
     internal float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f;
     internal float TurbeReduce = 10.0f;
     internal float TurbeRegen = 10.0f;
-//
 
     internal bool IsRegenerating = false;
     internal int TurbeRegenCoroutineAmount = 0;
@@ -76,8 +78,19 @@ public class BaseCarController : MonoBehaviour
     internal bool CanDrift = false;
     internal bool CanUseTurbo = false;
 
-    
+    [Header("Car Data")]
+    public CarValues CarValues;
 
+    /// <summary>
+    /// Copies values from the CarValues ScriptableObject into the controller fields.
+    /// Call this in Start() before using any of the values.
+    /// </summary>
+    internal void ApplyCarValues()
+    {
+        if (CarValues == null) return;
+            CarValues.ApplyValues(this);
+        
+    }
 
 
     private void OnDestroy()
@@ -214,7 +227,7 @@ public class BaseCarController : MonoBehaviour
         if (IsOnGrassCached() && !IsDrifting)
         {
             TargetTorque *= GrassSpeedMultiplier;
-            Maxspeed = Mathf.Lerp(Maxspeed, Grassmaxspeed, Time.deltaTime);
+            Maxspeed = Mathf.Lerp(Maxspeed, GrassSpeedMultiplier, Time.deltaTime);
             if (GameManager.instance.carSpeed < 50.0f)
             {
                 Maxspeed = 50.0f;
@@ -295,7 +308,7 @@ public class BaseCarController : MonoBehaviour
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteSlip = 1.0f;
             forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 4f;
+            forwardFriction.stiffness = 5f;
             wheel.WheelCollider.forwardFriction = forwardFriction;
         }
     }
@@ -337,7 +350,7 @@ public class BaseCarController : MonoBehaviour
         foreach (var wheel in Wheels.Where(w => w.Axel == Axel.Front))
         {
             
-            var _steerAngle = steerInput * TurnSensitivty * (IsDrifting ? 0.45f : 0.35f);
+            var _steerAngle = steerInput * TurnSensitivty * (IsDrifting ? 0.7f : 0.35f);
             wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
@@ -365,7 +378,7 @@ public class BaseCarController : MonoBehaviour
             forwardFriction.asymptoteSlip = 0.6f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 4f;
+            forwardFriction.stiffness = 5f;
             wheel.WheelCollider.forwardFriction = forwardFriction;
 
             if (wheel.Axel == Axel.Front)
@@ -397,11 +410,11 @@ public class BaseCarController : MonoBehaviour
             if (wheel.WheelCollider == null) continue;
 
             WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
-            sidewaysFriction.extremumSlip = 0.2f;
-            sidewaysFriction.asymptoteSlip = 0.4f;
+            sidewaysFriction.extremumSlip = 0.15f;
+            sidewaysFriction.asymptoteSlip = 0.3f;
             sidewaysFriction.extremumValue = 1.0f;
             sidewaysFriction.asymptoteValue = 1f;
-            sidewaysFriction.stiffness = 4f;
+            sidewaysFriction.stiffness = 5f;
             wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
         }
     }

@@ -28,6 +28,7 @@ public class PlayerCarController : BaseCarController
 
     void Start()
     {
+        ApplyCarValues();
         PerusMaxAccerelation = MaxAcceleration;
         SmoothedMaxAcceleration = PerusMaxAccerelation;
         PerusTargetTorque = TargetTorque;
@@ -158,11 +159,16 @@ public class PlayerCarController : BaseCarController
     {
         if (!IsDrifting) return;
 
-
         if (IsTurboActive)
-            Maxspeed = Mathf.Lerp(Maxspeed,Turbesped, Time.deltaTime * 0.5f);
+            Maxspeed = Mathf.Lerp(Maxspeed, BaseSpeed + Turbesped, Time.deltaTime * 0.5f);
+        else
+            Maxspeed = Mathf.Lerp(Maxspeed, DriftMaxSpeed, Time.deltaTime * 0.03f);
 
-        Maxspeed = Mathf.Lerp(Maxspeed, DriftMaxSpeed, Time.deltaTime * 0.1f);
+        
+        if (Mathf.Abs(steerInput) > 0.1f)
+        {
+            CarRb.AddTorque(Vector3.up * Time.deltaTime, ForceMode.Acceleration);
+        }
     }
 
     void StopDriftIfRaceFinished()
@@ -233,12 +239,12 @@ public class PlayerCarController : BaseCarController
             ? Controls.CarControls.ThrottleMod.ReadValue<float>()
             : Mathf.Abs(moveInput);
 
-        float power = CurrentControlScheme == "Gamepad" ? 0.9f : 0.1f;
+        float power = CurrentControlScheme == "Gamepad" ? 0.9f : 1.0f;
 
         float throttle = Mathf.Pow(inputValue, power);
         
         // Reduce power during drift but don't eliminate it
-        float driftPowerMultiplier = IsDrifting ? 0.7f : 1.0f;
+        float driftPowerMultiplier = IsDrifting ? 0.9f : 1.0f;
         float targetMaxAcc = PerusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttle) * driftPowerMultiplier;
 
         SmoothedMaxAcceleration = Mathf.MoveTowards(
@@ -256,11 +262,7 @@ public class PlayerCarController : BaseCarController
 
         if (!IsDrifting)
         {
-            float targetMaxSpeed = IsTurboActive ? BaseSpeed * 1.4f : BaseSpeed;
-            if (BaseSpeed > 240)
-            {
-                BaseSpeed = 240;
-            }
+            float targetMaxSpeed = IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed;
             Maxspeed = Mathf.Lerp(Maxspeed, targetMaxSpeed, Time.deltaTime);
         }
     }
@@ -288,7 +290,7 @@ public class PlayerCarController : BaseCarController
         Activedrift++;
         IsDrifting = true;
 
-        MaxAcceleration = PerusMaxAccerelation * 0.6f;
+        MaxAcceleration = PerusMaxAccerelation * 0.85f;
 
         foreach (var wheel in Wheels)
         {
@@ -302,7 +304,7 @@ public class PlayerCarController : BaseCarController
             wheel.WheelCollider.sidewaysFriction = sideways;
         }
 
-        CarRb.angularDamping = 0.01f;
+        CarRb.angularDamping = 0.005f;
         AdjustWheelsForDrift();
         WheelEffects(true);
     }
