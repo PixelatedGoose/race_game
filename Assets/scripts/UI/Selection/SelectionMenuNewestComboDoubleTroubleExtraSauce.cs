@@ -65,6 +65,16 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
 
 
+    //TODO: 1. setuppaa start button ja korjaa loading screen
+    //2. setuppaa auton skinien tarkistus paska (mitä sulla näkyy vaihtuu kun valittet basen)
+    //3. data handling playerprefs kautta (esim. tällä hetkellä valittu map)
+
+    //4. setuppaa map selectionin kuva juttu [ehkä]
+    //5. ? ehkä jotain jonka unohin
+
+    //6. score tai aika per auto: miten? mihin?
+    //7. lisää tweenaukset kaikkeen tarpeelliseen
+
     void Awake()
     {
         Controls = new CarInputActions();
@@ -231,10 +241,14 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private void Update()
     {
         GameObject current = EventSystem.current.currentSelectedGameObject;
+
         //Debug.LogWarning(current);
 
         if (current != null)
         {
+            //TODO: setuppaa todennäkösesti variable tolle ja sen onchanged paskiainen tänne,
+            //jotta voi yksinkertastaa koodia
+
             //vuoden indeksoinnit siitä
             if (details[availableSelectionMenus[selectionIndex].name].ContainsKey(current.name))
                 detailsPanelText.text = details[availableSelectionMenus[selectionIndex].name][current.name];
@@ -344,10 +358,17 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     }
 
     //tarkistan myöhemmin voiko tätä välttää... vitun coroutinet
-    public void StartGame()
+    public void StartButton()
     {
-        SetMapToLoad();
-        StartCoroutine(LoadSelectedMap());
+        if (selectionMenus[selectionIndex])
+        {
+            SetMapToLoad();
+            StartCoroutine(LoadSelectedMap());
+        }
+        else
+        {
+            Next();
+        }
     }
     private IEnumerator LoadSelectedMap()
     {
