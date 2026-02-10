@@ -254,7 +254,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         selectionIndex++;
         availableSelectionMenus[selectionIndex].SetActive(true);
         availableSelectionMenus[selectionIndex - 1].SetActive(false);
-        ThoseFuckingButtons();
+        ThePanelThing();
 
         carStatsContainer.SetActive(false);
         GameObject firstSelected = GameObject.FindGameObjectWithTag("firstSelectable");
@@ -285,19 +285,14 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             selectionIndex--;
             availableSelectionMenus[selectionIndex].SetActive(true);
             availableSelectionMenus[selectionIndex + 1].SetActive(false);
-            ThoseFuckingButtons();
+            ThePanelThing();
             
             carStatsContainer.SetActive(false);
             GameObject firstSelected = GameObject.FindGameObjectWithTag("firstSelectable");
             firstSelected.GetComponent<Selectable>().Select();
 
-            if (selectionIndex == 0) detailsPanel.SetActive(false);
-
             if (availableSelectionMenus[selectionIndex].name == "A_mapSelection")
             {
-                //TODO: tee lista, josta tarkistetaan, mille laittaa päälle buttonit ja ei
-                //koska vihaan miljoonaa if lausetta
-
                 foreach (GameObject car in cars)
                     car.SetActive(false);
             }
@@ -313,10 +308,12 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     }
 
     //helper
-    private void ThoseFuckingButtons()
+    //TODO: päivitä ottamaan huomioon autot (pieni juttu)
+    private void ThePanelThing()
     {
         nextButton.SetActive(false);
         backButton.SetActive(false);
+        if (selectionIndex == 0) detailsPanel.SetActive(false);
 
         if (availableSelectionMenus[selectionIndex].name == "C_optionSelection" ||
         availableSelectionMenus[selectionIndex].name == "1_AIoptionSelection")
