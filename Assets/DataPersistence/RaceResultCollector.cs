@@ -86,7 +86,7 @@ public class RaceResultCollector : MonoBehaviour
             "haukipudas" => "Shoreline Day",
             "ai_haukipudas" => "Shoreline Day [AI]",
             "haukipudas_night" => "Shoreline Night",
-            "ai_night_haukipudas" => "Shoreline Night [AI]",
+            "ai_haukipudas_night" => "Shoreline Night [AI]",
             "canyon" => "Canyon",
             "ai_canyon" => "Canyon [AI]",
             "tutorial" => "Tutorial",
@@ -96,21 +96,14 @@ public class RaceResultCollector : MonoBehaviour
 
     private string GetCarName()
     {
-        string tester = GameManager.instance.CurrentCar.name;
+        string car = GameManager.instance.CurrentCar.name;
+        int index = car.IndexOf("(");
+        string result = car.Substring(0, index);
         if (GameManager.instance != null && GameManager.instance.CurrentCar != null)
         {
-            switch (tester)
-            {
-                case "REALCAR":
-                    return "Sariua";
-                case "REALCAR_y":
-                    return "Bansku";
-                case "REALCAR_x":
-                    return "Teimo";
-                case "Lada":
-                    return "Tatato";
-            }
+            return result;
         }
+        
         return "Unknown";
     }
 

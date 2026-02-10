@@ -1,4 +1,13 @@
 {
+    "0_gmSelection":
+    {
+        
+    },
+    "1_AIoptionSelection":
+    {
+        "AIAmount": "The amount of AI drivers to spawn.",
+        "AILevel": "The difficulty of the AI, with the hardest being about as fast as you."
+    },
     "A_mapSelection":
     {
         "Shoreline": "An average-length map surrounded by water. Best suited for beginners and casual players.",
@@ -17,6 +26,6 @@
     {
         "Laps": "The amount of laps to drive.",
         "Reverse": "Reverses the direction of driving.",
-        "Time": "Time of day on the map."
+        "Time": "The time of day on the map."
     }
 }

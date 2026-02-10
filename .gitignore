@@ -76,3 +76,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 /[Aa]ssets/_[Rr]ecovery/
+
+/[Aa]ssets/fonts/Soniano Sans Unicode Regular SDF.asset

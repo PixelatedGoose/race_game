@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 using System;
+using UnityEngine.Rendering;
 
 [Serializable]
 public class CarStats
@@ -24,40 +25,54 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 {
     CarInputActions Controls;
 
-    private float schizophrenia;
     private AudioSource loadingLoop;
-    private Text scoreText;
+    private AudioSource menuMusic;
 
     public enum Gamemode {Single, AI, Multi};
-    [SerializeField] private Gamemode selectedGamemode; //serializefield on debug
+    [SerializeField] private Gamemode selectedGamemode = Gamemode.Single; //serializefield on debug
+    private float schizophrenia;
 
-    [SerializeField] private string savedMapBaseName; //serializefield on debug
+    [Header("player data")]
+    private string savedMapBaseName;
 
+    [Header("general selection data")]
     private TextAsset selectionDetails;
+    [SerializeField] private TMP_Dropdown lapCountDropdown; 
+    [SerializeField] private GameObject detailsPanel;
+    [SerializeField] private GameObject startButton;
+    [SerializeField] private GameObject nextButton;
+    [SerializeField] private GameObject backButton;
     private Dictionary<string, Dictionary<string, string>> details;
     [SerializeField] private TextMeshProUGUI detailsPanelText;
     private GameObject carStatsContainer;
-
     [SerializeField] private int selectionIndex = 0; //serializefield on debug
-    private GameObject[] selectionMenus;
+    private List<GameObject> selectionMenus;
+    private List<GameObject> availableSelectionMenus;
 
-    [SerializeField] private GameObject[] cars; //serializefield on debug
-    public CarStats[] carStats;
+    [Header("car selection")]
+    [SerializeField] private List<GameObject> cars; //serializefield on debug
+    public List<CarStats> carStats;
     public int scoreAmount;
     public Text carNameText,
     speedText, accelerationText, handlingText,
     scoreMultText, turbeBoostText, turbeAmountText;
     private int activeCarIndex = 0;
     [SerializeField] private int index; //serializefield on debug
-    private GameObject nextButton;
-    private GameObject backButton;
 
     RaceResultHandler handler;
     RaceResultCollection collection;
 
-    private AudioSource menuMusic;
 
 
+    //TODO: 1. setuppaa start button ja korjaa loading screen ✅
+    //2. setuppaa auton skinien tarkistus paska (mitä sulla näkyy vaihtuu kun valittet basen)
+    //3. data handling playerprefs kautta (esim. tällä hetkellä valittu map)
+
+    //4. setuppaa map selectionin kuva juttu [ehkä]
+    //5. ? ehkä jotain jonka unohin
+
+    //6. score tai aika per auto: miten? mihin?
+    //7. lisää tweenaukset kaikkeen tarpeelliseen
 
     void Awake()
     {
@@ -69,17 +84,14 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         handler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
         collection = handler.Load();
         cars = GameObject.FindGameObjectsWithTag("thisisacar")
-        .OrderBy(c => c.name).ToArray();
+        .OrderBy(c => c.name).ToList();
         
         carStatsContainer = GameObject.Find("carStatsContainer");
         carStatsContainer.SetActive(false);
         selectionMenus = GameObject.FindGameObjectsWithTag("selectionMenu")
-        .OrderBy(go => go.name).ToArray();
-        nextButton = GameObject.Find("Next");
-        backButton = GameObject.Find("Back");
-        nextButton.SetActive(false);
-        backButton.SetActive(false);
-        foreach (var menu in selectionMenus.Skip(1))
+        .OrderBy(go => go.name).ToList();
+        availableSelectionMenus = selectionMenus;
+        foreach (var menu in availableSelectionMenus.Skip(1))
         {
             menu.SetActive(false);
         }
@@ -109,6 +121,18 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             car.SetActive(false);
         }
         menuMusic.Play();
+
+        lapCountDropdown.onValueChanged.AddListener(delegate
+        {
+            LapsDropdownValueChanged(lapCountDropdown);
+        });
+    }
+
+    void LapsDropdownValueChanged(TMP_Dropdown change)
+    {
+        Debug.Log(change.value + 1);
+        PlayerPrefs.SetInt("LapCount", change.value + 1);
+        PlayerPrefs.Save();
     }
 
     //selection alkaa kolmella valinnalla: singleplayer, ai botit, multiplayer
@@ -120,9 +144,15 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     //uus scene: lobby > map > car > options > gaming multiplayeris
 
     //tätä käytetää vain alussa
-    public void SelectGamemode(Gamemode mode)
+    public void SelectGamemode(int mode)
     {
-        selectedGamemode = mode;
+        selectedGamemode = (Gamemode)mode;
+
+        //what bullshit. ei enää nii paskanen kuitenkaa
+        if (selectedGamemode != Gamemode.AI)
+            availableSelectionMenus = selectionMenus.Where((a, i) => i != 1).ToList();
+        else
+            availableSelectionMenus = selectionMenus;
     }
 
     public void UpdateCarStats()
@@ -133,13 +163,13 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         {
             if (car.activeInHierarchy)
             {
-                activeCarIndex = Array.IndexOf(cars, car);
+                activeCarIndex = cars.IndexOf(car);
                 break;
             }
         }
 
         //indeksin mukaan auton statsit
-        if (activeCarIndex >= 0 && activeCarIndex < cars.Length)
+        if (activeCarIndex >= 0 && activeCarIndex < cars.Count)
         {
             CarStats activeCarStats = carStats[activeCarIndex];
 
@@ -187,12 +217,12 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     
     public void RightButton()
     {
-        if (selectionMenus[selectionIndex].name != "B_carSelection") return;
+        if (availableSelectionMenus[selectionIndex].name != "B_carSelection") return;
 
         cars[index].SetActive(false);
-        index = (index + 1) % cars.Length;
+        index = (index + 1) % cars.Count;
         cars[index].SetActive(true);
-        if (index >= 0 && index < cars.Length)
+        if (index >= 0 && index < cars.Count)
         {
             activeCarIndex = index;
             UpdateCarStats(); 
@@ -204,12 +234,12 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     public void LeftButton()
     {
-        if (selectionMenus[selectionIndex].name != "B_carSelection") return;
+        if (availableSelectionMenus[selectionIndex].name != "B_carSelection") return;
         
         cars[index].SetActive(false);
-        index = (index - 1 + cars.Length) % cars.Length;
+        index = (index - 1 + cars.Count) % cars.Count;
         cars[index].SetActive(true);
-        if (index >= 0 && index < cars.Length)
+        if (index >= 0 && index < cars.Count)
         {
             activeCarIndex = index;
             UpdateCarStats(); 
@@ -222,16 +252,18 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private void Update()
     {
         GameObject current = EventSystem.current.currentSelectedGameObject;
-        //Debug.LogWarning(current);
 
         if (current != null)
         {
+            //TODO: setuppaa todennäkösesti variable tolle ja sen onchanged paskiainen tänne,
+            //jotta voi yksinkertastaa koodia
+
             //vuoden indeksoinnit siitä
-            if (details[selectionMenus[selectionIndex].name].ContainsKey(current.name))
-                detailsPanelText.text = details[selectionMenus[selectionIndex].name][current.name];
-            else if (details[selectionMenus[selectionIndex].name].ContainsKey(cars[activeCarIndex].name))
+            if (details[availableSelectionMenus[selectionIndex].name].ContainsKey(current.name))
+                detailsPanelText.text = details[availableSelectionMenus[selectionIndex].name][current.name];
+            else if (details[availableSelectionMenus[selectionIndex].name].ContainsKey(cars[activeCarIndex].name))
                 detailsPanelText.text
-                = details[selectionMenus[selectionIndex].name][cars[activeCarIndex].name];
+                = details[availableSelectionMenus[selectionIndex].name][cars[activeCarIndex].name];
             //säilytä edellinen teksti details ruudus jos dropdown on valittuna
             else if (current.name.StartsWith("Item"))
                 return;
@@ -243,15 +275,18 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     public void Next()
     {
         selectionIndex++;
-        selectionMenus[selectionIndex].SetActive(true);
-        selectionMenus[selectionIndex - 1].SetActive(false);
+        availableSelectionMenus[selectionIndex].SetActive(true);
+        availableSelectionMenus[selectionIndex - 1].SetActive(false);
+        ThePanelThing();
 
         carStatsContainer.SetActive(false);
+        GameObject firstSelected = GameObject.FindGameObjectWithTag("firstSelectable");
+        firstSelected.GetComponent<Selectable>().Select();
 
-        if (selectionMenus[selectionIndex].name == "B_carSelection")
+        if (availableSelectionMenus[selectionIndex].name == "B_carSelection")
         {
             carStatsContainer.SetActive(true);
-            if (index >= 0 && index < cars.Length)
+            if (index >= 0 && index < cars.Count)
             {
                 cars[index].SetActive(true);
             }
@@ -271,35 +306,47 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         if (selectionIndex != 0)
         {
             selectionIndex--;
-            selectionMenus[selectionIndex].SetActive(true);
-            selectionMenus[selectionIndex + 1].SetActive(false);
+            availableSelectionMenus[selectionIndex].SetActive(true);
+            availableSelectionMenus[selectionIndex + 1].SetActive(false);
+            ThePanelThing();
             
             carStatsContainer.SetActive(false);
+            GameObject firstSelected = GameObject.FindGameObjectWithTag("firstSelectable");
+            firstSelected.GetComponent<Selectable>().Select();
 
-            if (selectionMenus[selectionIndex].name == "A_mapSelection")
+            if (availableSelectionMenus[selectionIndex].name == "A_mapSelection")
             {
-                GameObject shorelineButton = GameObject.Find("Shoreline");
-                shorelineButton.GetComponent<Button>().Select();
-
                 foreach (GameObject car in cars)
                     car.SetActive(false);
             }
-            else if (selectionMenus[selectionIndex].name == "B_carSelection")
+            else if (availableSelectionMenus[selectionIndex].name == "B_carSelection")
             {
-                GameObject base1Button = GameObject.Find("Base1");
-                base1Button.GetComponent<Button>().Select();
-
                 carStatsContainer.SetActive(true);
-            }
-            if (selectionMenus[selectionIndex].name != "C_optionSelection")
-            {
-                nextButton.SetActive(false);
-                backButton.SetActive(false);
             }
         }
         else
         {
             SceneManager.LoadSceneAsync("MainMenu");
+        }
+    }
+
+    //helper
+    //TODO: päivitä ottamaan huomioon autot (pieni juttu)
+    private void ThePanelThing()
+    {
+        nextButton.SetActive(false);
+        backButton.SetActive(false);
+        startButton.SetActive(false);
+        if (selectionIndex == 0) detailsPanel.SetActive(false);
+
+        if (availableSelectionMenus[selectionIndex].name == "C_optionSelection")
+        {
+            startButton.SetActive(true);
+            backButton.SetActive(true);
+        }
+        else if (availableSelectionMenus[selectionIndex].name == "1_AIoptionSelection")
+        {
+            nextButton.SetActive(true);
         }
     }
 

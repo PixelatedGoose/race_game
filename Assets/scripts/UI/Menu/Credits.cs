@@ -47,7 +47,7 @@ public class Credits : MonoBehaviour
             "- all pixel art graphics\n- all map design\n- all shaders\n- leaderboard system",
             "- car controller\n- save data system\n- wheel support\n- score multiplier",
             "- all music and sound effects\n- selection menus\n- some graphics assets\n- bug fixing",
-            "- multiplayer\n - score system\n - lap and time system",
+            "- multiplayer\n- score system\n- lap and time system",
             "- AI car code\n- user input check system",
             "- car textures\n- ideas",
         };
