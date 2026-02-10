@@ -28,7 +28,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private bool[] checkpointStates;
 
     private int currentLap = 1;
-    private int totalLaps = 3;
+    private int totalLaps;
     public bool raceFinished = false;
 
     private Transform respawnPoint;
@@ -106,6 +106,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         winMenu = GameObject.Find("WinMenu").GetComponentInChildren<Canvas>(true).gameObject;
         Minimap = GameObject.Find("Minimap");
         startFinishLine = GameObject.Find("StartFinish").transform;
+
+        totalLaps = PlayerPrefs.GetInt("LapCount");
     }
 
     private void OnDisable()

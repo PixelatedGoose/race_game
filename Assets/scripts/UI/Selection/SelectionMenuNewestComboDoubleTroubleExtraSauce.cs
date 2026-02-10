@@ -30,12 +30,17 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     public enum Gamemode {Single, AI, Multi};
     [SerializeField] private Gamemode selectedGamemode = Gamemode.Single; //serializefield on debug
 
-    //tallennettavia juttui, joita käytetää myöhemmin esim. PlayerPrefsien kautta
-    [SerializeField] private string savedMapBaseName; //serializefield on debug
+    [Header("player data")]
+    private string savedMapBaseName;
+    //TODO: playerprefs from dropdown shit valuechanged
+    private int savedLapCount;
     
     [Header("general selection data")]
     private TextAsset selectionDetails;
     [SerializeField] private GameObject detailsPanel;
+    [SerializeField] private GameObject startButton;
+    [SerializeField] private GameObject nextButton;
+    [SerializeField] private GameObject backButton;
     private Dictionary<string, Dictionary<string, string>> details;
     [SerializeField] private TextMeshProUGUI detailsPanelText;
     private GameObject carStatsContainer;
@@ -52,8 +57,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     scoreMultText, turbeBoostText, turbeAmountText;
     private int activeCarIndex = 0;
     [SerializeField] private int index; //serializefield on debug
-    [SerializeField] private GameObject nextButton;
-    [SerializeField] private GameObject backButton;
 
     RaceResultHandler handler;
     RaceResultCollection collection;
@@ -327,13 +330,17 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     {
         nextButton.SetActive(false);
         backButton.SetActive(false);
+        startButton.SetActive(false);
         if (selectionIndex == 0) detailsPanel.SetActive(false);
 
-        if (availableSelectionMenus[selectionIndex].name == "C_optionSelection" ||
-        availableSelectionMenus[selectionIndex].name == "1_AIoptionSelection")
+        if (availableSelectionMenus[selectionIndex].name == "C_optionSelection")
+        {
+            startButton.SetActive(true);
+            backButton.SetActive(true);
+        }
+        else if (availableSelectionMenus[selectionIndex].name == "1_AIoptionSelection")
         {
             nextButton.SetActive(true);
-            backButton.SetActive(true);
         }
     }
 
@@ -358,17 +365,10 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     }
 
     //tarkistan myöhemmin voiko tätä välttää... vitun coroutinet
-    public void StartButton()
+    public void StartGame()
     {
-        if (selectionMenus[selectionIndex])
-        {
-            SetMapToLoad();
-            StartCoroutine(LoadSelectedMap());
-        }
-        else
-        {
-            Next();
-        }
+        SetMapToLoad();
+        StartCoroutine(LoadSelectedMap());
     }
     private IEnumerator LoadSelectedMap()
     {
