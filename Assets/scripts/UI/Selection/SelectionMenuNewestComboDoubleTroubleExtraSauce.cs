@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 using System;
-using UnityEngine.Rendering;
+using UnityEngine.InputSystem;
 
 [Serializable]
 public class CarStats
@@ -31,6 +31,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     public enum Gamemode {Single, AI, Multi};
     [SerializeField] private Gamemode selectedGamemode = Gamemode.Single; //serializefield on debug
     private float schizophrenia;
+    private GameObject current;
 
     [Header("player data")]
     private string savedMapBaseName;
@@ -50,13 +51,15 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private List<GameObject> availableSelectionMenus;
 
     [Header("car selection")]
+    [SerializeField] private List<GameObject> bases;
     [SerializeField] private List<GameObject> cars; //serializefield on debug
+    [SerializeField] private List<GameObject> activeCars; //serializefield on debug
     public List<CarStats> carStats;
+    public List<CarStats> carStatsOfBase;
     public int scoreAmount;
     public Text carNameText,
     speedText, accelerationText, handlingText,
     scoreMultText, turbeBoostText, turbeAmountText;
-    private int activeCarIndex = 0;
     [SerializeField] private int index; //serializefield on debug
 
     RaceResultHandler handler;
@@ -104,6 +107,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         Controls.Enable();
         Controls.CarControls.carskinright.performed += ctx => RightButton();
         Controls.CarControls.carskinleft.performed += ctx => LeftButton();
+        Controls.CarControls.Move.performed += ctx => UpdateCarStats();
         Controls.CarControls.menucancel.performed += ctx => Back();
     }
     void OnDisable()
@@ -111,6 +115,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         Controls.Disable();
         Controls.CarControls.carskinright.performed -= ctx => RightButton();
         Controls.CarControls.carskinleft.performed -= ctx => LeftButton();
+        Controls.CarControls.Move.performed -= ctx => UpdateCarStats();
         Controls.CarControls.menucancel.performed -= ctx => Back();
     }
 
@@ -157,21 +162,23 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     public void UpdateCarStats()
     {
-        activeCarIndex = -1;
+        if (availableSelectionMenus[selectionIndex].name != "B_carSelection") return;
+
+        index = -1;
         //laita activeCarIndex kuntoon
         foreach (GameObject car in cars)
         {
             if (car.activeInHierarchy)
             {
-                activeCarIndex = cars.IndexOf(car);
+                index = cars.IndexOf(car);
                 break;
             }
         }
 
         //indeksin mukaan auton statsit
-        if (activeCarIndex >= 0 && activeCarIndex < cars.Count)
+        if (index >= 0 && index < cars.Count)
         {
-            CarStats activeCarStats = carStats[activeCarIndex];
+            CarStats activeCarStats = carStats[index];
 
             carNameText.text = $"{activeCarStats.carName}";
             speedText.text = $"Speed: {activeCarStats.speed}";
@@ -186,7 +193,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     //todo: muuta score timeksi ja ota se per base map
     public void UpdateResultsPerMap()
     {
-        /* CarStatsNew activeCarStats = carStats[activeCarIndex];
+        /* CarStatsNew activeCarStats = carStats[index];
 
         string selectedMap = PlayerPrefs.GetString("SelectedMap");
 
@@ -224,7 +231,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         cars[index].SetActive(true);
         if (index >= 0 && index < cars.Count)
         {
-            activeCarIndex = index;
             UpdateCarStats(); 
         }
 
@@ -241,7 +247,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         cars[index].SetActive(true);
         if (index >= 0 && index < cars.Count)
         {
-            activeCarIndex = index;
             UpdateCarStats(); 
         }
 
@@ -251,7 +256,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     private void Update()
     {
-        GameObject current = EventSystem.current.currentSelectedGameObject;
+        current = EventSystem.current.currentSelectedGameObject;
 
         if (current != null)
         {
@@ -261,10 +266,10 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             //vuoden indeksoinnit siitä
             if (details[availableSelectionMenus[selectionIndex].name].ContainsKey(current.name))
                 detailsPanelText.text = details[availableSelectionMenus[selectionIndex].name][current.name];
-            else if (details[availableSelectionMenus[selectionIndex].name].ContainsKey(cars[activeCarIndex].name))
+            else if (details[availableSelectionMenus[selectionIndex].name].ContainsKey(cars[index].name))
                 detailsPanelText.text
-                = details[availableSelectionMenus[selectionIndex].name][cars[activeCarIndex].name];
-            //säilytä edellinen teksti details ruudus jos dropdown on valittuna
+                = details[availableSelectionMenus[selectionIndex].name][cars[index].name];
+            //säilytä edellinen teksti details ruudus jos dropdown on avattuna
             else if (current.name.StartsWith("Item"))
                 return;
             else
