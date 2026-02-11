@@ -1,7 +1,5 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using System.Linq;
 using System;
 
@@ -50,6 +48,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         sceneSelected = SceneManager.GetActiveScene().name;
 
+        //HUOM. TÄÄ JOUDUTAAN MUUTTAMAAN dictionary lookupilla
         int carIndex = PlayerPrefs.GetInt("CarIndex");
         if (sceneSelected == "tutorial") CurrentCar = GameObject.Find("REALCAR");
         else CurrentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
