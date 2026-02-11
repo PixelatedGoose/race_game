@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 using System;
-using UnityEngine.InputSystem;
 
 [Serializable]
 public class CarStats
@@ -51,11 +50,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private List<GameObject> availableSelectionMenus;
 
     [Header("car selection")]
-    [SerializeField] private List<GameObject> bases;
+    [SerializeField] private List<GameObject> bases; //serializefield on debug
     [SerializeField] private List<GameObject> cars; //serializefield on debug
-    [SerializeField] private List<GameObject> activeCars; //serializefield on debug
     public List<CarStats> carStats;
-    public List<CarStats> carStatsOfBase;
     public int scoreAmount;
     public Text carNameText,
     speedText, accelerationText, handlingText,
