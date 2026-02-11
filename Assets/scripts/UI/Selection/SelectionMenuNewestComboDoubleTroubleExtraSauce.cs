@@ -120,7 +120,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         Controls.Enable();
         Controls.CarControls.carskinright.performed += ctx => RightButton();
         Controls.CarControls.carskinleft.performed += ctx => LeftButton();
-        Controls.CarControls.Move.performed += ctx => UpdateCarStats();
         Controls.CarControls.menucancel.performed += ctx => Back();
     }
     void OnDisable()
@@ -128,7 +127,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         Controls.Disable();
         Controls.CarControls.carskinright.performed -= ctx => RightButton();
         Controls.CarControls.carskinleft.performed -= ctx => LeftButton();
-        Controls.CarControls.Move.performed -= ctx => UpdateCarStats();
         Controls.CarControls.menucancel.performed -= ctx => Back();
     }
 
@@ -172,14 +170,13 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             availableSelectionMenus = selectionMenus;
     }
 
-    private void SelectBase()
+    public void UpdateBase()
     {
-        foreach (CarBase carBase in carBases)
-            foreach (GameObject car in carBase.cars)
-                car.SetActive(false);
+        availableCars[index].SetActive(false);
 
-        //THE GRAND RETURN OF THIS FUCKER
-        baseIndex = int.Parse(current.name[^1].ToString());
+        //Update() ei tykänny päivittää valittua oikein... miten vitussa
+        GameObject selectedBase = EventSystem.current.currentSelectedGameObject;
+        baseIndex = int.Parse(selectedBase.name[^1].ToString()) - 1; //-1 koska baset alkaa numerost 1
         index = 0;
         availableCars = carBases[baseIndex].cars;
 
@@ -188,7 +185,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         UpdateCarStats();
     }
 
-    public void UpdateCarStats()
+    private void UpdateCarStats()
     {
         if (availableSelectionMenus[selectionIndex].name != "B_carSelection") return;
 
