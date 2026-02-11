@@ -72,17 +72,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     
 
-    /* kun liikut car selectionissa, script tarkistaa ja updatee carstasit valitulle autolle.
-    HUOM. tallennettava index EI SAA TOISTUA, jotta PlayerPrefsin CarIndex tietää minkä auton valita.
-    LISTA bases sisältää root objectit
-    näitä laitetaan päälle ja pois sen perusteella mikä base on valittuna;
-    base objectit pitää olla nimettynä
-    (JA TÄTÄ EI LIITETÄ MITENKÄÄ AUTOIHIN!!! HALLITTEE VAA NIITÄ BASEJA)
-    LISTA cars sisältää kaikki autot
-    LISTA carStats sisältää kaikkien autojen statsit samassa järjestyksessä kuin cars listassa */
-
-    //2. setuppaa auton skinien tarkistus paska (mitä sulla näkyy vaihtuu kun valittet basen)
-    //3. data handling playerprefs kautta (esim. tällä hetkellä valittu map)
+    //3.1. data handling playerprefs kautta (esim. tällä hetkellä valittu map)
+    //3.2. muuta gamemanagerin auton ottamis system shit fucker paska
 
     //4. setuppaa map selectionin kuva juttu [ehkä]
     //5. ? ehkä jotain jonka unohin
@@ -259,7 +250,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             UpdateCarStats(); 
         }
 
-        PlayerPrefs.SetInt("CarIndex", index);
+        PlayerPrefs.SetString("SelectedCar", availableCars[index].name);
         PlayerPrefs.Save();
     }
 
@@ -275,7 +266,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             UpdateCarStats(); 
         }
 
-        PlayerPrefs.SetInt("CarIndex", index);
+        PlayerPrefs.SetString("SelectedCar", availableCars[index].name);
         PlayerPrefs.Save();
     }
 

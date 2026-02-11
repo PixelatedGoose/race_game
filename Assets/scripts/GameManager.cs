@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 
 
@@ -47,13 +48,21 @@ public class GameManager : MonoBehaviour, IDataPersistence
         instance = this;
 
         sceneSelected = SceneManager.GetActiveScene().name;
+        Dictionary<string, GameObject> carsByName = new();
+        foreach (GameObject car in cars)
+        {
+            if (!carsByName.ContainsKey(car.name))
+            {
+                carsByName.Add(car.name, car);
+            }
+        }
 
-        //HUOM. TÄÄ JOUDUTAAN MUUTTAMAAN dictionary lookupilla
-        int carIndex = PlayerPrefs.GetInt("CarIndex");
         if (sceneSelected == "tutorial") CurrentCar = GameObject.Find("REALCAR");
-        else CurrentCar = carIndex >= 0 && carIndex < cars.Length ? cars[carIndex] : cars[0];
-
-        if (maps.Contains(sceneSelected)) CurrentCar = Instantiate(CurrentCar, playerSpawn.position, playerSpawn.rotation);
+        else if (maps.Contains(sceneSelected))
+        {
+            carsByName.TryGetValue(PlayerPrefs.GetString("SelectedCar"), out GameObject selectedCar);
+            CurrentCar = Instantiate(selectedCar, playerSpawn.position, playerSpawn.rotation);
+        }
     }
 
     void OnEnable()
