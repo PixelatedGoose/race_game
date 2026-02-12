@@ -107,7 +107,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         Minimap = GameObject.Find("Minimap");
         startFinishLine = GameObject.Find("StartFinish").transform;
 
-        totalLaps = PlayerPrefs.GetInt("LapCount");
+        totalLaps = PlayerPrefs.GetInt("Laps");
+        Debug.Log(totalLaps);
     }
 
     private void OnDisable()

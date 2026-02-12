@@ -35,7 +35,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private AudioSource menuMusic;
 
     public enum Gamemode {Single, AI, Multi};
-    [SerializeField] private Gamemode selectedGamemode = Gamemode.Single; //serializefield on debug
+    private Gamemode selectedGamemode = Gamemode.Single;
     private float schizophrenia;
     private GameObject current;
 
@@ -44,7 +44,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     [Header("general selection data")]
     private TextAsset selectionDetails;
-    [SerializeField] private TMP_Dropdown lapCountDropdown; 
+    [SerializeField] private TMP_Dropdown lapCountDropdown;
+    [SerializeField] private TMP_Dropdown AICarsAmountDropdown; 
+    [SerializeField] private TMP_Dropdown AIDifficultyDropdown; 
     [SerializeField] private GameObject detailsPanel;
     [SerializeField] private GameObject startButton;
     [SerializeField] private GameObject nextButton;
@@ -52,7 +54,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private Dictionary<string, Dictionary<string, string>> details;
     [SerializeField] private TextMeshProUGUI detailsPanelText;
     private GameObject carStatsContainer;
-    [SerializeField] private int selectionIndex = 0; //serializefield on debug
+    private int selectionIndex = 0;
     private List<GameObject> selectionMenus;
     private List<GameObject> availableSelectionMenus;
 
@@ -61,8 +63,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     public List<CarBase> carBases;
     [SerializeField] private List<GameObject> availableCars;
     [SerializeField] private List<CarStats> availableCarStats;
-    [SerializeField] private int baseIndex;
-    [SerializeField] private int index; //serializefield on debug
+    private int baseIndex;
+    private int index;
     public Text carNameText,
     speedText, accelerationText, handlingText,
     scoreMultText, turbeBoostText, turbeAmountText;
@@ -73,13 +75,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     
 
     //3.1. data handling playerprefs kautta (esim. tällä hetkellä valittu map)
-    //3.2. muuta gamemanagerin auton ottamis system shit fucker paska
-
     //4. setuppaa map selectionin kuva juttu [ehkä]
-    //5. ? ehkä jotain jonka unohin
-
-    //6. score tai aika per auto: miten? mihin?
-    //7. lisää tweenaukset kaikkeen tarpeelliseen
+    //5. score tai aika per auto: miten? mihin?
+    //6. lisää tweenaukset kaikkeen tarpeelliseen
 
     void Awake()
     {
@@ -128,25 +126,15 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
                 car.SetActive(false);
 
         menuMusic.Play();
-
-        lapCountDropdown.onValueChanged.AddListener(delegate
-        {
-            LapsDropdownValueChanged(lapCountDropdown);
-        });
     }
-
-    void LapsDropdownValueChanged(TMP_Dropdown change)
+    public void SaveDropdownValues()
     {
-        PlayerPrefs.SetInt("LapCount", change.value + 1);
+        PlayerPrefs.SetInt(lapCountDropdown.name, lapCountDropdown.value + 1);
+        PlayerPrefs.SetInt(AICarsAmountDropdown.name, AICarsAmountDropdown.value + 1);
+        PlayerPrefs.SetInt(AIDifficultyDropdown.name, AIDifficultyDropdown.value);
         PlayerPrefs.Save();
     }
 
-    //selection alkaa kolmella valinnalla: singleplayer, ai botit, multiplayer
-    //ai botit on sama ku singleplayer; ekana ai asetusten valinta
-    //tätä ekaa valintaa käytetään määrittämään arrayn koko
-    //(paitsi multiplayer koska se on eri scene)
-
-    //ai options > map > car > options > gaming singleplayeris
     //uus scene: lobby > map > car > options > gaming multiplayeris
 
     //tätä käytetää vain alussa

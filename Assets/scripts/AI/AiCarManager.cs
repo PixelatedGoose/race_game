@@ -17,7 +17,7 @@ public class AiCarManager : MonoBehaviour
     [SerializeField] private byte spawnedAiCarCount = 0;
     [SerializeField] private AiCarController[] AiCarPrefabs;
     public List<AiCarController> AiCars;
-    public AIDifficulty difficulty;
+    private AIDifficulty difficulty;
     public Vector3[] Waypoints { get; private set; }
     private GameManager gm;
     
@@ -47,6 +47,8 @@ public class AiCarManager : MonoBehaviour
     {
         BezierBaker bezierBaker = GetComponent<BezierBaker>();
         Waypoints = bezierBaker.GetCachedPoints();
+        spawnedAiCarCount = (byte)PlayerPrefs.GetInt("AIAmount");
+        difficulty = (AIDifficulty)PlayerPrefs.GetInt("AILevel");
 
         gm = GameManager.instance;
         if (gm == null || gm.CurrentCar == null) return;
