@@ -20,7 +20,6 @@ public class specialTextChances
     public float play2;
     public float play3;
     public float chance;
-    public float i_tried;
     public float outoftime;
     public float juud7;
     public float grass;
@@ -49,7 +48,7 @@ public class loading : MonoBehaviour
 
     public void loadingTexts()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
+        Random.InitState(System.DateTime.Now.Second);
         int chance = Random.Range(1, 101);
 
         string loadTextRarity;
