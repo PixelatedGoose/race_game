@@ -27,15 +27,18 @@ public class specialTextChances
     public float nine_trillion;
 }
 
-public class loading : MonoBehaviour
+public class SelectionMenuLoading : MonoBehaviour
 {
-    public Text loadText_text;
+    [SerializeField] private Text loadText_text;
     public TextAsset loadTexts;
     public loadText_data textData;
     public int index = -1;
 
     void OnEnable()
     {
+        // TODO - review why the hell you're doing this?
+        // reference: https://youtube.com/watch?v=R_b2B5tKBUM&t=55s
+        // anyway, JsonConvert.DeserializeObject on keksitty
         loadTexts = Resources.Load<TextAsset>("loading/loadTexts");
         textData = JsonUtility.FromJson<loadText_data>(loadTexts.text);
     }
