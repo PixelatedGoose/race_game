@@ -1,15 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-
-[System.Serializable]
-public class loadText_data
-{
-    public string[] general;
-    public string[] uncommon;
-    public string[] rare;
-    public string[] obscure;
-    public string[] special;
-}
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class specialTextChances
@@ -20,7 +12,6 @@ public class specialTextChances
     public float play2;
     public float play3;
     public float chance;
-    public float i_tried;
     public float outoftime;
     public float juud7;
     public float grass;
@@ -28,17 +19,17 @@ public class specialTextChances
     public float nine_trillion;
 }
 
-public class loading : MonoBehaviour
+public class SelectionMenuLoading : MonoBehaviour
 {
-    public Text loadText_text;
+    [SerializeField] private Text loadText_text;
     public TextAsset loadTexts;
-    public loadText_data textData;
+    public Dictionary<string, string[]> textData;
     public int index = -1;
 
     void OnEnable()
     {
         loadTexts = Resources.Load<TextAsset>("loading/loadTexts");
-        textData = JsonUtility.FromJson<loadText_data>(loadTexts.text);
+        textData = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(loadTexts.text);
     }
     void Start()
     {
@@ -51,8 +42,8 @@ public class loading : MonoBehaviour
     {
         Random.InitState(System.DateTime.Now.Millisecond);
         int chance = Random.Range(1, 101);
-
         string loadTextRarity;
+        int randomIndex;
 
         if (chance <= 2) //2%
         {
@@ -71,25 +62,18 @@ public class loading : MonoBehaviour
             loadTextRarity = "general";
         }
 
-        switch (loadTextRarity)
+        string[] texts = loadTextRarity switch
         {
-            case "general":
-                loadText_text.text = textData.general[Random.Range(0, textData.general.Length)];
+            "general" => textData["general"],
+            "uncommon" => textData["uncommon"],
+            "rare" => textData["rare"],
+            "obscure" => textData["obscure"],
+            _ => new string[] { "THIS IS NOT SUPPOSED TO SHOW UP" },
+        };
+        randomIndex = Random.Range(0, texts.Length);
+        loadText_text.text = texts[randomIndex];
 
-                break;
-            case "uncommon":
-                loadText_text.text = textData.uncommon[Random.Range(0, textData.uncommon.Length)];
-
-                break;
-            case "rare":
-                loadText_text.text = textData.rare[Random.Range(0, textData.rare.Length)];
-
-                break;
-            case "obscure":
-                loadText_text.text = textData.obscure[Random.Range(0, textData.obscure.Length)];
-
-                break;
-        }
+        Debug.Log(loadTextRarity);
     }
 
     public void specialLoadingTexts()
@@ -110,7 +94,7 @@ public class loading : MonoBehaviour
             float sChance = Random.Range(value * 1000, 100000);
             if (sChance <= value * 1000)
             {
-                loadText_text.text = textData.special[index];
+                loadText_text.text = textData["special"][index];
                 Debug.Log(key);
 
                 loadtextbehaviour loadtextbehaviour = gameObject.GetComponent<loadtextbehaviour>();
