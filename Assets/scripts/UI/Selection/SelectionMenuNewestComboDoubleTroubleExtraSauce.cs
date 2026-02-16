@@ -38,6 +38,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private Gamemode selectedGamemode = Gamemode.Single;
     private float schizophrenia;
     private GameObject current;
+    [SerializeField] private GameObject loadingImg;
 
     [Header("player data")]
     private string savedMapBaseName;
@@ -54,7 +55,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private Dictionary<string, Dictionary<string, string>> details;
     [SerializeField] private TextMeshProUGUI detailsPanelText;
     private GameObject carStatsContainer;
-    private int selectionIndex = 0;
+    public int selectionIndex = 0;
     private List<GameObject> selectionMenus;
     private List<GameObject> availableSelectionMenus;
 
@@ -389,9 +390,17 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private IEnumerator LoadSelectedMap()
     {
         loadingLoop.Play();
-
         schizophrenia = UnityEngine.Random.Range(3.5f, 6.5f);
-        //tweenaus myöhemmi
+
+        LeanTween.value(loadingImg, loadingImg.GetComponent<RectTransform>().anchoredPosition.y, 0.0f, 1f)
+        .setOnUpdate((float val) =>
+        {
+            loadingImg.GetComponent<RectTransform>().anchoredPosition
+            = new Vector2(loadingImg.GetComponent<RectTransform>().anchoredPosition.x, val);
+        })
+        .setEaseInOutCubic();
+
+        Controls.Disable();
         Debug.Log("you will now wait for: " + schizophrenia + " seconds");
         yield return new WaitForSeconds(schizophrenia);
         
