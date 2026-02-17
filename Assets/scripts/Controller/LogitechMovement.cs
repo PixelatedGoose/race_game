@@ -12,7 +12,7 @@ public class LogitechMovement : MonoBehaviour
     internal bool logitechInitialized = false;
     internal bool lastLogiConnected = false;
     
-    PlayerCarController PlayerCr;
+    PlayerCarController PlayerCar;
 
 
 
@@ -36,7 +36,7 @@ public class LogitechMovement : MonoBehaviour
         if (!LogitechGSDK.LogiIsConnected(0)) return;
 
         var state = LogitechGSDK.LogiGetStateUnity(0);
-        PlayerCr.steerInput = state.lX / 32768.0f;
+        PlayerCar.SteerInput = state.lX / 32768.0f;
         
         // Logitech pedals: -32768 (fully pressed) to 32767 (not pressed)
         // Invert and normalize to 0-1 range
@@ -46,11 +46,11 @@ public class LogitechMovement : MonoBehaviour
         float clutch = Mathf.Clamp01(-state.rglSlider[0] / 32768.0f);
         
         if (clutch > 0.1f)
-            PlayerCr.moveInput = -clutch;
+            PlayerCar.MoveInput = -clutch;
         else if (throttle > 0.1f)
-            PlayerCr.moveInput = throttle;
+            PlayerCar.MoveInput = throttle;
         else
-            PlayerCr.moveInput = 0f;
+            PlayerCar.MoveInput = 0f;
     }
 
     internal void StopAllForceFeedback()
@@ -71,7 +71,7 @@ public class LogitechMovement : MonoBehaviour
         }
         if (!logitechInitialized || !LogitechGSDK.LogiIsConnected(0)) return;
         
-        float speed = PlayerCr.CarRb.linearVelocity.magnitude * 3.6f;
+        float speed = PlayerCar.CarRb.linearVelocity.magnitude * 3.6f;
 
         // Continuously apply spring force (centering)
         int springStrength = Mathf.RoundToInt(40 * forceFeedbackMultiplier);
@@ -82,7 +82,7 @@ public class LogitechMovement : MonoBehaviour
         LogitechGSDK.LogiPlayDamperForce(0, damperStrength);
         
         // Dirt road only when on grass and moving
-        if (PlayerCr.IsOnGrassCached() && speed >= 10)
+        if (PlayerCar.IsOnGrassCached() && speed >= 10)
             LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(12.5f * forceFeedbackMultiplier));
         else
             LogitechGSDK.LogiStopDirtRoadEffect(0);

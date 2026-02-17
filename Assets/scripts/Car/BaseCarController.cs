@@ -10,17 +10,11 @@ using Unity.Splines.Examples;
 
 public class BaseCarController : MonoBehaviour
 {
-
-    internal CarInputActions Controls;
-
-    internal RacerScript RacerScript;
-
     public enum Axel
     {
         Front,
         Rear
     }
-
 
     [Serializable]
     public struct Wheel
@@ -34,101 +28,68 @@ public class BaseCarController : MonoBehaviour
     }
 
     [Header("Auton asetukset")]
-    internal float MaxAcceleration = 700.0f;
-    internal float BrakeAcceleration = 500.0f;
+    [SerializeField] protected float MaxAcceleration = 700.0f;
+    [SerializeField] protected float BrakeAcceleration = 500.0f;
     [Header("turn asetukset")]
-    internal float TurnSensitivty  = 1.0f;
-    internal float TurnSensitivtyAtHighSpeed  = 17.5f;
-    internal float TurnSensitivtyAtLowSpeed  = 30.0f;
-    internal float Deceleration  = 1.0f;
+    [SerializeField] protected float TurnSensitivty  = 1.0f;
+    [SerializeField] protected float TurnSensitivtyAtHighSpeed  = 17.5f;
+    [SerializeField] protected float TurnSensitivtyAtLowSpeed  = 30.0f;
+    [SerializeField] protected float Deceleration  = 1.0f;
     [Min(100.0f)]
-    internal float Maxspeed  = 100.0f;
-    internal float GravityMultiplier  = 1.5f;
-    internal List<Wheel> Wheels;
+    [SerializeField] protected float Maxspeed  = 100.0f;
+    [SerializeField] protected float GravityMultiplier  = 1.5f;
+    protected List<Wheel> Wheels;
     WheelHit hit;
-    internal float GrassSpeedMultiplier = 0.5f;
-    internal LayerMask Grass;
-    internal Material GrassMaterial, RoadMaterial;
-    internal bool GrassRespawnActive = false;
-    internal bool isOnGrassCached;
-    internal bool isOnGrassCachedValid;
-    internal float moveInput, steerInput;
-    internal Vector3 _CenterofMass;
-    internal float TargetTorque  = 0.0f;
-    internal Rigidbody CarRb;
-    internal bool IsTurboActive = false;
-    internal float Activedrift   = 0.0f;
-    internal float Turbesped = 60.0f, BaseSpeed = 180f, Grassmaxspeed = 50.0f, DriftMaxSpeed = 140f;
+    [SerializeField] protected float GrassSpeedMultiplier = 0.5f;
+    protected LayerMask Grass;
+    protected Material GrassMaterial, RoadMaterial;
+    public bool GrassRespawnActive = false;
+    protected bool isOnGrassCached;
+    protected bool isOnGrassCachedValid;
+    public float MoveInput;
+    public float SteerInput;
+    protected Vector3 _CenterofMass;
+    protected float TargetTorque  = 0.0f;
+    public Rigidbody CarRb { get; protected set; }
+    public bool IsTurboActive { get; protected set; } = false;
+    protected float Activedrift = 0.0f;
+    [SerializeField] protected float Turbesped = 60.0f, BaseSpeed = 180f, Grassmaxspeed = 50.0f, DriftMaxSpeed = 140f;
     [Header("Drift asetukset")]
-    //internal float DriftMultiplier = 1.0f;
-    internal bool IsTurnedDown = false, IsDrifting;
-    internal float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
+    //protected float DriftMultiplier = 1.0f;
+    public bool IsDrifting { get; protected set; } = false;
+    protected float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
 
 
     [Header("turbe asetukset")]
-    internal Image TurbeMeter;
-    internal float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f;
-    internal float TurbeReduce = 10.0f;
-    internal float TurbeRegen = 10.0f;
+    protected Image TurbeMeter;
+    [SerializeField] protected float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f;
+    [SerializeField] protected float TurbeReduce = 10.0f;
+    [SerializeField] protected float TurbeRegen = 10.0f;
 
-    internal bool IsRegenerating = false;
-    internal int TurbeRegenCoroutineAmount = 0;
-    internal Dictionary<string, float> CarTurboValues = new Dictionary<string, float>();
+    protected bool IsRegenerating = false;
+    protected int TurbeRegenCoroutineAmount = 0;
 
-    internal bool CanDrift = false;
-    internal bool CanUseTurbo = false;
+    [NonSerialized] public bool CanDrift = false;
+    [NonSerialized] public bool CanUseTurbo = false;
 
-    [Header("Car Data")]
-    public CarValues CarValues;
-
-    /// <summary>
-    /// Copies values from the CarValues ScriptableObject into the controller fields.
-    /// Call this in Start() before using any of the values.
-    /// </summary>
-    internal void ApplyCarValues()
-    {
-        if (CarValues == null) return;
-            CarValues.ApplyValues(this);
-        
-    }
-
-
-    private void OnDestroy()
-    {
-        Controls.Disable();
-        Controls.Dispose();
-    
-    }
-
-    internal float GetSpeed()
+    public float GetSpeed()
     {
         GameManager.instance.carSpeed = CarRb.linearVelocity.magnitude * 3.6f;
         return CarRb.linearVelocity.magnitude * 3.6f;
     }
 
-    internal float GetMaxSpeed()
+    public float GetMaxSpeed()
     {
         return Maxspeed;
     }
 
-    
-
-    internal void HandleTurbo()
-    {
-        if (!CanUseTurbo) return;
-        TURBE();
-        TURBEmeter();
-    }
-
-    
-
-    internal bool IsWheelGrounded(Wheel wheel)
+    protected bool IsWheelGrounded(Wheel wheel)
     {
         return wheel.WheelCollider.GetGroundHit(out hit);
     }
 
     [ContextMenu("Auto Assign Wheels")]
-    internal void AutoAssignWheelsAndMaterials()
+    protected void AutoAssignWheelsAndMaterials()
     {
         if (Wheels == null) Wheels = new List<Wheel>();
         Wheels.Clear();
@@ -170,7 +131,7 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    bool IsWheelOnGrass(Wheel wheel)
+    protected bool IsWheelOnGrass(Wheel wheel)
     {
         if (wheel.WheelCollider.GetGroundHit(out hit))
         {
@@ -179,7 +140,7 @@ public class BaseCarController : MonoBehaviour
         return false;
     }
 
-    internal void OnGrass()
+    protected void OnGrass()
     {
         int wheelsOnGrass = 0;
 
@@ -208,21 +169,12 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    internal bool IsOnGrass()
+    protected virtual bool IsOnGrass()
     {
-        foreach (var wheel in Wheels)
-        {
-            if (IsWheelGrounded(wheel) && IsWheelOnGrass(wheel))
-            {
-                if (GrassRespawnActive && RacerScript != null)
-                RacerScript.RespawnAtLastCheckpoint();
-                return true;
-            }
-        }
-        return false;
+        return Wheels.Any(wheel => IsWheelGrounded(wheel) && IsWheelOnGrass(wheel));
     }
 
-    internal void AdjustSpeedForGrass()
+    protected void AdjustSpeedForGrass()
     {
         if (IsOnGrassCached() && !IsDrifting)
         {
@@ -235,7 +187,7 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    internal bool IsOnGrassCached()
+    public bool IsOnGrassCached()
     {
         if (!isOnGrassCachedValid)
         {
@@ -246,49 +198,15 @@ public class BaseCarController : MonoBehaviour
     }
 
 
-    internal void ApplySpeedLimit(float speed)
+    protected void ApplySpeedLimit(float speed)
     {
         if (speed <= Maxspeed) return;
         CarRb.linearVelocity = CarRb.linearVelocity.normalized * (Maxspeed / 3.6f);
     }
 
-    internal void TURBE()
-    {
-        //uskon että tää on tarpeeton; viittauksia KOMMENTEISSA yhessä scriptis, ei missää muualla
-        //tätä ei myöskää muuteta koskaan...
-        if (IsTurnedDown)
-        {
-            IsTurboActive = false;
-            return;
-        }
-        IsTurboActive = Controls.CarControls.turbo.IsPressed() && TurbeAmount > 0;
-        if (IsTurboActive)
-        {
-            CarRb.AddForce(transform.forward * Turbepush, ForceMode.Acceleration);
-            TargetTorque = PerusTargetTorque * 1.5f;                
-            TargetTorque = Mathf.Min(TargetTorque, MaxAcceleration); 
-        }
-    }
 
-    void Move()
-    {
-        //HandeSteepSlope();
-        //UpdateTargetTorgue();
-        AdjustSuspension();
-        foreach (var wheel in Wheels)
-        {
-            if (Controls.CarControls.Brake.IsPressed())
-            {
-                Brakes(wheel);
-            }
-            else
-            {
-                MotorTorgue(wheel);
-            }
-        }
-    }
 
-    internal void AdjustSuspension()
+    protected void AdjustSuspension()
     {
         foreach (var wheel in Wheels)
         {
@@ -299,7 +217,7 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    internal void AdjustForwardFrictrion()
+    protected void AdjustForwardFrictrion()
     {
         foreach (var wheel in Wheels)
         {
@@ -313,13 +231,13 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    internal void Brakes(Wheel wheel)
+    protected void Brakes(Wheel wheel)
     {
         GameManager.instance.StopAddingPoints();
         wheel.WheelCollider.brakeTorque = BrakeAcceleration * 15f;
     }
 
-    internal void MotorTorgue(Wheel wheel)
+    protected void MotorTorgue(Wheel wheel)
     {
         wheel.WheelCollider.motorTorque = TargetTorque;
         wheel.WheelCollider.brakeTorque = 0f;
@@ -327,9 +245,10 @@ public class BaseCarController : MonoBehaviour
 
     
 
-    internal void Decelerate()
+    protected void Decelerate()
     {
-        if (moveInput == 0)
+        Debug.Log(MoveInput);
+        if (MoveInput == 0)
         {
             Vector3 velocity = CarRb.linearVelocity;
 
@@ -345,18 +264,18 @@ public class BaseCarController : MonoBehaviour
 
 
 
-    internal void Steer()
+    protected void Steer()
     {
         foreach (var wheel in Wheels.Where(w => w.Axel == Axel.Front))
         {
-            
-            var _steerAngle = steerInput * TurnSensitivty * (IsDrifting ? 0.7f : 0.35f);
+        
+            var _steerAngle = SteerInput * TurnSensitivty * (IsDrifting ? 0.7f : 0.35f);
             wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
 
     
-    internal void ApplyGravity()
+    protected void ApplyGravity()
     {
         if (Wheels.All(w => !IsWheelGrounded(w)))
         {
@@ -364,7 +283,7 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    internal void AdjustWheelsForDrift()
+    protected void AdjustWheelsForDrift()
     {
         foreach (var wheel in Wheels)
         {
@@ -390,44 +309,14 @@ public class BaseCarController : MonoBehaviour
         }        
     }
 
-    internal void StopDrifting()
-    {
-        Activedrift = 0;
-   
-        IsDrifting = false;
-        MaxAcceleration = PerusMaxAccerelation;
-        CarRb.angularDamping = 0.05f;
-        if (RacerScript != null &&
-            (RacerScript.raceFinished || GameManager.instance.carSpeed < 20.0f))
-        {
-            GameManager.instance.StopAddingPoints();
-            return;
-        }
-        GameManager.instance.StopAddingPoints();
 
-        foreach (var wheel in Wheels)
-        {
-            if (wheel.WheelCollider == null) continue;
-
-            WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
-            sidewaysFriction.extremumSlip = 0.15f;
-            sidewaysFriction.asymptoteSlip = 0.3f;
-            sidewaysFriction.extremumValue = 1.0f;
-            sidewaysFriction.asymptoteValue = 1f;
-            sidewaysFriction.stiffness = 5f;
-            wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
-        }
-    }
 
     public void Animatewheels()
     {
         foreach (var wheel in Wheels)
         {
-            Quaternion rot;
-            Vector3 pos;
-            wheel.WheelCollider.GetWorldPose(out pos, out rot);
-            wheel.WheelModel.transform.position = pos;
-            wheel.WheelModel.transform.rotation = rot;
+            wheel.WheelCollider.GetWorldPose(out Vector3 pos, out Quaternion rot);
+            wheel.WheelModel.transform.SetPositionAndRotation(pos, rot);
         }
     }
 
@@ -436,7 +325,7 @@ public class BaseCarController : MonoBehaviour
     /// <summary>
     /// does wheel effects
     /// </summary>
-    internal void WheelEffects(bool enable)
+    protected void WheelEffects(bool enable)
     {
         foreach (var wheel in Wheels.Where(w => w.Axel == Axel.Rear))
         {
@@ -472,7 +361,7 @@ public class BaseCarController : MonoBehaviour
     /// <summary>
     /// käytetään TURBEmeterin päivittämiseen joka frame
     /// </summary>
-    internal void TURBEmeter()
+    protected void TURBEmeter()
     {
         if (IsTurboActive && TurbeAmount != 0) //jos käytät turboa ja sitä o jäljellä
         {
