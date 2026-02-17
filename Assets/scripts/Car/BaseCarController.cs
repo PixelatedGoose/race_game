@@ -247,7 +247,7 @@ public class BaseCarController : MonoBehaviour
 
     protected void Decelerate()
     {
-        Debug.Log(MoveInput);
+
         if (MoveInput == 0)
         {
             Vector3 velocity = CarRb.linearVelocity;
@@ -308,8 +308,6 @@ public class BaseCarController : MonoBehaviour
             }
         }        
     }
-
-
 
     public void Animatewheels()
     {

@@ -71,7 +71,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     //Points - aika
     private float TimeStartPoint = 15000f;
     private float RaceTimer = 0f;
-    private const float PointsDecayTime = 300f; // nyt on 5min ennenkuin 0 aika pointtia
+    private const float PointsDecayTime = 300f;
 
     //all this for the purple car
     private float scoreMultiplier = 1.0f;
@@ -114,9 +114,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     void Update()
     {
-        //print(TimeStartPoint);
-        if (!EnsureCarController()) return;
-
+        
         float deltaTime = Time.deltaTime;
         Vector3 velocity = GetVelocity();
 
@@ -134,7 +132,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         UpdateBaseScore(deltaTime, velocity);
         UpdateDriftState(deltaTime, velocity);
         AnimatePendingBonus(deltaTime);
-        UpdateScoreUIIfChanged();
+        UpdateScoreUIChanged();
     }
 
     public void ShowScores()
@@ -144,12 +142,6 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         DriftScoreText.text = "Drift: " + Mathf.FloorToInt(GetScoreInt() - TimeStartPoint).ToString();
     }
 
-    bool EnsureCarController()
-    {
-        if (carController != null) return true;
-        carController = FindFirstObjectByType<PlayerCarController>();
-        return carController != null;
-    }
 
     Vector3 GetVelocity()
     {
@@ -209,7 +201,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         isDriftingActive = true;
         driftStartScore = scoreFloat;
         driftSessionBaseGain = 0f;
-        driftCompoundMultiplier = 1f;
+        driftCompoundMultiplier = 0.93f;
         driftTime = 0f;
         touchedGrassWhileDrifting = false;
 
@@ -228,17 +220,13 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     void EndDrift()
     {
-        float intensity = Mathf.InverseLerp(1f, maxDriftMultiplier, driftCompoundMultiplier);
-        float timeFactor = Mathf.Clamp01(driftTime / 3f);
-        float combinedQuality = Mathf.Clamp01(0.5f * intensity + 0.5f * timeFactor);
-
-        ApplyDriftBonusOnce();
+        ApplyDriftBonus();
         isDriftingActive = false;
         driftTime = 0f;
         driftCompoundMultiplier = 1f;
         driftSessionBaseGain = 0f;
 
-        // Immediately hide multiplier - no delay
+        // reset multiplier not going down incrementally just straight to 0 bcs Project manager >:(
         if (multCounter != null)
         {
             multCounter.ResetMultiplier();
@@ -251,10 +239,9 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
         bonusApplyProgress += (bonusApplyDuration <= 0f) ? 1f : deltaTime / bonusApplyDuration;
         float normalizedTime = Mathf.Clamp01(bonusApplyProgress);
-        float easedTime = 1f - Mathf.Pow(1f - normalizedTime, 2f);
+        float easedTime = 1f - Mathf.Pow(1f - normalizedTime, 1f);
 
-        float targetBonus = pendingDriftBonusTotal * easedTime;
-        float bonusToAdd = targetBonus - bonusAddedSoFar;
+        float bonusToAdd = pendingDriftBonusTotal * easedTime - bonusAddedSoFar;
         
         if (bonusToAdd > 0f)
         {
@@ -276,7 +263,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         bonusAddedSoFar = 0f;
     }
 
-    void UpdateScoreUIIfChanged()
+    void UpdateScoreUIChanged()
     {
         int currentScore = Mathf.FloorToInt(scoreFloat);
         if (currentScore == lastReportedScore) return;
@@ -296,8 +283,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         if (lateralSpeed < minLateralSpeed) return 0f;
 
         float sharpness;
-        try { sharpness = Mathf.Abs(carController.GetDriftSharpness()); }
-        catch { return 0f; }
+        sharpness = Mathf.Abs(carController.GetDriftSharpness()); 
         if (sharpness < minSharpnessForScoring) return 0f;
 
         driftTime += deltaTime;
@@ -305,8 +291,8 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         float normalizedSharpness = Mathf.InverseLerp(minSharpnessForScoring, peakSharpness, sharpness);
         float sharpnessBonus = Mathf.Pow(normalizedSharpness, sharpnessExponent);
 
-        float timeBonus = 1f + driftTime / timeScale;
-        float baseMultiplier = 1f + sharpnessBonus * timeBonus;
+
+        float baseMultiplier = 1f + sharpnessBonus * 1f + driftTime / timeScale;
 
         float forwardSpeed = Mathf.Max(0f, Vector3.Dot(velocity, carController.transform.forward));
         float speedFactor = Mathf.Clamp01(forwardSpeed / Mathf.Max(0.5f, maxForwardSpeedForBase));
@@ -314,7 +300,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         return baseMultiplier * (1f + speedFactor);
     }
 
-    void ApplyDriftBonusOnce()
+    void ApplyDriftBonus()
     {
         if (driftTime <= 0.2f || driftCompoundMultiplier <= 1.01f)
         {
@@ -325,19 +311,20 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         driftCount++;
 
         float intensity = Mathf.InverseLerp(1f, maxDriftMultiplier, driftCompoundMultiplier);
-        float timeFactor = Mathf.Clamp01(driftTime / 3f);
-        float combinedQuality = Mathf.Clamp01(0.5f * intensity + 0.5f * timeFactor);
-
-        //calculate bonus nad adds it to score
+        float combinedQuality = Mathf.Clamp01(0.5f * intensity + 0.5f * driftTime / 3f);
         float bonus = CalculateDriftBonus(combinedQuality);
-        bonus *= 0.75f;
+        bonus *= 0.65f;
         bonus *= scoreMultiplier; 
 
-        StartBonusAnimation(bonus);
+        //does the animation for the bonus being added
+        pendingDriftBonusTotal = bonus;
+        isApplyingBonus = bonus > 0f;
+        bonusApplyProgress = 0f;
+        bonusAddedSoFar = 0f;
 
         if (debugScoreBreakdown)
         {
-            LogDriftBreakdown(intensity, timeFactor, combinedQuality, bonus);
+            LogDriftBreakdown(intensity, combinedQuality, bonus);
         }
 
         touchedGrassWhileDrifting = false;
@@ -362,15 +349,7 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    void StartBonusAnimation(float bonus)
-    {
-        pendingDriftBonusTotal = bonus;
-        isApplyingBonus = bonus > 0f;
-        bonusApplyProgress = 0f;
-        bonusAddedSoFar = 0f;
-    }
-
-    void LogDriftBreakdown(float intensity, float timeFactor, float quality, float finalBonus)
+    void LogDriftBreakdown(float intensity, float quality, float finalBonus)
     {
         float scoreAfterBonus = scoreFloat + finalBonus;
         string tier = quality < midTierThreshold ? "LOW-MID" : "MID-HIGH";
@@ -385,7 +364,6 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         Debug.Log($"───────────────────────────────────────────────────────────────");
         Debug.Log($"QUALITY FACTORS:");
         Debug.Log($"  • Intensity: {intensity:P0}");
-        Debug.Log($"  • Time Factor: {timeFactor:P0}");
         Debug.Log($"  • Combined Quality: {quality:P0}");
         Debug.Log($"  • Tier: {tier} (threshold: {midTierThreshold:P0})");
         Debug.Log($"───────────────────────────────────────────────────────────────");
@@ -397,7 +375,6 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
         Debug.Log($"SCORE IMPACT:");
         Debug.Log($"  • Before Drift: {driftStartScore:N0}");
         Debug.Log($"  • After Bonus: {scoreAfterBonus:N0}");
-        Debug.Log($"  • Total Gain: +{(scoreAfterBonus - driftStartScore):N0}");
         Debug.Log($"═══════════════════════════════════════════════════════════════");
     }
 
@@ -415,19 +392,13 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     public void SetOnGrass(bool grassContact)
     {
         if (isOnGrass == grassContact) return;
-        isOnGrass = grassContact;
 
-        if (isOnGrass)
+        if (isOnGrass && isDriftingActive && driftCompoundMultiplier > 1.01f)
         {
             touchedGrassWhileDrifting = true;
-
-            // Print when grass causes an active drift's multiplier to be lost
-            if (isDriftingActive && driftCompoundMultiplier > 1.01f)
-            {
-                Debug.Log($"[ScoreManager] Drift multiplier reset by grass - peak mult: x{driftCompoundMultiplier:F2}, driftTime: {driftTime:F2}s");
-                multCounter.UpdateMultiplierText(1f);
-                driftMultLost.Play();
-            }
+            Debug.Log($"[ScoreManager] Drift multiplier reset by grass - peak mult: x{driftCompoundMultiplier:F2}, driftTime: {driftTime:F2}s");
+            multCounter.UpdateMultiplierText(1f);
+            driftMultLost.Play();
         }
     }
 
@@ -446,19 +417,5 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
     public float GetDriftTime()
     {
         return driftTime;
-    }
-
-    public float GetCurrentSharpness()
-    {
-        if (carController == null) return 0f;
-        
-        try 
-        { 
-            return Mathf.Abs(carController.GetDriftSharpness()); 
-        }
-        catch 
-        { 
-            return 0f; 
-        }
     }
 }
