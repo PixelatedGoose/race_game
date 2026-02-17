@@ -71,6 +71,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     speedText, accelerationText, handlingText,
     scoreMultText, turbeBoostText, turbeAmountText;
     [SerializeField] private Text lockedPopup;
+    [SerializeField] private GameObject[] baseButtons;
 
     RaceResultHandler handler;
     RaceResultCollection collection;
@@ -197,9 +198,12 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             turbeBoostText.text = $"Turbo boost: {activeCarStats.turbeBoost}";
             turbeAmountText.text = $"Turbo amount: {activeCarStats.turbeAmount}";
 
-            lockedPopup.color = new(1f, 1f, 1f, 0f);
             //DO YOU SUCK?
-            if (!unlockedSkins.Contains(activeCarStats.carName))
+            if (unlockedSkins.Contains(activeCarStats.carName))
+            {
+                lockedPopup.color = new(1f, 1f, 1f, 0f);
+            }
+            else
             {
                 lockedPopup.color = new(1f, 1f, 1f, 1f);
             }
@@ -276,20 +280,16 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
         if (current != null)
         {
+            Dictionary<string, string> currentMenu = details[availableSelectionMenus[selectionIndex].name];
             //TODO: setuppaa todennäkösesti variable tolle ja sen onchanged paskiainen tänne,
             //jotta voi yksinkertastaa koodia
 
             //vuoden indeksoinnit siitä
-            if (details[availableSelectionMenus[selectionIndex].name].ContainsKey(current.name))
-                detailsPanelText.text = details[availableSelectionMenus[selectionIndex].name][current.name];
-            else if (details[availableSelectionMenus[selectionIndex].name].ContainsKey(availableCars[index].name))
-                detailsPanelText.text
-                = details[availableSelectionMenus[selectionIndex].name][availableCars[index].name];
+            if (currentMenu.ContainsKey(current.name)) detailsPanelText.text = currentMenu[current.name];
+            else if (currentMenu.ContainsKey(availableCars[index].name)) detailsPanelText.text = currentMenu[availableCars[index].name];
             //säilytä edellinen teksti details ruudus jos dropdown on avattuna
-            else if (current.name.StartsWith("Item"))
-                return;
-            else
-                detailsPanelText.text = "";
+            else if (current.name.StartsWith("Item")) return;
+            else detailsPanelText.text = "";
         }
     }
 

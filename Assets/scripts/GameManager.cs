@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using Unity.Splines.Examples;
 
 
 
@@ -48,19 +49,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
         instance = this;
 
         sceneSelected = SceneManager.GetActiveScene().name;
-        Dictionary<string, GameObject> carsByName = new();
-        foreach (GameObject car in cars)
-        {
-            if (!carsByName.ContainsKey(car.name))
-            {
-                carsByName.Add(car.name, car);
-            }
-        }
 
         if (sceneSelected == "tutorial") CurrentCar = GameObject.Find("REALCAR");
-        else if (maps.Contains(sceneSelected))
+        else if (maps.Contains(sceneSelected) && cars.Length > 0)
         {
-            carsByName.TryGetValue(PlayerPrefs.GetString("SelectedCar"), out GameObject selectedCar);
+            GameObject selectedCar = cars.FirstOrDefault(c => c.name == PlayerPrefs.GetString("SelectedCar"));
+            if (selectedCar == null) selectedCar = cars[0];
             CurrentCar = Instantiate(selectedCar, playerSpawn.position, playerSpawn.rotation);
         }
     }
