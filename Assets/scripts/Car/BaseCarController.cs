@@ -42,7 +42,6 @@ public class BaseCarController : MonoBehaviour
     WheelHit hit;
     [SerializeField] protected float GrassSpeedMultiplier = 0.5f;
     protected LayerMask Grass;
-    protected Material GrassMaterial, RoadMaterial;
     public bool GrassRespawnActive = false;
     protected bool isOnGrassCached;
     protected bool isOnGrassCachedValid;
@@ -57,9 +56,9 @@ public class BaseCarController : MonoBehaviour
     [Header("Drift asetukset")]
     //protected float DriftMultiplier = 1.0f;
     public bool IsDrifting { get; protected set; } = false;
+    [SerializeField] protected Color GrassTrailColor = new Color(0.3f, 0.15f, 0.0f);
+    [SerializeField] protected Color RoadTrailColor = Color.black;
     protected float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
-
-
     [Header("turbe asetukset")]
     protected Image TurbeMeter;
     [SerializeField] protected float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f;
@@ -91,43 +90,40 @@ public class BaseCarController : MonoBehaviour
     [ContextMenu("Auto Assign Wheels")]
     protected void AutoAssignWheelsAndMaterials()
     {
-        if (Wheels == null) Wheels = new List<Wheel>();
+        Wheels ??= new List<Wheel>();
         Wheels.Clear();
 
-        var colliders = GetComponentsInChildren<WheelCollider>(true);
-        Transform meshesRoot = transform.Find("meshes");
-        Transform effectsRoot = transform.Find("wheelEffectobj");
+        var Colliders   = GetComponentsInChildren<WheelCollider>(true);
+        var Meshes  = transform.Find("meshes");
+        var Effects = transform.Find("wheelEffectobj");
 
-        foreach (var wc in colliders)
+        Grass = 1 << 7;
+
+        foreach (var WheelCollider in Colliders)
         {
-            Wheel w = new Wheel();
-            w.WheelCollider = wc;
+            var wheel = new Wheel
+            {
+                WheelCollider = WheelCollider
+            };
 
- 
-            Transform modelT = meshesRoot != null ? meshesRoot.Find(wc.name) : null;
-            if (modelT == null) modelT = wc.transform.GetComponentInChildren<MeshRenderer>(true)?.transform;
-            w.WheelModel = modelT != null ? modelT.gameObject : null;
+            var Mesh = Meshes.Find(WheelCollider.name) ?? WheelCollider.transform.GetComponentInChildren<MeshRenderer>(true)?.transform;
 
+            wheel.WheelModel = Mesh?.gameObject;
 
-            Transform effectT = effectsRoot != null ? effectsRoot.Find(wc.name) : null;
-            if (effectT == null) effectT = wc.transform.Find("wheelEffectobj");
-            w.WheelEffectobj = effectT != null ? effectT.gameObject : null;
+            var Effect = Effects.Find(WheelCollider.name) ?? WheelCollider.transform.Find("wheelEffectobj");
 
-    
-            w.SmokeParticle = w.WheelEffectobj != null
-                ? w.WheelEffectobj.GetComponentInChildren<ParticleSystem>(true)
-                : wc.transform.GetComponentInChildren<ParticleSystem>(true);
+            wheel.WheelEffectobj = Effect?.gameObject;
+                    wheel.SmokeParticle =
+            wheel.WheelEffectobj != null
+                ? wheel.WheelEffectobj.GetComponentInChildren<ParticleSystem>(true)
+                : WheelCollider.transform.GetComponentInChildren<ParticleSystem>(true);
 
-           
-            var n = wc.name.ToLowerInvariant();
-            w.Axel = n.Contains("front") ? Axel.Front : Axel.Rear;
-            
-            Grass = 1 << 7;
+            wheel.Axel =
+                WheelCollider.name.IndexOf("front", StringComparison.OrdinalIgnoreCase) >= 0
+                    ? Axel.Front
+                    : Axel.Rear;
 
-            RoadMaterial = Resources.Load<Material>("DriftMaterial/RoadMaterial");
-            GrassMaterial = Resources.Load<Material>("DriftMaterial/GrassMaterial");
-            
-            Wheels.Add(w);
+            Wheels.Add(wheel);
         }
     }
 
@@ -146,27 +142,17 @@ public class BaseCarController : MonoBehaviour
 
         foreach (var wheel in Wheels)
         {
-            if (wheel.WheelEffectobj == null) continue;
+            bool WheelOnGrass = IsWheelGrounded(wheel) && IsWheelOnGrass(wheel);
 
-            var trailRenderer = wheel.WheelEffectobj.GetComponentInChildren<TrailRenderer>();
-            if (trailRenderer == null) continue;
+            if (WheelOnGrass) wheelsOnGrass++;
 
-            bool wheelOnGrass = IsWheelGrounded(wheel) && IsWheelOnGrass(wheel);
+            var trail = wheel.WheelEffectobj.GetComponentInChildren<TrailRenderer>();
 
-            // per rear-wheel line material
-            trailRenderer.material = wheelOnGrass ? GrassMaterial : RoadMaterial;
-
-            if (wheelOnGrass)
-                wheelsOnGrass++;
+            trail.material.color = WheelOnGrass ? GrassTrailColor : RoadTrailColor;
         }
 
-        const int wheelsNeededForPenalty = 2;
-        bool onGrassForScore = wheelsOnGrass >= wheelsNeededForPenalty;
 
-        if (ScoreManager.instance != null)
-        {
-            ScoreManager.instance.SetOnGrass(onGrassForScore);
-        }
+        ScoreManager.instance?.SetOnGrass(wheelsOnGrass >= 2);
     }
 
     protected virtual bool IsOnGrass()
@@ -176,27 +162,14 @@ public class BaseCarController : MonoBehaviour
 
     protected void AdjustSpeedForGrass()
     {
-        if (IsOnGrassCached() && !IsDrifting)
+        if (IsOnGrass())
         {
             TargetTorque *= GrassSpeedMultiplier;
-            Maxspeed = Mathf.Lerp(Maxspeed, GrassSpeedMultiplier, Time.deltaTime);
-            if (GameManager.instance.carSpeed < 50.0f)
-            {
-                Maxspeed = 50.0f;
-            }
+            print("wheel on grass");
+
+            Maxspeed = Mathf.Lerp(Maxspeed, Maxspeed * GrassSpeedMultiplier,Time.deltaTime  );
         }
     }
-
-    public bool IsOnGrassCached()
-    {
-        if (!isOnGrassCachedValid)
-        {
-            isOnGrassCached = IsOnGrass();
-            isOnGrassCachedValid = true;
-        }
-        return isOnGrassCached;
-    }
-
 
     protected void ApplySpeedLimit(float speed)
     {
