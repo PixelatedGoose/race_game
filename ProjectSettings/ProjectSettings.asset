@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Pooraf Studios
+  companyName: PseudoFlame
   productName: race_game
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -145,7 +145,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: demo_2
+  bundleVersion: pre-release_v3
   preloadedAssets:
   - {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   - {fileID: -944628639613478452, guid: 53472e6d66c2c0f4ba2cc137f3d2721b, type: 3}
@@ -304,7 +304,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: a0587d1a7ed3a7241b42e0ab35fe76d6, type: 3}
+      m_Icon: {fileID: 2800000, guid: fdd47dc047d66f2468771cde839ef56c, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

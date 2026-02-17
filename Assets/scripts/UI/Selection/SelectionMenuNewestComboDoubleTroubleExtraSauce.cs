@@ -73,13 +73,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     [SerializeField] private Text lockedPopup;
     [SerializeField] private GameObject[] baseButtons;
 
-    RaceResultHandler handler;
-    RaceResultCollection collection;
-
     
 
     //4. setuppaa map selectionin kuva juttu [ehkä]
-    //5. score tai aika per auto: miten? mihin?
 
     void Awake()
     {
@@ -88,8 +84,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         selectionDetails = Resources.Load<TextAsset>("selectionDetails");
         //i'm dictionarying my dictionary
         details = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(selectionDetails.text);
-        handler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
-        collection = handler.Load();
         availableCars = carBases[baseIndex].cars;
         availableCarStats = carBases[baseIndex].carStats;
         
@@ -208,38 +202,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
                 lockedPopup.color = new(1f, 1f, 1f, 1f);
             }
         }
-    }
-
-    //todo: muuta score timeksi ja ota se per base map
-    public void UpdateResultsPerMap()
-    {
-        /* CarStatsNew activeCarStats = carStats[index];
-
-        string selectedMap = PlayerPrefs.GetString("SelectedMap");
-
-        var bestResults = Array.Empty<RaceResultData>();
-        if (collection != null && collection.results.Count != 0)
-        {
-            bestResults = collection.results
-                .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
-                .Where(r => string.Equals(r.carName, activeCarStats.carName, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(r => r.score)
-                .ToArray();
-        }
-        else
-        {
-            Debug.Log("no race results exist; defaulting to empty");
-            bestResults = Array.Empty<RaceResultData>();
-        }
-
-        int topResultsScore = 0;
-        if (bestResults.Length != 0)
-        {
-            topResultsScore = bestResults[0].score;
-            scoreText.text = $"Best score with {activeCarStats.carName}: {topResultsScore}";
-        }
-        else
-            scoreText.text = $"No score yet with {activeCarStats.carName}"; */
     }
     
     public void RightButton()
