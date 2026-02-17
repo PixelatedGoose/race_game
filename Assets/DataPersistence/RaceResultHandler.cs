@@ -87,7 +87,7 @@ public class RaceResultHandler
                     loadedData.results = new List<RaceResultData>();
                 }
                 
-                Debug.Log($"Successfully loaded {(loadedData?.results?.Count ?? 0)} race results from: {fullPath}");
+                Debug.Log($"Successfully loaded {loadedData?.results?.Count ?? 0} race results from: {fullPath}");
             }
             catch (Exception e)
             {

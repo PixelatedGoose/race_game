@@ -40,8 +40,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private GameObject current;
     [SerializeField] private GameObject loadingImg;
 
-    [Header("player data")]
+    [Header("data")]
     private string savedMapBaseName;
+    public List<string> unlockedSkins;
 
     [Header("general selection data")]
     private TextAsset selectionDetails;
@@ -69,16 +70,15 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     public Text carNameText,
     speedText, accelerationText, handlingText,
     scoreMultText, turbeBoostText, turbeAmountText;
+    [SerializeField] private Text lockedPopup;
 
     RaceResultHandler handler;
     RaceResultCollection collection;
 
     
 
-    //3.1. data handling playerprefs kautta (esim. tällä hetkellä valittu map)
     //4. setuppaa map selectionin kuva juttu [ehkä]
     //5. score tai aika per auto: miten? mihin?
-    //6. lisää tweenaukset kaikkeen tarpeelliseen
 
     void Awake()
     {
@@ -122,6 +122,10 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     void Start()
     {
+        //huom. obfuscation/encryption?
+        TextAsset data = Resources.Load<TextAsset>("unlockedSkins");
+        unlockedSkins = JsonConvert.DeserializeObject<List<string>>(data.text);
+
         foreach (CarBase carBase in carBases)
             foreach (GameObject car in carBase.cars)
                 car.SetActive(false);
@@ -192,6 +196,13 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             scoreMultText.text = $"Score mult.: {activeCarStats.scoreMult}x";
             turbeBoostText.text = $"Turbo boost: {activeCarStats.turbeBoost}";
             turbeAmountText.text = $"Turbo amount: {activeCarStats.turbeAmount}";
+
+            lockedPopup.color = new(1f, 1f, 1f, 0f);
+            //DO YOU SUCK?
+            if (!unlockedSkins.Contains(activeCarStats.carName))
+            {
+                lockedPopup.color = new(1f, 1f, 1f, 1f);
+            }
         }
     }
 
