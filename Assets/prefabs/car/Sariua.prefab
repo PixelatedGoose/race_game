@@ -592,8 +592,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useLogitechWheel: 1
-  forceFeedbackMultiplier: 1
+  MaxAcceleration: 1000
+  BrakeAcceleration: 200
+  TurnSensitivty: 1
+  TurnSensitivtyAtHighSpeed: 16
+  TurnSensitivtyAtLowSpeed: 30
+  Deceleration: 1
+  Maxspeed: 180
+  GravityMultiplier: 1.5
+  GrassSpeedMultiplier: 0.5
+  GrassRespawnActive: 0
+  MoveInput: 0
+  SteerInput: 0
+  Turbesped: 60
+  BaseSpeed: 120
+  Grassmaxspeed: 50
+  DriftMaxSpeed: 140
+  TurbeAmount: 100
+  TurbeMax: 100
+  Turbepush: 15
+  TurbeReduce: 10
+  TurbeRegen: 10
 --- !u!114 &187602521392888673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2369,7 +2388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3621995110324072295, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_Name
-      value: Sairua
+      value: Sariua
       objectReference: {fileID: 0}
     - target: {fileID: 3621995110324072295, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_IsActive
