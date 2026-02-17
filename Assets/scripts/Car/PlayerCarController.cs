@@ -2,12 +2,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Logitech;
+using System.Linq;
 
  
 public class PlayerCarController : BaseCarController
 {
 
 
+    private CarInputActions Controls;
     RacerScript racerScript;
     //LogitechMovement LGM;
 
@@ -28,7 +30,6 @@ public class PlayerCarController : BaseCarController
 
     void Start()
     {
-        ApplyCarValues();
         PerusMaxAccerelation = MaxAcceleration;
         SmoothedMaxAcceleration = PerusMaxAccerelation;
         PerusTargetTorque = TargetTorque;
@@ -56,11 +57,11 @@ public class PlayerCarController : BaseCarController
 
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
-        steerInput = ctx.ReadValue<Vector2>().x;
+        SteerInput = ctx.ReadValue<Vector2>().x;
     }
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
-        steerInput = 0f;
+        SteerInput = 0f;
     }
 
     // void OnApplicationFocus(bool focus)
@@ -165,7 +166,7 @@ public class PlayerCarController : BaseCarController
             Maxspeed = Mathf.Lerp(Maxspeed, DriftMaxSpeed, Time.deltaTime * 0.03f);
 
         
-        if (Mathf.Abs(steerInput) > 0.1f)
+        if (Mathf.Abs(SteerInput) > 0.1f)
         {
             CarRb.AddTorque(Vector3.up * Time.deltaTime, ForceMode.Acceleration);
         }
@@ -187,15 +188,15 @@ public class PlayerCarController : BaseCarController
         //lukee inputin valuen ja etenee siittä
         //LGM.logitechInitialized || !LogitechGSDK.LogiIsConnected(0))
         
-        steerInput = Controls.CarControls.Move.ReadValue<Vector2>().x;
+        SteerInput = Controls.CarControls.Move.ReadValue<Vector2>().x;
         
         
         if (Controls.CarControls.MoveForward.IsPressed())
-            moveInput = Controls.CarControls.MoveForward.ReadValue<float>();
+            MoveInput = Controls.CarControls.MoveForward.ReadValue<float>();
         else if (Controls.CarControls.MoveBackward.IsPressed())
-            moveInput = -Controls.CarControls.MoveBackward.ReadValue<float>();
+            MoveInput = -Controls.CarControls.MoveBackward.ReadValue<float>();
         else
-            moveInput = 0f;
+            MoveInput = 0f;
 
         if (!Controls.CarControls.Drift.IsPressed())
             StopDrifting();
@@ -209,35 +210,42 @@ public class PlayerCarController : BaseCarController
             Mathf.Clamp01(speed / Maxspeed));
     }
 
+    protected void HandleTurbo()
+    {
+        if (!CanUseTurbo) return;
+        TURBE();
+        TURBEmeter();
+    }
+
+    protected void TURBE()
+    {
+        IsTurboActive = Controls.CarControls.turbo.IsPressed() && TurbeAmount > 0;
+        if (IsTurboActive)
+        {
+            CarRb.AddForce(transform.forward * Turbepush, ForceMode.Acceleration);
+            TargetTorque = PerusTargetTorque * 1.5f;                
+            TargetTorque = Mathf.Min(TargetTorque, MaxAcceleration); 
+        }
+    }
 
     void Move()
     {
         //HandeSteepSlope();
-        UpdateTargetTorgue();
+        UpdateTargetTorque();
         AdjustSpeedForGrass();
         AdjustSuspension();
         foreach (var wheel in Wheels)
         {
-            if (Controls.CarControls.Brake.IsPressed())
-            {
-                Brakes(wheel);
-            }
-            else
-            {
-                MotorTorgue(wheel);
-            }
+            if (Controls.CarControls.Brake.IsPressed()) Brakes(wheel);
+            else MotorTorgue(wheel);
         }
     }
 
-
-
-
-
-    private void UpdateTargetTorgue()
+    private void UpdateTargetTorque()
     {
         float inputValue = CurrentControlScheme == "Gamepad"
             ? Controls.CarControls.ThrottleMod.ReadValue<float>()
-            : Mathf.Abs(moveInput);
+            : Mathf.Abs(MoveInput);
 
         float power = CurrentControlScheme == "Gamepad" ? 0.9f : 1.0f;
 
@@ -253,12 +261,7 @@ public class PlayerCarController : BaseCarController
             Time.deltaTime * 250f
         );
 
-        if (moveInput > 0f)
-            TargetTorque = SmoothedMaxAcceleration;
-        else if (moveInput < 0f)
-            TargetTorque = -SmoothedMaxAcceleration;
-        else
-            TargetTorque = 0f;
+        TargetTorque = MoveInput * SmoothedMaxAcceleration;
 
         if (!IsDrifting)
         {
@@ -316,5 +319,46 @@ public class PlayerCarController : BaseCarController
         MaxAcceleration = PerusMaxAccerelation;
         TargetTorque = PerusTargetTorque;
         WheelEffects(false);
+    }
+
+    override protected bool IsOnGrass()
+    {
+        if (Wheels.Any(wheel => IsWheelGrounded(wheel) && IsWheelOnGrass(wheel)))
+        {
+            if (GrassRespawnActive && racerScript != null) racerScript.RespawnAtLastCheckpoint();
+            return true;
+        }
+        return false;
+    }
+
+        protected void StopDrifting()
+    {
+        Activedrift = 0;
+   
+        IsDrifting = false;
+        MaxAcceleration = PerusMaxAccerelation;
+        CarRb.angularDamping = 0.05f;
+        if (
+            racerScript != null 
+            && (racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
+            )
+        {
+            GameManager.instance.StopAddingPoints();
+            return;
+        }
+        GameManager.instance.StopAddingPoints();
+
+        foreach (var wheel in Wheels)
+        {
+            if (wheel.WheelCollider == null) continue;
+
+            WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
+            sidewaysFriction.extremumSlip = 0.15f;
+            sidewaysFriction.asymptoteSlip = 0.3f;
+            sidewaysFriction.extremumValue = 1.0f;
+            sidewaysFriction.asymptoteValue = 1f;
+            sidewaysFriction.stiffness = 5f;
+            wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
+        }
     }
 }
