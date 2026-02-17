@@ -307,7 +307,7 @@ public class PlayerCarController : BaseCarController
             wheel.WheelCollider.sidewaysFriction = sideways;
         }
 
-        CarRb.angularDamping = 0.005f;
+        CarRb.angularDamping = 0.01f;
         AdjustWheelsForDrift();
         WheelEffects(true);
     }
