@@ -395,6 +395,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     //tarkistan myöhemmin voiko tätä välttää... vitun coroutinet
     public void StartGame()
     {
+        PlayerPrefs.SetString("SelectedCar", availableCars[index].name);
+        PlayerPrefs.Save();
         SetMapToLoad();
         StartCoroutine(LoadSelectedMap());
     }
