@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public class specialTextChances
@@ -23,8 +24,8 @@ public class SelectionMenuLoading : MonoBehaviour
 {
     [SerializeField] private Text loadText_text;
     public TextAsset loadTexts;
-    public Dictionary<string, string[]> textData;
-    public int index = -1;
+    private Dictionary<string, string[]> textData;
+    private int index = -1;
 
     void OnEnable()
     {
@@ -40,8 +41,8 @@ public class SelectionMenuLoading : MonoBehaviour
 
     public void loadingTexts()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
-        int chance = Random.Range(1, 101);
+        UnityEngine.Random.InitState(DateTime.Now.Millisecond);
+        int chance = UnityEngine.Random.Range(1, 101);
         string loadTextRarity;
         int randomIndex;
 
@@ -70,7 +71,7 @@ public class SelectionMenuLoading : MonoBehaviour
             "obscure" => textData["obscure"],
             _ => new string[] { "THIS IS NOT SUPPOSED TO SHOW UP" },
         };
-        randomIndex = Random.Range(0, texts.Length);
+        randomIndex = UnityEngine.Random.Range(0, texts.Length);
         loadText_text.text = texts[randomIndex];
 
         Debug.Log(loadTextRarity);
@@ -81,7 +82,7 @@ public class SelectionMenuLoading : MonoBehaviour
         TextAsset specialTextChancesFile = Resources.Load<TextAsset>("loading/specialTextChances");
         specialTextChances specialChances = JsonUtility.FromJson<specialTextChances>(specialTextChancesFile.text);
 
-        Random.InitState(System.DateTime.Now.Millisecond);
+        UnityEngine.Random.InitState(DateTime.Now.Millisecond);
 
         var fields = typeof(specialTextChances).GetFields();
         foreach (var field in fields)
@@ -91,7 +92,7 @@ public class SelectionMenuLoading : MonoBehaviour
             string key = field.Name;
             float value = (float)field.GetValue(specialChances);
 
-            float sChance = Random.Range(value * 1000, 100000);
+            float sChance = UnityEngine.Random.Range(value * 1000, 100000);
             if (sChance <= value * 1000)
             {
                 loadText_text.text = textData["special"][index];
