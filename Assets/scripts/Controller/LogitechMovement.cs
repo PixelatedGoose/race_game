@@ -81,10 +81,10 @@ public class LogitechMovement : MonoBehaviour
         int damperStrength = Mathf.RoundToInt(10 * forceFeedbackMultiplier);
         LogitechGSDK.LogiPlayDamperForce(0, damperStrength);
         
-        // Dirt road only when on grass and moving
-        if (PlayerCar.IsOnGrassCached() && speed >= 10)
-            LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(12.5f * forceFeedbackMultiplier));
-        else
-            LogitechGSDK.LogiStopDirtRoadEffect(0);
+        // Dirt road only when on grass and moving. I Will fix this when i get back to the wheel, but for now no shake 
+        // if (PlayerCar.() && speed >= 10)
+        //     LogitechGSDK.LogiPlayDirtRoadEffect(0, Mathf.RoundToInt(12.5f * forceFeedbackMultiplier));
+        // else
+        //     LogitechGSDK.LogiStopDirtRoadEffect(0);
     }
 }
