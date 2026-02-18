@@ -71,7 +71,10 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     speedText, accelerationText, handlingText,
     scoreMultText, turbeBoostText, turbeAmountText;
     [SerializeField] private Text lockedPopup;
-    [SerializeField] private GameObject[] baseButtons;
+    [SerializeField] private Button[] baseButtons;
+    private bool canSelectCar;
+    //tämä saa olla ensimmäinen ja AINOA kerta kun teen näin
+    [SerializeField] private AudioSource selectSound;
 
     
 
@@ -126,6 +129,24 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
                 car.SetActive(false);
 
         menuMusic.Play();
+    }
+    private void Update()
+    {
+        current = EventSystem.current.currentSelectedGameObject;
+
+        if (current != null)
+        {
+            Dictionary<string, string> currentMenu = details[availableSelectionMenus[selectionIndex].name];
+            //TODO: setuppaa todennäkösesti variable tolle ja sen onchanged paskiainen tänne,
+            //jotta voi yksinkertastaa koodia
+
+            //vuoden indeksoinnit siitä
+            if (currentMenu.ContainsKey(current.name)) detailsPanelText.text = currentMenu[current.name];
+            else if (currentMenu.ContainsKey(availableCars[index].name)) detailsPanelText.text = currentMenu[availableCars[index].name];
+            //säilytä edellinen teksti details ruudus jos dropdown on avattuna
+            else if (current.name.StartsWith("Item")) return;
+            else detailsPanelText.text = "";
+        }
     }
     public void SaveDropdownValues()
     {
@@ -196,10 +217,12 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             if (unlockedSkins.Contains(activeCarStats.carName))
             {
                 lockedPopup.color = new(1f, 1f, 1f, 0f);
+                canSelectCar = true;
             }
             else
             {
                 lockedPopup.color = new(1f, 1f, 1f, 1f);
+                canSelectCar = false;
             }
         }
     }
@@ -236,23 +259,18 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    private void Update()
+    public void AttemptNext()
     {
-        current = EventSystem.current.currentSelectedGameObject;
-
-        if (current != null)
+        //vitun paskanen hack
+        if (canSelectCar)
         {
-            Dictionary<string, string> currentMenu = details[availableSelectionMenus[selectionIndex].name];
-            //TODO: setuppaa todennäkösesti variable tolle ja sen onchanged paskiainen tänne,
-            //jotta voi yksinkertastaa koodia
-
-            //vuoden indeksoinnit siitä
-            if (currentMenu.ContainsKey(current.name)) detailsPanelText.text = currentMenu[current.name];
-            else if (currentMenu.ContainsKey(availableCars[index].name)) detailsPanelText.text = currentMenu[availableCars[index].name];
-            //säilytä edellinen teksti details ruudus jos dropdown on avattuna
-            else if (current.name.StartsWith("Item")) return;
-            else detailsPanelText.text = "";
+            startButton.SetActive(true);
+            backButton.SetActive(true);
+            selectSound.Play();
+            Next();
+            return;
         }
+        Debug.Log("FUCK YOU BALTIMORE! IF YOU'RE DUMB ENOUGH TO BUY A NEW CAR THIS WEEKEND, YOU'RE A BIG ENOUGH SCHMUCK TO COME TO BIG BILL HELL'S CARS! BAD DEALS! CARS THAT BREAK DOWN! THIEVES! IF YOU THINK YOU'RE GOING TO FIND A BARGAIN AT BIG BILL, YOU CAN KISS MY ASS! IT'S OUR BELIEF THAT YOU'RE SUCH A STUPID MOTHERFUCKER, YOU'LL FALL FOR THIS BULLSHIT - GUARANTEED! IF YOU FIND A BETTER DEAL: SHOVE IT UP YOUR UGLY ASS! YOU HEARD US RIGHT: SHOVE IT UP YOUR UGLY ASS! BRING YOUR TRADE! BRING YOUR TITLE! BRING YOUR WIFE! WE'LL FUCK HER! THAT'S RIGHT, WE'LL FUCK YOUR WIFE! BECAUSE AT BIG BILL HELL'S, YOU'RE FUCKED SIX WAYS FROM SUNDAY! TAKE A HIKE TO BIG BILL HELL'S - HOME OF CHALLENGE PISSING! THAT'S RIGHT, CHALLENGE PISSING! HOW DOES IT WORK? IF YOU CAN PISS SIX FEET IN THE AIR STRAIGHT UP AND NOT GET WET, YOU GET NO DOWN PAYMENT! DON'T WAIT! DON'T DELAY! DON'T FUCK WITH US, OR WE'LL RIP YOUR NUTS OFF! ONLY AT BIG BILL HELL'S, THE ONLY DEALER THAT TELLS YOU TO FUCK OFF! HURRY UP ASSHOLE! THIS EVENT ENDS THE MINUTE YOU WRITE US A CHECK! AND IT BETTER NOT BOUNCE OR YOU'RE A DEAD MOTHERFUCKER! GO TO HELL! BIG BILL HELL'S CARS - BALTIMORE'S FILTHIEST AND EXCLUSIVE HOME OF THE MEANEST SONS OF BITCHES IN THE STATE OF MARYLAND - GUARANTEED!");
     }
 
     public void Next()
