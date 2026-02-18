@@ -34,6 +34,7 @@ public class LapCounter : MonoBehaviour
     void Update()
     {
         int lap = racer != null ? racer.CurrentLap : 0;
+        int totalLaps = PlayerPrefs.GetInt("Laps");
         string lapString = lap.ToString().PadLeft(digitCount, '0');
 
         // Only update UI if the lap string has changed
@@ -42,6 +43,7 @@ public class LapCounter : MonoBehaviour
             UpdateLapUI(lapString, lastLapString);
             lastLapString = lapString;
         }
+        //if (lap == totalLaps) digitImages =
     }
 
     void UpdateLapUI(string lapString, string prevLapString)
