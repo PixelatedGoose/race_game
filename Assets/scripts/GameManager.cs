@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Header("car selection")]
     public GameObject CurrentCar { get; private set; }
     [SerializeField] private Transform playerSpawn;
+    [SerializeField] private Transform reverse_playerSpawn;
     [SerializeField] private GameObject[] cars;
 
     [Header("scene asetukset")]
@@ -55,34 +56,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             GameObject selectedCar = cars.FirstOrDefault(c => c.name == PlayerPrefs.GetString("SelectedCar"));
             if (selectedCar == null) selectedCar = cars[0];
-            CurrentCar = Instantiate(selectedCar, playerSpawn.position, playerSpawn.rotation);
+            Transform spawn = PlayerPrefs.GetInt("Reverse") == 1 ? reverse_playerSpawn : playerSpawn;
+            CurrentCar = Instantiate(selectedCar, spawn.position, spawn.rotation);
         }
     }
 
     void OnEnable()
     {
-        //instance = this;
-        // if (instance == null)
-        // {
-        //     //Debug.Log("Pasia, olet tehnyt sen!");
-        //     // DontDestroyOnLoad(gameObject); //poistin koska "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
-        // }
-        // else
-        // {
-        //     Destroy(gameObject);
-        // }
-
-        //etsi autot järjestyksessä (pitäs olla aika ilmiselvää)
-        /*cars = new GameObject[] 
-        { 
-            GameObject.Find("REALCAR_x"), 
-            GameObject.Find("REALCAR"), 
-            GameObject.Find("REALCAR_y"),
-            GameObject.Find("Lada")
-        };*/
-
-        
-
         racerscript = FindAnyObjectByType<RacerScript>();
     }
 
