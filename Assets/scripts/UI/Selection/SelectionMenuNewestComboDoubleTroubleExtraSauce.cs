@@ -40,15 +40,16 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private GameObject current;
     [SerializeField] private GameObject loadingImg;
 
-    [Header("data")]
+    [Header("data and player settings")]
     private string savedMapBaseName;
     public List<string> unlockedSkins;
-
-    [Header("general selection data")]
-    private TextAsset selectionDetails;
     [SerializeField] private TMP_Dropdown lapCountDropdown;
     [SerializeField] private TMP_Dropdown AICarsAmountDropdown; 
     [SerializeField] private TMP_Dropdown AIDifficultyDropdown; 
+    [SerializeField] private Toggle reverseRaceToggle;
+
+    [Header("general selection data")]
+    private TextAsset selectionDetails;
     [SerializeField] private GameObject detailsPanel;
     [SerializeField] private GameObject startButton;
     [SerializeField] private GameObject nextButton;
@@ -148,11 +149,12 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             else detailsPanelText.text = "";
         }
     }
-    public void SaveDropdownValues()
+    public void SaveSettings()
     {
         PlayerPrefs.SetInt(lapCountDropdown.name, lapCountDropdown.value + 1);
         PlayerPrefs.SetInt(AICarsAmountDropdown.name, AICarsAmountDropdown.value + 1);
         PlayerPrefs.SetInt(AIDifficultyDropdown.name, AIDifficultyDropdown.value);
+        PlayerPrefs.SetInt(reverseRaceToggle.name, reverseRaceToggle.isOn ? 1 : 0);
         PlayerPrefs.Save();
     }
 
