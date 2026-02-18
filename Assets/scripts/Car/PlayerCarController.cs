@@ -3,8 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Logitech;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 
- 
+
 public class PlayerCarController : BaseCarController
 {
 
@@ -139,9 +140,7 @@ public class PlayerCarController : BaseCarController
         isOnGrassCachedValid = false;
         ApplySpeedLimit(speed);
 
-        
         UpdateDriftSpeed();
-        StopDriftIfRaceFinished();
 
         ApplyGravity();
         Move();
@@ -172,14 +171,6 @@ public class PlayerCarController : BaseCarController
         }
     }
 
-    void StopDriftIfRaceFinished()
-    {
-        if (racerScript == null) return;
-        if (!racerScript.raceFinished) return;
-        if (Activedrift <= 0) return;
-
-        StopDrifting();
-    }
 
 
 
@@ -252,7 +243,7 @@ public class PlayerCarController : BaseCarController
         float throttle = Mathf.Pow(inputValue, power);
         
         // Reduce power during drift but don't eliminate it
-        float driftPowerMultiplier = IsDrifting ? 0.9f : 1.0f;
+        float driftPowerMultiplier = IsDrifting ? 0.7f : 1.0f;
         float targetMaxAcc = PerusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttle) * driftPowerMultiplier;
 
         SmoothedMaxAcceleration = Mathf.MoveTowards(
@@ -288,7 +279,7 @@ public class PlayerCarController : BaseCarController
     //i hate this so much, its always somewhat broken but for now....... its not broken.
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
-        if (IsDrifting || GameManager.instance.isPaused || !CanDrift) return;
+        if (IsDrifting || GameManager.instance.isPaused || !CanDrift || racerScript.raceFinished) return;
 
         Activedrift++;
         IsDrifting = true;
@@ -300,14 +291,14 @@ public class PlayerCarController : BaseCarController
             if (wheel.WheelCollider == null) continue;
             WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
             sideways.extremumSlip   = 0.7f;
-            sideways.asymptoteSlip  = 1.05f;
+            sideways.asymptoteSlip  = 1.4f;
             sideways.extremumValue  = 1f;
-            sideways.asymptoteValue = 1.2f;
+            sideways.asymptoteValue = 1.4f;
             sideways.stiffness      = 2f;
             wheel.WheelCollider.sidewaysFriction = sideways;
         }
 
-        CarRb.angularDamping = 0.01f;
+        CarRb.angularDamping = 0.04f;
         AdjustWheelsForDrift();
         WheelEffects(true);
     }
@@ -315,7 +306,6 @@ public class PlayerCarController : BaseCarController
     void OnDriftCanceled(InputAction.CallbackContext ctx)
     {
         StopDrifting();
-        AdjustForwardFrictrion();
         MaxAcceleration = PerusMaxAccerelation;
         TargetTorque = PerusTargetTorque;
         WheelEffects(false);
@@ -331,21 +321,19 @@ public class PlayerCarController : BaseCarController
         return false;
     }
 
-        protected void StopDrifting()
+    internal void StopDrifting()
     {
         Activedrift = 0;
    
         IsDrifting = false;
         MaxAcceleration = PerusMaxAccerelation;
-        CarRb.angularDamping = 0.05f;
-        if (
-            racerScript != null 
-            && (racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
-            )
+        CarRb.angularDamping = 0.1f;
+        if (racerScript != null && (racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f))
         {
             GameManager.instance.StopAddingPoints();
-            return;
         }
+        AdjustForwardFrictrion();
+        AdjustSuspension();
         GameManager.instance.StopAddingPoints();
 
         foreach (var wheel in Wheels)

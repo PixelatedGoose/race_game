@@ -321,6 +321,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         raceFinished = true;
         startTimer = false;
 
+
+        carController.StopDrifting();
+        carController.CanDrift = false;
         endButtons = GameObject.FindGameObjectsWithTag("winmenubuttons")
             .OrderBy(r => r.name)
             .ToArray();

@@ -56,8 +56,8 @@ public class BaseCarController : MonoBehaviour
     [Header("Drift asetukset")]
     //protected float DriftMultiplier = 1.0f;
     public bool IsDrifting { get; protected set; } = false;
-    [SerializeField] protected Color GrassTrailColor = new Color(0.3f, 0.15f, 0.0f);
-    [SerializeField] protected Color RoadTrailColor = Color.black;
+    protected Color GrassTrailColor = new Color(0.3f, 0.15f, 0.0f);
+    protected Color RoadTrailColor = Color.black;
     protected float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
     [Header("turbe asetukset")]
     protected Image TurbeMeter;
@@ -152,7 +152,7 @@ public class BaseCarController : MonoBehaviour
         }
 
 
-        ScoreManager.instance?.SetOnGrass(wheelsOnGrass >= 2);
+        ScoreManager.instance.SetOnGrass(wheelsOnGrass >= 2);
     }
 
     protected virtual bool IsOnGrass()
@@ -165,9 +165,8 @@ public class BaseCarController : MonoBehaviour
         if (IsOnGrass())
         {
             TargetTorque *= GrassSpeedMultiplier;
-            print("wheel on grass");
 
-            Maxspeed = Mathf.Lerp(Maxspeed, Maxspeed * GrassSpeedMultiplier,Time.deltaTime  );
+            Maxspeed = Mathf.Lerp(Maxspeed, Maxspeed * GrassSpeedMultiplier,Time.deltaTime);
         }
     }
 
@@ -242,7 +241,7 @@ public class BaseCarController : MonoBehaviour
         foreach (var wheel in Wheels.Where(w => w.Axel == Axel.Front))
         {
         
-            var _steerAngle = SteerInput * TurnSensitivty * (IsDrifting ? 0.7f : 0.35f);
+            var _steerAngle = SteerInput * TurnSensitivty * (IsDrifting ? 0.5f : 0.35f);
             wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
@@ -270,7 +269,7 @@ public class BaseCarController : MonoBehaviour
             forwardFriction.asymptoteSlip = 0.6f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 5f;
+            forwardFriction.stiffness = 4f;
             wheel.WheelCollider.forwardFriction = forwardFriction;
 
             if (wheel.Axel == Axel.Front)
