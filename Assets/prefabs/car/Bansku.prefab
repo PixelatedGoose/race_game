@@ -1199,7 +1199,7 @@ MonoBehaviour:
   MaxAcceleration: 500
   BrakeAcceleration: 150
   TurnSensitivty: 1
-  TurnSensitivtyAtHighSpeed: 15
+  TurnSensitivtyAtHighSpeed: 17
   TurnSensitivtyAtLowSpeed: 30
   Deceleration: 1
   Maxspeed: 200

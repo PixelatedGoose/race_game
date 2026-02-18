@@ -391,14 +391,15 @@ public class ScoreManager : MonoBehaviour, IDataPersistence
 
     public void SetOnGrass(bool grassContact)
     {
-        if (isOnGrass == grassContact) return;
+        isOnGrass = grassContact;
 
         if (isOnGrass && isDriftingActive && driftCompoundMultiplier > 1.01f)
         {
-            touchedGrassWhileDrifting = true;
+            touchedGrassWhileDrifting = true; 
             Debug.Log($"[ScoreManager] Drift multiplier reset by grass - peak mult: x{driftCompoundMultiplier:F2}, driftTime: {driftTime:F2}s");
             multCounter.UpdateMultiplierText(1f);
             driftMultLost.Play();
+            
         }
     }
 
