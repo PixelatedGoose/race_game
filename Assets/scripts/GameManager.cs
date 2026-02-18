@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Header("car selection")]
     public GameObject CurrentCar { get; private set; }
     [SerializeField] private Transform playerSpawn;
+    [SerializeField] private Transform reverse_playerSpawn;
     [SerializeField] private GameObject[] cars;
 
     [Header("scene asetukset")]
@@ -55,7 +56,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             GameObject selectedCar = cars.FirstOrDefault(c => c.name == PlayerPrefs.GetString("SelectedCar"));
             if (selectedCar == null) selectedCar = cars[0];
-            CurrentCar = Instantiate(selectedCar, playerSpawn.position, PlayerPrefs.GetInt("Reverse") == 1 ? playerSpawn.rotation : Quaternion.Euler(playerSpawn.eulerAngles.x, playerSpawn.eulerAngles.y + 180.0f, playerSpawn.eulerAngles.z));
+            Transform spawn = PlayerPrefs.GetInt("Reverse") == 1 ? reverse_playerSpawn : playerSpawn;
+            CurrentCar = Instantiate(selectedCar, spawn.position, spawn.rotation);
         }
     }
 
