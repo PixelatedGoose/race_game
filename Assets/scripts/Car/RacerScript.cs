@@ -22,7 +22,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     // Other variables
     public Transform startFinishLine;
-    public Transform[] checkpoints;
+    public List<Transform> checkpoints;
     public int CurrentLap => currentLap;
 
     private bool[] checkpointStates;
@@ -89,17 +89,8 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         Controls.Enable();
         
-        GameObject[] checkpointObjects = GameObject.FindGameObjectsWithTag("checkpointTag");
-        List<Transform> checkpointsToMove = new();
-
-        foreach (GameObject checkpoint in checkpointObjects)
-        {
-            Transform checkpointTransform;
-            checkpointTransform = checkpoint.GetComponent<Transform>();
-
-            checkpointsToMove.Add(checkpointTransform);
-        }
-        checkpoints = checkpointsToMove.ToArray();
+        List<Transform> checkpointObjects = GameObject.FindGameObjectsWithTag("checkpointTag").Select(a => a.transform).ToList();
+        foreach (Transform checkpoint in checkpointObjects) if (PlayerPrefs.GetInt("Reverse") == 1) checkpoint.localEulerAngles = new();
 
         finalLapImg = GameObject.Find("UIcanvas/finalLap");
 
@@ -168,7 +159,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     {
         respawnPoint = startFinishLine;
 
-        checkpointStates = new bool[checkpoints.Length];
+        checkpointStates = new bool[checkpoints.Count];
     }
 
     void HandleReset()
@@ -279,7 +270,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void HandleCheck(Collider other)
     {
-        for (int i = 0; i < checkpoints.Length; i++)
+        for (int i = 0; i < checkpoints.Count; i++)
         {
             if (other.transform == checkpoints[i])
             {
