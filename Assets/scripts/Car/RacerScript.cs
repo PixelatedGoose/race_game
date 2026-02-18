@@ -88,9 +88,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private void OnEnable()
     {
         Controls.Enable();
-        
-        List<Transform> checkpointObjects = GameObject.FindGameObjectsWithTag("checkpointTag").Select(a => a.transform).ToList();
-        foreach (Transform checkpoint in checkpointObjects) if (PlayerPrefs.GetInt("Reverse") == 1) checkpoint.localEulerAngles = new();
+
+        checkpoints = GameObject.FindGameObjectsWithTag("checkpointTag").Select(a => a.transform).ToList();
+        if (PlayerPrefs.GetInt("Reverse") == 1) foreach (Transform checkpoint in checkpoints) checkpoint.eulerAngles = new(checkpoint.eulerAngles.x, checkpoint.eulerAngles.y + 180.0f, checkpoint.eulerAngles.z);
 
         finalLapImg = GameObject.Find("UIcanvas/finalLap");
 

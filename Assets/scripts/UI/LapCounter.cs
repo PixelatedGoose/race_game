@@ -43,7 +43,6 @@ public class LapCounter : MonoBehaviour
             UpdateLapUI(lapString, lastLapString);
             lastLapString = lapString;
         }
-        //if (lap == totalLaps) digitImages =
     }
 
     void UpdateLapUI(string lapString, string prevLapString)
