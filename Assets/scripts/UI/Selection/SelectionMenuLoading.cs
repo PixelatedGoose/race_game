@@ -23,7 +23,7 @@ public class specialTextChances
 public class SelectionMenuLoading : MonoBehaviour
 {
     [SerializeField] private Text loadText_text;
-    public TextAsset loadTexts;
+    private TextAsset loadTexts;
     private Dictionary<string, string[]> textData;
     private int index = -1;
 
@@ -73,8 +73,6 @@ public class SelectionMenuLoading : MonoBehaviour
         };
         randomIndex = UnityEngine.Random.Range(0, texts.Length);
         loadText_text.text = texts[randomIndex];
-
-        Debug.Log(loadTextRarity);
     }
 
     public void specialLoadingTexts()

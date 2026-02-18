@@ -71,15 +71,14 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     speedText, accelerationText, handlingText,
     scoreMultText, turbeBoostText, turbeAmountText;
     [SerializeField] private Text lockedPopup;
-    [SerializeField] private GameObject[] baseButtons;
-
-    RaceResultHandler handler;
-    RaceResultCollection collection;
+    [SerializeField] private Button[] baseButtons;
+    private bool canSelectCar;
+    //tämä saa olla ensimmäinen ja AINOA kerta kun teen näin
+    [SerializeField] private AudioSource selectSound;
 
     
 
     //4. setuppaa map selectionin kuva juttu [ehkä]
-    //5. score tai aika per auto: miten? mihin?
 
     void Awake()
     {
@@ -88,8 +87,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         selectionDetails = Resources.Load<TextAsset>("selectionDetails");
         //i'm dictionarying my dictionary
         details = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(selectionDetails.text);
-        handler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
-        collection = handler.Load();
         availableCars = carBases[baseIndex].cars;
         availableCarStats = carBases[baseIndex].carStats;
         
@@ -132,6 +129,24 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
                 car.SetActive(false);
 
         menuMusic.Play();
+    }
+    private void Update()
+    {
+        current = EventSystem.current.currentSelectedGameObject;
+
+        if (current != null)
+        {
+            Dictionary<string, string> currentMenu = details[availableSelectionMenus[selectionIndex].name];
+            //TODO: setuppaa todennäkösesti variable tolle ja sen onchanged paskiainen tänne,
+            //jotta voi yksinkertastaa koodia
+
+            //vuoden indeksoinnit siitä
+            if (currentMenu.ContainsKey(current.name)) detailsPanelText.text = currentMenu[current.name];
+            else if (currentMenu.ContainsKey(availableCars[index].name)) detailsPanelText.text = currentMenu[availableCars[index].name];
+            //säilytä edellinen teksti details ruudus jos dropdown on avattuna
+            else if (current.name.StartsWith("Item")) return;
+            else detailsPanelText.text = "";
+        }
     }
     public void SaveDropdownValues()
     {
@@ -202,44 +217,14 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             if (unlockedSkins.Contains(activeCarStats.carName))
             {
                 lockedPopup.color = new(1f, 1f, 1f, 0f);
+                canSelectCar = true;
             }
             else
             {
                 lockedPopup.color = new(1f, 1f, 1f, 1f);
+                canSelectCar = false;
             }
         }
-    }
-
-    //todo: muuta score timeksi ja ota se per base map
-    public void UpdateResultsPerMap()
-    {
-        /* CarStatsNew activeCarStats = carStats[index];
-
-        string selectedMap = PlayerPrefs.GetString("SelectedMap");
-
-        var bestResults = Array.Empty<RaceResultData>();
-        if (collection != null && collection.results.Count != 0)
-        {
-            bestResults = collection.results
-                .Where(r => string.Equals(r.map, selectedMap, StringComparison.OrdinalIgnoreCase))
-                .Where(r => string.Equals(r.carName, activeCarStats.carName, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(r => r.score)
-                .ToArray();
-        }
-        else
-        {
-            Debug.Log("no race results exist; defaulting to empty");
-            bestResults = Array.Empty<RaceResultData>();
-        }
-
-        int topResultsScore = 0;
-        if (bestResults.Length != 0)
-        {
-            topResultsScore = bestResults[0].score;
-            scoreText.text = $"Best score with {activeCarStats.carName}: {topResultsScore}";
-        }
-        else
-            scoreText.text = $"No score yet with {activeCarStats.carName}"; */
     }
     
     public void RightButton()
@@ -274,23 +259,18 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    private void Update()
+    public void AttemptNext()
     {
-        current = EventSystem.current.currentSelectedGameObject;
-
-        if (current != null)
+        //vitun paskanen hack
+        if (canSelectCar)
         {
-            Dictionary<string, string> currentMenu = details[availableSelectionMenus[selectionIndex].name];
-            //TODO: setuppaa todennäkösesti variable tolle ja sen onchanged paskiainen tänne,
-            //jotta voi yksinkertastaa koodia
-
-            //vuoden indeksoinnit siitä
-            if (currentMenu.ContainsKey(current.name)) detailsPanelText.text = currentMenu[current.name];
-            else if (currentMenu.ContainsKey(availableCars[index].name)) detailsPanelText.text = currentMenu[availableCars[index].name];
-            //säilytä edellinen teksti details ruudus jos dropdown on avattuna
-            else if (current.name.StartsWith("Item")) return;
-            else detailsPanelText.text = "";
+            startButton.SetActive(true);
+            backButton.SetActive(true);
+            selectSound.Play();
+            Next();
+            return;
         }
+        Debug.Log("FUCK YOU BALTIMORE! IF YOU'RE DUMB ENOUGH TO BUY A NEW CAR THIS WEEKEND, YOU'RE A BIG ENOUGH SCHMUCK TO COME TO BIG BILL HELL'S CARS! BAD DEALS! CARS THAT BREAK DOWN! THIEVES! IF YOU THINK YOU'RE GOING TO FIND A BARGAIN AT BIG BILL, YOU CAN KISS MY ASS! IT'S OUR BELIEF THAT YOU'RE SUCH A STUPID MOTHERFUCKER, YOU'LL FALL FOR THIS BULLSHIT - GUARANTEED! IF YOU FIND A BETTER DEAL: SHOVE IT UP YOUR UGLY ASS! YOU HEARD US RIGHT: SHOVE IT UP YOUR UGLY ASS! BRING YOUR TRADE! BRING YOUR TITLE! BRING YOUR WIFE! WE'LL FUCK HER! THAT'S RIGHT, WE'LL FUCK YOUR WIFE! BECAUSE AT BIG BILL HELL'S, YOU'RE FUCKED SIX WAYS FROM SUNDAY! TAKE A HIKE TO BIG BILL HELL'S - HOME OF CHALLENGE PISSING! THAT'S RIGHT, CHALLENGE PISSING! HOW DOES IT WORK? IF YOU CAN PISS SIX FEET IN THE AIR STRAIGHT UP AND NOT GET WET, YOU GET NO DOWN PAYMENT! DON'T WAIT! DON'T DELAY! DON'T FUCK WITH US, OR WE'LL RIP YOUR NUTS OFF! ONLY AT BIG BILL HELL'S, THE ONLY DEALER THAT TELLS YOU TO FUCK OFF! HURRY UP ASSHOLE! THIS EVENT ENDS THE MINUTE YOU WRITE US A CHECK! AND IT BETTER NOT BOUNCE OR YOU'RE A DEAD MOTHERFUCKER! GO TO HELL! BIG BILL HELL'S CARS - BALTIMORE'S FILTHIEST AND EXCLUSIVE HOME OF THE MEANEST SONS OF BITCHES IN THE STATE OF MARYLAND - GUARANTEED!");
     }
 
     public void Next()
@@ -395,6 +375,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     //tarkistan myöhemmin voiko tätä välttää... vitun coroutinet
     public void StartGame()
     {
+        PlayerPrefs.SetString("SelectedCar", availableCars[index].name);
+        PlayerPrefs.Save();
         SetMapToLoad();
         StartCoroutine(LoadSelectedMap());
     }
