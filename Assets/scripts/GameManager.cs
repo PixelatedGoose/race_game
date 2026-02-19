@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using Unity.Splines.Examples;
+using Unity.PlasticSCM.Editor.WebApi;
 
 
 
@@ -39,7 +40,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
         "ai_haukipudas",
         "ai_haukipudas_night",
         "tutorial",
-        "canyon"
+        "canyon",
+        "canyon_night",
+        "ai_canyon",
+        "ai_canyon_night"
     };
     
     [Header("auto")]
