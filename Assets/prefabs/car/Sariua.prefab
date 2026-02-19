@@ -595,24 +595,25 @@ MonoBehaviour:
   MaxAcceleration: 1000
   BrakeAcceleration: 200
   TurnSensitivty: 1
-  TurnSensitivtyAtHighSpeed: 16
+  TurnSensitivtyAtHighSpeed: 18
   TurnSensitivtyAtLowSpeed: 30
   Deceleration: 1
-  Maxspeed: 180
+  Maxspeed: 190
   GravityMultiplier: 1.5
+  Wheels: []
   GrassSpeedMultiplier: 0.5
   GrassRespawnActive: 0
   MoveInput: 0
   SteerInput: 0
   Turbesped: 60
-  BaseSpeed: 120
+  BaseSpeed: 130
   Grassmaxspeed: 50
-  DriftMaxSpeed: 140
+  DriftMaxSpeed: 100
   TurbeAmount: 100
   TurbeMax: 100
   Turbepush: 15
-  TurbeReduce: 10
-  TurbeRegen: 10
+  TurbeReduce: 20
+  TurbeRegen: 15
 --- !u!114 &187602521392888673
 MonoBehaviour:
   m_ObjectHideFlags: 0

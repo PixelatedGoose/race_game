@@ -1196,27 +1196,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxAcceleration: 500
+  MaxAcceleration: 300
   BrakeAcceleration: 150
   TurnSensitivty: 1
-  TurnSensitivtyAtHighSpeed: 17
+  TurnSensitivtyAtHighSpeed: 20
   TurnSensitivtyAtLowSpeed: 30
   Deceleration: 1
-  Maxspeed: 200
+  Maxspeed: 240
   GravityMultiplier: 1.5
+  Wheels: []
   GrassSpeedMultiplier: 0.5
   GrassRespawnActive: 0
   MoveInput: 0
   SteerInput: 0
   Turbesped: 60
-  BaseSpeed: 140
+  BaseSpeed: 180
   Grassmaxspeed: 50
   DriftMaxSpeed: 140
   TurbeAmount: 100
   TurbeMax: 100
   Turbepush: 15
-  TurbeReduce: 10
-  TurbeRegen: 10
+  TurbeReduce: 20
+  TurbeRegen: 15
 --- !u!114 &8984414616937260121
 MonoBehaviour:
   m_ObjectHideFlags: 0
