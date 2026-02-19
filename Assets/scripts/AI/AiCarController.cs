@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-public class AiCarController : MonoBehaviour
+public class BetterNewAiCarController : MonoBehaviour
 {
     
     // --- Constants ---
@@ -18,9 +18,7 @@ public class AiCarController : MonoBehaviour
     [Tooltip("Distance threshold for reaching a waypoint.")]
     [SerializeField] private float waypointThreshold = 10.0f;
     [Tooltip("Angle threshold for switching between straight lines and curves.")]
-    #pragma warning disable 0414
     [SerializeField] private float angleThreshold = 35.0f;
-    #pragma warning restore 0414
 
     // --- Car Movement ---
     [Header("Car Movement Settings")]
@@ -32,18 +30,14 @@ public class AiCarController : MonoBehaviour
     // --- Steering ---
     [Header("Steering Settings")]
     [Tooltip("Left turn radius (how far the front left wheel can rotate).")]
-    #pragma warning disable 0414
     [SerializeField] private float leftTurnRadius = 10.0f;
     [Tooltip("Right turn radius (how far the front right wheel can rotate).")]
     [SerializeField] private float rightTurnRadius = 30.0f;
     [Tooltip("Current turn sensitivity.")]
     [SerializeField] private float turnSensitivity = 30.0f;
-    #pragma warning restore 0414
     private float turnStrength = 2.5f;
 
-    #pragma warning disable 0414
     [SerializeField] private int lookAheadIndex = 5;
-    #pragma warning restore 0414
 
     // --- Physics ---
     [Header("Physics Settings")]
@@ -55,22 +49,18 @@ public class AiCarController : MonoBehaviour
     // --- Corner Slowdown ---
     [Header("AI Turn Slowdown Settings")]
     [Tooltip("Degrees: Only slow down for turns sharper than this.")]
-    #pragma warning disable 0414
     [SerializeField] private float slowdownThreshold = 30f;
     [Tooltip("Degrees: Max slowdown at this angle or above.")]
     [SerializeField] private float maxSlowdownAngle = 90f;
     [Tooltip("Minimum speed factor at max angle (e.g. 0.35 = 35% of maxSpeed).")]
     [SerializeField] private float minSlowdown = 0.35f;
-    #pragma warning restore 0414
 
     // --- Turn Detection ---
     [Header("Turn Detection Settings")]
     [Tooltip("Radius of the detection sphere for upcoming turns.")]
-    #pragma warning disable 0414
     [SerializeField] private float detectionRadius = 7.0f;
     [Tooltip("Tolerance for deviation from the Bezier curve.")]
     [SerializeField] private float curveTolerance = 2.0f;
-    #pragma warning restore 0414
 
     // --- Avoidance ---
     [Header("Avoidance Settings")]
@@ -78,9 +68,7 @@ public class AiCarController : MonoBehaviour
     [SerializeField] private float avoidanceBuffer = 5.0f;
     [Tooltip("How far to offset laterally when dodging another car.")]
     [SerializeField] private float avoidanceLateralOffset = 2.0f;
-    #pragma warning disable 0414
     private float avoidanceOffset = 0f;
-    #pragma warning restore 0414
     public float safeRadius { get; private set; }
 
     // --- Boost ---
@@ -93,11 +81,11 @@ public class AiCarController : MonoBehaviour
     // --- References ---
     [Header("References")]
     [Tooltip("List of wheels used by the car.")]
-    [SerializeField] private BaseCarController.Wheel[] wheels;
+    [SerializeField] private List<BaseCarController.Wheel> wheels;
     [Tooltip("Rigidbody component of the car.")]
-    public Rigidbody carRb { get; private set; }
+    public Rigidbody CarRb { get; private set; }
     [Tooltip("Reference to the player car.")]
-    private PlayerCarController playerCar;
+    [SerializeField] private BaseCarController playerCar;
     public AiCarManager aiCarManager;
     private Collider carCollider;
     public float CarWidth { get; private set; }
@@ -116,13 +104,10 @@ public class AiCarController : MonoBehaviour
     private LayerMask objectLayerMask;
     private float steerInput;
     private float avoidance;
-    public AiCarController Initialize(
-        AiCarManager aiCarManager, 
-        Collider playerCollider, 
-        AiCarManager.DifficultyStats difficultyStats
-        )
+    public BetterNewAiCarController Initialize(AiCarManager aiCarManager, Collider playerCollider, AiCarManager.DifficultyStats difficultyStats)
     {
         this.aiCarManager = aiCarManager;
+        playerCar = playerCollider.GetComponent<BaseCarController>();
         Collider pc = playerCollider.GetComponent<Collider>();
         playerCarWidth = pc.bounds.size.x;
         playerCarLength = pc.bounds.size.z;
@@ -131,14 +116,12 @@ public class AiCarController : MonoBehaviour
         avoidance = difficultyStats.avoidance;
         return this;
     }
-
     private void Awake()
     {
-        playerCar = GameManager.instance.CurrentCar.GetComponentInChildren<PlayerCarController>();
         
-        frontWheels = wheels.Where(w => w.Axel == BaseCarController.Axel.Front).ToArray();
-        if (carRb == null) carRb = GetComponentInChildren<Rigidbody>();
-        carRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
+
+        if (CarRb == null) CarRb = GetComponentInChildren<Rigidbody>();
+        CarRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
 
         carCollider = GetComponentInChildren<Collider>();
         if (carCollider != null)
@@ -147,6 +130,8 @@ public class AiCarController : MonoBehaviour
             CarLength = carCollider.bounds.size.z;
             safeRadius = Mathf.Max(CarWidth, CarLength) * 0.5f;
         }
+
+        frontWheels = wheels.Where(w => w.Axel == BaseCarController.Axel.Front).ToArray();
     }
 
     private void Start()
@@ -158,14 +143,14 @@ public class AiCarController : MonoBehaviour
     private void FixedUpdate()
     {
         // Airborne?
-        if (Physics.Raycast(carRb.position, Vector3.down, GROUND_RAY_LENGTH))
+        if (Physics.Raycast(CarRb.position, Vector3.down, GROUND_RAY_LENGTH))
         {
             // Apply gravity
-            carRb.AddForce(gravityMultiplier * Physics.gravity.magnitude * Vector3.down, ForceMode.Acceleration);
+            CarRb.AddForce(gravityMultiplier * Physics.gravity.magnitude * Vector3.down, ForceMode.Acceleration);
         }
 
         // Set new waypoint if close enough to current
-        if (Vector3.Distance(carRb.position, aiCarManager.Waypoints[currentWaypointIndex]) < waypointThreshold)
+        if (Vector3.Distance(CarRb.position, aiCarManager.Waypoints[currentWaypointIndex]) < waypointThreshold)
         {
             currentWaypointIndex = (currentWaypointIndex + 1) % aiCarManager.Waypoints.Count();
         }
@@ -174,16 +159,16 @@ public class AiCarController : MonoBehaviour
 
         AvoidObstacles();
 
-        carRb.rotation = Quaternion.Lerp(
-            carRb.rotation,
-            Quaternion.LookRotation(targetPoint - carRb.position),
+        CarRb.rotation = Quaternion.Lerp(
+            CarRb.rotation,
+            Quaternion.LookRotation(targetPoint - CarRb.position),
             turnStrength * Time.fixedDeltaTime
         );
 
         
         foreach (BaseCarController.Wheel wheel in frontWheels)
         {
-            wheel.WheelCollider.steerAngle = carRb.rotation.y;
+            wheel.WheelCollider.steerAngle = CarRb.rotation.y;
         }
 
         
@@ -225,27 +210,23 @@ public class AiCarController : MonoBehaviour
 
     private void ApplySpeedLimit(float targetSpeed)
     {
-        float currentSpeed = carRb.linearVelocity.magnitude * 3.6f; // Convert to km/h
+        float currentSpeed = CarRb.linearVelocity.magnitude * 3.6f; // Convert to km/h
         if (currentSpeed > targetSpeed)
         {
-            carRb.linearVelocity = carRb.linearVelocity.normalized * (targetSpeed / 3.6f);
+            CarRb.linearVelocity = CarRb.linearVelocity.normalized * (targetSpeed / 3.6f);
         }
     }
 
     private bool IsOnGrass()
     {
         if (wheels == null) return false;
-        foreach (PlayerCarController.Wheel wheel in wheels)
+        foreach (BaseCarController.Wheel wheel in wheels)
         {
-            if (
-                Physics.Raycast(
-                    wheel.WheelCollider.transform.position,
-                    -wheel.WheelCollider.transform.up, 
-                    out RaycastHit hit, 
-                    wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance
-                ) 
-                && hit.collider.gameObject.layer == grassLayerMask
-            ) return true;
+            if (Physics.Raycast(wheel.WheelCollider.transform.position, -wheel.WheelCollider.transform.up, out RaycastHit hit, wheel.WheelCollider.radius + wheel.WheelCollider.suspensionDistance))
+            {
+                if (hit.collider.gameObject.layer == grassLayerMask)
+                    return true;
+            }
         }
         return false;
     }
@@ -254,15 +235,15 @@ public class AiCarController : MonoBehaviour
     {
         float avoidanceOffset = 0f;
         
-        RaycastHit[] hits = Physics.BoxCastAll(center:carRb.transform.forward * CarLength + carRb.position, halfExtents:new Vector3(CarLength * 4, 2, CarWidth), direction:carRb.transform.forward, orientation:carRb.transform.rotation,  maxDistance:CarLength * 2, layerMask:objectLayerMask, QueryTriggerInteraction.Ignore);
-        //Debug.Log("max dist: " + CarLength * 4);
+        RaycastHit[] hits = Physics.BoxCastAll(center:CarRb.transform.forward * CarLength + CarRb.position, halfExtents:new Vector3(CarLength * 4, 2, CarWidth), direction:CarRb.transform.forward, orientation:CarRb.transform.rotation,  maxDistance:CarLength * 2, layerMask:objectLayerMask, QueryTriggerInteraction.Ignore);
+        Debug.Log("max dist: " + CarLength * 4);
         foreach (RaycastHit hit in hits)
         {
             if (hit.collider.gameObject.layer != objectLayerMask) continue;
 
             Debug.Log("distance: " + hit.distance);
             Debug.Log("hit object: " + hit.collider.gameObject.name);
-            float steerDirection = Vector3.Cross(carRb.transform.forward, hit.point).y > 0 ? -1f : 1f;
+            float steerDirection = Vector3.Cross(CarRb.transform.forward, hit.point).y > 0 ? -1f : 1f;
             avoidanceOffset += steerDirection * avoidanceLateralOffset * avoidance;
         }
 
@@ -270,23 +251,23 @@ public class AiCarController : MonoBehaviour
         {
             if (other == this) continue;
 
-            Vector3 toOther = other.carRb.position - carRb.position;
+            Vector3 toOther = other.CarRb.position - CarRb.position;
             float distance = toOther.magnitude;
             float otherSafeRadius = Mathf.Max(other.CarWidth, other.CarLength) * 0.5f;
             float minSafeDistance = safeRadius + otherSafeRadius + avoidanceBuffer;
 
-            if (distance < minSafeDistance && Vector3.Dot(carRb.transform.forward, toOther.normalized) > 0.5f)
+            if (distance < minSafeDistance && Vector3.Dot(CarRb.transform.forward, toOther.normalized) > 0.5f)
             {
-                Vector3 myFuturePos = carRb.position + carRb.linearVelocity * 0.5f;
-                Vector3 otherFuturePos = other.carRb.position + other.carRb.linearVelocity * 0.5f;
+                Vector3 myFuturePos = CarRb.position + CarRb.linearVelocity * 0.5f;
+                Vector3 otherFuturePos = other.CarRb.position + other.CarRb.linearVelocity * 0.5f;
                 float futureDist = (myFuturePos - otherFuturePos).magnitude;
 
                 if (futureDist < minSafeDistance)
                 {
-                    float steerDirection = Vector3.Cross(carRb.transform.forward, toOther).y > 0 ? -1f : 1f;
+                    float steerDirection = Vector3.Cross(CarRb.transform.forward, toOther).y > 0 ? -1f : 1f;
                     avoidanceOffset += steerDirection * avoidanceLateralOffset * avoidance;
 
-                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > other.carRb.linearVelocity.magnitude)
+                    if (distance < minSafeDistance * 0.5f && CarRb.linearVelocity.magnitude > other.CarRb.linearVelocity.magnitude)
                     {
                         moveInput = 0.7f;
                     }
@@ -296,38 +277,38 @@ public class AiCarController : MonoBehaviour
 
         if (playerCar != null && playerCar.CarRb != null && playerCar != this)
         {
-            Vector3 toPlayer = playerCar.transform.position - carRb.transform.position;
+            Vector3 toPlayer = playerCar.transform.position - CarRb.transform.position;
             float distance = toPlayer.magnitude;
             float playerSafeRadius = Mathf.Max(playerCarWidth, playerCarLength) * 0.5f;
             float minSafeDistance = safeRadius + playerSafeRadius + avoidanceBuffer;
 
-            if (distance < minSafeDistance && Vector3.Dot(carRb.transform.forward, toPlayer.normalized) > 0.5f)
+            if (distance < minSafeDistance && Vector3.Dot(CarRb.transform.forward, toPlayer.normalized) > 0.5f)
             {
-                Vector3 myFuturePos = carRb.transform.position + carRb.linearVelocity * 0.5f;
+                Vector3 myFuturePos = CarRb.transform.position + CarRb.linearVelocity * 0.5f;
                 Vector3 playerFuturePos = playerCar.transform.position + playerCar.CarRb.linearVelocity * 0.5f;
                 float futureDist = (myFuturePos - playerFuturePos).magnitude;
 
                 if (futureDist < minSafeDistance)
                 {
-                    float steerDirection = Vector3.Cross(carRb.transform.forward, toPlayer).y > 0 ? -1f : 1f;
+                    float steerDirection = Vector3.Cross(CarRb.transform.forward, toPlayer).y > 0 ? -1f : 1f;
                     avoidanceOffset += steerDirection * avoidanceLateralOffset;
 
-                    if (distance < minSafeDistance * 0.5f && carRb.linearVelocity.magnitude > playerCar.CarRb.linearVelocity.magnitude) moveInput = 0.7f;
+                    if (distance < minSafeDistance * 0.5f && CarRb.linearVelocity.magnitude > playerCar.CarRb.linearVelocity.magnitude) moveInput = 0.7f;
                 }
             }
         }
 
-        Vector3 localPosition = carRb.gameObject.transform.InverseTransformPoint(targetPoint);
+        Vector3 localPosition = CarRb.gameObject.transform.InverseTransformPoint(targetPoint);
         localPosition.x += avoidanceOffset;
 
 
-        targetPoint = carRb.gameObject.transform.TransformPoint(localPosition);
+        targetPoint = CarRb.gameObject.transform.TransformPoint(localPosition);
 
     }
 
     void OnDrawGizmos()
     {
-        Gizmos.DrawLine(carRb.position, carRb.transform.forward * CarLength * 4 + carRb.position);
-        Gizmos.DrawCube(carRb.transform.forward * CarLength + carRb.position, new(CarLength * 4, 2, CarWidth));
+        Gizmos.DrawLine(CarRb.position, CarRb.transform.forward * CarLength * 4 + CarRb.position);
+        Gizmos.DrawCube(CarRb.transform.forward * CarLength + CarRb.position, new(CarLength * 4, 2, CarWidth));
     }
 }

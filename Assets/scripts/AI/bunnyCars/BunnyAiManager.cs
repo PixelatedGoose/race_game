@@ -14,7 +14,7 @@ public class BunnyAiManager : MonoBehaviour
 {
     #pragma warning disable 0414
     public List<Vector3> BezierPoints { get; private set; } = new();
-    private AiCarController[] aiCars;
+    private BunnyAiCars[] aiCars;
     [Header("AI Car Settings")]
     [SerializeField] private bool enableAiCars = true;
     [Tooltip("Number of AI cars to spawn. Optional.")]

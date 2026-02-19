@@ -15,8 +15,8 @@ public class AiCarManager : MonoBehaviour
     [Tooltip("Number of AI cars to spawn. 0 = no AI cars.")]
     [Range(0, 100)]
     [SerializeField] private byte spawnedAiCarCount = 0;
-    [SerializeField] private AiCarController[] AiCarPrefabs;
-    public List<AiCarController> AiCars;
+    [SerializeField] private NewAiCarController[] AiCarPrefabs;
+    public List<NewAiCarController> AiCars;
     private AIDifficulty difficulty;
     public Vector3[] Waypoints { get; private set; }
     private GameManager gm;
@@ -47,7 +47,7 @@ public class AiCarManager : MonoBehaviour
     {
         BezierBaker bezierBaker = GetComponent<BezierBaker>();
         Waypoints = bezierBaker.GetCachedPoints();
-        spawnedAiCarCount = (byte)PlayerPrefs.GetInt("AIAmount");
+        spawnedAiCarCount = 3;//(byte)PlayerPrefs.GetInt("AIAmount");
         difficulty = (AIDifficulty)PlayerPrefs.GetInt("AILevel");
 
         gm = GameManager.instance;
@@ -63,12 +63,12 @@ public class AiCarManager : MonoBehaviour
             for (int i = 0; i < spawnedAiCarCount; i++)
             {
                 // Get a random prefab from the list
-                AiCarController prefab = AiCarPrefabs[UnityEngine.Random.Range(0, AiCarPrefabs.Length)];
+                NewAiCarController prefab = AiCarPrefabs[UnityEngine.Random.Range(0, AiCarPrefabs.Length)];
                 
                 // Spawn the AI car
                 GameObject newAI = Instantiate(prefab.gameObject, spawnPoints[i % spawnPoints.Length].position, transform.rotation);
 
-                AiCarController controller = newAI.GetComponent<AiCarController>();
+                NewAiCarController controller = newAI.GetComponent<NewAiCarController>();
                 controller.Initialize(this, gm.CurrentCar.GetComponentInChildren<Collider>(), difficultyRanges[difficulty]);
                 
                 AiCars.Add(controller);
