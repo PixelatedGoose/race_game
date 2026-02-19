@@ -53,7 +53,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     [SerializeField] private GameObject detailsPanel;
     [SerializeField] private GameObject startButton;
     [SerializeField] private GameObject nextButton;
-    [SerializeField] private GameObject backButton;
     private Dictionary<string, Dictionary<string, string>> details;
     [SerializeField] private TextMeshProUGUI detailsPanelText;
     private GameObject carStatsContainer;
@@ -72,7 +71,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     speedText, accelerationText, handlingText,
     scoreMultText, turbeBoostText, turbeAmountText;
     [SerializeField] private Text lockedPopup;
-    [SerializeField] private Button[] baseButtons;
     private bool canSelectCar;
     //tämä saa olla ensimmäinen ja AINOA kerta kun teen näin
     [SerializeField] private AudioSource selectSound;
@@ -80,6 +78,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     
 
     //4. setuppaa map selectionin kuva juttu [ehkä]
+    //back buttonin voi poistaa
 
     void Awake()
     {
@@ -125,9 +124,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         TextAsset data = Resources.Load<TextAsset>("unlockedSkins");
         unlockedSkins = JsonConvert.DeserializeObject<List<string>>(data.text);
 
-        foreach (CarBase carBase in carBases)
-            foreach (GameObject car in carBase.cars)
-                car.SetActive(false);
+        foreach (CarBase carBase in carBases) foreach (GameObject car in carBase.cars)
+            car.SetActive(false);
 
         menuMusic.Play();
     }
@@ -166,10 +164,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         selectedGamemode = (Gamemode)mode;
 
         //what bullshit. ei enää nii paskanen kuitenkaa
-        if (selectedGamemode != Gamemode.AI)
-            availableSelectionMenus = selectionMenus.Where((a, i) => i != 1).ToList();
-        else
-            availableSelectionMenus = selectionMenus;
+        if (selectedGamemode != Gamemode.AI) availableSelectionMenus = selectionMenus.Where((a, i) => i != 1).ToList();
+        else availableSelectionMenus = selectionMenus;
     }
 
     public void UpdateBase()
@@ -267,7 +263,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         if (canSelectCar)
         {
             startButton.SetActive(true);
-            backButton.SetActive(true);
             selectSound.Play();
             Next();
             return;
@@ -318,15 +313,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             firstSelected.GetComponent<Selectable>().Select();
 
             if (availableSelectionMenus[selectionIndex].name == "A_mapSelection")
-            {
-                foreach (CarBase carBase in carBases)
-                    foreach (GameObject car in carBase.cars)
-                        car.SetActive(false);
-            }
+                foreach (CarBase carBase in carBases) foreach (GameObject car in carBase.cars) car.SetActive(false);
             else if (availableSelectionMenus[selectionIndex].name == "B_carSelection")
-            {
                 carStatsContainer.SetActive(true);
-            }
         }
         else
         {
@@ -339,19 +328,12 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private void ThePanelThing()
     {
         nextButton.SetActive(false);
-        backButton.SetActive(false);
         startButton.SetActive(false);
         if (selectionIndex == 0) detailsPanel.SetActive(false);
 
-        if (availableSelectionMenus[selectionIndex].name == "C_optionSelection")
-        {
-            startButton.SetActive(true);
-            backButton.SetActive(true);
-        }
-        else if (availableSelectionMenus[selectionIndex].name == "1_AIoptionSelection")
-        {
-            nextButton.SetActive(true);
-        }
+        if (availableSelectionMenus[selectionIndex].name == "C_optionSelection") startButton.SetActive(true);
+
+        else if (availableSelectionMenus[selectionIndex].name == "1_AIoptionSelection") nextButton.SetActive(true);
     }
 
     private void SetMapToLoad()
@@ -359,10 +341,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         string selectedMap = savedMapBaseName;
         TMP_Dropdown dayOrNight = GameObject.Find("Time").GetComponent<TMP_Dropdown>();
 
-        if (selectedGamemode == Gamemode.AI)
-            selectedMap = $"ai_{savedMapBaseName}";
-        if (dayOrNight.value == 1)
-            selectedMap += $"_night";
+        if (selectedGamemode == Gamemode.AI) selectedMap = $"ai_{savedMapBaseName}";
+        if (dayOrNight.value == 1) selectedMap += $"_night";
         PlayerPrefs.SetString("SelectedMap", selectedMap);
         PlayerPrefs.Save();
 

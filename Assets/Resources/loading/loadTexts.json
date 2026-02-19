@@ -167,7 +167,8 @@
         "How many different cars have you unlocked?",
         "We do not have secrets hidden in our game. I repeat, there are no secrets.",
         "at some point in my life, i swear i saw this game in my dream",
-        "Have you ever thought about car insurance?"
+        "Have you ever thought about car insurance?",
+        "Like Sonny, Like Ronny"
     ],
 
     "uncommon": [
@@ -425,7 +426,7 @@
         "Any donations to fund our totally normal game development are appreciated",
         "Isn't it lunch time?",
         "Nice car you got there. Can I have it?",
-        "ja nyt tulet näkemään, miltä vuosi pelin kehittämistä näyttää",
+        "ja nyt tulet näkemään, miltä vuosi pelikehitystä näyttää",
         "meil on myös mountain mappi. jos se ei oo täs, se on silti olemas",
         "MUISTA DRIFTATA AUTOLLA. ÄLÄ MISSÄÄN NIMESSÄ AJA SILLÄ SUORAAN.",
         "Laws exist in this game as well - but we made our own, so have fun",
@@ -438,12 +439,17 @@
         "we don't have a better name for this screen that happens to be loading something",
         "Ismo Laitelan ase-supermarketti",
         "Our cars are not scale models. They are real, supreme quality automobiles.",
-        "Kesken kaiken, yhteiskunnalla on sinulle asiaa. Tiesitkö, että joka kolmas ajaja ei driftaa oikein?"
+        "Kesken kaiken, yhteiskunnalla on sinulle asiaa. Tiesitkö, että joka kolmas ajaja ei driftaa oikein?",
+        "did you know our game is old fashioned?",
+        "we included funny texts on this screen; now go ahead and find them all",
+        "I desire to drive a car. Nothing more, nothing less.",
+        "Can our loading texts be compared to The Library of Babel?",
+        "aw man, i just crashed my car and the seat broke! ... oh yeah my car's engine also broke down"
     ],
 
     "obscure": [
-        "Joonas Kallio on meidän suurin inspiraatiomme",
-        "Älä katso autojen sisälle oman mielenterveytesi takia.",
+        "Joonas Kallio on suurin inspiraatiomme",
+        "Älä katso autojen sisälle oman terveytesi takia.",
         "the stat-i-nator 9000",
         "We aren't responsible for damages caused by the Stat-i-nator 9000.",
         "Try pressing CTRL + Left Shift + Left Alt + SPACE + C on the main menu",
@@ -494,5 +500,3 @@
         "Your chance of seeing this exact text on this loading screen is 1 in 12 quadrillion."
     ]
 }
-
-
