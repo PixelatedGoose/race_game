@@ -38,7 +38,7 @@ public class BaseCarController : MonoBehaviour
     [Min(100.0f)]
     [SerializeField] protected float Maxspeed  = 100.0f;
     [SerializeField] protected float GravityMultiplier  = 1.5f;
-    protected List<Wheel> Wheels;
+    [SerializeField] protected List<Wheel> Wheels;
     WheelHit hit;
     [SerializeField] protected float GrassSpeedMultiplier = 0.5f;
     protected LayerMask Grass;
@@ -194,11 +194,11 @@ public class BaseCarController : MonoBehaviour
         foreach (var wheel in Wheels)
         {
             WheelFrictionCurve forwardFriction = wheel.WheelCollider.forwardFriction;
-            forwardFriction.extremumSlip = 0.6f;
+            forwardFriction.extremumSlip = 0.8f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteSlip = 1.0f;
             forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 5f;
+            forwardFriction.stiffness = 7f;
             wheel.WheelCollider.forwardFriction = forwardFriction;
         }
     }
@@ -241,7 +241,7 @@ public class BaseCarController : MonoBehaviour
         foreach (var wheel in Wheels.Where(w => w.Axel == Axel.Front))
         {
         
-            var _steerAngle = SteerInput * TurnSensitivty * (IsDrifting ? 0.5f : 0.35f);
+            var _steerAngle = SteerInput * TurnSensitivty * (IsDrifting ? 0.8f : 0.35f);
             wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
@@ -260,22 +260,22 @@ public class BaseCarController : MonoBehaviour
         foreach (var wheel in Wheels)
         {
             JointSpring suspensionSpring = wheel.WheelCollider.suspensionSpring;
-            suspensionSpring.spring = 4000.0f;
-            suspensionSpring.damper = 1000.0f;
+            suspensionSpring.spring = 500.0f;
+            suspensionSpring.damper = 2500.0f;
             wheel.WheelCollider.suspensionSpring = suspensionSpring;
 
             WheelFrictionCurve forwardFriction = wheel.WheelCollider.forwardFriction;
-            forwardFriction.extremumSlip = 0.4f;
+            forwardFriction.extremumSlip = 0.45f;
             forwardFriction.asymptoteSlip = 0.6f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteValue = 1;
-            forwardFriction.stiffness = 4f;
+            forwardFriction.stiffness = 5.5f;
             wheel.WheelCollider.forwardFriction = forwardFriction;
 
             if (wheel.Axel == Axel.Front)
             {
                 WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
-                sidewaysFriction.stiffness = 2.0f;
+                sidewaysFriction.stiffness = 2f;
                 wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
             }
         }        
@@ -293,7 +293,7 @@ public class BaseCarController : MonoBehaviour
     //bobbing effect
 
     /// <summary>
-    /// does wheel effects
+    /// calls tje wjeeöeffects
     /// </summary>
     protected void WheelEffects(bool enable)
     {
