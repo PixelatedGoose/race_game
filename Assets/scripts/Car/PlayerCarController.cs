@@ -243,7 +243,10 @@ public class PlayerCarController : BaseCarController
         float throttle = Mathf.Pow(inputValue, power);
         
         // Reduce power during drift but don't eliminate it
-        float driftPowerMultiplier = IsDrifting ? 0.7f : 1.0f;
+
+
+        float steerFactor = Mathf.Clamp01(Mathf.Abs(SteerInput));
+        float driftPowerMultiplier = IsDrifting ? Mathf.Lerp(0.65f, 0.85f, steerFactor) : 1.0f;
         float targetMaxAcc = PerusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttle) * driftPowerMultiplier;
 
         SmoothedMaxAcceleration = Mathf.MoveTowards(
@@ -252,7 +255,17 @@ public class PlayerCarController : BaseCarController
             Time.deltaTime * 250f
         );
 
-        TargetTorque = MoveInput * SmoothedMaxAcceleration;
+        float rawTorque = MoveInput * SmoothedMaxAcceleration;
+        float forwardVel = Vector3.Dot(CarRb.linearVelocity, transform.forward);
+        if (IsDrifting && forwardVel > 0.5f && rawTorque < 0f) rawTorque = 0f;
+
+        TargetTorque = rawTorque;
+
+        // Additional hard reduction while drifting so the car loses speed even when not turning
+        if (IsDrifting)
+        {
+            TargetTorque *= 0.5f; // reduce to 50% while drifting
+        }
 
         if (!IsDrifting)
         {
@@ -284,21 +297,21 @@ public class PlayerCarController : BaseCarController
         Activedrift++;
         IsDrifting = true;
 
-        MaxAcceleration = PerusMaxAccerelation * 0.85f;
+        MaxAcceleration = PerusMaxAccerelation * 0.95f;
 
         foreach (var wheel in Wheels)
         {
             if (wheel.WheelCollider == null) continue;
             WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
-            sideways.extremumSlip   = 0.7f;
-            sideways.asymptoteSlip  = 1.4f;
-            sideways.extremumValue  = 1f;
-            sideways.asymptoteValue = 1.4f;
-            sideways.stiffness      = 2f;
+            sideways.extremumSlip   = 0.9f;
+            sideways.asymptoteSlip  = 1.6f;
+            sideways.extremumValue  = 1.0f;
+            sideways.asymptoteValue = 1.2f;
+            sideways.stiffness      = 2.0f;
             wheel.WheelCollider.sidewaysFriction = sideways;
         }
 
-        CarRb.angularDamping = 0.04f;
+        CarRb.angularDamping = 0.03f;
         AdjustWheelsForDrift();
         WheelEffects(true);
     }
