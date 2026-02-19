@@ -246,7 +246,7 @@ public class PlayerCarController : BaseCarController
 
 
         float steerFactor = Mathf.Clamp01(Mathf.Abs(SteerInput));
-        float driftPowerMultiplier = IsDrifting ? Mathf.Lerp(0.7f, 0.85f, steerFactor) : 1.0f;
+        float driftPowerMultiplier = IsDrifting ? Mathf.Lerp(0.65f, 0.85f, steerFactor) : 1.0f;
         float targetMaxAcc = PerusMaxAccerelation * Mathf.Lerp(0.4f, 1f, throttle) * driftPowerMultiplier;
 
         SmoothedMaxAcceleration = Mathf.MoveTowards(
@@ -260,6 +260,12 @@ public class PlayerCarController : BaseCarController
         if (IsDrifting && forwardVel > 0.5f && rawTorque < 0f) rawTorque = 0f;
 
         TargetTorque = rawTorque;
+
+        // Additional hard reduction while drifting so the car loses speed even when not turning
+        if (IsDrifting)
+        {
+            TargetTorque *= 0.5f; // reduce to 50% while drifting
+        }
 
         if (!IsDrifting)
         {
