@@ -1,422 +1,200 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 using TMPro;
 
 public class ScoreManager : MonoBehaviour, IDataPersistence
 {
-    [Header("Base Score Settings")]
-    [SerializeField] private float basePointsPerSecond = 1.5f;
-    [SerializeField] private float baseSpeedMultiplier = 1.0f;
-    [SerializeField] private float maxForwardSpeedForBase = 40f;
+    [Header("Base")]
+    [SerializeField] float basePointsPerSecond = 1.5f, baseSpeedMultiplier = 1f, maxForwardSpeedForBase = 40f;
 
-    [Header("Drift Score Settings")]
-    [SerializeField] private float peakSharpness = 60f;
-    [SerializeField] private float sharpnessExponent = 0.75f;
-    [SerializeField] private float timeScale = 2f;
-    [SerializeField] private float minSharpnessForScoring = 3f;
-    [SerializeField] private float minLateralSpeed = 0.5f;
-    [SerializeField] private float minForwardSpeed = 1f;
+    [Header("Drift")]
+    [SerializeField] float peakSharpness = 60f, sharpnessExponent = 0.75f, timeScale = 2f;
+    [SerializeField] float minSharpnessForScoring = 3f, minLateralSpeed = 0.5f, minForwardSpeed = 1f;
+    [Tooltip("Multiplier UI")]
+    public float driftMultiplierRate = 0.6f;
+    [SerializeField] float maxDriftMultiplier = 10f;
 
-    [Header("Drift Multiplier Settings")]
-    [Tooltip("How strongly drift multiplier is applied per second")]
-    public float driftMultiplierRate = 0.60f; 
-    [SerializeField] private float maxDriftMultiplier = 10f;
+    [Header("Bonus")]
+    [SerializeField] float minDriftBonus = 300f, midDriftBonus = 2000f, maxDriftBonus = 7500f, grassMaxBonus = 350f;
+    [SerializeField, Range(0f, 1f)] float midTierThreshold = 0.4f;
+    [SerializeField] float bonusApplyDuration = 1f;
+    [SerializeField] bool debugScoreBreakdown;
 
-    [Header("Drift Bonus Ranges")]
-    [SerializeField] private float minDriftBonus = 300f;
-    [SerializeField] private float midDriftBonus = 2000f;
-    [SerializeField] private float maxDriftBonus = 7500f;
-    [SerializeField, Range(0f, 1f), Tooltip("Very High Quality threshold for mid-tier bonus")]
-    private float midTierThreshold = 0.4f;
-    [SerializeField] private float grassMaxBonus = 350f;
-
-    [Header("Animation Settings")]
-    [SerializeField, Tooltip("Duration to animate bonus into score bcs Animation = addicting")]
-    private float bonusApplyDuration = 1.0f;
-
-    [Header("Debug Settings")]
-    [SerializeField] private bool debugScoreBreakdown = false;
-
-    [Header("UI References")]
-    [SerializeField] private MultCounter multCounter;
+    [Header("UI")]
+    [SerializeField] MultCounter multCounter;
+    [SerializeField] AudioSource driftMultLost;
+    public TextMeshProUGUI TimeScoreText, TotalScoreText, DriftScoreText;
 
     public static ScoreManager instance;
     public event Action<int> OnScoreChanged;
     public float CurrentDriftMultiplier => isDriftingActive ? driftCompoundMultiplier : 0f;
 
-    private float scoreFloat;
-    private int lastReportedScore = -1;
-    private float driftTime;
-    private PlayerCarController carController;
-    private RacerScript racerScript;
-    private bool isOnGrass = false;
+    PlayerCarController carController;
+    RacerScript racerScript;
 
-    private bool isDriftingActive = false;
-    private float driftStartScore = 0f;
-    private float driftSessionBaseGain = 0f;
-    private float driftCompoundMultiplier = 1f;
-    private bool touchedGrassWhileDrifting = false;
+    [SerializeField] float scoreFloat, driftTime, driftCompoundMultiplier = 0.65f;
+    float pendingDriftBonusTotal, bonusApplyProgress, bonusAddedSoFar;
+    float driftSessionBaseGain, driftStartScore, scoreMultiplier = 1f;
+    float TimeStartPoint = 15000f, RaceTimer;
+    const float PointsDecayTime = 300f;
+    int lastReportedScore = -1, driftCount;
+    bool isOnGrass, isDriftingActive, touchedGrassWhileDrifting, isApplyingBonus;
 
-    private float pendingDriftBonusTotal = 0f;
-    private float bonusApplyProgress = 0f;
-    private float bonusAddedSoFar = 0f;
-    private bool isApplyingBonus = false;
-    public TextMeshProUGUI TimeScoreText;
-    public TextMeshProUGUI TotalScoreText;
-    public TextMeshProUGUI DriftScoreText;
-
-    private int driftCount = 0;
-
-    //Points - aika
-    private float TimeStartPoint = 15000f;
-    private float RaceTimer = 0f;
-    private const float PointsDecayTime = 300f;
-
-    //all this for the purple car
-    private float scoreMultiplier = 1.0f;
-
-    [SerializeField] private AudioSource driftMultLost;
-
-
-
-    public void LoadData(GameData data)
-    {
-        if (data != null)
-        {
-            return;
-        }
-    }
-
-    public void SaveData(ref GameData data)
-    {
-        if (data != null && racerScript.raceFinished == true) 
-        {
-            int finalScore = GetScoreInt() + Mathf.FloorToInt(TimeStartPoint);
-            data.scored += finalScore;
-            Debug.Log($"ScoreManager: Saved final score {finalScore} to GameData.");
-        }       
-    }
-
-    void Awake()
-    {
-        instance = this;
-
-    }
+    void Awake() => instance = this;
 
     void Start()
     {
         carController = FindFirstObjectByType<PlayerCarController>();
-        racerScript = FindFirstObjectByType<RacerScript>();
-        multCounter = FindFirstObjectByType<MultCounter>();
-        
+        racerScript  = FindFirstObjectByType<RacerScript>();
+        multCounter  ??= FindFirstObjectByType<MultCounter>();
     }
 
     void Update()
     {
-        
-        float deltaTime = Time.deltaTime;
-        Vector3 velocity = GetVelocity();
+        float dt  = Time.deltaTime;
+        Vector3 vel = carController?.CarRb != null ? carController.CarRb.linearVelocity : Vector3.zero;
 
-        if (racerScript != null && racerScript.racestarted && !racerScript.raceFinished)
+        if (racerScript != null)
         {
-            RaceTimer += deltaTime;
-            UpdateTimePoints();
+            if (racerScript.racestarted && !racerScript.raceFinished)
+            {
+                RaceTimer += dt;
+                TimeStartPoint = Mathf.Max(0f, 15000f * (1f - RaceTimer / PointsDecayTime));
+            }
+            if (racerScript.raceFinished) ShowScores();
         }
 
-        if (racerScript != null && racerScript.raceFinished)
-        {
-            ShowScores();
-        }
+        UpdateBaseScore(dt, vel);
+        UpdateDriftState(dt, vel);
+        AnimatePendingBonus(dt);
 
-        UpdateBaseScore(deltaTime, velocity);
-        UpdateDriftState(deltaTime, velocity);
-        AnimatePendingBonus(deltaTime);
-        UpdateScoreUIChanged();
+        int s = Mathf.FloorToInt(scoreFloat);
+        if (s != lastReportedScore) { lastReportedScore = s; OnScoreChanged?.Invoke(s); }
     }
+
+
 
     public void ShowScores()
     {
-        TotalScoreText.text = "Final Score: " + GetScoreInt().ToString();
-        TimeScoreText.text = "Time: " + Mathf.FloorToInt(TimeStartPoint).ToString();
-        DriftScoreText.text = "Drift: " + Mathf.FloorToInt(GetScoreInt() - TimeStartPoint).ToString();
+        TotalScoreText.text = "Final Score: " + GetScoreInt();
+        TimeScoreText.text  = "Time: " + Mathf.FloorToInt(TimeStartPoint);
+        DriftScoreText.text = "Drift: " + Mathf.FloorToInt(GetScoreInt() - TimeStartPoint);
     }
 
+    public int GetScoreInt()  => racerScript != null && racerScript.raceFinished
+        ? Mathf.FloorToInt(scoreFloat + TimeStartPoint)
+        : Mathf.FloorToInt(scoreFloat);
+    public float GetDriftTime() => driftTime;
+    public void  SetScoreMultiplier(float m) => scoreMultiplier = m;
 
-    Vector3 GetVelocity()
+    public void SetOnGrass(bool grassContact)
     {
-        return (carController.CarRb != null) ? carController.CarRb.linearVelocity : Vector3.zero;
-    }
-
-    void UpdateTimePoints()
-    {
-        TimeStartPoint = Mathf.Max(0f, 15000f * (1f - RaceTimer / PointsDecayTime));
-    }
-
-    public void SetScoreMultiplier(float multiplier)
-    {
-        scoreMultiplier = multiplier;
-    }
-
-    void UpdateBaseScore(float deltaTime, Vector3 velocity)
-    {
-        if (isOnGrass) return;
-           
-        float forwardSpeed = Mathf.Max(0f, Vector3.Dot(velocity, carController.transform.forward));
-        float speedFactor = Mathf.Clamp01(forwardSpeed / Mathf.Max(0.0001f, maxForwardSpeedForBase));
-        float speedMultiplier = 1f + speedFactor * baseSpeedMultiplier;
-        if (!racerScript.raceFinished)
+        isOnGrass = grassContact;
+        if (isOnGrass && isDriftingActive && driftCompoundMultiplier > 1.01f)
         {
-            scoreFloat += basePointsPerSecond * speedMultiplier * scoreMultiplier * deltaTime;
+            touchedGrassWhileDrifting = true;
+            Debug.Log($"[ScoreManager] Grass hit - mult: x{driftCompoundMultiplier:F2}, time: {driftTime:F2}s");
+            multCounter.UpdateMultiplierText(1f);
+            driftMultLost.Play();
         }
     }
 
-    void UpdateDriftState(float deltaTime, Vector3 velocity)
+    public void LoadData(GameData data) { }
+    public void SaveData(ref GameData data)
     {
-        bool canDriftNow = !isOnGrass && carController.IsDrifting;
-
-        if (canDriftNow)
+        if (data != null && racerScript != null && racerScript.raceFinished)
         {
-            if (!isDriftingActive)
+            int finalScore = GetScoreInt() + Mathf.FloorToInt(TimeStartPoint);
+            data.scored += finalScore;
+            Debug.Log($"ScoreManager: Saved final score {finalScore} to GameData.");
+        }
+    }
+
+
+    void UpdateBaseScore(float dt, Vector3 vel)
+    {
+        if (isOnGrass || racerScript == null || racerScript.raceFinished) return;
+        float fwd   = Mathf.Max(0f, Vector3.Dot(vel, carController.transform.forward));
+        float factor = Mathf.Clamp01(fwd / Mathf.Max(0.0001f, maxForwardSpeedForBase));
+        scoreFloat += basePointsPerSecond * (1f + factor * baseSpeedMultiplier) * scoreMultiplier * dt;
+    }
+
+    void UpdateDriftState(float deltatime, Vector3 velocity)
+    {
+        bool canDrift = !isOnGrass && carController != null && carController.IsDrifting;
+        if (canDrift)
+        {
+            if (!isDriftingActive) StartDrift();
+            float multiplier = ComputeDriftMultiplierIncrement(velocity, deltatime);
+            if (multiplier > 0f)
             {
-                StartDrift();
-            }
-
-            float finalMultiplier = ComputeDriftMultiplierIncrement(velocity, deltaTime);
-            if (finalMultiplier > 0f)
-            {
-                AccumulateDriftMultiplier(finalMultiplier, deltaTime);
+                float target = driftCompoundMultiplier * Mathf.Pow(multiplier, deltatime * driftMultiplierRate);
+                float lerpFactor = Mathf.Clamp01(deltatime * driftMultiplierRate * 50f); //if you dont like how slowly the multiplier goes, ramp it up to 75f, or 100, anything over that becomes a child's play
+                driftCompoundMultiplier = Mathf.Min(Mathf.Lerp(driftCompoundMultiplier, target, lerpFactor), maxDriftMultiplier);
+                driftSessionBaseGain    += basePointsPerSecond * deltatime;
             }
         }
-        else if (isDriftingActive)
-        {
-            EndDrift();
-        }
+        else if (isDriftingActive) EndDrift();
     }
-
-    
 
     void StartDrift()
     {
-        isDriftingActive = true;
-        driftStartScore = scoreFloat;
-        driftSessionBaseGain = 0f;
-        driftCompoundMultiplier = 0.93f;
-        driftTime = 0f;
-        touchedGrassWhileDrifting = false;
-
-        if (multCounter != null)
-        {
-            multCounter.StartMultiplier(1f, 0f, 1);
-        }
-    }
-
-    void AccumulateDriftMultiplier(float finalMultiplier, float deltaTime)
-    {
-        driftCompoundMultiplier *= Mathf.Pow(finalMultiplier, deltaTime * driftMultiplierRate);
-        driftCompoundMultiplier = Mathf.Min(driftCompoundMultiplier, maxDriftMultiplier);
-        driftSessionBaseGain += basePointsPerSecond * deltaTime;
+        isDriftingActive = true;  driftStartScore = scoreFloat;
+        driftSessionBaseGain = 0f; driftCompoundMultiplier = 0.93f;
+        driftTime = 0f; touchedGrassWhileDrifting = false;
+        multCounter?.StartMultiplier(1f, 0f, 1);
     }
 
     void EndDrift()
     {
         ApplyDriftBonus();
-        isDriftingActive = false;
-        driftTime = 0f;
-        driftCompoundMultiplier = 1f;
-        driftSessionBaseGain = 0f;
-
-        // reset multiplier not going down incrementally just straight to 0 bcs Project manager >:(
-        if (multCounter != null)
-        {
-            multCounter.ResetMultiplier();
-        }
+        isDriftingActive = false; driftTime = 0f;
+        driftCompoundMultiplier = 1f; driftSessionBaseGain = 0f;
+        multCounter?.ResetMultiplier(); // straight to 0 bcs Project manager >:(
     }
 
-    void AnimatePendingBonus(float deltaTime)
+    void AnimatePendingBonus(float dt)
     {
         if (!isApplyingBonus || pendingDriftBonusTotal <= 0f) return;
-
-        bonusApplyProgress += (bonusApplyDuration <= 0f) ? 1f : deltaTime / bonusApplyDuration;
-        float normalizedTime = Mathf.Clamp01(bonusApplyProgress);
-        float easedTime = 1f - Mathf.Pow(1f - normalizedTime, 1f);
-
-        float bonusToAdd = pendingDriftBonusTotal * easedTime - bonusAddedSoFar;
-        
-        if (bonusToAdd > 0f)
-        {
-            scoreFloat += bonusToAdd;
-            bonusAddedSoFar += bonusToAdd;
-        }
-
-        if (normalizedTime >= 1f)
-        {
-            FinishBonusAnimation();
-        }
+        bonusApplyProgress = Mathf.Clamp01(bonusApplyProgress + (bonusApplyDuration <= 0f ? 1f : dt / bonusApplyDuration));
+        float add = pendingDriftBonusTotal * bonusApplyProgress - bonusAddedSoFar;
+        if (add > 0f) { scoreFloat += add; bonusAddedSoFar += add; }
+        if (bonusApplyProgress >= 1f) { isApplyingBonus = false; pendingDriftBonusTotal = bonusApplyProgress = bonusAddedSoFar = 0f; }
     }
 
-    void FinishBonusAnimation()
+    float ComputeDriftMultiplierIncrement(Vector3 vel, float dt)
     {
-        isApplyingBonus = false;
-        pendingDriftBonusTotal = 0f;
-        bonusApplyProgress = 0f;
-        bonusAddedSoFar = 0f;
-    }
-
-    void UpdateScoreUIChanged()
-    {
-        int currentScore = Mathf.FloorToInt(scoreFloat);
-        if (currentScore == lastReportedScore) return;
-
-        lastReportedScore = currentScore;
-        OnScoreChanged?.Invoke(currentScore);
-    }
-
-    float ComputeDriftMultiplierIncrement(Vector3 velocity, float deltaTime)
-    {
-        if (deltaTime <= 0f || carController == null || carController.CarRb == null) return 0f;
-
-        float speed = velocity.magnitude;
-        if (speed < minForwardSpeed) return 0f;
-
-        float lateralSpeed = Mathf.Abs(Vector3.Dot(velocity, carController.transform.right));
-        if (lateralSpeed < minLateralSpeed) return 0f;
-
-        float sharpness;
-        sharpness = Mathf.Abs(carController.GetDriftSharpness()); 
+        if (dt <= 0f || carController?.CarRb == null) return 0f;
+        if (vel.magnitude < minForwardSpeed) return 0f;
+        if (Mathf.Abs(Vector3.Dot(vel, carController.transform.right)) < minLateralSpeed) return 0f;
+        float sharpness = Mathf.Abs(carController.GetDriftSharpness());
         if (sharpness < minSharpnessForScoring) return 0f;
 
-        driftTime += deltaTime;
-
-        float normalizedSharpness = Mathf.InverseLerp(minSharpnessForScoring, peakSharpness, sharpness);
-        float sharpnessBonus = Mathf.Pow(normalizedSharpness, sharpnessExponent);
-
-
-        float baseMultiplier = 1f + sharpnessBonus * 1f + driftTime / timeScale;
-
-        float forwardSpeed = Mathf.Max(0f, Vector3.Dot(velocity, carController.transform.forward));
-        float speedFactor = Mathf.Clamp01(forwardSpeed / Mathf.Max(0.5f, maxForwardSpeedForBase));
-
-        return baseMultiplier * (1f + speedFactor);
+        driftTime += dt;
+        float sharpBonus = Mathf.Pow(Mathf.InverseLerp(minSharpnessForScoring, peakSharpness, sharpness), sharpnessExponent);
+        float fwd = Mathf.Max(0f, Vector3.Dot(vel, carController.transform.forward));
+        float speedFactor = Mathf.Clamp01(fwd / Mathf.Max(0.5f, maxForwardSpeedForBase));
+        return (1f + sharpBonus + driftTime / timeScale) * (1f + speedFactor);
     }
 
     void ApplyDriftBonus()
     {
-        if (driftTime <= 0.2f || driftCompoundMultiplier <= 1.01f)
-        {
-            touchedGrassWhileDrifting = false;
-            return;
-        }
-
-        driftCount++;
-
-        float intensity = Mathf.InverseLerp(1f, maxDriftMultiplier, driftCompoundMultiplier);
-        float combinedQuality = Mathf.Clamp01(0.5f * intensity + 0.5f * driftTime / 3f);
-        float bonus = CalculateDriftBonus(combinedQuality);
-        bonus *= 0.65f;
-        bonus *= scoreMultiplier; 
-
-        //does the animation for the bonus being added
-        pendingDriftBonusTotal = bonus;
-        isApplyingBonus = bonus > 0f;
-        bonusApplyProgress = 0f;
-        bonusAddedSoFar = 0f;
-
-        if (debugScoreBreakdown)
-        {
-            LogDriftBreakdown(intensity, combinedQuality, bonus);
-        }
-
         touchedGrassWhileDrifting = false;
+        if (driftTime <= 0.2f || driftCompoundMultiplier <= 1.01f) return;
+        driftCount++;
+        float intensity     = Mathf.InverseLerp(1f, maxDriftMultiplier, driftCompoundMultiplier);
+        float combinedQuality = Mathf.Clamp01(0.5f * intensity + 0.5f * driftTime / 3f);
+        float bonus         = CalculateDriftBonus(combinedQuality) * 0.65f * scoreMultiplier;
+        pendingDriftBonusTotal = bonus; isApplyingBonus = bonus > 0f; bonusApplyProgress = bonusAddedSoFar = 0f;
+        if (debugScoreBreakdown)
+            Debug.Log($"[DRIFT #{driftCount}] {(combinedQuality < midTierThreshold ? "LOW-MID" : "MID-HIGH")} | dur:{driftTime:F2}s mult:x{driftCompoundMultiplier:F2} quality:{combinedQuality:P0} bonus:+{bonus:N0}");
     }
 
-    float CalculateDriftBonus(float quality)
+    float CalculateDriftBonus(float score)
     {
-        if (touchedGrassWhileDrifting)
-        {
-            return Mathf.Lerp(0f, grassMaxBonus, quality);
-        }
-
-        if (quality < midTierThreshold)
-        {
-            float normalizedQuality = quality / midTierThreshold;
-            return Mathf.Lerp(minDriftBonus, midDriftBonus, normalizedQuality);
-        }
-        else
-        {
-            float normalizedQuality = (quality - midTierThreshold) / (1f - midTierThreshold);
-            return Mathf.Lerp(midDriftBonus, maxDriftBonus, normalizedQuality);
-        }
-    }
-
-    void LogDriftBreakdown(float intensity, float quality, float finalBonus)
-    {
-        float scoreAfterBonus = scoreFloat + finalBonus;
-        string tier = quality < midTierThreshold ? "LOW-MID" : "MID-HIGH";
-        string bonusRange = GetBonusRangeDescription(quality);
-        
-        Debug.Log($"═══════════════════════════════════════════════════════════════");
-        Debug.Log($"[DRIFT #{driftCount}] ENDED - {tier} TIER");
-        Debug.Log($"───────────────────────────────────────────────────────────────");
-        Debug.Log($"TIME & MULTIPLIER:");
-        Debug.Log($"  • Duration: {driftTime:F2}s");
-        Debug.Log($"  • Peak Multiplier: x{driftCompoundMultiplier:F2} (max: x{maxDriftMultiplier})");
-        Debug.Log($"───────────────────────────────────────────────────────────────");
-        Debug.Log($"QUALITY FACTORS:");
-        Debug.Log($"  • Intensity: {intensity:P0}");
-        Debug.Log($"  • Combined Quality: {quality:P0}");
-        Debug.Log($"  • Tier: {tier} (threshold: {midTierThreshold:P0})");
-        Debug.Log($"───────────────────────────────────────────────────────────────");
-        Debug.Log($"BONUS CALCULATION:");
-        Debug.Log($"  • Grass Touched: {(touchedGrassWhileDrifting ? "YES" : "NO")}");
-        Debug.Log($"  • Bonus Range: {bonusRange}");
-        Debug.Log($"  • Final Bonus: +{finalBonus:N0}");
-        Debug.Log($"───────────────────────────────────────────────────────────────");
-        Debug.Log($"SCORE IMPACT:");
-        Debug.Log($"  • Before Drift: {driftStartScore:N0}");
-        Debug.Log($"  • After Bonus: {scoreAfterBonus:N0}");
-        Debug.Log($"═══════════════════════════════════════════════════════════════");
-    }
-
-    string GetBonusRangeDescription(float quality)
-    {
-        if (touchedGrassWhileDrifting)
-            return $"0 → {grassMaxBonus:N0} (grass penalty)";
-        
-        if (quality < midTierThreshold)
-            return $"{minDriftBonus:N0} → {midDriftBonus:N0} (low tier)";
-        
-        return $"{midDriftBonus:N0} → {maxDriftBonus:N0} (high tier)";
-    }
-
-    public void SetOnGrass(bool grassContact)
-    {
-        isOnGrass = grassContact;
-
-        if (isOnGrass && isDriftingActive && driftCompoundMultiplier > 1.01f)
-        {
-            touchedGrassWhileDrifting = true; 
-            Debug.Log($"[ScoreManager] Drift multiplier reset by grass - peak mult: x{driftCompoundMultiplier:F2}, driftTime: {driftTime:F2}s");
-            multCounter.UpdateMultiplierText(1f);
-            driftMultLost.Play();
-            
-        }
-    }
-
-    public int GetScoreInt()
-    {
-        
-        if (racerScript != null && racerScript.raceFinished == true)
-        {
-            return Mathf.FloorToInt(scoreFloat + TimeStartPoint);
-        }else
-        {
-            return Mathf.FloorToInt(scoreFloat);
-        }
-    }
-
-    public float GetDriftTime()
-    {
-        return driftTime;
+        if (touchedGrassWhileDrifting) return Mathf.Lerp(0f, grassMaxBonus, score);
+        return score < midTierThreshold
+            ? Mathf.Lerp(minDriftBonus, midDriftBonus, score / midTierThreshold)
+            : Mathf.Lerp(midDriftBonus, maxDriftBonus, (score - midTierThreshold) / (1f - midTierThreshold));
     }
 }
