@@ -36,6 +36,7 @@ public static class BezierMath
         );
     }
 
+    // Algorithm made by the french EWWWWWWWWWWWWWWW
     // De casteljau's algorithm for finding a point inside any amount of control points
     public static Vector3 CalculateBezierPoint(float t, float y, Vector3[] controlPoints)
     {

@@ -10,6 +10,7 @@ using UnityEngine;
 // Add AiSpawnPosition prefabs as children to this manager to set spawn positions for AI cars
 
 
+[System.Obsolete("Joke script")]
 public class BunnyAiManager : MonoBehaviour
 {
     #pragma warning disable 0414

@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 
 // Change to .cs if you want to use these scripts
+[System.Obsolete("Joke script")]
 
 public class BunnyAiCars : MonoBehaviour
 {

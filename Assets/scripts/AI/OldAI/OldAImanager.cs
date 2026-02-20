@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Obsolete("Heavily outdated script")]
 public class AImanager : MonoBehaviour
 {
     #pragma warning disable 0414
