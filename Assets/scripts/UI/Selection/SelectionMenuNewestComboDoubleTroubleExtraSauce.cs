@@ -95,10 +95,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
         selectionMenus = GameObject.FindGameObjectsWithTag("selectionMenu")
         .OrderBy(go => go.name).ToList();
         availableSelectionMenus = selectionMenus;
-        foreach (var menu in availableSelectionMenus.Skip(1))
-        {
-            menu.SetActive(false);
-        }
+        foreach (var menu in availableSelectionMenus.Skip(1)) menu.SetActive(false);
 
         menuMusic = GameObject.Find("menuLoop").GetComponent<AudioSource>();
         loadingLoop = GameObject.Find("loadingLoop").GetComponent<AudioSource>();
@@ -267,7 +264,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
             Next();
             return;
         }
-        Debug.Log("FUCK YOU BALTIMORE! IF YOU'RE DUMB ENOUGH TO BUY A NEW CAR THIS WEEKEND, YOU'RE A BIG ENOUGH SCHMUCK TO COME TO BIG BILL HELL'S CARS! BAD DEALS! CARS THAT BREAK DOWN! THIEVES! IF YOU THINK YOU'RE GOING TO FIND A BARGAIN AT BIG BILL, YOU CAN KISS MY ASS! IT'S OUR BELIEF THAT YOU'RE SUCH A STUPID MOTHERFUCKER, YOU'LL FALL FOR THIS BULLSHIT - GUARANTEED! IF YOU FIND A BETTER DEAL: SHOVE IT UP YOUR UGLY ASS! YOU HEARD US RIGHT: SHOVE IT UP YOUR UGLY ASS! BRING YOUR TRADE! BRING YOUR TITLE! BRING YOUR WIFE! WE'LL FUCK HER! THAT'S RIGHT, WE'LL FUCK YOUR WIFE! BECAUSE AT BIG BILL HELL'S, YOU'RE FUCKED SIX WAYS FROM SUNDAY! TAKE A HIKE TO BIG BILL HELL'S - HOME OF CHALLENGE PISSING! THAT'S RIGHT, CHALLENGE PISSING! HOW DOES IT WORK? IF YOU CAN PISS SIX FEET IN THE AIR STRAIGHT UP AND NOT GET WET, YOU GET NO DOWN PAYMENT! DON'T WAIT! DON'T DELAY! DON'T FUCK WITH US, OR WE'LL RIP YOUR NUTS OFF! ONLY AT BIG BILL HELL'S, THE ONLY DEALER THAT TELLS YOU TO FUCK OFF! HURRY UP ASSHOLE! THIS EVENT ENDS THE MINUTE YOU WRITE US A CHECK! AND IT BETTER NOT BOUNCE OR YOU'RE A DEAD MOTHERFUCKER! GO TO HELL! BIG BILL HELL'S CARS - BALTIMORE'S FILTHIEST AND EXCLUSIVE HOME OF THE MEANEST SONS OF BITCHES IN THE STATE OF MARYLAND - GUARANTEED!");
     }
 
     public void Next()

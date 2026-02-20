@@ -6,10 +6,10 @@ public class optionScript : MonoBehaviour
 {
     public Material pixelCount;
     private Text pixelCountLabel;
-    private Dictionary<string, Slider> sliders = new Dictionary<string, Slider>();
-    private Dictionary<string, Toggle> toggles = new Dictionary<string, Toggle>();
+    private Dictionary<string, Slider> sliders = new();
+    private Dictionary<string, Toggle> toggles = new();
 
-    private const float DefaultPixelValue = 256f;
+    private const float DefaultPixelValue = 320f;
     private const float PixelMultiplier = 64f;
     private const float DefaultVolume = 0.6f;
 
