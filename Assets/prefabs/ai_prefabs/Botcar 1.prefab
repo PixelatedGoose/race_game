@@ -1141,6 +1141,27 @@ MonoBehaviour:
   Deceleration: 1
   Maxspeed: 100
   GravityMultiplier: 1.5
+  Wheels:
+  - WheelModel: {fileID: 2480497655319108271}
+    WheelCollider: {fileID: 8226038361239439730}
+    WheelEffectobj: {fileID: 7608247685079618447}
+    SmokeParticle: {fileID: 8375895737432743733}
+    Axel: 0
+  - WheelModel: {fileID: 3144801104615171818}
+    WheelCollider: {fileID: 3133544218236099077}
+    WheelEffectobj: {fileID: 1783991673816374232}
+    SmokeParticle: {fileID: 2334615181226230212}
+    Axel: 0
+  - WheelModel: {fileID: 4381428712381846278}
+    WheelCollider: {fileID: 3392321435618256846}
+    WheelEffectobj: {fileID: 8724243338627483694}
+    SmokeParticle: {fileID: 4522420571162533016}
+    Axel: 1
+  - WheelModel: {fileID: 494362406291348668}
+    WheelCollider: {fileID: 1684521221934789367}
+    WheelEffectobj: {fileID: 522083029466099480}
+    SmokeParticle: {fileID: 304971687747636552}
+    Axel: 1
   GrassSpeedMultiplier: 0.5
   GrassRespawnActive: 0
   MoveInput: 0
@@ -1167,7 +1188,6 @@ MonoBehaviour:
   avoidanceBuffer: 5
   avoidanceLateralOffset: 2
   boostMultiplier: 1.25
-  wheels: []
   aiCarManager: {fileID: 0}
 --- !u!1 &6333829925512713852
 GameObject:
@@ -1766,6 +1786,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+--- !u!198 &304971687747636552 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+  m_PrefabInstance: {fileID: 1855749121256118122}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3444362448563565869 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -1841,6 +1866,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
   m_PrefabInstance: {fileID: 2538154768527181498}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &4522420571162533016 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+  m_PrefabInstance: {fileID: 2538154768527181498}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4439902716834110438
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1913,6 +1943,11 @@ PrefabInstance:
 --- !u!4 &833613865799776673 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+  m_PrefabInstance: {fileID: 4439902716834110438}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &2334615181226230212 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
   m_PrefabInstance: {fileID: 4439902716834110438}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6624398958974378620
@@ -2107,6 +2142,11 @@ PrefabInstance:
 --- !u!4 &6902478414323623760 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+  m_PrefabInstance: {fileID: 7621958741762114839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8375895737432743733 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
   m_PrefabInstance: {fileID: 7621958741762114839}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8869863077179259584
