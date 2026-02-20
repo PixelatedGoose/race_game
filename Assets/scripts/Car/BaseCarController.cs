@@ -90,12 +90,12 @@ public class BaseCarController : MonoBehaviour
     [ContextMenu("Auto Assign Wheels")]
     protected void AutoAssignWheelsAndMaterials()
     {
-        Wheels ??= new List<Wheel>();
         Wheels.Clear();
 
-        var Colliders   = GetComponentsInChildren<WheelCollider>(true);
-        var Meshes  = transform.Find("meshes");
-        var Effects = transform.Find("wheelEffectobj");
+        var Colliders = GetComponentsInChildren<WheelCollider>(true);
+        var Meshes = transform.GetComponentsInChildren<Transform>().First(obj => obj.name == "meshes");
+        
+        var Effects = transform.GetComponentsInChildren<Transform>().First(obj => obj.name == "wheelEffectobj");
 
         Grass = 1 << 7;
 
@@ -106,11 +106,11 @@ public class BaseCarController : MonoBehaviour
                 WheelCollider = WheelCollider
             };
 
-            var Mesh = Meshes.Find(WheelCollider.name) ?? WheelCollider.transform.GetComponentInChildren<MeshRenderer>(true)?.transform;
+            var Mesh = Meshes.Find(WheelCollider.name);
 
             wheel.WheelModel = Mesh?.gameObject;
 
-            var Effect = Effects.Find(WheelCollider.name) ?? WheelCollider.transform.Find("wheelEffectobj");
+            var Effect = Effects.transform.Find(WheelCollider.name);
 
             wheel.WheelEffectobj = Effect?.gameObject;
                     wheel.SmokeParticle =
