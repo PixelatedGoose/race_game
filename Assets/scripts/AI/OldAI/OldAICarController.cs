@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
+[System.Obsolete("Heavily outdated script")]
 public class AICarController : MonoBehaviour
 {
     #pragma warning disable 0414

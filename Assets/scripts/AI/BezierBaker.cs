@@ -1,6 +1,8 @@
 using System.Linq;
 using UnityEngine;
 
+// I love baking beziers they taste so good
+
 [ExecuteAlways]
 [RequireComponent(typeof(AiCarManager))]
 public class BezierBaker : MonoBehaviour
