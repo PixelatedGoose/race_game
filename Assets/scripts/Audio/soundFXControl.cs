@@ -119,17 +119,6 @@ public class soundFXControl : MonoBehaviour
         SoundFXHandler("slider", soundSlidersList, soundClickList[2].GetComponent<AudioSource>());
     }
 
-    void Update()
-    {
-        if (SceneManager.GetActiveScene().name == "MainMenu"
-        || SceneManager.GetActiveScene().name == "Carselectionmenu_VECTORAMA"
-        || SceneManager.GetActiveScene().name == "SelectionMenu") return;
-        if (Controls.CarControls.pausemenu.triggered && racerScript.racestarted == true)
-        {
-            PauseStateHandler();
-        }
-    }
-
     /// <summary>
     /// liittää jokaseen määritettyyn nappiin, slideriin ja toggleen niitten omat äänet.
     /// korjaa sen ikivanhan kolmen foreachin koodin
@@ -175,6 +164,7 @@ public class soundFXControl : MonoBehaviour
         }
     }
 
+    //ei halunnu toimia enää omassa scriptissään
     public void PauseStateHandler()
     {
         bool isPaused = GameManager.instance.isPaused;
