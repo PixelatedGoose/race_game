@@ -1,15 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Video;
 using UnityEngine.Events;
 
 public class MainMenu : MonoBehaviour
 {
-    int randomChance;
     [SerializeField] optionScript OptionScript;
     public GameObject fullMenu;
     private AudioSource menuMusic;
-    public VideoPlayer videoPlayer;
     private int musictweenIDstart = -1;
     private int musictweenIDend = -1;
 
@@ -32,58 +29,18 @@ public class MainMenu : MonoBehaviour
         if (playConfirmPanel != null)
             playConfirmPanel.SetActive(false);
 
-        randomChance = Random.Range(1, 3334);
-
         //hei nimeni on main menu ja tykkään vittuilla koodaajille
         OptionScript.CacheUIElements();
         OptionScript.InitializeSliderValues();
         OptionScript.InitializeToggleValues();
     }
 
-    void OnEnable()
-    {
-        if (randomChance <= 2)
-        {
-            videoPlayer.loopPointReached += OnVideoFinished;
-            videoPlayer.Play();
-        }
-    }
-    void OnVideoFinished(VideoPlayer vp)
-    {
-        videoPlayer.Stop();
-        Destroy(videoPlayer);
-
-        LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce);
-        menuMusic.Play();
-    }
-    void OnDisable()
-    {
-        videoPlayer.loopPointReached -= OnVideoFinished;
-    }
-
     void Start()
     {
-        if (randomChance <= 2)
+        LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce).setOnStart(() =>
         {
-            return;
-        }
-        else
-        {
-            LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f)
-            .setEase(LeanTweenType.easeOutBounce)
-            .setOnStart(() =>
-            {
-                menuMusic.Play();
-            });
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            SceneManager.LoadSceneAsync("Carselectionmenu_VECTORAMA");
-        }
+            menuMusic.Play();
+        });
     }
 
     // changed: show the play-confirm UI instead of immediately loading
