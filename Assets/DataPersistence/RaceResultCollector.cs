@@ -88,7 +88,9 @@ public class RaceResultCollector : MonoBehaviour
             "haukipudas_night" => "Shoreline Night",
             "ai_haukipudas_night" => "Shoreline Night [AI]",
             "canyon" => "Canyon",
+            "canyon_night" => "Canyon Night",
             "ai_canyon" => "Canyon [AI]",
+            "ai_canyon_night" => "Canyon Night [AI]",
             "tutorial" => "Tutorial",
             _ => "Unknown"
         };
