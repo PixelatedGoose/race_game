@@ -401,17 +401,17 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.6
+    m_ExtremumSlip: 0.8
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 0.15
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -599,17 +599,17 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.6
+    m_ExtremumSlip: 0.8
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 0.15
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -670,17 +670,17 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.6
+    m_ExtremumSlip: 0.8
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 0.15
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -808,10 +808,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxAcceleration: 500
+  MaxAcceleration: 1000
   BrakeAcceleration: 200
   TurnSensitivty: 1
-  TurnSensitivtyAtHighSpeed: 20
+  TurnSensitivtyAtHighSpeed: 18
   TurnSensitivtyAtLowSpeed: 30
   Deceleration: 1
   Maxspeed: 200
@@ -822,13 +822,13 @@ MonoBehaviour:
   MoveInput: 0
   SteerInput: 0
   Turbesped: 60
-  BaseSpeed: 140
+  BaseSpeed: 120
   Grassmaxspeed: 50
   DriftMaxSpeed: 100
-  TurbeAmount: 100
-  TurbeMax: 33
-  Turbepush: 500
-  TurbeReduce: 20
+  TurbeAmount: 40
+  TurbeMax: 40
+  Turbepush: 50
+  TurbeReduce: 15
   TurbeRegen: 15
 --- !u!114 &8914551668265311642
 MonoBehaviour:
@@ -1477,17 +1477,17 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.6
+    m_ExtremumSlip: 0.8
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 0.15
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
