@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 using Logitech;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
+using UnityEngine.AI;
+using System.Collections;
 
 
 public class PlayerCarController : BaseCarController
@@ -17,6 +19,9 @@ public class PlayerCarController : BaseCarController
 
     private PlayerInput PlayerInput;
     private string CurrentControlScheme = "Keyboard";
+
+    protected Coroutine DriftBoost;
+    
 
 
     
@@ -242,7 +247,7 @@ public class PlayerCarController : BaseCarController
 
         float throttle = Mathf.Pow(inputValue, power);
         
-        // Reduce power during drift but don't eliminate it
+        // Reduce power during drift but don'turbe eliminate it
 
 
         float steerFactor = Mathf.Clamp01(Mathf.Abs(SteerInput));
@@ -319,6 +324,7 @@ public class PlayerCarController : BaseCarController
     void OnDriftCanceled(InputAction.CallbackContext ctx)
     {
         StopDrifting();
+        OnDriftEndBoost();
         MaxAcceleration = PerusMaxAccerelation;
         TargetTorque = PerusTargetTorque;
         WheelEffects(false);
@@ -361,5 +367,46 @@ public class PlayerCarController : BaseCarController
             sidewaysFriction.stiffness = 5f;
             wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
         }
+    }
+
+    public void OnDriftEndBoost()
+    {
+        float driftmultiplier = ScoreManager.instance.CurrentDriftMultiplier;
+
+        if (driftmultiplier < 4f) return;
+
+        float turbe = Mathf.InverseLerp(4f, 10f, driftmultiplier);
+        float TurbeStrength = Mathf.Lerp(1f, 5f, turbe);
+
+        if (DriftBoost != null)
+            StopCoroutine(DriftBoost);
+
+        DriftBoost = StartCoroutine(DriftBoostCoroutine(TurbeStrength));
+    }
+
+    private IEnumerator DriftBoostCoroutine(float TurbeStrength)
+    {
+        float originalspeed = Maxspeed;
+        float boostedMax = Mathf.Max(BaseSpeed + Turbesped, originalspeed + TurbeStrength);
+
+        float duration = Mathf.Lerp(1.5f, 3.5f, Mathf.InverseLerp(2f, 5f, TurbeStrength));
+        float timer = 0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float time = timer / duration;
+            float smooth = Mathf.SmoothStep(0f, 1f, time);
+
+            float force = TurbeStrength * (1f - smooth) * Time.deltaTime;
+            force = Mathf.Min(force, 0.5f); 
+
+            CarRb.AddForce(transform.forward * force, ForceMode.VelocityChange);
+
+            Maxspeed = Mathf.Lerp(boostedMax, originalspeed, smooth);
+            yield return null;
+        }
+
+        Maxspeed = originalspeed;
+        DriftBoost = null;
     }
 }
