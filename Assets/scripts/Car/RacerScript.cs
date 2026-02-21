@@ -7,10 +7,11 @@ using TMPro;
 
 public class RacerScript : MonoBehaviour, IDataPersistence
 {
-    // Public variables
     public GameObject winMenu; 
     public GameObject Car1Hud;
     public GameObject Minimap;
+    private GameObject respawnfade;
+    private bool FadeState;
 
     CarInputActions Controls;
 
@@ -88,28 +89,31 @@ public class RacerScript : MonoBehaviour, IDataPersistence
     private void OnEnable()
     {
         Controls.Enable();
+        Controls.CarControls.respawn.performed += ctx => FadeGameViewAndRespawn();
 
         checkpoints = GameObject.FindGameObjectsWithTag("checkpointTag").Select(a => a.transform).ToList();
         if (PlayerPrefs.GetInt("Reverse") == 1) foreach (Transform checkpoint in checkpoints) checkpoint.eulerAngles = new(checkpoint.eulerAngles.x, checkpoint.eulerAngles.y + 180.0f, checkpoint.eulerAngles.z);
 
         finalLapImg = GameObject.Find("UIcanvas/finalLap");
+        respawnfade = GameObject.Find("UIcanvas/respawnfade");
 
         winMenu = GameObject.Find("WinMenu").GetComponentInChildren<Canvas>(true).gameObject;
         Minimap = GameObject.Find("Minimap");
         startFinishLine = GameObject.Find("StartFinish").transform;
 
         totalLaps = PlayerPrefs.GetInt("Laps");
-        Debug.Log(totalLaps);
     }
 
     private void OnDisable()
     {
         Controls.Disable();
+        Controls.CarControls.respawn.performed -= ctx => FadeGameViewAndRespawn();
     }
 
     private void OnDestroy()
     {
         Controls.Disable();
+        Controls.CarControls.respawn.performed -= ctx => FadeGameViewAndRespawn();
         Controls.Dispose();
     }
 
@@ -124,7 +128,6 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         if (!racestarted || raceFinished) return; // Only run race logic if started
 
         HandleReset();
-        Inactivity();
         Ranking(); // Continuously update the rank
     }
 
@@ -136,7 +139,7 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
         else if (other.gameObject.CompareTag("RespawnTrigger")) // Check for the respawn trigger
         {
-            RespawnAtLastCheckpoint();
+            FadeGameViewAndRespawn(0.8f);
         }
         else
         {
@@ -144,15 +147,44 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
     }
 
+    //helper method fadeaamiselle
+    private void FadeGameViewAndRespawn(float length = 0.25f)
+    {
+        if (GameManager.instance.isPaused || !racestarted || FadeState) return;
+
+        FadeState = true;
+        LeanTween.value(respawnfade.GetComponent<RawImage>().color.a, 1f, length).setOnUpdate((float val) =>
+        {
+            var img = respawnfade.GetComponent<RawImage>();
+            Color c = img.color;
+            c.a = val;
+            img.color = c;
+        })
+        .setOnComplete(() =>
+        {
+            RespawnAtLastCheckpoint();
+            LeanTween.value(respawnfade.GetComponent<RawImage>().color.a, 0f, length).setOnUpdate((float val) =>
+            {
+                var img = respawnfade.GetComponent<RawImage>();
+                Color c = img.color;
+                c.a = val;
+                img.color = c;
+            })
+            .setOnComplete(() => FadeState = false);
+        });
+    }
+
     public void RespawnAtLastCheckpoint()
     {
         Debug.Log("Respawning at the last checkpoint...");
         transform.SetPositionAndRotation(respawnPoint != null ? respawnPoint.position : startFinishLine.position,
         respawnPoint != null ? respawnPoint.rotation : startFinishLine.rotation);
+
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
+        carController.ClearWheelTrails();
     }
 
     void InitializeRace()
@@ -164,39 +196,9 @@ public class RacerScript : MonoBehaviour, IDataPersistence
 
     void HandleReset()
     {
-        if (Controls.CarControls.respawn.triggered)
-        {
-            ResetPosition();
-            carController.ClearWheelTrails();
-        }
-
         if (transform.position.y < -1)
         {
-            ResetPosition();
-            carController.ClearWheelTrails();
-            ResetCarState();
-        }
-    }
-
-    void ResetPosition()
-    {
-        transform.position = respawnPoint != null ? respawnPoint.position : startFinishLine.position;
-        transform.rotation = respawnPoint != null ? respawnPoint.rotation : startFinishLine.rotation;
-
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = Vector3.zero;//stop the car
-        rb.angularVelocity = Vector3.zero;
-        
-        //StartCoroutine(TurnDownCarsValues());
-
-    }
-
-
-    void Inactivity()
-    {
-        if (startTimer)
-        {
-            laptime += Time.deltaTime;
+            RespawnAtLastCheckpoint();
         }
     }
 
@@ -281,12 +283,13 @@ public class RacerScript : MonoBehaviour, IDataPersistence
         }
     }
 
-    void ResetCarState()
+    //water found in ocean
+    /* void ResetCarState()
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;
         transform.rotation = Quaternion.Euler(0, 0, 0);
-    }
+    } */
 
     void StartNewLap()
     {

@@ -2,9 +2,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using System;
-using System.Collections.Generic;
-using Unity.Splines.Examples;
-using Unity.PlasticSCM.Editor.WebApi;
 
 
 
