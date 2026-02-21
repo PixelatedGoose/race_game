@@ -51,17 +51,17 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.6
+    m_ExtremumSlip: 0.81
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 0.15
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 5
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -407,17 +407,17 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.6
+    m_ExtremumSlip: 0.81
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 0.15
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 5
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -637,13 +637,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxAcceleration: 550
+  MaxAcceleration: 1000
   BrakeAcceleration: 200
   TurnSensitivty: 1
   TurnSensitivtyAtHighSpeed: 20.5
   TurnSensitivtyAtLowSpeed: 30
   Deceleration: 1
-  Maxspeed: 210
+  Maxspeed: 190
   GravityMultiplier: 1.5
   Wheels: []
   GrassSpeedMultiplier: 0.5
@@ -651,11 +651,11 @@ MonoBehaviour:
   MoveInput: 0
   SteerInput: 0
   Turbesped: 60
-  BaseSpeed: 150
+  BaseSpeed: 130
   Grassmaxspeed: 50
-  DriftMaxSpeed: 140
-  TurbeAmount: 100
-  TurbeMax: 100
+  DriftMaxSpeed: 100
+  TurbeAmount: 90
+  TurbeMax: 90
   Turbepush: 15
   TurbeReduce: 20
   TurbeRegen: 15
@@ -1034,17 +1034,17 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.6
+    m_ExtremumSlip: 0.81
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 0.15
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 5
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1343,17 +1343,17 @@ WheelCollider:
   m_Mass: 100
   m_WheelDampingRate: 1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.6
+    m_ExtremumSlip: 0.81
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.4
+    m_ExtremumSlip: 0.15
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.8
+    m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
-    m_Stiffness: 4
+    m_Stiffness: 5
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
