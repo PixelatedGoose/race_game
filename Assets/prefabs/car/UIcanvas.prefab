@@ -228,7 +228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6324283417373672364
 RectTransform:
   m_ObjectHideFlags: 0
@@ -241,6 +241,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 209291568174717158}
   - {fileID: 9025469661172098587}
   - {fileID: 8329395437814515185}
   - {fileID: 5121783524725972629}
@@ -942,6 +943,78 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!1 &5530416265847091656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 209291568174717158}
+  - component: {fileID: 3776050520632236868}
+  - component: {fileID: 1009663717757205507}
+  m_Layer: 5
+  m_Name: respawnfade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &209291568174717158
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5530416265847091656}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 6324283417373672364}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3776050520632236868
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5530416265847091656}
+  m_CullTransparentMesh: 1
+--- !u!114 &1009663717757205507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5530416265847091656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: c92274b840f68a8489b40362408406d4, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &6370229266499869494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,13 +1343,13 @@ MonoBehaviour:
   - {fileID: 1197767586, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
   - {fileID: -1783108577, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
   - {fileID: -631359010, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
-  - {fileID: 2069161897, guid: 0524ea821b097d6449557e7288664f14, type: 3}
-  - {fileID: 1962550650, guid: 0524ea821b097d6449557e7288664f14, type: 3}
-  - {fileID: 319851824, guid: 0524ea821b097d6449557e7288664f14, type: 3}
-  - {fileID: 116746076, guid: 0524ea821b097d6449557e7288664f14, type: 3}
-  - {fileID: 860580514, guid: 0524ea821b097d6449557e7288664f14, type: 3}
-  - {fileID: 379103307, guid: 0524ea821b097d6449557e7288664f14, type: 3}
-  - {fileID: 1420360379, guid: 0524ea821b097d6449557e7288664f14, type: 3}
+  - {fileID: -2018109058, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
+  - {fileID: -723308037, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
+  - {fileID: 1876958155, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
+  - {fileID: 680046995, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
+  - {fileID: 2011141198, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
+  - {fileID: 1288078298, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
+  - {fileID: 2006065192, guid: d1ce8b20e4359914a900f52a5c6849d0, type: 3}
   lapContainer: {fileID: 2186337789622851477}
   digitPrefab: {fileID: 8624740118581079510}
 --- !u!1 &7514224399117958209
