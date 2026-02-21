@@ -654,8 +654,8 @@ MonoBehaviour:
   BaseSpeed: 130
   Grassmaxspeed: 50
   DriftMaxSpeed: 100
-  TurbeAmount: 90
-  TurbeMax: 90
+  TurbeAmount: 80
+  TurbeMax: 80
   Turbepush: 15
   TurbeReduce: 20
   TurbeRegen: 15
