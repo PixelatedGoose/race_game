@@ -107,7 +107,7 @@ public class Credits : MonoBehaviour
     private IEnumerator InactiveCoroutine()
     {
         //cacheen laittaminen paskois tän kaiken lol
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(30f);
         videoPlayer.Prepare();
         videoPlayer.Play();
         creditsTrack.volume = 0f;
