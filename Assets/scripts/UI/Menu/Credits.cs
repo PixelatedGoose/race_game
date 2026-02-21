@@ -1,21 +1,23 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class Credits : MonoBehaviour
 {
-    int index = 0;
+    [SerializeField] private VideoPlayer videoPlayer;
+    
+    private int index = 0;
 
     [Header("UI")]
     [SerializeField] private Text thetext;
-    [SerializeField] private Selectable target;
-    [SerializeField] private GameObject buttonContainer; // The parent GameObject containing all buttons
 
     [Header("Data")]
-    [TextArea] public string[] tasks;
+    private string[] tasks;
 
     [Header("Specific Info Popup")]
-    public string[] whatHeDo;
+    private string[] whatHeDo;
     [SerializeField] private Text popupInfo;
     [SerializeField] private AudioSource creditsTrack;
 
@@ -24,30 +26,29 @@ public class Credits : MonoBehaviour
 
     CarInputActions Controls;
 
+    //BEST VALUE!!
+    private Coroutine inactivityCoroutine;
+
     private void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
 
-        if (tasks == null || tasks.Length == 0)
+        tasks = new string[]
         {
-            tasks = new string[]
-            {
-                "PixelatedGoose\nPROJECT LEAD\ngraphical design, map design, shaders",
-                "Vizl87\nLEAD PROGRAMMER\ncar controller, game data handling",
-                "ThatOneGuy\nCOMPOSER, PROGRAMMER\nmusic and sfx, selection menus",
-                "Leobold\nPROGRAMMER\ncertain menus, racing mechanics",
-                "lamelemon\nPROGRAMMER\nai coding, refactoring scripts",
-                "rojp\nDESIGNER\nother help, car textures",
-            };
-        }
+            "PixelatedGoose\nPROJECT LEAD\ngraphical design, map design, shaders",
+            "Vizl87\nLEAD PROGRAMMER\ncar controller, game data handling",
+            "ThatOneGuy\nCOMPOSER, PROGRAMMER\nmusic and sfx, selection menus",
+            "Leobold\nPROGRAMMER\nracing mechanics",
+            "lamelemon\nPROGRAMMER\nai cars, refactoring scripts",
+            "rojp\nDESIGNER\nother help, car textures",
+        };
         whatHeDo = new string[]
         {
-            //lol
             "- all pixel art graphics\n- all map design\n- all shaders\n- leaderboard system",
-            "- car controller\n- save data system\n- wheel support\n- score multiplier",
+            "- car controller\n- save data system\n- wheel support\n- score system",
             "- all music and sound effects\n- selection menus\n- some graphics assets\n- bug fixing",
-            "- multiplayer\n- score system\n- lap and time system",
+            "- lap and time system",
             "- AI car code\n- user input check system",
             "- car textures\n- ideas",
         };
@@ -61,24 +62,19 @@ public class Credits : MonoBehaviour
     public void UpdateIconSelection()
     {        
         GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
-        target = currentSelected.GetComponent<Selectable>();
-        if (!int.TryParse(target.name.Substring(0, 1), out index))
+        if (currentSelected.TryGetComponent(out Selectable target))
         {
-            Debug.LogWarning($"Could not parse index from name: {target.name}");
-            return;
-        }
-
-        if (index >= 0 && index < tasks.Length)
-        {
-            thetext.text = tasks[index];
-        }
-        else
-        {
-            thetext.text = "";
-        }
-        if (index >= 0 && index < whatHeDo.Length)
-        {
-            popupInfo.text = whatHeDo[index];
+            bool hasIndex = int.TryParse(target.name.Substring(0, 1), out index);
+            if (hasIndex)
+            {
+                thetext.text = tasks[index];
+                popupInfo.text = whatHeDo[index];
+            }
+            else
+            {
+                thetext.text = "";
+                popupInfo.text = "";
+            }
         }
     }
 
@@ -102,5 +98,24 @@ public class Credits : MonoBehaviour
                 .setOnUpdate(val => creditsTrack.volume = val).id;
                 break;
         }
+    }
+
+    public void Inactive()
+    {
+        inactivityCoroutine = StartCoroutine(InactiveCoroutine());
+    }
+    private IEnumerator InactiveCoroutine()
+    {
+        //cacheen laittaminen paskois tän kaiken lol
+        yield return new WaitForSecondsRealtime(30f);
+        videoPlayer.Prepare();
+        videoPlayer.Play();
+        creditsTrack.volume = 0f;
+    }
+    public void StopInactive()
+    {
+        videoPlayer.Stop();
+        creditsTrack.volume = 0.27f;
+        StopCoroutine(inactivityCoroutine);
     }
 }

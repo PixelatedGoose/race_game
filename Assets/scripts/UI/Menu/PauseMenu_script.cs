@@ -29,7 +29,11 @@ public class PauseMenu : MonoBehaviour
     }
 
     private void OnEnable() => Controls.Enable();
-    private void OnDisable() => Controls.Disable();
+    private void OnDisable()
+    {
+        Controls.CarControls.pausemenu.performed -= PauseMenuCheck;
+        Controls.Disable();
+    }
     private void OnDestroy() => Controls.Disable();
 
     void Start()
@@ -99,14 +103,16 @@ public class PauseMenu : MonoBehaviour
     }
 
     //ERITTÄIN ronnyinen funktio tääl näi
+    //ja nyt se on kaks kertaa ronnyisempi
     public void SetPausedState(bool paused)
     {
         Time.timeScale = paused ? 0 : 1;
         GameManager.instance.isPaused = paused;
 
         musicControl musicCtrl = FindFirstObjectByType<musicControl>();
-        if (musicCtrl != null)
-            musicCtrl.PausedMusicHandler();
+        if (musicCtrl != null) musicCtrl.PausedMusicHandler();
+        soundFXControl soundFXctrl = FindFirstObjectByType<soundFXControl>();
+        if (soundFXctrl != null && racerScript.racestarted) soundFXctrl.PauseStateHandler();
     }
 
     public void ContinueGame()
@@ -119,7 +125,6 @@ public class PauseMenu : MonoBehaviour
     }
     public void QuitGame()
     {
-        musicControl musicCtrl = FindFirstObjectByType<musicControl>();
         SetPausedState(false);
         SceneManager.LoadSceneAsync("MainMenu");
     }

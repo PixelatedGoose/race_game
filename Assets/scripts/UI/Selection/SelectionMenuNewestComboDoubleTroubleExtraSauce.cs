@@ -74,6 +74,8 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     private bool canSelectCar;
     //tämä saa olla ensimmäinen ja AINOA kerta kun teen näin
     [SerializeField] private AudioSource selectSound;
+    //rip minä lol
+    [SerializeField] private AudioSource carTypeSwitchSound;
 
     
 
@@ -226,6 +228,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     {
         if (availableSelectionMenus[selectionIndex].name != "B_carSelection") return;
 
+        carTypeSwitchSound.Play();
         availableCars[index].SetActive(false);
         index = (index + 1) % availableCars.Count;
         availableCars[index].SetActive(true);
@@ -242,6 +245,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     {
         if (availableSelectionMenus[selectionIndex].name != "B_carSelection") return;
         
+        carTypeSwitchSound.Play();
         availableCars[index].SetActive(false);
         index = (index - 1 + availableCars.Count) % availableCars.Count;
         availableCars[index].SetActive(true);
