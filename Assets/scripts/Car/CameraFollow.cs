@@ -1,7 +1,8 @@
 using UnityEngine;
+using PurrNet;
 
 [RequireComponent(typeof(Camera))]
-public class CameraFollow : MonoBehaviour
+public class CameraFollow : NetworkBehaviour
 {
     public float moveSmoothness;
     public float rotSmoothness;
@@ -20,6 +21,12 @@ public class CameraFollow : MonoBehaviour
     public bool setTutorialValues = false;
 
 
+     protected override void OnSpawned(bool asServer)
+    {
+        base.OnSpawned(asServer);
+
+        enabled = isOwner;
+    }
 
     private void Start()
     {
@@ -29,6 +36,7 @@ public class CameraFollow : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!isOwner) return;
         FollowTarget();
     }
 
