@@ -17,4 +17,48 @@ MonoBehaviour:
   poolByDefault: 0
   folder: {fileID: 102900000, guid: 078081ce4e371394bbed3c98864e9816, type: 3}
   linkedNetworkPrefabs: []
-  prefabs: []
+  prefabs:
+  - guid: 061d794f450725942986e9978a2122c9
+    prefab: {fileID: 6265147186453089306, guid: 061d794f450725942986e9978a2122c9, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 1fb1a32fa77eec941956ce5fba5949cd
+    prefab: {fileID: 3470644107909227971, guid: 1fb1a32fa77eec941956ce5fba5949cd, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 49d01b31cdf957546ab9f81cced5cc30
+    prefab: {fileID: 381436349141117568, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 6a8c46777ccc3ca4a9e6c0a5ee83e0d9
+    prefab: {fileID: 6265147186453089306, guid: 6a8c46777ccc3ca4a9e6c0a5ee83e0d9, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: 8fc548e35fbad4148822fbdc924ca0d4
+    prefab: {fileID: 6265147186453089306, guid: 8fc548e35fbad4148822fbdc924ca0d4, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: a24723b553486f34e9f17fcfea47ffbe
+    prefab: {fileID: 6265147186453089306, guid: a24723b553486f34e9f17fcfea47ffbe, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: a466494dd195c8d49a06e52b49f125dc
+    prefab: {fileID: 2853865628529193986, guid: a466494dd195c8d49a06e52b49f125dc, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: b389d0493975b734aa1ec486d373e17c
+    prefab: {fileID: 2177387022637776804, guid: b389d0493975b734aa1ec486d373e17c, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: b9967bc823ac2c641b0343d5ee062a9f
+    prefab: {fileID: 6724314122475099813, guid: b9967bc823ac2c641b0343d5ee062a9f, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: d564b44e6c3401a46a68ee07eb6a202c
+    prefab: {fileID: 3621995110324072295, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    pooled: 0
+    warmupCount: 5
+  - guid: e63ec9c06badf0f4c86184abb21730c8
+    prefab: {fileID: 5629295490424322811, guid: e63ec9c06badf0f4c86184abb21730c8, type: 3}
+    pooled: 0
+    warmupCount: 5

@@ -22,9 +22,22 @@ public class PlayerCarController : BaseCarController
 
     protected Coroutine DriftBoost;
     
+    protected override void OnSpawned(bool asServer)
+    {
+        base.OnSpawned(asServer);
 
+        enabled = isOwner;
 
-    
+        var cam = GetComponentInChildren<Camera>();
+        if (cam != null)
+        {
+            cam.enabled = isOwner;
+
+            var audioListener = cam.GetComponent<AudioListener>();
+            if (audioListener != null)
+                audioListener.enabled = isOwner;
+        }
+    }
 
     void Awake()
     {
@@ -120,6 +133,7 @@ public class PlayerCarController : BaseCarController
 
     void Update()
     {
+        if (!isOwner) return;
         GetInputs();
         Animatewheels();
         // detect connection state changes and print once when it changes
@@ -141,6 +155,7 @@ public class PlayerCarController : BaseCarController
 
     void FixedUpdate()
     {
+        if (!isOwner) return;
         float speed = CarRb.linearVelocity.magnitude * 3.6f;
         isOnGrassCachedValid = false;
         ApplySpeedLimit(speed);
