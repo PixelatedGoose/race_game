@@ -26,12 +26,12 @@ public class BaseCarController : MonoBehaviour
     }
 
     [Header("Auton asetukset")]
-    [SerializeField] protected float MaxAcceleration = 700.0f;
+    [SerializeField] internal float MaxAcceleration = 700.0f;
     [SerializeField] protected float BrakeAcceleration = 500.0f;
     [Header("turn asetukset")]
-    [SerializeField] protected float TurnSensitivty  = 1.0f;
-    [SerializeField] protected float TurnSensitivtyAtHighSpeed  = 17.5f;
-    [SerializeField] protected float TurnSensitivtyAtLowSpeed  = 30.0f;
+    [SerializeField] protected float TurnSensitivity  = 1.0f;
+    [SerializeField] protected float TurnSensitivityAtHighSpeed  = 17.5f;
+    [SerializeField] protected float TurnSensitivityAtLowSpeed  = 30.0f;
     [SerializeField] protected float Deceleration  = 1.0f;
     [Min(100.0f)]
     [SerializeField] protected float Maxspeed  = 100.0f;
@@ -46,20 +46,20 @@ public class BaseCarController : MonoBehaviour
     public float MoveInput;
     public float SteerInput;
     protected Vector3 _CenterofMass;
-    protected float TargetTorque  = 0.0f;
+    internal float TargetTorque  = 0.0f;
     public Rigidbody CarRb { get; protected set; }
-    public bool IsTurboActive { get; protected set; } = false;
+    public bool IsTurboActive { get; internal set; } = false;
     protected float Activedrift = 0.0f;
     [SerializeField] protected float Turbesped = 60.0f, TurbeChargeSped = 80, BaseSpeed = 180f, Grassmaxspeed = 50.0f, DriftMaxSpeed = 140f;
     [Header("Drift asetukset")]
     //protected float DriftMultiplier = 1.0f;
     public bool IsDrifting { get; protected set; } = false;
-    protected Color GrassTrailColor = new Color(0.3f, 0.15f, 0.0f);
-    protected Color RoadTrailColor = Color.black;
-    protected float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
+    protected Color GrassTrailColor = new Color(0.6f, 0.35f, 0.1f);
+    protected Color RoadTrailColor = new Color(0.08f, 0.08f, 0.08f);
+    internal float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
     [Header("turbe asetukset")]
     protected Image TurbeMeter;
-    [SerializeField] protected float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f, turbechargepush = 20;
+    [SerializeField] internal float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f, turbechargepush = 20;
     [SerializeField] protected float TurbeReduce = 10.0f;
     [SerializeField] protected float TurbeRegen = 10.0f;
 
@@ -137,6 +137,7 @@ public class BaseCarController : MonoBehaviour
     protected void OnGrass()
     {
         int wheelsOnGrass = 0;
+        //Color rgbColor = Color.HSVToRGB((Time.time * 0.5f) % 1f, 1f, 1f);
 
         foreach (var wheel in Wheels)
         {
@@ -145,7 +146,7 @@ public class BaseCarController : MonoBehaviour
             if (WheelOnGrass) wheelsOnGrass++;
 
             var trail = wheel.WheelEffectobj.GetComponentInChildren<TrailRenderer>();
-
+                                                //if you want rgb colors change one of them to rgbcolor and uncomment the rgb color just for fun
             trail.material.color = WheelOnGrass ? GrassTrailColor : RoadTrailColor;
         }
 
@@ -238,7 +239,7 @@ public class BaseCarController : MonoBehaviour
         foreach (var wheel in Wheels.Where(w => w.Axel == Axel.Front))
         {
         
-            var _steerAngle = SteerInput * TurnSensitivty * (IsDrifting ? 0.8f : 0.35f);
+            var _steerAngle = SteerInput * TurnSensitivity * (IsDrifting ? 0.8f : 0.35f);
             wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, _steerAngle, 0.6f);            
         }
     }
