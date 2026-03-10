@@ -204,7 +204,7 @@
                 {
                     "name": "",
                     "id": "93580299-f4f8-4701-a4b7-5bd990d464cf",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -347,7 +347,7 @@
                 {
                     "name": "",
                     "id": "ecc093f7-c778-4f68-82f5-efddd9743ed3",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

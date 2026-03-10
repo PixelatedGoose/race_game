@@ -77,10 +77,11 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     //rip minä lol
     [SerializeField] private AudioSource carTypeSwitchSound;
 
+    [SerializeField] private GameObject temp_AIUnavailablePopup;
+
     
 
     //4. setuppaa map selectionin kuva juttu [ehkä]
-    //back buttonin voi poistaa
 
     void Awake()
     {
@@ -260,6 +261,9 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
 
     public void AttemptNext()
     {
+        temp_AIUnavailablePopup.SetActive(false);
+        //hack 2
+        if (selectedGamemode == Gamemode.AI && savedMapBaseName == "canyon") temp_AIUnavailablePopup.SetActive(true);
         //vitun paskanen hack
         if (canSelectCar)
         {
@@ -300,6 +304,7 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     }
     public void Back()
     {
+        temp_AIUnavailablePopup.SetActive(false);
         //normal back
         if (selectionIndex != 0)
         {
@@ -357,6 +362,10 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     //tarkistan myöhemmin voiko tätä välttää... vitun coroutinet
     public void StartGame()
     {
+        //nopee hackki taas...
+        if (selectedGamemode == Gamemode.AI && savedMapBaseName == "canyon") return;
+
+        detailsPanel.SetActive(false);
         PlayerPrefs.SetString("SelectedCar", availableCars[index].name);
         PlayerPrefs.Save();
         SetMapToLoad();

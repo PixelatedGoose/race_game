@@ -24,11 +24,43 @@ public class SpeedMeter : MonoBehaviour
             Debug.LogWarning("speedLabel EI OLE VITTU OLEMASSA");
         }
 
+        TryBindTarget();
+    }
+
+    private void OnEnable()
+    {
+        if (GameManager.instance != null)
+            GameManager.instance.OnCurrentCarChanged += OnCurrentCarChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (GameManager.instance != null)
+            GameManager.instance.OnCurrentCarChanged -= OnCurrentCarChanged;
+    }
+
+    private void OnCurrentCarChanged(GameObject currentCar)
+    {
+        target = currentCar != null ? currentCar.GetComponentInChildren<Rigidbody>() : null;
+    }
+
+    private void TryBindTarget()
+    {
+        if (GameManager.instance == null || GameManager.instance.CurrentCar == null)
+            return;
+
         target = GameManager.instance.CurrentCar.GetComponentInChildren<Rigidbody>();
     }
 
     private void Update()
     {
+        if (target == null)
+        {
+            TryBindTarget();
+            if (target == null)
+                return;
+        }
+
         speed = target.linearVelocity.magnitude * 3.6f;
 
         if (speedLabel != null)

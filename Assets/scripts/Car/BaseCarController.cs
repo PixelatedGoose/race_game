@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
-using UnityEngine.Analytics;
-using Unity.Splines.Examples;
 using PurrNet;
 
 
@@ -53,7 +51,7 @@ public class BaseCarController : NetworkBehaviour
     public Rigidbody CarRb { get; protected set; }
     public bool IsTurboActive { get; protected set; } = false;
     protected float Activedrift = 0.0f;
-    [SerializeField] protected float Turbesped = 60.0f, BaseSpeed = 180f, Grassmaxspeed = 50.0f, DriftMaxSpeed = 140f;
+    [SerializeField] protected float Turbesped = 60.0f, TurbeChargeSped = 80, BaseSpeed = 180f, Grassmaxspeed = 50.0f, DriftMaxSpeed = 140f;
     [Header("Drift asetukset")]
     //protected float DriftMultiplier = 1.0f;
     public bool IsDrifting { get; protected set; } = false;
@@ -62,7 +60,7 @@ public class BaseCarController : NetworkBehaviour
     protected float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
     [Header("turbe asetukset")]
     protected Image TurbeMeter;
-    [SerializeField] protected float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f;
+    [SerializeField] protected float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f, turbechargepush = 20;
     [SerializeField] protected float TurbeReduce = 10.0f;
     [SerializeField] protected float TurbeRegen = 10.0f;
 
@@ -163,7 +161,7 @@ public class BaseCarController : NetworkBehaviour
 
     protected void AdjustSpeedForGrass()
     {
-        if (IsOnGrass())
+        if (IsOnGrass() && !IsTurboActive)
         {
             TargetTorque *= GrassSpeedMultiplier;
 

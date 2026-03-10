@@ -1260,14 +1260,17 @@ MonoBehaviour:
   MoveInput: 0
   SteerInput: 0
   Turbesped: 60
+  TurbeChargeSped: 80
   BaseSpeed: 150
   Grassmaxspeed: 50
   DriftMaxSpeed: 100
   TurbeAmount: 85
   TurbeMax: 85
   Turbepush: 17.5
+  turbechargepush: 20
   TurbeReduce: 20
   TurbeRegen: 15
+  turbeChargeAmount: 3
 --- !u!114 &8984414616937260121
 MonoBehaviour:
   m_ObjectHideFlags: 0
