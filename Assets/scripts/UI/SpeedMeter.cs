@@ -19,10 +19,7 @@ public class SpeedMeter : MonoBehaviour
 
     private void Start()
     {
-        if (speedLabel == null)
-        {
-            Debug.LogWarning("speedLabel EI OLE VITTU OLEMASSA");
-        }
+        if (speedLabel == null) Debug.LogWarning("speedLabel EI OLE VITTU OLEMASSA");
 
         target = GameManager.instance.CurrentCar.GetComponentInChildren<Rigidbody>();
     }
@@ -30,15 +27,7 @@ public class SpeedMeter : MonoBehaviour
     private void Update()
     {
         speed = target.linearVelocity.magnitude * 3.6f;
-
-        if (speedLabel != null)
-        {
-            speedLabel.text = ((int)speed) + " km/h";
-        }
-
-        if (arrow != null)
-        {
-            arrow.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(minSpeedArrowAngle, maxSpeedArrowAngle, speed / maxSpeed));
-        }
+        if (speedLabel != null) speedLabel.text = $"{(int)speed} km/h";
+        if (arrow != null) arrow.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(minSpeedArrowAngle, maxSpeedArrowAngle, speed / maxSpeed));
     }
 }
