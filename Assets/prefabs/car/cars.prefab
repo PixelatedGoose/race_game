@@ -520,65 +520,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAcceleration: 450
-  brakeAcceleration: 100
-  turnSensitivty: 10
-  turnSensitivtyAtHighSpeed: 13
-  turnSensitivtyAtLowSpeed: 20
-  deceleration: 1
-  maxspeed: 140
-  gravityMultiplier: 0.25
-  grassSpeedMultiplier: 0.5
-  wheels:
-  - wheelModel: {fileID: 5981257611660523697}
-    wheelCollider: {fileID: 5873520657972233007}
-    wheelEffectobj: {fileID: 3830969520191170211}
-    smokeParticle: {fileID: 7867449904438721443}
-    axel: 0
-  - wheelModel: {fileID: 2196264200430626406}
-    wheelCollider: {fileID: 1513152605912548565}
-    wheelEffectobj: {fileID: 1687672644566147044}
-    smokeParticle: {fileID: 4821058196090275879}
-    axel: 0
-  - wheelModel: {fileID: 6722043891458941664}
-    wheelCollider: {fileID: 6528529704389583545}
-    wheelEffectobj: {fileID: 1869988502196754695}
-    smokeParticle: {fileID: 13687456860652236}
-    axel: 1
-  - wheelModel: {fileID: 6666472120420136118}
-    wheelCollider: {fileID: 4730294300133153909}
-    wheelEffectobj: {fileID: 4078834326811246720}
-    smokeParticle: {fileID: 8448773996138549713}
-    axel: 1
-  _centerofMass: {x: 0, y: 0, z: 0}
-  grass:
-    serializedVersion: 2
-    m_Bits: 128
-  targetTorque: 0
-  grassMaterial: {fileID: 2100000, guid: 6fd8429b74ab9eb4fae4415c8a29b8e5, type: 2}
-  roadMaterial: {fileID: 2100000, guid: 2078d9428218af54fa6eaa4ae7fdbaa1, type: 2}
-  driftmaterial: {fileID: 2100000, guid: 2078d9428218af54fa6eaa4ae7fdbaa1, type: 2}
-  carRb: {fileID: 0}
-  isTurboActive: 0
+  MaxAcceleration: 700
+  BrakeAcceleration: 500
+  TurnSensitivty: 1
+  TurnSensitivtyAtHighSpeed: 17.5
+  TurnSensitivtyAtLowSpeed: 30
+  Deceleration: 1
+  Maxspeed: 100
+  GravityMultiplier: 1.5
+  Wheels: []
+  GrassSpeedMultiplier: 0.5
+  GrassRespawnActive: 0
+  MoveInput: 0
+  SteerInput: 0
   Turbesped: 190
-  basespeed: 140
-  grassmaxspeed: 50
-  driftMaxSpeed: 40
-  driftMultiplier: 5
-  isTurnedDown: 0
-  isDrifting: 0
-  turbeMeter: {fileID: 0}
-  turbeAmount: 100
-  turbeMax: 100
-  turbepush: 50
-  turbeReduce: 20
-  turbeRegen: 15
-  isRegenerating: 0
-  turbeRegenCoroutineAmount: 0
-  canDrift: 0
-  canUseTurbo: 0
-  useLogitechWheel: 1
-  forceFeedbackMultiplier: 1
+  TurbeChargeSped: 80
+  BaseSpeed: 180
+  Grassmaxspeed: 50
+  DriftMaxSpeed: 140
+  TurbeAmount: 100
+  TurbeMax: 100
+  Turbepush: 15
+  turbechargepush: 20
+  TurbeReduce: 10
+  TurbeRegen: 10
+  turbeChargeAmount: 3
 --- !u!114 &6266965496208303817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,12 +557,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718c68663d4dc28408fcc839dde75394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rankManager: {fileID: 0}
   winMenu: {fileID: 0}
-  Car1Hud: {fileID: 777392002364676048, guid: 80000b9bacd37a44bb37538db943bd1e, type: 3}
   Minimap: {fileID: 0}
   laptime: 0
-  Rank: 0
   besttime: 0
   racestarted: 0
   startFinishLine: {fileID: 2912510506377448091}
@@ -617,15 +580,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0034849d033d3444b4c3f33ef275840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  s1: {fileID: 0}
-  s2: {fileID: 0}
-  s3: {fileID: 0}
-  go: {fileID: 0}
-  racerScript: {fileID: 6266965496208303817}
-  count1: {fileID: 0}
-  count2: {fileID: 0}
-  count3: {fileID: 0}
-  countGo: {fileID: 0}
+  countGraphics: []
+  countSounds: []
 --- !u!114 &7163741383851822111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1466,8 +1422,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e2001e2ec1786e84c8e31132099c56df, type: 2}
-  - {fileID: 2100000, guid: e2001e2ec1786e84c8e31132099c56df, type: 2}
+  - {fileID: 2100000, guid: aef9556b93a458641833bce390b0118e, type: 2}
+  - {fileID: 2100000, guid: aef9556b93a458641833bce390b0118e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2675,12 +2631,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 5438dae53bff01940b9bb1c67c114519, type: 2}
+      objectReference: {fileID: 2100000, guid: 4a41beaa4d4933548a400bdbad0eb0e7, type: 2}
+    - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4a41beaa4d4933548a400bdbad0eb0e7, type: 2}
     - target: {fileID: 6913775488181635797, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -2830,17 +2790,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 33521460955142030}
   m_SourcePrefab: {fileID: 100100000, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
---- !u!114 &6806053433548342062 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5318218194112899866, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
-  m_PrefabInstance: {fileID: 1710785995942946868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8447617623130279254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 718c68663d4dc28408fcc839dde75394, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8447617623130279254 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7099390124016199010, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
@@ -2858,15 +2807,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0034849d033d3444b4c3f33ef275840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  s1: {fileID: 0}
-  s2: {fileID: 0}
-  s3: {fileID: 0}
-  go: {fileID: 0}
-  racerScript: {fileID: 6806053433548342062}
-  count1: {fileID: 0}
-  count2: {fileID: 0}
-  count3: {fileID: 0}
-  countGo: {fileID: 0}
+  countGraphics: []
+  countSounds: []
 --- !u!114 &33521460955142030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2954,11 +2896,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
---- !u!198 &13687456860652236 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 2146857439117957358}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3154507574022404777 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -3465,9 +3402,17 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: be0922fd0d015524a880352b58f11275, type: 2}
+      objectReference: {fileID: 2100000, guid: be148bfa16d91fc408eef161dcebcef6, type: 2}
+    - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: be148bfa16d91fc408eef161dcebcef6, type: 2}
     - target: {fileID: 6913775488181635797, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -3642,15 +3587,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0034849d033d3444b4c3f33ef275840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  s1: {fileID: 0}
-  s2: {fileID: 0}
-  s3: {fileID: 0}
-  go: {fileID: 0}
-  racerScript: {fileID: 9059760393653632985}
-  count1: {fileID: 0}
-  count2: {fileID: 0}
-  count3: {fileID: 0}
-  countGo: {fileID: 0}
+  countGraphics: []
+  countSounds: []
 --- !u!114 &7859560685591799201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3673,17 +3611,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7691087905362571268, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
   m_PrefabInstance: {fileID: 3779829979240387779}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9059760393653632985 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5318218194112899866, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
-  m_PrefabInstance: {fileID: 3779829979240387779}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6265279913391567265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 718c68663d4dc28408fcc839dde75394, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4524308336977744825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4206,12 +4133,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 0b1064d2cc5bc64459819d2de77a1a29, type: 2}
+      objectReference: {fileID: 2100000, guid: 448b16aa0a3db484cb689a5ca7209028, type: 2}
+    - target: {fileID: 6748637382448867141, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 448b16aa0a3db484cb689a5ca7209028, type: 2}
     - target: {fileID: 6913775488181635797, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -4382,17 +4313,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6968916883164566048}
   m_SourcePrefab: {fileID: 100100000, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
---- !u!114 &2293941396014156875 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5318218194112899866, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
-  m_PrefabInstance: {fileID: 6204742914659231569}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3791385999473656371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 718c68663d4dc28408fcc839dde75394, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3791385999473656371 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7099390124016199010, guid: 49d01b31cdf957546ab9f81cced5cc30, type: 3}
@@ -4410,15 +4330,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0034849d033d3444b4c3f33ef275840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  s1: {fileID: 0}
-  s2: {fileID: 0}
-  s3: {fileID: 0}
-  go: {fileID: 0}
-  racerScript: {fileID: 2293941396014156875}
-  count1: {fileID: 0}
-  count2: {fileID: 0}
-  count3: {fileID: 0}
-  countGo: {fileID: 0}
+  countGraphics: []
+  countSounds: []
 --- !u!114 &6968916883164566048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4506,11 +4419,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
---- !u!198 &4821058196090275879 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 6853455257670472197}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7570684724689956930 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -4662,11 +4570,6 @@ PrefabInstance:
 --- !u!4 &6825130915728583092 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 7546793772674993139}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &8448773996138549713 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
   m_PrefabInstance: {fileID: 7546793772674993139}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7619426475554390973
@@ -5017,11 +4920,6 @@ PrefabInstance:
 --- !u!4 &5105220807327253446 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 8130483717543633281}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &7867449904438721443 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
   m_PrefabInstance: {fileID: 8130483717543633281}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8454611301187897206
