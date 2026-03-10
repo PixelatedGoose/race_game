@@ -169,6 +169,7 @@
         "Have you ever thought about car insurance?",
         "Like Sonny, Like Ronny",
         "tiesitkö, että enemmän mappeja on ollut saatavilla muutaman kuukauden ajan",
+        "Have you tried pressing CTRL + N in the Extras menu?",
         "kissa pankissa rajoitetun ajan! :)"
     ],
 
@@ -320,6 +321,8 @@
         "Uutisissa tänään: bussimatkojen hinnat nousevat edelleen",
         "Uutisissa tänään: vanha mies löysi itensä keskeltä metsää",
         "Uutisissa tänään: uusi albumi julkaistiin, monet kokoontuivat kuuntelemaan",
+        "Uutisissa tänään: paikallinen mies vihaa satunnaisia kortteja",
+        "Uutisissa tänään: vii häv svitched to inglish länguich",
         "Honestly, I gotta tell you, this game might remind you of bad decisions",
         "Kyllä, autos ajajalla on nimi. Kysy siit lisää meiltä.",
         "do you prefer water or milk? yeah i'll put that in your car's gas tank",
@@ -330,7 +333,14 @@
         "There's never a bad time to go for a drive.",
         "Market pliers now only $5!",
         "you've found a secret. the secret will be shown to you in about three seconds",
-        "Uh, no"
+        "Uh, no",
+        "We are not responsible for leaking the source code of MC Legacy Console Edition.",
+        "this loading screen is taking really long",
+        "Looks like you're still a newcomer to drifting.",
+        "fraudulent!!!",
+        "why is the car spinning?",
+        "Our cars may not be used to break the laws of time and space",
+        "his internet still sucks for some reason"
     ],
 
     "rare": [
@@ -452,7 +462,10 @@
         "i TOLD YOU not to wait in the extras menu!",
         "I have yet to meet one that can outsmart the car.",
         "four bases and so many variants",
-        "by the time you see this you've likely seen about fifty unique texts"
+        "by the time you see this you've likely seen about fifty unique texts",
+        "this game will never be fully done visually",
+        "We will soon trademark AmisDrift. But we have yet to trademark AimsDrift, our secret ripoff",
+        "I dare you to unlock all the cars. Even the hidden ones. Wait, what did I just say?"
     ],
 
     "obscure": [
@@ -512,7 +525,8 @@
         "The price of market pliers has risen to $20!",
         "this game is inspired by questionable sources",
         "aina on hyvä päivä ku pääsee korjaamaan bugeja",
-        "Saatat pian nähdä pyörän tässä pelissä."
+        "Saatat pian nähdä pyörän tässä pelissä.",
+        "im gonna sell this for 69 million € and then retire"
     ],
 
     "special": [
