@@ -650,14 +650,17 @@ MonoBehaviour:
   MoveInput: 0
   SteerInput: 0
   Turbesped: 60
+  TurbeChargeSped: 80
   BaseSpeed: 130
   Grassmaxspeed: 50
   DriftMaxSpeed: 100
   TurbeAmount: 80
   TurbeMax: 80
   Turbepush: 15
+  turbechargepush: 20
   TurbeReduce: 20
   TurbeRegen: 15
+  turbeChargeAmount: 3
 --- !u!114 &7719115578787100056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1222,7 +1225,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5438dae53bff01940b9bb1c67c114519, type: 2}
+  - {fileID: 2100000, guid: 4a41beaa4d4933548a400bdbad0eb0e7, type: 2}
+  - {fileID: 2100000, guid: 4a41beaa4d4933548a400bdbad0eb0e7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
