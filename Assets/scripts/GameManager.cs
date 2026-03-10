@@ -58,4 +58,14 @@ public class GameManager : MonoBehaviour
     {
         racerscript = FindAnyObjectByType<RacerScript>();
     }
+
+    //temp ja ota se pois sit
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (racerscript.raceFinished) return;
+            racerscript.EndRace();
+        }
+    }
 }

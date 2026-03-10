@@ -142,7 +142,7 @@ public class AiCarController : BaseCarController
         carRb.rotation = Quaternion.Lerp(
             carRb.rotation,
             Quaternion.LookRotation(new Vector3(targetPoint.x - carRb.position.x, 0, targetPoint.z - carRb.position.z)),
-            TurnSensitivty * Time.fixedDeltaTime
+            TurnSensitivity * Time.fixedDeltaTime
         );
 
         foreach (Wheel wheel in frontWheels) wheel.WheelCollider.steerAngle = carRb.rotation.y;
