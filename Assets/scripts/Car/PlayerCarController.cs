@@ -145,15 +145,10 @@ public class PlayerCarController : BaseCarController
         float speed = CarRb.linearVelocity.magnitude * 3.6f;
         isOnGrassCachedValid = false;
         ApplySpeedLimit(speed);
-
         UpdateDriftSpeed();
-
         ApplyGravity();
         Move();
         Steer();
-
-        
-
         Decelerate();
         Applyturnsensitivity(speed);
         OnGrass();
@@ -336,28 +331,24 @@ public class PlayerCarController : BaseCarController
 
     internal void StopDrifting()
     {
-        Activedrift = 0;
-   
-        IsDrifting = false;
-        MaxAcceleration = PerusMaxAccerelation;
-        CarRb.angularDamping = 0.1f;
-        if (racerScript.raceFinished || GameManager.instance.carSpeed < 20.0f)
+        if (IsDrifting)
         {
+            Activedrift = 0;
+            IsDrifting = false;
+            MaxAcceleration = PerusMaxAccerelation;
         }
-        AdjustForwardFrictrion();
-        AdjustSuspension();
+        float DeltaTime = Time.deltaTime * 2.5f;
 
+        CarRb.angularDamping = Mathf.Lerp(CarRb.angularDamping, 0.1f, DeltaTime);
+        
         foreach (var wheel in Wheels)
         {
             if (wheel.WheelCollider == null) continue;
-
-            WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
-            sidewaysFriction.extremumSlip = 0.15f;
-            sidewaysFriction.asymptoteSlip = 0.1f;
-            sidewaysFriction.extremumValue = 1.0f;
-            sidewaysFriction.asymptoteValue = 1f;
-            sidewaysFriction.stiffness = 5f;
-            wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
+            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            sideways.stiffness = Mathf.Lerp(sideways.stiffness, 5f, DeltaTime);
+            sideways.extremumSlip  = Mathf.Lerp(sideways.extremumSlip, 0.15f, DeltaTime);
+            sideways.asymptoteSlip = Mathf.Lerp(sideways.asymptoteSlip, 0.1f, DeltaTime);
+            wheel.WheelCollider.sidewaysFriction = sideways;
         }
     }
 
