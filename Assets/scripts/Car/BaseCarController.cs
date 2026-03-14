@@ -48,7 +48,6 @@ public class BaseCarController : MonoBehaviour
     protected Vector3 _CenterofMass;
     internal float TargetTorque  = 0.0f;
     public Rigidbody CarRb { get; protected set; }
-    public bool IsTurboActive { get; internal set; } = false;
     protected float Activedrift = 0.0f;
     [SerializeField] protected float Turbesped = 60.0f, TurbeChargeSped = 80, BaseSpeed = 180f, Grassmaxspeed = 50.0f, DriftMaxSpeed = 140f;
     [Header("Drift asetukset")]
@@ -58,13 +57,12 @@ public class BaseCarController : MonoBehaviour
     protected Color RoadTrailColor = new Color(0.08f, 0.08f, 0.08f);
     internal float PerusMaxAccerelation, PerusTargetTorque, SmoothedMaxAcceleration;
     [Header("turbe asetukset")]
-    protected Image TurbeMeter;
+    protected Image TurbeBar;
+    public bool IsTurboActive { get; internal set; } = false;
     [SerializeField] internal float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f, turbechargepush = 20;
     [SerializeField] protected float TurbeReduce = 10.0f;
     [SerializeField] protected float TurbeRegen = 10.0f;
-
-    protected bool IsRegenerating = false;
-    protected int TurbeRegenCoroutineAmount = 0;
+    protected Coroutine TurbeRegeneration = null;
 
     [NonSerialized] public bool CanDrift = false;
     [NonSerialized] public bool CanUseTurbo = false;
@@ -326,98 +324,49 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// käytetään TURBEmeterin päivittämiseen joka frame
-    /// </summary>
-    protected void TURBEmeter()
+    //problems with Le Turbé:
+    //1. käyttää liikaa methodeja/coroutineja (performance)
+    //2. if statementteja, joita voi varmaan kääntää indenttien vähentämiseen (performance ja readability)
+    //3. yleisesti asioita jotka ei käy järkeen ja ovat omaan taitoon verrattuna aivan päin persettä (readability)
+
+    //miten pitäs toimia:
+    //TURBO INPUT > turbo päällä; aloita vähennys (TurbeReduce) > NO TURBO INPUT > turbo pois päältä > (2 sekuntia) aloita regenerointi
+    //sen täytyy oottaa AINA viimesimmästä inputista 2 sekuntia ja sitten vasta regeneroida kunnes se on täynnä
+    protected void TurbeMeter()
     {
-        if (IsTurboActive && TurbeAmount != 0) //jos käytät turboa ja sitä o jäljellä
+        if (IsTurboActive)
         {
-            GameManager.instance.turbeActive = true;
-
-            if (TurbeRegenCoroutineAmount > 0)
+            if (TurbeRegeneration != null) 
             {
-                turbeRegenCoroutines("stop");
+                Debug.Log("STOPPED ACTIVE COROUTINE AND REMOVED ASSOCIATION IN VARIABLE");
+                StopCoroutine(TurbeRegeneration);
+                TurbeRegeneration = null;
             }
-            IsRegenerating = false;
-            TurbeRegenCoroutineAmount = 0;
-
-            TurbeAmount -= TurbeReduce * Time.deltaTime;
+            Debug.Log("using turbo");
+            TurbeAmount = Mathf.Max(TurbeReduce * Time.deltaTime, 0);
         }
-        else if (!IsTurboActive && TurbeAmount < TurbeMax) //jos et käytä turboa ja se ei oo täynnä
+        else if (TurbeAmount < TurbeMax && TurbeRegeneration == null)
         {
-
-            GameManager.instance.turbeActive = false;
-
-            if (TurbeRegenCoroutineAmount == 0 && IsRegenerating == false)
-            {
-                turbeRegenCoroutines("start");
-                TurbeRegenCoroutineAmount += 1;
-            }
+            Debug.Log("begin regen coroutine");
+            TurbeRegeneration = StartCoroutine(RegenerateTurbe());
         }
-
-        if (TurbeAmount < 0)
-        {
-            TurbeAmount = 0;
-        }
-        if (TurbeAmount > TurbeMax)
-        {
-            //Debug.Log("I bought a property in Egypt, and what they do is they give you the property");
-            TurbeAmount = TurbeMax;
-
-            turbeRegenCoroutines("stop");
-            IsRegenerating = false;
-            TurbeRegenCoroutineAmount = 0;
-        }
-
-        TurbeMeter.fillAmount = TurbeAmount / TurbeMax;
+        TurbeBar.fillAmount = TurbeAmount / TurbeMax;
     }
 
-    /// <summary>
-    /// käytetään TURBEn regeneroimiseen
-    /// ...koska fuck C#
-    /// </summary>
-    private IEnumerator turbeRegenerate()
+    private IEnumerator RegenerateTurbe()
     {
+        Debug.Log("started!");
         yield return new WaitForSecondsRealtime(2.0f);
-        IsRegenerating = true;
 
-        if (IsRegenerating && TurbeRegenCoroutineAmount == 1)
+        while (TurbeAmount < TurbeMax)
         {
-            while (IsRegenerating && TurbeRegenCoroutineAmount == 1)
-            {
-                yield return StartCoroutine(RegenerateTurbeAmount());
-            }
+            TurbeAmount = Mathf.Min(TurbeRegen * Time.deltaTime, TurbeMax);
+            Debug.Log($"current: {TurbeAmount}, bar fill: {TurbeBar.fillAmount}");
+            yield return null;
         }
-        else
-        {
-            Debug.Log("stopped regen coroutine");
-            yield break;
-            //scriptin ei pitäs päästä tähä tilanteeseen missään vaiheessa, mutta se on täällä varmuuden vuoksi
-        }
-    }
 
-    private IEnumerator RegenerateTurbeAmount()
-    {
-        TurbeAmount += TurbeRegen * Time.deltaTime;
-        yield return null; // Wait for the next frame
-    }
-
-    /// <summary>
-    /// aloita tai pysäytä TURBEn regenerointi coroutine
-    /// </summary>
-    /// <param name="option">start / stop</param>
-    private void turbeRegenCoroutines(string option)
-    {
-        switch (option)
-        {
-            case "start":
-                StartCoroutine("turbeRegenerate");
-                break;
-
-            case "stop":
-                StopCoroutine("turbeRegenerate");
-                break;
-        }
+        TurbeRegeneration = null;
+        Debug.Log("stopped!");
+        yield break;
     }
 }
