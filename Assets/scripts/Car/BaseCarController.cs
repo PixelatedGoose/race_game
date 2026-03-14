@@ -62,6 +62,7 @@ public class BaseCarController : MonoBehaviour
     [SerializeField] internal float TurbeAmount = 100.0f, TurbeMax = 100.0f, Turbepush = 15.0f, turbechargepush = 20;
     [SerializeField] protected float TurbeReduce = 10.0f;
     [SerializeField] protected float TurbeRegen = 10.0f;
+    [SerializeField] protected float TurbeWaitTime = 2.0f;
     protected Coroutine TurbeRegeneration = null;
 
     [NonSerialized] public bool CanDrift = false;
@@ -324,49 +325,32 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    //problems with Le Turbé:
-    //1. käyttää liikaa methodeja/coroutineja (performance)
-    //2. if statementteja, joita voi varmaan kääntää indenttien vähentämiseen (performance ja readability)
-    //3. yleisesti asioita jotka ei käy järkeen ja ovat omaan taitoon verrattuna aivan päin persettä (readability)
-
-    //miten pitäs toimia:
-    //TURBO INPUT > turbo päällä; aloita vähennys (TurbeReduce) > NO TURBO INPUT > turbo pois päältä > (2 sekuntia) aloita regenerointi
-    //sen täytyy oottaa AINA viimesimmästä inputista 2 sekuntia ja sitten vasta regeneroida kunnes se on täynnä
     protected void TurbeMeter()
     {
         if (IsTurboActive)
         {
             if (TurbeRegeneration != null) 
             {
-                Debug.Log("STOPPED ACTIVE COROUTINE AND REMOVED ASSOCIATION IN VARIABLE");
                 StopCoroutine(TurbeRegeneration);
                 TurbeRegeneration = null;
             }
-            Debug.Log("using turbo");
-            TurbeAmount = Mathf.Max(TurbeReduce * Time.deltaTime, 0);
+            TurbeAmount = Mathf.Max(TurbeAmount - TurbeReduce * Time.deltaTime, 0f);
         }
-        else if (TurbeAmount < TurbeMax && TurbeRegeneration == null)
-        {
-            Debug.Log("begin regen coroutine");
-            TurbeRegeneration = StartCoroutine(RegenerateTurbe());
-        }
+        else if (TurbeAmount < TurbeMax && TurbeRegeneration == null) TurbeRegeneration = StartCoroutine(RegenerateTurbe());
         TurbeBar.fillAmount = TurbeAmount / TurbeMax;
     }
 
     private IEnumerator RegenerateTurbe()
     {
-        Debug.Log("started!");
-        yield return new WaitForSecondsRealtime(2.0f);
+        yield return new WaitForSeconds(TurbeWaitTime);
 
         while (TurbeAmount < TurbeMax)
         {
-            TurbeAmount = Mathf.Min(TurbeRegen * Time.deltaTime, TurbeMax);
-            Debug.Log($"current: {TurbeAmount}, bar fill: {TurbeBar.fillAmount}");
+            TurbeAmount = Mathf.Min(TurbeAmount + TurbeRegen * Time.deltaTime, TurbeMax);
             yield return null;
         }
 
         TurbeRegeneration = null;
-        Debug.Log("stopped!");
         yield break;
     }
 }
