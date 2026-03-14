@@ -66,7 +66,7 @@ public class ButtonInstructions : MonoBehaviour
     private void OnEnable()
     {
         InputActions.CarControls.Enable();
-
+        InputActions.CarControls.Get().actionTriggered += OnAnyActionTriggered;
         foreach (var step in TutorialSteps)
         {
             if (!string.IsNullOrEmpty(step.ActionName))
@@ -82,13 +82,12 @@ public class ButtonInstructions : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (var step in TutorialSteps)
+        if (InputActions != null)
         {
-            if (!string.IsNullOrEmpty(step.ActionName) && CachedActions.TryGetValue(step.ActionName, out var action))
-                action.performed -= OnActionPerformed;
+            InputActions.CarControls.Get().actionTriggered -= OnAnyActionTriggered;
+            InputActions.CarControls.Disable();
+            InputActions.Dispose();
         }
-
-        InputActions.Dispose();
     }
 
     private void Update()
@@ -157,20 +156,10 @@ public class ButtonInstructions : MonoBehaviour
         if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
             lastUsedDevice = Keyboard.current;
 
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current != null && (Mouse.current.leftButton.wasPressedThisFrame ||
+                                      Mouse.current.rightButton.wasPressedThisFrame ||
+                                      Mouse.current.middleButton.wasPressedThisFrame))
             lastUsedDevice = Mouse.current;
-
-        if (Gamepad.current != null)
-        {
-            foreach (var stick in new[] { Gamepad.current.leftStick, Gamepad.current.rightStick })
-                if (stick.ReadValue() != Vector2.zero)
-                    lastUsedDevice = Gamepad.current;
-
-            foreach (var button in new[] { Gamepad.current.buttonSouth, Gamepad.current.buttonNorth,
-                                           Gamepad.current.buttonEast, Gamepad.current.buttonWest })
-                if (button.wasPressedThisFrame)
-                    lastUsedDevice = Gamepad.current;
-        }
     }
 
     private void StartStep()
@@ -195,6 +184,9 @@ public class ButtonInstructions : MonoBehaviour
 
     private void OnActionPerformed(InputAction.CallbackContext ctx)
     {
+        if (tutorialComplete || currentStep < 0 || currentStep >= TutorialSteps.Count)
+            return;
+
         var step = TutorialSteps[currentStep];
 
         // Only trigger immediate advance for non-hold, non-directional steps
@@ -203,6 +195,15 @@ public class ButtonInstructions : MonoBehaviour
             bool pressed = ctx.ReadValue<float>() > 0.5f;
             if (pressed) AdvanceStep();
         }
+    }
+
+    private void OnAnyActionTriggered(InputAction.CallbackContext ctx)
+    {
+        var control = ctx.action?.activeControl;
+        if (control == null)
+            return;
+
+        lastUsedDevice = control.device;
     }
 
     private void AdvanceStep()
@@ -219,6 +220,13 @@ public class ButtonInstructions : MonoBehaviour
     private void CompleteTutorial()
     {
         tutorialComplete = true;
+
+        foreach (var action in CachedActions.Values)
+            action.performed -= OnActionPerformed;
+
+        InputActions.CarControls.Get().actionTriggered -= OnAnyActionTriggered;
+        InputActions.CarControls.Disable();
+
         InstructionText.text = "Ready to race!";
         if (WaitBeforeStart != null) WaitBeforeStart.enabled = true;
         Time.timeScale = 1f;
@@ -244,39 +252,53 @@ public class ButtonInstructions : MonoBehaviour
     private string GetBindingDisplay(InputAction action, string CompositePart = null)
     {
         if (action == null) return "";
-        string deviceType = lastUsedDevice switch
+        List<string> devicePreferences = new();
+        if (lastUsedDevice is Gamepad)
+            devicePreferences.Add("Gamepad");
+        else if (lastUsedDevice is Mouse)
         {
-            Keyboard => "Keyboard",
-            Gamepad => "Gamepad",
-            _ => null
-        };
+            devicePreferences.Add("Mouse");
+            devicePreferences.Add("Keyboard");
+        }
+        else if (lastUsedDevice is Keyboard)
+            devicePreferences.Add("Keyboard");
 
+        foreach (var deviceType in devicePreferences)
+        {
+            string display = FindBindingDisplay(action, CompositePart, deviceType);
+            if (!string.IsNullOrEmpty(display))
+                return display;
+        }
+
+        string fallback = FindBindingDisplay(action, CompositePart, null);
+        if (!string.IsNullOrEmpty(fallback))
+            return fallback;
+
+        return "";
+    }
+
+    private string FindBindingDisplay(InputAction action, string compositePart, string deviceType)
+    {
         for (int i = 0; i < action.bindings.Count; i++)
         {
-            var Binding = action.bindings[i];
+            var binding = action.bindings[i];
 
-            if (!string.IsNullOrEmpty(CompositePart) && (!Binding.isPartOfComposite || !Binding.name.Equals(CompositePart, StringComparison.OrdinalIgnoreCase)))
+            if (!string.IsNullOrEmpty(compositePart) && (!binding.isPartOfComposite || !binding.name.Equals(compositePart, StringComparison.OrdinalIgnoreCase)))
                 continue;
 
-            if (Binding.isPartOfComposite && string.IsNullOrEmpty(CompositePart))
+            if (binding.isPartOfComposite && string.IsNullOrEmpty(compositePart))
                 continue;
 
-            // Skip bindings that don't match the device type
-            if (deviceType != null && !Binding.path.Contains(deviceType, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(deviceType) && !binding.path.Contains(deviceType, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            // Convert the binding path to a human-readable name
             return InputControlPath.ToHumanReadableString(
-                Binding.effectivePath,
+                binding.effectivePath,
                 InputControlPath.HumanReadableStringOptions.OmitDevice
             );
         }
 
-        // fallback: show first binding for the action
-        return InputControlPath.ToHumanReadableString(
-            action.bindings[0].effectivePath,
-            InputControlPath.HumanReadableStringOptions.OmitDevice
-        );
+        return "";
     }
 
     private string GetComboBindingDisplay(string[] ActionNames)
