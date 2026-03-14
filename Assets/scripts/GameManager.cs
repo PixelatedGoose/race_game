@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
     
     [Header("auto")]
     public float carSpeed;
-    public bool turbeActive = false;
     void Awake()
     {
         instance = this;

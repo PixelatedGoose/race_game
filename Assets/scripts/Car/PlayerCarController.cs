@@ -31,7 +31,7 @@ public class PlayerCarController : BaseCarController
     {
         Controls = new CarInputActions();
         Controls.Enable();
-        TurbeMeter = GameObject.Find("turbeFull").GetComponent<Image>();
+        TurbeBar = GameObject.Find("turbeFull").GetComponent<Image>();
         AutoAssignWheelsAndMaterials();
     }
 
@@ -208,7 +208,7 @@ public class PlayerCarController : BaseCarController
     {
         if (!CanUseTurbo) return;
         Turbe.Apply(this, selectedTurboType);
-        TURBEmeter();
+        TurbeMeter();
     }
 
 
