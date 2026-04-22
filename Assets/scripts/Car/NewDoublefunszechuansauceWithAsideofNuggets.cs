@@ -1,5 +1,6 @@
 using System;
 using Unity.Mathematics;
+using Unity.Splines.Examples;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -12,17 +13,24 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     LogitechMovement LGM;
     private string CurrentControlScheme;
     PlayerInput PlayerInput;
+    private Material carLightsMaterial;
 
-
-    new void Awake()
+    override protected void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
         CarRb = GetComponent<Rigidbody>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
-        AutoAssignWheelsAndMaterials();
-        
+        carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
+        base.Awake();
+
+        if (turbo != null)
+        {
+            Controls.CarControls.turbo.started += context => { turbo.Activate(); };
+            Controls.CarControls.turbo.performed += context => { turbo.Stop(); };
+        }
     }
+
     private void OnControlsChanged(PlayerInput input)
     {
         CurrentControlScheme = input.currentControlScheme;
@@ -35,7 +43,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         if (control == null)
             return;
 
-       }
+    }
+
     private void OnEnable()
     {
         Controls.Enable();
@@ -50,8 +59,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Controls.CarControls.Move.performed += OnMovePerformed;
         Controls.CarControls.Move.canceled  += OnMoveCanceled;
 
-        Controls.CarControls.Drift.performed   += OnDriftPerformed;
-        Controls.CarControls.Drift.canceled    += OnDriftCanceled;
+        Controls.CarControls.Drift.performed += OnDriftPerformed;
+        Controls.CarControls.Drift.canceled  += OnDriftCanceled;
         Controls.CarControls.Brake.performed += OnBrakePerformed;
         Controls.CarControls.Brake.canceled  += OnBrakeCanceled;
     }
@@ -95,7 +104,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         MoveInput = 0f;
     }
 
-    protected override void Start()
+    override protected void Start()
     {
         racerScript = FindAnyObjectByType<RacerScript>();
         LGM = FindAnyObjectByType<LogitechMovement>();
@@ -105,42 +114,31 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         base.Start();
     }
 
-    //movement or anykind of input related will go here
+    
     protected void Update()
     {
         Animatewheels();
         GetInputs();
-
         Steer();
         CarMovement();
-        ApplySpeedLimit();
-        Decelerate();
     }
 
     
-    
-    //physics related will go here
-    protected new void FixedUpdate()
+    override protected void FixedUpdate()
     {
         Applyturnsensitivity(CarRb.linearVelocity.magnitude);
-        // HandleTurbo();
+        Decelerate();
+
+        base.FixedUpdate();
     }
 
-    //que
-//    protected void HandleTurbo()
-//     {
-//         if (!CanUseTurbo) return;
-//         Turbe.TURBO(this);
-//         TurbeMeter();
-//     }
 
     void GetInputs()
     {
-
         Vector2 move = Controls.CarControls.Move.ReadValue<Vector2>();
         SteerInput = move.x;
         MoveInput = move.y;
-
+        
     }
     //Arcade car style movement
     protected void CarMovement()
@@ -163,6 +161,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
     {
+        carLightsMaterial.SetVector("_EmissionColor", new Vector4(1f, 0.0491371f, 0f, 1f) * 2f);
         foreach (var wheel in Wheels)
         {
             wheel.Brake(BrakeAcceleration);
@@ -171,6 +170,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnBrakeCanceled(InputAction.CallbackContext ctx)
     {
+        carLightsMaterial.SetVector("_EmissionColor", new Vector4(0f, 0f, 0f, 1f) * 2f);
         foreach (var wheel in Wheels)
         {
             wheel.MotorTorque(TargetTorque);
