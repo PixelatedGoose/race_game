@@ -140,13 +140,16 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         MoveInput = move.y;
         
     }
+
     //Arcade car style movement
     protected void CarMovement()
     {
         float forwardValue = Mathf.Abs(MoveInput);
+        //this might look like slop, but for now i did this way 
+        float direction = MoveInput != 0 ? Mathf.Sign(MoveInput) : Mathf.Sign(Vector3.Dot(CarRb.linearVelocity, transform.forward));
        
         float targetSpeed = Mathf.MoveTowards(CarRb.linearVelocity.magnitude, MaxSpeed  * forwardValue, Acceleration * Time.deltaTime);
-        Vector3 flatForwardVelocity = transform.forward * targetSpeed;
+        Vector3 flatForwardVelocity = transform.forward * targetSpeed * direction;
         CarRb.linearVelocity = new Vector3(flatForwardVelocity.x, CarRb.linearVelocity.y, flatForwardVelocity.z);
     }
 
