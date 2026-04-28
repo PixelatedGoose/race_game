@@ -8,20 +8,20 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public CarInputActions Controls;
+    public static CarInputActions Controls;
     public static GameManager instance;
     public static RacerScript racerscript;
-    public GameObject CarUI;
+    public static GameObject CarUI;
 
-    public bool isPaused => Time.timeScale == 0;
+    public static bool IsPaused => Time.timeScale == 0;
 
-    public GameObject CurrentCar { get; private set; }
+    public static GameObject CurrentCar { get; private set; }
     [SerializeField] private Transform playerSpawn;
     [SerializeField] private Transform reverse_playerSpawn;
     [SerializeField] private GameObject[] cars;
-    [NonSerialized] public HashSet<BaseCarController> spawnedCars = new();
+    [NonSerialized] public static HashSet<BaseCarController> spawnedCars = new();
 
-    public string sceneSelected => SceneManager.GetActiveScene().name;
+    public static string sceneSelected => SceneManager.GetActiveScene().name;
     private readonly string[] maps = new string[]
     {
         "shoreline",

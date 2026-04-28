@@ -18,7 +18,7 @@ public class LapCounter : MonoBehaviour
     void Start()
     {
         SFXMngr = FindFirstObjectByType<SFXManager>(FindObjectsInactive.Exclude);
-        if (GameManager.instance.CurrentCar != null) racer = GameManager.instance.CurrentCar.GetComponentInChildren<RacerScript>();
+        if (GameManager.CurrentCar != null) racer = GameManager.CurrentCar.GetComponentInChildren<RacerScript>();
         laps = PlayerPrefs.GetInt("Laps");
         numberSprites = laps == 1 ? finalLapNumberSprites : numberSprites;
 

@@ -243,7 +243,7 @@ public class LogitechMovement : MonoBehaviour
     {
         if (!LogitechSDKManager.IsReady) return;
 
-        if (GameManager.instance.isPaused)
+        if (GameManager.IsPaused)
         {
             LogitechGSDK.LogiStopDirtRoadEffect(0);
             return;

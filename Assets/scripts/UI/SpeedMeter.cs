@@ -15,7 +15,7 @@ public class SpeedMeter : MonoBehaviour
 
     private void Start()
     {
-        target = GameManager.instance.CurrentCar.GetComponentInChildren<Rigidbody>();
+        target = GameManager.CurrentCar.GetComponentInChildren<Rigidbody>();
     }
 
     private void Update()

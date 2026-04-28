@@ -84,8 +84,8 @@ public class RaceResultCollector : MonoBehaviour
 
     private string GetCarName()
     {
-        if (GameManager.instance == null || GameManager.instance.CurrentCar == null) return "Unknown";
-        string car = GameManager.instance.CurrentCar.name;
+        if (GameManager.CurrentCar == null) return "Unknown";
+        string car = GameManager.CurrentCar.name;
         string result = car.Substring(0, car.IndexOf("("));
 
         return result;

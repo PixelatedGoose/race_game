@@ -127,7 +127,7 @@ public class AiCarController : BaseCarController
         float localX = localPosition.x;
 
         bool hasHit = false;
-        foreach (BaseCarController other in GameManager.instance.spawnedCars)
+        foreach (BaseCarController other in GameManager.spawnedCars)
         {
             if (other == this) continue;
 

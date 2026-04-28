@@ -44,7 +44,7 @@ public class CarColors : MonoBehaviour
     /// <param name="shouldSet">jos funktio kutsutaan, pitäskö sen muuttaa valot asetuksen mukaiseksi?</param>
     public void LightsState(int lightSelected)
     {
-        if (GameManager.instance.isPaused) return;
+        if (GameManager.IsPaused) return;
 
         switch (lightSelected)
         {
