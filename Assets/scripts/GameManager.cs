@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public static CarInputActions Controls;
     public static GameManager instance;
     public static RacerScript racerscript;
-    public static GameObject CarUI;
+    public GameObject CarUI;
 
     public static bool IsPaused => Time.timeScale == 0;
 
@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
             if (selectedCar == null) selectedCar = cars[0];
             Transform spawn = PlayerPrefs.GetInt("Reverse") == 1 ? reverse_playerSpawn : playerSpawn;
             CurrentCar = Instantiate(selectedCar, spawn.position, spawn.rotation);
+            racerscript = CurrentCar.GetComponentInChildren<RacerScript>();
             spawnedCars.Add(CurrentCar.GetComponentInChildren<BaseCarController>());
             #if UNITY_EDITOR
                 Controls.CarControls.Debug_Win.performed += context => ManualRaceEnd();
@@ -49,10 +50,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnEnable()
-    {
-        racerscript = FindAnyObjectByType<RacerScript>();
-    }
     #if UNITY_EDITOR
         void OnDisable()
         {

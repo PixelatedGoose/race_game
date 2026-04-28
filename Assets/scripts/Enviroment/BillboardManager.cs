@@ -1,20 +1,21 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BillboardManager : MonoBehaviour
 {
-    static readonly List<BillboardObject> objects = new();
+    static readonly List<BillboardingObject> objects = new();
 
-    [Header("Global Billboard Settings")]
-    public Camera billboardCamera;
-    public float updateInterval = 0.2f;
-    public float lenientAngle = 90f;
+    private Camera billboardCamera;
+    [SerializeField] private float updateInterval = 0.2f;
+    [SerializeField] private float lenientAngle = 90f;
 
     float timer;
 
-    void OnEnable()
+    void Awake()
     {
-        if (billboardCamera == null) billboardCamera = Camera.main;
+        billboardCamera = Camera.main;
+        if (billboardCamera == null) throw new NullReferenceException("billboardCamera is null");
     }
 
     void Update()
@@ -30,15 +31,12 @@ public class BillboardManager : MonoBehaviour
 
     void UpdateBillboarding()
     {
-        if (billboardCamera == null) return;
-
         Vector3 camPos = billboardCamera.transform.position;
         Vector3 camForward = billboardCamera.transform.forward;
 
         for (int i = 0; i < objects.Count; i++)
         {
             var obj = objects[i];
-            if (obj == null) continue;
 
             Vector3 toObj = (obj.transform.position - camPos).normalized;
 
@@ -55,12 +53,12 @@ public class BillboardManager : MonoBehaviour
         }
     }
 
-    public static void Register(BillboardObject obj)
+    public static void Register(BillboardingObject obj)
     {
         if (!objects.Contains(obj)) objects.Add(obj);
     }
 
-    public static void Unregister(BillboardObject obj)
+    public static void Unregister(BillboardingObject obj)
     {
         objects.Remove(obj);
     }
