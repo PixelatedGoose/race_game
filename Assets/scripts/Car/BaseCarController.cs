@@ -16,7 +16,15 @@ public class BaseCarController : MonoBehaviour
     [SerializeField] protected float TurnSensitivity = 1.0f;
     [SerializeField] protected float TurnSensitivityAtHighSpeed = 17.5f;
     [SerializeField] protected float TurnSensitivityAtLowSpeed = 30.0f;
-    public float MaxSpeed = 180.0f;
+    public float MaxSpeed { 
+        get => MaxSpeed; 
+        set
+        {
+            MaxSpeed = value;
+            maxSpeed = value / 3.6f;
+        } 
+    }
+    public float maxSpeed { get; protected set; } = 50.0f; // Max speed in m/s
     [SerializeField] protected List<Wheel> Wheels;
     [Header("Trail settings")]
     public float MoveInput;
@@ -99,7 +107,7 @@ public class BaseCarController : MonoBehaviour
 
     protected virtual void ApplySpeedLimit()
     {
-        if (CarRb.linearVelocity.magnitude * 3.6f > MaxSpeed) CarRb.linearVelocity = MaxSpeed / 3.6f * CarRb.linearVelocity.normalized;
+        if (CarRb.linearVelocity.magnitude > maxSpeed) CarRb.linearVelocity = maxSpeed * CarRb.linearVelocity.normalized;
     }
 
     [ContextMenu("Auto Assign Wheels")]
@@ -254,33 +262,4 @@ public class BaseCarController : MonoBehaviour
             trail.enabled = true;
         }
     }
-
-    // protected void TurbeMeter()
-    // {
-    //     if (isTurboActive)
-    //     {
-    //         if (TurbeRegeneration != null) 
-    //         {
-    //             StopCoroutine(TurbeRegeneration);
-    //             TurbeRegeneration = null;
-    //         }
-    //         TurbeAmount = Mathf.Max(TurbeAmount - TurbeReduce * Time.deltaTime, 0f);
-    //     }
-    //     else if (TurbeAmount < TurbeMax && TurbeRegeneration == null) TurbeRegeneration = StartCoroutine(RegenerateTurbe());
-    //     TurbeBar.fillAmount = TurbeAmount / TurbeMax;
-    // }
-
-    // private IEnumerator RegenerateTurbe()
-    // {
-    //     yield return new WaitForSeconds(TurbeWaitTime);
-
-    //     while (TurbeAmount < TurbeMax)
-    //     {
-    //         TurbeAmount = Mathf.Min(TurbeAmount + TurbeRegen * Time.deltaTime, TurbeMax);
-    //         yield return null;
-    //     }
-
-    //     TurbeRegeneration = null;
-    //     yield break;
-    // }
 }
