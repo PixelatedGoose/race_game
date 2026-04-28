@@ -1,18 +1,16 @@
-using System;
-using Unity.Mathematics;
-using Unity.Splines.Examples;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.XR;
 
 public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 {
     internal CarInputActions Controls;
+    public Material pixelCount;
     RacerScript racerScript;
     LogitechMovement LGM;
     private string CurrentControlScheme;
     PlayerInput PlayerInput;
+    [SerializeField] private GameObject carLights;
     private Material carLightsMaterial;
 
     override protected void Awake()
@@ -21,7 +19,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Controls.Enable();
         CarRb = GetComponent<Rigidbody>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
-        AutoAssignWheelsAndMaterials();
+        carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
+        base.Awake();
         
     }
 
@@ -36,7 +35,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         var control = ctx.action?.activeControl;
         if (control == null)
             return;
-
+    
     }
 
     private void OnEnable()
@@ -106,6 +105,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         CarRb.centerOfMass = _CenterofMass;
 
         base.Start();
+        
     }
 
     
@@ -158,7 +158,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
     {
-        carLightsMaterial.SetVector("_EmissionColor", new Vector4(1f, 0.0491371f, 0f, 1f) * 2f);
         foreach (var wheel in Wheels)
         {
             wheel.Brake(BrakeAcceleration);
@@ -167,20 +166,22 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnBrakeCanceled(InputAction.CallbackContext ctx)
     {
-        carLightsMaterial.SetVector("_EmissionColor", new Vector4(0f, 0f, 0f, 1f) * 2f);
         foreach (var wheel in Wheels)
         {
             wheel.MotorTorque(TargetTorque);
         }
     }
 
+
+    // your car is drifting bro better go and call your insurance company
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
-        print("you're are drifting now");
+        WheelEffects(true);   
     }
 
     void OnDriftCanceled(InputAction.CallbackContext ctx)
     {
+        WheelEffects(false);
         print("you stopped drifting");
     }
 }
