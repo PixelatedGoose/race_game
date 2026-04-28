@@ -21,10 +21,13 @@ public class BaseCarController : MonoBehaviour
         set
         {
             MaxSpeed = value;
-            maxSpeed = value / 3.6f;
+            MpsMaxSpeed = value / 3.6f;
         } 
     }
-    public float maxSpeed { get; protected set; } = 50.0f; // Max speed in m/s
+    /// <summary>
+    /// Max speed in meters per second.
+    /// </summary>
+    public float MpsMaxSpeed { get; protected set; } = 50.0f;
     [SerializeField] protected List<Wheel> Wheels;
     [Header("Trail settings")]
     public float MoveInput;
@@ -107,7 +110,7 @@ public class BaseCarController : MonoBehaviour
 
     protected virtual void ApplySpeedLimit()
     {
-        if (CarRb.linearVelocity.magnitude > maxSpeed) CarRb.linearVelocity = maxSpeed * CarRb.linearVelocity.normalized;
+        if (CarRb.linearVelocity.magnitude > MpsMaxSpeed) CarRb.linearVelocity = MpsMaxSpeed * CarRb.linearVelocity.normalized;
     }
 
     [ContextMenu("Auto Assign Wheels")]
