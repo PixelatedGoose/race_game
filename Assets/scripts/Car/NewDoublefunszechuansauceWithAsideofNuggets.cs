@@ -173,7 +173,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         foreach (var wheel in Wheels)
         {
-            wheel.MotorTorque(TargetTorque);
+            wheel.SetTorque(TargetTorque);
         }
     }
 

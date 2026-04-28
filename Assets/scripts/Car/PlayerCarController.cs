@@ -270,7 +270,7 @@ public class PlayerCarController : BaseCarController
         foreach (var wheel in Wheels)
         {
             if (Controls.CarControls.Brake.IsPressed()) wheel.Brake(BrakeAcceleration);
-            else wheel.MotorTorque(TargetTorque);
+            else wheel.SetTorque(TargetTorque);
         }
     }
 
