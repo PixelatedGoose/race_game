@@ -46,8 +46,6 @@ public class SFXManager : MonoBehaviour
                 //TODO: dropdown SFX jollai muulla event paskalla
             }
         }
-        CarColors c = FindFirstObjectByType<CarColors>();
-        if (c != null) c.lights = carLightsToggle;
     }
 
     //TODO: muuttaa hiukan paremmaks, mutta tarpeeks hyvä atm

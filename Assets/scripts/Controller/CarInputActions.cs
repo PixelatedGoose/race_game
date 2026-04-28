@@ -138,27 +138,18 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""underglow"",
-                    ""type"": ""Button"",
-                    ""id"": ""d4102735-3864-4934-abef-108780d8abb9"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""lights"",
-                    ""type"": ""Button"",
-                    ""id"": ""6f5aac5b-c411-4b24-be01-816933cfe631"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""811df9fc-dd41-4458-8d7e-de881038de65"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""UIMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""4e018970-232f-4771-8527-8c15b4400073"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -201,7 +192,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""menusubmit"",
+                    ""name"": ""UISubmit"",
                     ""type"": ""Button"",
                     ""id"": ""083223b4-dcf8-4745-879f-aea59a382185"",
                     ""expectedControlType"": """",
@@ -226,24 +217,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ui_advance"",
-                    ""type"": ""Button"",
-                    ""id"": ""04744b37-2fa2-4f48-8585-43f95a092a5a"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ThrottleMod"",
-                    ""type"": ""Value"",
-                    ""id"": ""7603759c-be72-43e3-8049-184ff3360045"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""carskinright"",
@@ -276,6 +249,33 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Debug_ClearLeaderboard"",
                     ""type"": ""Button"",
                     ""id"": ""a378742b-eb8b-4033-aecd-7e3a1c59d2cb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MusicChangerMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""8a26d362-bab9-460d-9141-965a5d3af999"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MusicChangerPullup"",
+                    ""type"": ""Button"",
+                    ""id"": ""2a78470f-acc4-41e9-8d29-c65ac88d723c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MusicChangerConfirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c7158d1-18b2-4acf-be14-a7351a70366f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -472,61 +472,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5d37cfaf-6556-46d2-b071-0fb69a64525c"",
-                    ""path"": ""<Gamepad>/dpad/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""underglow"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b8ce154e-940e-4ba8-b9bb-62363eee4ee2"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""underglow"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""961a3dfe-d6a9-4d99-bfd2-155930744183"",
-                    ""path"": ""<Gamepad>/dpad/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""lights"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""107441e6-a69f-4ee3-a126-2a4f96a9f5cb"",
-                    ""path"": ""<Keyboard>/l"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""lights"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fb721821-50de-45c2-bff6-bd26545f80d2"",
-                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button9"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""lights"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""20b0499c-ed92-44bf-9bbf-152f619212a3"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
@@ -648,12 +593,133 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""38513c61-8492-46db-a338-f0d9ed53e59f"",
+                    ""id"": ""84b863eb-2f57-4eb4-8b2a-eebe1e387e72"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone(min=0.2,max=0.925)"",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""35a3b0c2-4411-4aad-9e99-47e668b40bd7"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""316f16d4-1650-4f15-b306-bf696f33e892"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""68d0c3bf-28d6-492d-a1d8-7163d949105f"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ffc4a456-fe37-45fa-9339-f565598bab4f"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""608cb552-cb6b-46cb-9b05-1fbd7e8f3753"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""7e7e9c15-a482-4dfc-a7d1-c36ff5fd8d70"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""a90dde6c-ea34-4fe8-abd5-051e8c853eac"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""855af543-00f6-4ec6-8c48-296ce5234164"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""6400f43e-6df4-4b4e-88f2-fa115e4ac0ca"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""b347a6bf-77b2-4e2a-8456-74cb4d229614"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ef114b2-c108-4ff1-9bdb-dd2bd92f0d2d"",
                     ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/hat"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""UIMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -672,17 +738,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""f6fc425e-c926-4650-b8d3-981714083f7f"",
                     ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveForward"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""973927da-1108-468c-829c-8251bd596c20"",
-                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -785,7 +840,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""menusubmit"",
+                    ""action"": ""UISubmit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -796,7 +851,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""menusubmit"",
+                    ""action"": ""UISubmit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -807,7 +862,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""menusubmit"",
+                    ""action"": ""UISubmit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -818,7 +873,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""menusubmit"",
+                    ""action"": ""UISubmit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -829,7 +884,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""menusubmit"",
+                    ""action"": ""UISubmit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -879,61 +934,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9f57deab-bbd1-43d0-9024-33b8ebc0d2b8"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ui_advance"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4e3bfa4c-d507-4768-bc59-93dc3be8d3af"",
-                    ""path"": ""<Keyboard>/enter"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ui_advance"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2f3004b7-caad-4e90-874e-475f5139d1c4"",
-                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button24"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ui_advance"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cbf7850f-46af-488c-a167-64e4e7137a4e"",
-                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ui_advance"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d42d4f8c-40e4-4c75-bb52-bb537600fbb6"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ThrottleMod"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""90860d41-c4ae-4b41-8588-6c0343a2a266"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -967,6 +967,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""27ff30c4-275d-4dd3-9b4e-8ba33ef24fc7"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button11"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""carskinright"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8129f213-d5f7-4114-b359-8c2d19f876fc"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
@@ -980,6 +991,17 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""d64ce3d8-01e6-408e-a1da-73647bf2e03e"",
                     ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""carskinleft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3b74abf-a42c-46ce-a91b-36c377261983"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button12"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1052,6 +1074,127 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Debug_ClearLeaderboard"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""7344fb04-0604-4d53-bb00-c39a09d62f0b"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""b9d7f6fc-f99d-4f9a-81b1-e70ae9b96534"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7fdc2c6b-bbf0-4533-956f-993837459c0b"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""41aa4b5b-6fc7-4427-a1c1-8e7334a6caef"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""37ad86cb-5be9-4c94-a9d6-283de4668478"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f3c37e3d-5f7b-423e-9a24-a3626b2764e2"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerPullup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""180d73e6-a208-4e4c-b2d9-6461872e3ed4"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerPullup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0fd4127-b134-44ad-9811-106fb0a14ddd"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/button4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerPullup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58a26c52-4083-47eb-819e-2f117b4ba0b5"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e6d6b9c-16a8-450b-96c3-537e4ad92ad3"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6943fd70-de6d-4822-9f86-a1a314ca80e4"",
+                    ""path"": ""<HID::Logitech G923 Racing Wheel for PlayStation and PC>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MusicChangerConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1077,22 +1220,22 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_CarControls_Point = m_CarControls.FindAction("Point", throwIfNotFound: true);
         m_CarControls_Drift = m_CarControls.FindAction("Drift", throwIfNotFound: true);
         m_CarControls_turbo = m_CarControls.FindAction("turbo", throwIfNotFound: true);
-        m_CarControls_underglow = m_CarControls.FindAction("underglow", throwIfNotFound: true);
-        m_CarControls_lights = m_CarControls.FindAction("lights", throwIfNotFound: true);
         m_CarControls_Move = m_CarControls.FindAction("Move", throwIfNotFound: true);
+        m_CarControls_UIMove = m_CarControls.FindAction("UIMove", throwIfNotFound: true);
         m_CarControls_MoveForward = m_CarControls.FindAction("MoveForward", throwIfNotFound: true);
         m_CarControls_MoveBackward = m_CarControls.FindAction("MoveBackward", throwIfNotFound: true);
         m_CarControls_respawn = m_CarControls.FindAction("respawn", throwIfNotFound: true);
         m_CarControls_pausemenu = m_CarControls.FindAction("pausemenu", throwIfNotFound: true);
-        m_CarControls_menusubmit = m_CarControls.FindAction("menusubmit", throwIfNotFound: true);
+        m_CarControls_UISubmit = m_CarControls.FindAction("UISubmit", throwIfNotFound: true);
         m_CarControls_menunext = m_CarControls.FindAction("menunext", throwIfNotFound: true);
         m_CarControls_menucancel = m_CarControls.FindAction("menucancel", throwIfNotFound: true);
-        m_CarControls_ui_advance = m_CarControls.FindAction("ui_advance", throwIfNotFound: true);
-        m_CarControls_ThrottleMod = m_CarControls.FindAction("ThrottleMod", throwIfNotFound: true);
         m_CarControls_carskinright = m_CarControls.FindAction("carskinright", throwIfNotFound: true);
         m_CarControls_carskinleft = m_CarControls.FindAction("carskinleft", throwIfNotFound: true);
         m_CarControls_Debug_Win = m_CarControls.FindAction("Debug_Win", throwIfNotFound: true);
         m_CarControls_Debug_ClearLeaderboard = m_CarControls.FindAction("Debug_ClearLeaderboard", throwIfNotFound: true);
+        m_CarControls_MusicChangerMove = m_CarControls.FindAction("MusicChangerMove", throwIfNotFound: true);
+        m_CarControls_MusicChangerPullup = m_CarControls.FindAction("MusicChangerPullup", throwIfNotFound: true);
+        m_CarControls_MusicChangerConfirm = m_CarControls.FindAction("MusicChangerConfirm", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -1178,22 +1321,22 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_Point;
     private readonly InputAction m_CarControls_Drift;
     private readonly InputAction m_CarControls_turbo;
-    private readonly InputAction m_CarControls_underglow;
-    private readonly InputAction m_CarControls_lights;
     private readonly InputAction m_CarControls_Move;
+    private readonly InputAction m_CarControls_UIMove;
     private readonly InputAction m_CarControls_MoveForward;
     private readonly InputAction m_CarControls_MoveBackward;
     private readonly InputAction m_CarControls_respawn;
     private readonly InputAction m_CarControls_pausemenu;
-    private readonly InputAction m_CarControls_menusubmit;
+    private readonly InputAction m_CarControls_UISubmit;
     private readonly InputAction m_CarControls_menunext;
     private readonly InputAction m_CarControls_menucancel;
-    private readonly InputAction m_CarControls_ui_advance;
-    private readonly InputAction m_CarControls_ThrottleMod;
     private readonly InputAction m_CarControls_carskinright;
     private readonly InputAction m_CarControls_carskinleft;
     private readonly InputAction m_CarControls_Debug_Win;
     private readonly InputAction m_CarControls_Debug_ClearLeaderboard;
+    private readonly InputAction m_CarControls_MusicChangerMove;
+    private readonly InputAction m_CarControls_MusicChangerPullup;
+    private readonly InputAction m_CarControls_MusicChangerConfirm;
     /// <summary>
     /// Provides access to input actions defined in input action map "CarControls".
     /// </summary>
@@ -1226,17 +1369,13 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @turbo => m_Wrapper.m_CarControls_turbo;
         /// <summary>
-        /// Provides access to the underlying input action "CarControls/underglow".
-        /// </summary>
-        public InputAction @underglow => m_Wrapper.m_CarControls_underglow;
-        /// <summary>
-        /// Provides access to the underlying input action "CarControls/lights".
-        /// </summary>
-        public InputAction @lights => m_Wrapper.m_CarControls_lights;
-        /// <summary>
         /// Provides access to the underlying input action "CarControls/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_CarControls_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/UIMove".
+        /// </summary>
+        public InputAction @UIMove => m_Wrapper.m_CarControls_UIMove;
         /// <summary>
         /// Provides access to the underlying input action "CarControls/MoveForward".
         /// </summary>
@@ -1254,9 +1393,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @pausemenu => m_Wrapper.m_CarControls_pausemenu;
         /// <summary>
-        /// Provides access to the underlying input action "CarControls/menusubmit".
+        /// Provides access to the underlying input action "CarControls/UISubmit".
         /// </summary>
-        public InputAction @menusubmit => m_Wrapper.m_CarControls_menusubmit;
+        public InputAction @UISubmit => m_Wrapper.m_CarControls_UISubmit;
         /// <summary>
         /// Provides access to the underlying input action "CarControls/menunext".
         /// </summary>
@@ -1265,14 +1404,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CarControls/menucancel".
         /// </summary>
         public InputAction @menucancel => m_Wrapper.m_CarControls_menucancel;
-        /// <summary>
-        /// Provides access to the underlying input action "CarControls/ui_advance".
-        /// </summary>
-        public InputAction @ui_advance => m_Wrapper.m_CarControls_ui_advance;
-        /// <summary>
-        /// Provides access to the underlying input action "CarControls/ThrottleMod".
-        /// </summary>
-        public InputAction @ThrottleMod => m_Wrapper.m_CarControls_ThrottleMod;
         /// <summary>
         /// Provides access to the underlying input action "CarControls/carskinright".
         /// </summary>
@@ -1289,6 +1420,18 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CarControls/Debug_ClearLeaderboard".
         /// </summary>
         public InputAction @Debug_ClearLeaderboard => m_Wrapper.m_CarControls_Debug_ClearLeaderboard;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/MusicChangerMove".
+        /// </summary>
+        public InputAction @MusicChangerMove => m_Wrapper.m_CarControls_MusicChangerMove;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/MusicChangerPullup".
+        /// </summary>
+        public InputAction @MusicChangerPullup => m_Wrapper.m_CarControls_MusicChangerPullup;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/MusicChangerConfirm".
+        /// </summary>
+        public InputAction @MusicChangerConfirm => m_Wrapper.m_CarControls_MusicChangerConfirm;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1330,15 +1473,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @turbo.started += instance.OnTurbo;
             @turbo.performed += instance.OnTurbo;
             @turbo.canceled += instance.OnTurbo;
-            @underglow.started += instance.OnUnderglow;
-            @underglow.performed += instance.OnUnderglow;
-            @underglow.canceled += instance.OnUnderglow;
-            @lights.started += instance.OnLights;
-            @lights.performed += instance.OnLights;
-            @lights.canceled += instance.OnLights;
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @UIMove.started += instance.OnUIMove;
+            @UIMove.performed += instance.OnUIMove;
+            @UIMove.canceled += instance.OnUIMove;
             @MoveForward.started += instance.OnMoveForward;
             @MoveForward.performed += instance.OnMoveForward;
             @MoveForward.canceled += instance.OnMoveForward;
@@ -1351,21 +1491,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @pausemenu.started += instance.OnPausemenu;
             @pausemenu.performed += instance.OnPausemenu;
             @pausemenu.canceled += instance.OnPausemenu;
-            @menusubmit.started += instance.OnMenusubmit;
-            @menusubmit.performed += instance.OnMenusubmit;
-            @menusubmit.canceled += instance.OnMenusubmit;
+            @UISubmit.started += instance.OnUISubmit;
+            @UISubmit.performed += instance.OnUISubmit;
+            @UISubmit.canceled += instance.OnUISubmit;
             @menunext.started += instance.OnMenunext;
             @menunext.performed += instance.OnMenunext;
             @menunext.canceled += instance.OnMenunext;
             @menucancel.started += instance.OnMenucancel;
             @menucancel.performed += instance.OnMenucancel;
             @menucancel.canceled += instance.OnMenucancel;
-            @ui_advance.started += instance.OnUi_advance;
-            @ui_advance.performed += instance.OnUi_advance;
-            @ui_advance.canceled += instance.OnUi_advance;
-            @ThrottleMod.started += instance.OnThrottleMod;
-            @ThrottleMod.performed += instance.OnThrottleMod;
-            @ThrottleMod.canceled += instance.OnThrottleMod;
             @carskinright.started += instance.OnCarskinright;
             @carskinright.performed += instance.OnCarskinright;
             @carskinright.canceled += instance.OnCarskinright;
@@ -1378,6 +1512,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @Debug_ClearLeaderboard.started += instance.OnDebug_ClearLeaderboard;
             @Debug_ClearLeaderboard.performed += instance.OnDebug_ClearLeaderboard;
             @Debug_ClearLeaderboard.canceled += instance.OnDebug_ClearLeaderboard;
+            @MusicChangerMove.started += instance.OnMusicChangerMove;
+            @MusicChangerMove.performed += instance.OnMusicChangerMove;
+            @MusicChangerMove.canceled += instance.OnMusicChangerMove;
+            @MusicChangerPullup.started += instance.OnMusicChangerPullup;
+            @MusicChangerPullup.performed += instance.OnMusicChangerPullup;
+            @MusicChangerPullup.canceled += instance.OnMusicChangerPullup;
+            @MusicChangerConfirm.started += instance.OnMusicChangerConfirm;
+            @MusicChangerConfirm.performed += instance.OnMusicChangerConfirm;
+            @MusicChangerConfirm.canceled += instance.OnMusicChangerConfirm;
         }
 
         /// <summary>
@@ -1404,15 +1547,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @turbo.started -= instance.OnTurbo;
             @turbo.performed -= instance.OnTurbo;
             @turbo.canceled -= instance.OnTurbo;
-            @underglow.started -= instance.OnUnderglow;
-            @underglow.performed -= instance.OnUnderglow;
-            @underglow.canceled -= instance.OnUnderglow;
-            @lights.started -= instance.OnLights;
-            @lights.performed -= instance.OnLights;
-            @lights.canceled -= instance.OnLights;
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @UIMove.started -= instance.OnUIMove;
+            @UIMove.performed -= instance.OnUIMove;
+            @UIMove.canceled -= instance.OnUIMove;
             @MoveForward.started -= instance.OnMoveForward;
             @MoveForward.performed -= instance.OnMoveForward;
             @MoveForward.canceled -= instance.OnMoveForward;
@@ -1425,21 +1565,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @pausemenu.started -= instance.OnPausemenu;
             @pausemenu.performed -= instance.OnPausemenu;
             @pausemenu.canceled -= instance.OnPausemenu;
-            @menusubmit.started -= instance.OnMenusubmit;
-            @menusubmit.performed -= instance.OnMenusubmit;
-            @menusubmit.canceled -= instance.OnMenusubmit;
+            @UISubmit.started -= instance.OnUISubmit;
+            @UISubmit.performed -= instance.OnUISubmit;
+            @UISubmit.canceled -= instance.OnUISubmit;
             @menunext.started -= instance.OnMenunext;
             @menunext.performed -= instance.OnMenunext;
             @menunext.canceled -= instance.OnMenunext;
             @menucancel.started -= instance.OnMenucancel;
             @menucancel.performed -= instance.OnMenucancel;
             @menucancel.canceled -= instance.OnMenucancel;
-            @ui_advance.started -= instance.OnUi_advance;
-            @ui_advance.performed -= instance.OnUi_advance;
-            @ui_advance.canceled -= instance.OnUi_advance;
-            @ThrottleMod.started -= instance.OnThrottleMod;
-            @ThrottleMod.performed -= instance.OnThrottleMod;
-            @ThrottleMod.canceled -= instance.OnThrottleMod;
             @carskinright.started -= instance.OnCarskinright;
             @carskinright.performed -= instance.OnCarskinright;
             @carskinright.canceled -= instance.OnCarskinright;
@@ -1452,6 +1586,15 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
             @Debug_ClearLeaderboard.started -= instance.OnDebug_ClearLeaderboard;
             @Debug_ClearLeaderboard.performed -= instance.OnDebug_ClearLeaderboard;
             @Debug_ClearLeaderboard.canceled -= instance.OnDebug_ClearLeaderboard;
+            @MusicChangerMove.started -= instance.OnMusicChangerMove;
+            @MusicChangerMove.performed -= instance.OnMusicChangerMove;
+            @MusicChangerMove.canceled -= instance.OnMusicChangerMove;
+            @MusicChangerPullup.started -= instance.OnMusicChangerPullup;
+            @MusicChangerPullup.performed -= instance.OnMusicChangerPullup;
+            @MusicChangerPullup.canceled -= instance.OnMusicChangerPullup;
+            @MusicChangerConfirm.started -= instance.OnMusicChangerConfirm;
+            @MusicChangerConfirm.performed -= instance.OnMusicChangerConfirm;
+            @MusicChangerConfirm.canceled -= instance.OnMusicChangerConfirm;
         }
 
         /// <summary>
@@ -1541,26 +1684,19 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTurbo(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "underglow" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUnderglow(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "lights" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnLights(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UIMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUIMove(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "MoveForward" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -1590,12 +1726,12 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPausemenu(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "menusubmit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "UISubmit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnMenusubmit(InputAction.CallbackContext context);
+        void OnUISubmit(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "menunext" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -1610,20 +1746,6 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMenucancel(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "ui_advance" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUi_advance(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "ThrottleMod" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnThrottleMod(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "carskinright" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -1652,5 +1774,26 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDebug_ClearLeaderboard(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MusicChangerMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMusicChangerMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MusicChangerPullup" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMusicChangerPullup(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MusicChangerConfirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMusicChangerConfirm(InputAction.CallbackContext context);
     }
 }
