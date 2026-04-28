@@ -25,11 +25,11 @@ public class Waitbeforestart : MonoBehaviour
     {
         for (int val = 3; val >= 1; val--)
         {
-            countGraphics.Add(GameManager.instance.CarUI.transform.Find($"s{val}").gameObject);
-            countSounds.Add(GameManager.instance.CarUI.transform.Find($"s{val}").GetComponent<AudioSource>());
+            countGraphics.Add(GameManager.CarUI.transform.Find($"s{val}").gameObject);
+            countSounds.Add(GameManager.CarUI.transform.Find($"s{val}").GetComponent<AudioSource>());
         }
-        countGraphics.Add(GameManager.instance.CarUI.transform.Find("go").gameObject);
-        countSounds.Add(GameManager.instance.CarUI.transform.Find("go").GetComponent<AudioSource>());
+        countGraphics.Add(GameManager.CarUI.transform.Find("go").gameObject);
+        countSounds.Add(GameManager.CarUI.transform.Find("go").GetComponent<AudioSource>());
         
         foreach (GameObject img in countGraphics) img.SetActive(false);
     }

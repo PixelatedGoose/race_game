@@ -18,7 +18,7 @@ public class TimeCounter : MonoBehaviour
 
     void Start()
     {
-        if (GameManager.instance.CurrentCar != null) racerScript = GameManager.instance.CurrentCar.GetComponentInChildren<RacerScript>();
+        if (GameManager.CurrentCar != null) racerScript = GameManager.CurrentCar.GetComponentInChildren<RacerScript>();
         for (int i = 0; i < timerNumberCount; i++)
         {
             GameObject digitGO = Instantiate(digitPrefab, transform);

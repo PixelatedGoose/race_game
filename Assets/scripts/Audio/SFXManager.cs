@@ -79,7 +79,7 @@ public class SFXManager : MonoBehaviour
 
     public void PauseStateHandler()
     {
-        bool isPaused = GameManager.instance.isPaused;
+        bool isPaused = GameManager.IsPaused;
 
         pausedTrack.volume = isPaused ? 0.72f : 0f;
         foreach (AudioSource sound in soundList)

@@ -10,10 +10,10 @@ public class leaderboardClearer : MonoBehaviour
     void Start()
     {
         filePath = Path.Combine(Application.persistentDataPath, "race_result.json");
-        GameManager.instance.Controls.CarControls.Debug_ClearLeaderboard.performed += context => ClearLeaderboardData();
+        GameManager.Controls.CarControls.Debug_ClearLeaderboard.performed += context => ClearLeaderboardData();
     }
-    void OnDisable() => GameManager.instance.Controls.CarControls.Debug_ClearLeaderboard.performed -= context => ClearLeaderboardData();
-    void OnDestroy() => GameManager.instance.Controls.CarControls.Debug_ClearLeaderboard.performed -= context => ClearLeaderboardData();
+    void OnDisable() => GameManager.Controls.CarControls.Debug_ClearLeaderboard.performed -= context => ClearLeaderboardData();
+    void OnDestroy() => GameManager.Controls.CarControls.Debug_ClearLeaderboard.performed -= context => ClearLeaderboardData();
 
     private void ClearLeaderboardData()
     {

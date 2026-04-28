@@ -23,7 +23,6 @@ public class InputRecorder : MonoBehaviour
             onFilterEvent = (ptr, device) => FilterInput(ptr, device)
         };
         inputTrace.Enable();
-        Debug.Log("data path: " + dataDirPath);
     }
 
     void OnEnable()
@@ -33,19 +32,24 @@ public class InputRecorder : MonoBehaviour
             onFilterEvent = (ptr, device) => FilterInput(ptr, device)
         };
         inputTrace.Enable();
-        Debug.Log("data path: " + dataDirPath);
     }
 
     void OnDisable()
     {
-        inputTrace.Disable();
-        inputTrace.Dispose();
+        if (inputTrace != null)
+        {
+            inputTrace.Disable();
+            inputTrace.Dispose();
+        }
     }
 
     void OnDestroy()
     {
-        inputTrace.Disable();
-        inputTrace.Dispose();
+        if (inputTrace != null)
+        {
+            inputTrace.Disable();
+            inputTrace.Dispose();
+        }
     }
 
     bool FilterInput(InputEventPtr inputEventPtr, InputDevice inputDevice)

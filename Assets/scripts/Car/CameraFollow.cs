@@ -21,9 +21,9 @@ public class CameraFollow : MonoBehaviour
     {
         Cam = GetComponent<Camera>();
         //kindly fuck off
-        carController = GameManager.instance.CurrentCar.GetComponentInChildren<NewDoublefunszechuansauceWithAsideofNuggets>();
+        carController = GameManager.CurrentCar.GetComponentInChildren<NewDoublefunszechuansauceWithAsideofNuggets>();
         if (carController != null) return;
-        carController = GameManager.instance.CurrentCar.GetComponentInChildren<PlayerCarController>();
+        carController = GameManager.CurrentCar.GetComponentInChildren<PlayerCarController>();
     }
 
     private void FixedUpdate()
