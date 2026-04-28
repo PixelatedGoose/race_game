@@ -17,10 +17,9 @@ public class BaseCarController : MonoBehaviour
     [SerializeField] protected float TurnSensitivityAtHighSpeed = 17.5f;
     [SerializeField] protected float TurnSensitivityAtLowSpeed = 30.0f;
     public float MaxSpeed { 
-        get => MaxSpeed; 
+        get => MpsMaxSpeed * 3.6f; // c# 9.0 doesn't allow you to just use get; by itself and multiplication isnt too intensive
         set
         {
-            MaxSpeed = value;
             MpsMaxSpeed = value / 3.6f;
         } 
     }
@@ -93,27 +92,28 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    protected virtual void Awake()
+    virtual protected void Awake()
     {
-        AutoAssignWheelsAndMaterials();
+        //AutoAssignWheelsAndMaterials();
         TryGetComponent(out turbo);
     }
 
-    protected virtual void Start()
+    virtual protected void Start()
     {
         carCollider = GetComponentInChildren<Collider>();
         CarExtents = carCollider.bounds.size;
+        //AutoAssignWheelsAndMaterials();
         ClearWheelTrails();
     }
 
-    protected virtual void FixedUpdate()
+    virtual protected void FixedUpdate()
     {
         ApplySpeedLimit();
     }
 
-    protected virtual void ApplySpeedLimit()
+    virtual protected void ApplySpeedLimit()
     {
-        if (CarRb.linearVelocity.sqrMagnitude > MpsMaxSpeed*MpsMaxSpeed) CarRb.linearVelocity = MpsMaxSpeed * CarRb.linearVelocity.normalized;
+        if (CarRb.linearVelocity.magnitude > MpsMaxSpeed) CarRb.linearVelocity = MpsMaxSpeed * CarRb.linearVelocity.normalized;
     }
 
     [ContextMenu("Auto Assign Wheels")]
@@ -144,16 +144,15 @@ public class BaseCarController : MonoBehaviour
             if (trailRenderer != null && (trailRenderer.sharedMaterial == null || trailRenderer.sharedMaterial.shader == null || !trailRenderer.sharedMaterial.shader.isSupported))
             {
                 trailRenderer.sharedMaterial = new Material(Shader.Find("Sprites/Default"));
-                trailRenderer.enabled = true;
-                wheel.trailRenderer = trailRenderer;
             }
+            trailRenderer.enabled = true;
+            wheel.trailRenderer = trailRenderer;
             wheel.SmokeParticle = wheel.WheelEffectobj != null
                 ? wheel.WheelEffectobj.GetComponentInChildren<ParticleSystem>(true)
                 : WheelCollider.transform.GetComponentInChildren<ParticleSystem>(true);
 
             wheel.Axel = WheelCollider.name.IndexOf("front", StringComparison.OrdinalIgnoreCase) >= 0 ? Axel.Front : Axel.Rear;
 
-        
             Wheels.Add(wheel);
         }
     }
@@ -174,7 +173,7 @@ public class BaseCarController : MonoBehaviour
         if (MoveInput == 0)
         {
             if (CarRb.linearVelocity.magnitude < 0.1f) CarRb.linearVelocity = Vector3.zero;
-            else CarRb.linearVelocity = Vector3.Lerp(CarRb.linearVelocity, Vector3.zero, 2.0f * Time.deltaTime);
+            else CarRb.linearVelocity = Vector3.Lerp(CarRb.linearVelocity, Vector3.zero, Time.deltaTime);
         }
     }
 

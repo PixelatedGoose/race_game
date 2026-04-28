@@ -28,7 +28,7 @@ public class PlayerCarController : BaseCarController
         PlayerInput = GetComponent<PlayerInput>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
-        AutoAssignWheelsAndMaterials();
+        //AutoAssignWheelsAndMaterials();
 
         base.Awake();
 
