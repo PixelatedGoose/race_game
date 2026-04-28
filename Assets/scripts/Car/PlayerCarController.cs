@@ -18,6 +18,7 @@ public class PlayerCarController : BaseCarController
     internal float LastNonWheelInputTime = 0f;
     internal float LastWheelInputTime = 0f;
 
+    [SerializeField] private GameObject carLights;
     private Material carLightsMaterial;
 
     override protected void Awake()
@@ -25,7 +26,7 @@ public class PlayerCarController : BaseCarController
         Controls = new CarInputActions();
         Controls.Enable();
         PlayerInput = GetComponent<PlayerInput>();
-        TurbeBar = GameManager.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
+        TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
         AutoAssignWheelsAndMaterials();
 
@@ -263,14 +264,21 @@ public class PlayerCarController : BaseCarController
     void Move()
     {
         UpdateTargetTorque();
-        if (Controls.CarControls.Brake.IsPressed()) carLightsMaterial.SetVector("_EmissionColor", new Vector4(1f, 0.0491371f, 0f, 1f) * 2f);
-        else if (carLightsMaterial.GetVector("_EmissionColor") != new Vector4(0f, 0f, 0f, 1f) * 2f) carLightsMaterial.SetVector("_EmissionColor", new Vector4(0f, 0f, 0f, 1f) * 2f);
-
         AdjustSuspension();
         foreach (var wheel in Wheels)
         {
             if (Controls.CarControls.Brake.IsPressed()) wheel.Brake(BrakeAcceleration);
             else wheel.SetTorque(TargetTorque);
+        }
+        if (Controls.CarControls.Brake.IsPressed())
+        {
+            carLights.SetActive(true);
+            carLightsMaterial.SetVector("_EmissionColor", new Vector4(1f, 0.0491371f, 0f, 1f) * 2f);
+        }
+        else if (carLightsMaterial.GetVector("_EmissionColor") != new Vector4(0f, 0f, 0f, 1f) * 2f || !carLights.activeSelf)
+        {
+            carLights.SetActive(false);
+            carLightsMaterial.SetVector("_EmissionColor", new Vector4(0f, 0f, 0f, 1f) * 2f);
         }
     }
 

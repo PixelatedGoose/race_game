@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BillboardObject : MonoBehaviour
+public class BillboardingObject : MonoBehaviour
 {
     [Header("Variation")]
     public bool allowScaling = true;
@@ -18,20 +18,14 @@ public class BillboardObject : MonoBehaviour
 
     Vector3 originalScale;
     float objectHeight;
-    bool initialized;
 
     public Quaternion RotationOffset => Quaternion.Euler(rotationOffset);
 
     void Awake()
-    {
-        originalScale = transform.localScale;
-        
-        // Get height from renderer bounds
+    { 
         Renderer rend = GetComponentInChildren<Renderer>();
-        if (rend != null)
-        {
-            objectHeight = rend.bounds.size.y;
-        }
+        if (rend == null) return;
+        objectHeight = rend.bounds.size.y;
         
         ApplyVariation();
         BillboardManager.Register(this);
@@ -44,8 +38,7 @@ public class BillboardObject : MonoBehaviour
 
     void ApplyVariation()
     {
-        if (initialized) return;
-        initialized = true;
+        originalScale = transform.localScale;
 
         Vector3 scale = originalScale;
         float factor = 1f;
