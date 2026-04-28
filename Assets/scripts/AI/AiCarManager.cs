@@ -78,7 +78,7 @@ public class AiCarManager : MonoBehaviour
             AiCarController controller = newAI.GetComponent<AiCarController>();
             controller.Initialize(this, difficultyRanges[difficulty], startIndex, isReversed);
             
-            GameManager.instance.spawnedCars.Add(controller);
+            GameManager.spawnedCars.Add(controller);
         }
     }
 }

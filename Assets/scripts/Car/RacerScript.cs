@@ -54,8 +54,8 @@ public class RacerScript : MonoBehaviour
         startFinishLine = GameObject.FindGameObjectWithTag("StartFinishLine").transform;
         checkpoints = GameObject.FindGameObjectsWithTag("checkpointTag").Select(a => a.transform).ToList();
         SetupRacingShit();
-        if (GameManager.instance.CarUI != null) respawnfade = GameManager.instance.CarUI.transform.Find("respawnfade").gameObject;
-        finishedImg = GameManager.instance.CarUI.transform.Find("Race Finished").GetComponent<Image>();
+        if (GameManager.CarUI != null) respawnfade = GameManager.CarUI.transform.Find("respawnfade").gameObject;
+        finishedImg = GameManager.CarUI.transform.Find("Race Finished").GetComponent<Image>();
         totalLaps = PlayerPrefs.GetInt("Laps");
     }
 
@@ -94,7 +94,7 @@ public class RacerScript : MonoBehaviour
 
     private void SetupRacingShit()
     {
-        if (GameManager.instance.CarUI != null) finalLapImg = GameManager.instance.CarUI.transform.Find("finalLap").gameObject;
+        if (GameManager.CarUI != null) finalLapImg = GameManager.CarUI.transform.Find("finalLap").gameObject;
         if (PlayerPrefs.GetInt("Reverse") == 1)
         {
             foreach (Transform checkpoint in checkpoints) checkpoint.eulerAngles = new(checkpoint.eulerAngles.x, checkpoint.eulerAngles.y + 180.0f, checkpoint.eulerAngles.z);
@@ -105,7 +105,7 @@ public class RacerScript : MonoBehaviour
     //helper method fadeaamiselle
     private void FadeGameViewAndRespawn(float length = 0.25f)
     {
-        if (GameManager.instance.isPaused || !racestarted || raceFinished || FadeState) return;
+        if (GameManager.IsPaused || !racestarted || raceFinished || FadeState) return;
 
         FadeState = true;
         LeanTween.value(respawnfade.GetComponent<RawImage>().color.a, 1f, length).setOnUpdate((float val) =>
@@ -229,8 +229,8 @@ public class RacerScript : MonoBehaviour
         sfxmngr.raceFinished.Play();
         finishedImg.color = new(1f, 1f, 1f, 1f);
         //TODO: erittäin paska tapa ottaa nämä...
-        GameManager.instance.CarUI.GetComponentInChildren<SpeedMeter>().gameObject.SetActive(false);
-        GameManager.instance.CarUI.transform.Find("TurbeDisplay").gameObject.SetActive(false);
+        GameManager.CarUI.GetComponentInChildren<SpeedMeter>().gameObject.SetActive(false);
+        GameManager.CarUI.transform.Find("TurbeDisplay").gameObject.SetActive(false);
         LeanTween.value(finishedImg.color.a, 0.0f, 2.5f)
         .setOnUpdate((float alpha) =>
         {
@@ -247,7 +247,7 @@ public class RacerScript : MonoBehaviour
         carController.CanUseTurbo = false;
         yield return new WaitForSecondsRealtime(2.5f);
 
-        if (GameManager.instance.CarUI != null) GameManager.instance.CarUI.SetActive(false);
+        if (GameManager.CarUI != null) GameManager.CarUI.SetActive(false);
         musicControl.resultsTrack.Play();
         winmenu.OnRaceEnd();
         Destroy(FindFirstObjectByType<OptionCategories>(FindObjectsInactive.Include));

@@ -128,7 +128,7 @@ public class musicControl : MonoBehaviour
 
     public void PausedMusicHandler()
     {
-        bool isPaused = GameManager.instance.isPaused;
+        bool isPaused = GameManager.IsPaused;
         foreach (AudioSource track in musicTracks)
         {
             if (isPaused) track.Pause();

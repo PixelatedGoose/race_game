@@ -8,7 +8,7 @@ public class FollowCarNoRotation : MonoBehaviour
 
     void Awake()
     {
-        target = GameManager.instance.CurrentCar.transform.Find("car");
+        target = GameManager.CurrentCar.transform.Find("car");
     }
 
     void LateUpdate()
