@@ -16,17 +16,11 @@ public class BaseCarController : MonoBehaviour
     [SerializeField] protected float TurnSensitivity = 1.0f;
     [SerializeField] protected float TurnSensitivityAtHighSpeed = 17.5f;
     [SerializeField] protected float TurnSensitivityAtLowSpeed = 30.0f;
-    public float MaxSpeed { 
-        get => MpsMaxSpeed * 3.6f; // c# 9.0 doesn't allow you to just use get; by itself and multiplication isnt too intensive
-        set
-        {
-            MpsMaxSpeed = value / 3.6f;
-        } 
-    }
+    public float MaxSpeed = 180.0f;
     /// <summary>
     /// Max speed in meters per second.
     /// </summary>
-    public float MpsMaxSpeed { get; protected set; } = 50.0f;
+    public float MpsMaxSpeed { get; protected set; }
     [SerializeField] protected List<Wheel> Wheels;
     protected readonly Func<Wheel, bool> frontWheelPredicate = w => w.Axel == Axel.Front;
     protected readonly Func<Wheel, bool> rearWheelPredicate = w => w.Axel == Axel.Rear;
@@ -92,9 +86,16 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
+    virtual protected void OnValidate()
+    {
+        MpsMaxSpeed = MaxSpeed / 3.6f;
+    }
+
     virtual protected void Awake()
     {
         //AutoAssignWheelsAndMaterials();
+        //MpsMaxSpeed = MaxSpeed / 3.6f;
+        Debug.Log(MpsMaxSpeed);
         TryGetComponent(out turbo);
     }
 
