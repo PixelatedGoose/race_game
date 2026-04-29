@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class musicControl : MonoBehaviour
 {
-    //ois pitäny olla private jo alusta alkaen...
     private GameObject[] musicObjects;
     private AudioSource[] musicTracks;
     
