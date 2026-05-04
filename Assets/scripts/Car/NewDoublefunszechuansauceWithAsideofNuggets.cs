@@ -13,6 +13,14 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     [SerializeField] private GameObject carLights;
     private Material carLightsMaterial;
 
+    float DriftDirection;
+    float DriftTurnSpeed = 5f;
+    [SerializeField] float DriftTurnSpeedAtHighSpeed = 2f;
+    float driftMultiplier = 1.2f;
+    float SteerDeadzone = 0.2f;
+
+
+
     override protected void Awake()
     {
         Controls = new CarInputActions();
@@ -113,8 +121,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         Animatewheels();
         GetInputs();
+        SteerInput = GetDriftSteer();
         Steer();
         CarMovement();
+        ApplyDriftTurn();
+        WheelEffects(IsDrifting);
     }
 
     
@@ -132,7 +143,29 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Vector2 move = Controls.CarControls.Move.ReadValue<Vector2>();
         SteerInput = move.x;
         MoveInput = move.y;
-        
+    }
+
+    float GetDriftSteer()
+    {
+        if (!IsDrifting)
+            return SteerInput;
+
+        if (Mathf.Approximately(DriftDirection, 0f))
+            DriftDirection = GetSteerSign(SteerInput);
+
+
+        return DriftDirection;
+    }
+
+    void ApplyDriftTurn()
+    {
+        if (!IsDrifting)
+            return;
+        float speed = CarRb.linearVelocity.magnitude * 3.6f;
+        float speedRatio = Mathf.Clamp01(speed / Mathf.Max(MaxSpeed, 0.1f));
+        float driftTurnSpeed = Mathf.Lerp(DriftTurnSpeed, DriftTurnSpeedAtHighSpeed, speedRatio);
+        float turn = DriftDirection * driftTurnSpeed * driftMultiplier * Time.deltaTime;
+        transform.Rotate(0f, turn, 0f);
     }
 
     //Arcade car style movement
@@ -150,10 +183,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void Applyturnsensitivity(float speed)
     {
+        float speedKph = speed * 3.6f;
         TurnSensitivity = Mathf.Lerp(
             TurnSensitivityAtLowSpeed,
             TurnSensitivityAtHighSpeed,
-            Mathf.Clamp01(speed / MaxSpeed));
+            Mathf.Clamp01(speedKph / Mathf.Max(MaxSpeed, 0.1f)));
     }
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
@@ -176,12 +210,17 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     // your car is drifting bro better go and call your insurance company
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
-        WheelEffects(true);   
+        IsDrifting = true;
+        DriftDirection = 0f;
+        WheelEffects(true);
     }
 
     void OnDriftCanceled(InputAction.CallbackContext ctx)
     {
+        IsDrifting = false;
+        DriftDirection = 0f;
         WheelEffects(false);
-        print("you stopped drifting");
     }
+
+    float GetSteerSign(float steer) => Mathf.Abs(steer) > SteerDeadzone ? Mathf.Sign(steer) : 0f;
 }
