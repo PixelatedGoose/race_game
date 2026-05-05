@@ -30,7 +30,9 @@ public class BaseCarController : MonoBehaviour
     protected Vector3 _CenterofMass;
     public float TargetTorque;
     public Rigidbody CarRb { get; protected set; }
-    public float Turbesped = 60.0f, BaseSpeed = 180f, DriftMaxSpeed = 140f;
+    public float Turbesped = 60.0f;
+    public float BaseSpeed = 180f;
+    public float DriftMaxSpeed = 140f;
     [Header("Drift asetukset")]
     public bool IsDrifting { get; protected set; } = false;
     public float BaseMaxAccerelation { get; protected set; }
@@ -38,7 +40,7 @@ public class BaseCarController : MonoBehaviour
     public float SmoothedMaxAcceleration { get; protected set; }
     [Header("turbe asetukset")]
     protected Image TurbeBar;
-    public bool isTurboActive { get; set; } = false;
+    public bool IsTurboActive { get; set; } = false;
     public float TurbeAmount { get; protected set; } = 100.0f;
     [SerializeField] protected float TurbeMax = 100.0f;
     public float Turbepush = 15.0f;
@@ -234,16 +236,12 @@ public class BaseCarController : MonoBehaviour
         foreach (Wheel wheel in Wheels)
         {
             if (wheel.Axel != Axel.Rear) continue;
-            if (enabled && wheel.IsGrounded())
-            {
-                wheel.trailRenderer.emitting = true;
-                if (wheel.SmokeParticle != null) wheel.SmokeParticle.Play();
-            }
-            else
-            {
-                wheel.trailRenderer.emitting = false;
-                if (wheel.SmokeParticle != null) wheel.SmokeParticle.Stop();
-            }
+
+            wheel.trailRenderer.emitting = enabled && wheel.IsGrounded();
+
+            if (wheel.SmokeParticle == null) continue;
+            if (wheel.trailRenderer.emitting) wheel.SmokeParticle.Play();
+            else wheel.SmokeParticle.Stop();
         }
     }
 

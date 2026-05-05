@@ -40,14 +40,14 @@ public abstract class Turbo : MonoBehaviour
     {
         if (amount <= 0) return;
 
-        carController.isTurboActive = true;
+        carController.IsTurboActive = true;
         StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Consume());
     }
 
     public virtual void Stop()
     {
-        carController.isTurboActive = false;
+        carController.IsTurboActive = false;
         StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Regenerate());
     }
