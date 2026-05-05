@@ -27,9 +27,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Controls.Enable();
         CarRb = GetComponent<Rigidbody>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
-        carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
         base.Awake();
-        
     }
 
     private void OnControlsChanged(PlayerInput input)
@@ -132,6 +130,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     override protected void FixedUpdate()
     {
         Applyturnsensitivity(CarRb.linearVelocity.magnitude);
+        base.FixedUpdate();
         Decelerate();
 
         base.FixedUpdate();
@@ -202,7 +201,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         foreach (var wheel in Wheels)
         {
-            wheel.MotorTorque(TargetTorque);
+            wheel.SetTorque(TargetTorque);
         }
     }
 
