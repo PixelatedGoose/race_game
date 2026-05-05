@@ -1130,63 +1130,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a75420e8610d9e946bb1fdd6f6b4f045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewAiCarController
-  MaxAcceleration: 700
+  Acceleration: 700
+  Deceleration: 1
   BrakeAcceleration: 500
   TurnSensitivity: 0.05
   TurnSensitivityAtHighSpeed: 17.5
   TurnSensitivityAtLowSpeed: 30
-  Deceleration: 1
-  Maxspeed: 100
-  GravityMultiplier: 1.5
+  MaxSpeed: 180
   Wheels:
   - WheelModel: {fileID: 2480497655319108271}
     WheelCollider: {fileID: 8226038361239439730}
     WheelEffectobj: {fileID: 7608247685079618447}
     SmokeParticle: {fileID: 8375895737432743733}
     Axel: 0
+    trailRenderer: {fileID: 2021973964890505535}
   - WheelModel: {fileID: 3144801104615171818}
     WheelCollider: {fileID: 3133544218236099077}
     WheelEffectobj: {fileID: 1783991673816374232}
     SmokeParticle: {fileID: 2334615181226230212}
     Axel: 0
+    trailRenderer: {fileID: 9091864196178292296}
   - WheelModel: {fileID: 4381428712381846278}
     WheelCollider: {fileID: 3392321435618256846}
     WheelEffectobj: {fileID: 8724243338627483694}
     SmokeParticle: {fileID: 4522420571162533016}
     Axel: 1
+    trailRenderer: {fileID: 7821873138286253313}
   - WheelModel: {fileID: 494362406291348668}
     WheelCollider: {fileID: 1684521221934789367}
     WheelEffectobj: {fileID: 522083029466099480}
     SmokeParticle: {fileID: 304971687747636552}
     Axel: 1
-  GrassSpeedMultiplier: 0.5
-  GrassLayerName: Grass
-  EmitTrailsOnlyWhileDrifting: 1
-  GrassRespawnActive: 0
+    trailRenderer: {fileID: 6834855549498128116}
   MoveInput: 0
   SteerInput: 0
+  TargetTorque: 0
   Turbesped: 60
-  TurbeChargeSped: 80
   BaseSpeed: 180
-  Grassmaxspeed: 50
   DriftMaxSpeed: 140
-  TurbeAmount: 100
   TurbeMax: 100
   Turbepush: 15
-  turbechargepush: 20
   TurbeReduce: 10
   TurbeRegen: 10
   TurbeWaitTime: 2
   waypointThreshold: 10
-  lookAheadIndex: 5
   minSlowdown: 0.5
   curveTolerance: 2
   avoidanceBuffer: 10
   avoidanceLateralOffset: 3
   maxAvoidanceOffset: 8
-  objectAvoidanceBeams: 10
-  avoidanceBeamLenght: 30
-  beamAngle: 60
   boostMultiplier: 1.25
 --- !u!1 &6333829925512713852
 GameObject:
@@ -1658,6 +1650,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5976924119187256007}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1707,6 +1703,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+--- !u!96 &2021973964890505535 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+  m_PrefabInstance: {fileID: 1818224660931728823}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5287963600397514620 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
@@ -1953,6 +1954,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2216359093242725876}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2007,6 +2012,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 6624398958974378620}
   m_PrefabAsset: {fileID: 0}
+--- !u!96 &6834855549498128116 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+  m_PrefabInstance: {fileID: 6624398958974378620}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7617908060193489289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2015,6 +2025,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6515084467945664988}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2067,6 +2081,11 @@ PrefabInstance:
 --- !u!4 &4170615100852953922 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+  m_PrefabInstance: {fileID: 7617908060193489289}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &7821873138286253313 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 7617908060193489289}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7621958741762114839
@@ -2152,6 +2171,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1646473697044115033}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2204,5 +2227,10 @@ PrefabInstance:
 --- !u!4 &3116818784775313419 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+  m_PrefabInstance: {fileID: 8869863077179259584}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &9091864196178292296 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 8869863077179259584}
   m_PrefabAsset: {fileID: 0}

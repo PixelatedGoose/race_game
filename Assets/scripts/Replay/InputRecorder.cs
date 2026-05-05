@@ -18,6 +18,7 @@ public class InputRecorder : MonoBehaviour
     {
         dataDirPath = Application.persistentDataPath + "/Replays";
         enabled = false;
+        inputTrace?.Dispose();
         inputTrace = new()
         {
             onFilterEvent = (ptr, device) => FilterInput(ptr, device)
@@ -27,6 +28,7 @@ public class InputRecorder : MonoBehaviour
 
     void OnEnable()
     {
+        inputTrace.Dispose();
         inputTrace = new()
         {
             onFilterEvent = (ptr, device) => FilterInput(ptr, device)

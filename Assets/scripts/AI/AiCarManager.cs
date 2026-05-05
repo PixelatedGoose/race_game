@@ -21,6 +21,7 @@ public class AiCarManager : MonoBehaviour
     public enum AIDifficulty { Beginner, Intermediate, Hard } 
     [SerializeField] private float reverseSpawnDirection;
     [SerializeField] private bool forceReverse;
+    [SerializeField] private bool dontSpawnAi;
  
     public struct DifficultyStats
     {
@@ -45,7 +46,7 @@ public class AiCarManager : MonoBehaviour
     void Start()
     {
         spawnedAiCarCount = (byte)PlayerPrefs.GetInt("AIAmount");
-        if (spawnedAiCarCount <= 0 || PlayerPrefs.GetInt("SpawnAI") == 0)
+        if (spawnedAiCarCount <= 0 || PlayerPrefs.GetInt("SpawnAI") == 0 || dontSpawnAi)
         {
             Destroy(gameObject);
             return;
