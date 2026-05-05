@@ -988,7 +988,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3013609153453077785}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
@@ -1000,7 +1000,31 @@ MonoBehaviour:
   TurnSensitivityAtHighSpeed: 17.5
   TurnSensitivityAtLowSpeed: 30
   MaxSpeed: 180
-  Wheels: []
+  Wheels:
+  - WheelModel: {fileID: 3356778135624283465}
+    WheelCollider: {fileID: 1611016019681196766}
+    WheelEffectobj: {fileID: 253234819805006193}
+    SmokeParticle: {fileID: 8370427124804131512}
+    Axel: 0
+    trailRenderer: {fileID: 8160355021072943683}
+  - WheelModel: {fileID: 2001825485098282248}
+    WheelCollider: {fileID: 4322213742954386768}
+    WheelEffectobj: {fileID: 4233654236648341}
+    SmokeParticle: {fileID: 5735925340106288723}
+    Axel: 0
+    trailRenderer: {fileID: 9005531565795757299}
+  - WheelModel: {fileID: 742366007508499148}
+    WheelCollider: {fileID: 4594780843961564118}
+    WheelEffectobj: {fileID: 3172822010265455929}
+    SmokeParticle: {fileID: 234832648449404130}
+    Axel: 1
+    trailRenderer: {fileID: 5158449423416874759}
+  - WheelModel: {fileID: 4416569952393853735}
+    WheelCollider: {fileID: 8795832801714016059}
+    WheelEffectobj: {fileID: 6565481224098539492}
+    SmokeParticle: {fileID: 688611208309200021}
+    Axel: 1
+    trailRenderer: {fileID: 6188845243956253520}
   MoveInput: 0
   SteerInput: 0
   TargetTorque: 0
@@ -3008,6 +3032,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+--- !u!198 &688611208309200021 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+  m_PrefabInstance: {fileID: 1474361404832501431}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2484262381890563312 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -3078,6 +3107,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+--- !u!198 &234832648449404130 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+  m_PrefabInstance: {fileID: 2214012694476142272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2933501743252706439 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -3091,6 +3125,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 49788654104543124}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_Parameters.colorGradient.ctime0
       value: 65535
@@ -3165,6 +3203,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 4801577458313134991}
   m_PrefabAsset: {fileID: 0}
+--- !u!96 &5158449423416874759 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+  m_PrefabInstance: {fileID: 4801577458313134991}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5825387272512669656
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3173,6 +3216,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2125808150819754723}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_Parameters.colorGradient.ctime0
       value: 65535
@@ -3247,6 +3294,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 5825387272512669656}
   m_PrefabAsset: {fileID: 0}
+--- !u!96 &6188845243956253520 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+  m_PrefabInstance: {fileID: 5825387272512669656}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5936186763071157361
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3312,6 +3364,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+--- !u!198 &5735925340106288723 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+  m_PrefabInstance: {fileID: 5936186763071157361}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7236641332555339318 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -3387,6 +3444,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
   m_PrefabInstance: {fileID: 7625210733809598618}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &8370427124804131512 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
+  m_PrefabInstance: {fileID: 7625210733809598618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8361980000268918475
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3395,6 +3457,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6239771636095995330}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3449,6 +3515,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 8361980000268918475}
   m_PrefabAsset: {fileID: 0}
+--- !u!96 &8160355021072943683 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+  m_PrefabInstance: {fileID: 8361980000268918475}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8777177124122466427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3457,6 +3528,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3591611932570582395}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3509,6 +3584,11 @@ PrefabInstance:
 --- !u!4 &2997131558614366896 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+  m_PrefabInstance: {fileID: 8777177124122466427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &9005531565795757299 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 8777177124122466427}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8961229981457995164

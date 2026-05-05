@@ -28,7 +28,7 @@ public class PlayerCarController : BaseCarController
         PlayerInput = GetComponent<PlayerInput>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
-        AutoAssignWheelsAndMaterials();
+        //AutoAssignWheelsAndMaterials();
 
         base.Awake();
 
@@ -202,7 +202,7 @@ public class PlayerCarController : BaseCarController
     {
         if (!IsDrifting) return;
 
-        if (isTurboActive)
+        if (IsTurboActive)
             MaxSpeed = Mathf.Lerp(MaxSpeed, BaseSpeed + Turbesped, Time.deltaTime * 0.5f);
         else
             MaxSpeed = Mathf.Lerp(MaxSpeed, DriftMaxSpeed, Time.deltaTime * 0.1f);
@@ -268,7 +268,7 @@ public class PlayerCarController : BaseCarController
         foreach (var wheel in Wheels)
         {
             if (Controls.CarControls.Brake.IsPressed()) wheel.Brake(BrakeAcceleration);
-            else wheel.MotorTorque(TargetTorque);
+            else wheel.SetTorque(TargetTorque);
         }
         if (Controls.CarControls.Brake.IsPressed())
         {
@@ -314,7 +314,7 @@ public class PlayerCarController : BaseCarController
 
         if (!IsDrifting)
         {
-            MaxSpeed = Mathf.Lerp(MaxSpeed, isTurboActive ? BaseSpeed + Turbesped : BaseSpeed, Time.deltaTime);
+            MaxSpeed = Mathf.Lerp(MaxSpeed, IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed, Time.deltaTime);
         }
     }
 
@@ -412,8 +412,8 @@ public class PlayerCarController : BaseCarController
     {
 
         float GetCurrentBaseSpeed() => IsDrifting
-            ? (isTurboActive ? BaseSpeed + Turbesped : DriftMaxSpeed)
-            : (isTurboActive ? BaseSpeed + Turbesped : BaseSpeed);
+            ? (IsTurboActive ? BaseSpeed + Turbesped : DriftMaxSpeed)
+            : (IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed);
 
         float originalSpeed = GetCurrentBaseSpeed();
         float boostedMax = Mathf.Max(BaseSpeed + Turbesped, originalSpeed + turboStrength);

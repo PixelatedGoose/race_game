@@ -14,14 +14,13 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     PlayerInput PlayerInput;
 
 
-    new void Awake()
+    override protected void Awake()
     {
         Controls = new CarInputActions();
         Controls.Enable();
         CarRb = GetComponent<Rigidbody>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
-        AutoAssignWheelsAndMaterials();
-        
+        base.Awake();
     }
     private void OnControlsChanged(PlayerInput input)
     {
@@ -95,7 +94,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         MoveInput = 0f;
     }
 
-    protected override void Start()
+    override protected void Start()
     {
         racerScript = FindAnyObjectByType<RacerScript>();
         LGM = FindAnyObjectByType<LogitechMovement>();
@@ -123,6 +122,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     protected new void FixedUpdate()
     {
         Applyturnsensitivity(CarRb.linearVelocity.magnitude);
+        base.FixedUpdate();
         // HandleTurbo();
     }
 
@@ -173,7 +173,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         foreach (var wheel in Wheels)
         {
-            wheel.MotorTorque(TargetTorque);
+            wheel.SetTorque(TargetTorque);
         }
     }
 

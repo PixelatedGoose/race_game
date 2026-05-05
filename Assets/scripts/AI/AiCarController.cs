@@ -84,7 +84,7 @@ public class AiCarController : BaseCarController
         {
             int newIndex = currentWaypointIndex + waypointSign;
             currentWaypointIndex = (Math.Sign(newIndex) >= 0 ? newIndex : waypointSize - 1) % waypointSize;
-            MaxSpeed = Mathf.Clamp(Mathf.Sqrt(MaxSpeed * aiCarManager.PointRadi[currentWaypointIndex]) * 1.3f, MaxSpeed * minSlowdown, MaxSpeed) / 3.6f;
+            MaxSpeed = Mathf.Clamp(Mathf.Sqrt(MaxSpeed * aiCarManager.PointRadi[currentWaypointIndex]) * 1.3f, MaxSpeed * minSlowdown, MaxSpeed);
             targetPoint = aiCarManager.Waypoints[currentWaypointIndex].position;
         }
 

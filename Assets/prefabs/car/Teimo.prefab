@@ -20,6 +20,10 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 138890378139104270, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 251722276886359576, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_Name
       value: Front- and backlights
@@ -56,14 +60,122 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 664903612923758694, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2136980685887261712, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: checkpoints.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: MaxSpeed
+      value: 210
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: carLights
       value: 
       objectReference: {fileID: 1632364530625525117}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[2].Axel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[3].Axel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[0].WheelModel
+      value: 
+      objectReference: {fileID: 24393547810998541}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[1].WheelModel
+      value: 
+      objectReference: {fileID: 1883850972809249671}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[2].WheelModel
+      value: 
+      objectReference: {fileID: 2336845816390015487}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[3].WheelModel
+      value: 
+      objectReference: {fileID: 3318118432821318475}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[0].SmokeParticle
+      value: 
+      objectReference: {fileID: 5083216551636659793}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[0].WheelCollider
+      value: 
+      objectReference: {fileID: 493731763055734542}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[0].trailRenderer
+      value: 
+      objectReference: {fileID: 3610753382386916890}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[1].SmokeParticle
+      value: 
+      objectReference: {fileID: 3792544442663217116}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[1].WheelCollider
+      value: 
+      objectReference: {fileID: 7880516231917043929}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[1].trailRenderer
+      value: 
+      objectReference: {fileID: 3858106840526707879}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[2].SmokeParticle
+      value: 
+      objectReference: {fileID: 6677864309872752332}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[2].WheelCollider
+      value: 
+      objectReference: {fileID: 3815229321783456523}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[2].trailRenderer
+      value: 
+      objectReference: {fileID: 1455910521379221355}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[3].SmokeParticle
+      value: 
+      objectReference: {fileID: 7284862789921711006}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[3].WheelCollider
+      value: 
+      objectReference: {fileID: 3428677423889735303}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[3].trailRenderer
+      value: 
+      objectReference: {fileID: 2081552153755603715}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[0].WheelEffectobj
+      value: 
+      objectReference: {fileID: 2480926479404300013}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[1].WheelEffectobj
+      value: 
+      objectReference: {fileID: 669926672857572711}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[2].WheelEffectobj
+      value: 
+      objectReference: {fileID: 555941683053646704}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: Wheels.Array.data[3].WheelEffectobj
+      value: 
+      objectReference: {fileID: 1975435450685398690}
+    - target: {fileID: 2329382784887801794, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2865107287730210175, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3582652508530400840, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: turnSensitivty
       value: 12
@@ -161,8 +273,108 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+--- !u!1 &24393547810998541 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1553661858755023464, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &493731763055734542 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 1369948176810718315, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &555941683053646704 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1328004386374436885, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &669926672857572711 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2059570226978143746, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &1455910521379221355 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 138890378139104270, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1632364530625525117 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 251722276886359576, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1883850972809249671 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1152312982436141282, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1975435450685398690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1059250692707681735, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &2081552153755603715 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 664903612923758694, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2336845816390015487 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3870626264015717018, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2480926479404300013 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4014707876218826120, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3318118432821318475 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4311437797761288238, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &3428677423889735303 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 4200738069657535970, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &3610753382386916890 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 2865107287730210175, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3792544442663217116 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2411903980732824761, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &3815229321783456523 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 2390131765041834094, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &3858106840526707879 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 2329382784887801794, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &5083216551636659793 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6003905725016634676, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6677864309872752332 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5293300499733671337, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7284862789921711006 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8124518929143052539, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &7880516231917043929 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 8684111291001936828, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
