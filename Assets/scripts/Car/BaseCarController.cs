@@ -94,7 +94,7 @@ public class BaseCarController : MonoBehaviour
     virtual protected void Awake()
     {
         //AutoAssignWheelsAndMaterials();
-        //MpsMaxSpeed = MaxSpeed / 3.6f;
+        MpsMaxSpeed = MaxSpeed / 3.6f;
         Debug.Log(MpsMaxSpeed);
         TryGetComponent(out turbo);
     }
