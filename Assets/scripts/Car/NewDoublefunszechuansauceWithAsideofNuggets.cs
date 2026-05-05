@@ -18,6 +18,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     [SerializeField] float DriftTurnSpeedAtHighSpeed = 2f;
     float driftMultiplier = 1.2f;
     float SteerDeadzone = 0.2f;
+    float CurrentDriftAngle = 0f;
+
+    float RightDriftAngle = 45f;
+    float LeftDriftAngle = -45f;
+
 
 
 
@@ -160,11 +165,18 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         if (!IsDrifting)
             return;
-        float speed = CarRb.linearVelocity.magnitude * 3.6f;
-        float speedRatio = Mathf.Clamp01(speed / Mathf.Max(MaxSpeed, 0.1f));
-        float driftTurnSpeed = Mathf.Lerp(DriftTurnSpeed, DriftTurnSpeedAtHighSpeed, speedRatio);
-        float turn = DriftDirection * driftTurnSpeed * driftMultiplier * Time.deltaTime;
-        transform.Rotate(0f, turn, 0f);
+        
+        float speedRatio = Mathf.Clamp01(CarRb.linearVelocity.magnitude / Mathf.Max(MaxSpeed, 0.01f));
+        float turnSpeed = Mathf.Lerp(DriftTurnSpeed, DriftTurnSpeedAtHighSpeed, speedRatio);
+
+        float deltaTurn = DriftDirection * turnSpeed * driftMultiplier * Time.deltaTime;
+
+        float newAngle = Mathf.Clamp(CurrentDriftAngle + deltaTurn, LeftDriftAngle, RightDriftAngle);
+        float appliedTurn = newAngle - CurrentDriftAngle;
+
+        CurrentDriftAngle = newAngle;
+
+        transform.Rotate(0f, appliedTurn, 0f);
     }
 
     //Arcade car style movement
