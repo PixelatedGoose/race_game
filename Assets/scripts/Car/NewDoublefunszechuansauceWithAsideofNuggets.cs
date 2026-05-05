@@ -5,22 +5,31 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(RacerScript))]
 public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 {
-    internal CarInputActions Controls;
+    public CarInputActions Controls { get; protected set; }
     RacerScript racerScript;
     LogitechMovement LGM;
     private string CurrentControlScheme;
     PlayerInput PlayerInput;
-
-
     override protected void Awake()
     {
         Controls = new CarInputActions();
-        Controls.Enable();
         CarRb = GetComponent<Rigidbody>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
+        racerScript = GetComponent<RacerScript>();
+        TryGetComponent(out LGM);
+        
+        Controls.Enable();
         base.Awake();
+
+        if (turbo != null)
+        {
+            Controls.CarControls.turbo.started += context => { turbo.Activate(); };
+            Controls.CarControls.turbo.performed += context => { turbo.Stop(); };
+        }
     }
     private void OnControlsChanged(PlayerInput input)
     {
@@ -119,7 +128,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     
     
     //physics related will go here
-    protected new void FixedUpdate()
+    override protected void FixedUpdate()
     {
         Applyturnsensitivity(CarRb.linearVelocity.magnitude);
         base.FixedUpdate();
