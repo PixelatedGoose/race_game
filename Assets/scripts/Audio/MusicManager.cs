@@ -1,20 +1,29 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
-public class musicControl : MonoBehaviour
+[Serializable]
+public class Song
 {
-    private GameObject[] musicObjects;
-    private AudioSource[] musicTracks;
+    public string name;
+    public AudioSource baseTrack;
+    public AudioSource driftTrack;
+    public AudioSource turboTrack;
+    public float defaultVolume;
+}
+public class MusicManager : MonoBehaviour
+{
+    [SerializeField] private List<Song> songs;
+    private Song currentSong;
+    [SerializeField] private AudioSource[] currentSongTracks;
     
     private enum CarMusicState {Main, Drift, Turbo};
     private CarMusicState CurrentMusState = CarMusicState.Main;
     private CarMusicState LatestMusState = CarMusicState.Main;
     private int[] activeTweenIDs;
 
-    //uniikkeja yksittäisiä biisejä, siksi en laita näille tageja tai arrayta.
-    //vectoraman demossa se tulee valittemaan kolmen eri biisin välillä
-    //ja se vaatii sit enemmän paskaa
+    //uniikkeja yksittäisiä biisejä, siksi en laita näille tageja tai arrayta
     public AudioSource resultsTrack;
     public AudioSource finalLapTrack;
 
@@ -23,6 +32,9 @@ public class musicControl : MonoBehaviour
 
     void Awake()
     {
+        //default; tulevaisuudes tallentaa playerprefsiin jotta muistaa?
+        currentSong = songs[0];
+        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
         Controls = new CarInputActions();
         carController = FindAnyObjectByType<PlayerCarController>();
 
@@ -46,15 +58,9 @@ public class musicControl : MonoBehaviour
 
     void Start()
     {
-        //Ouchies! Double ouchies! Triple? Yes!
-        musicObjects = GameObject.FindGameObjectsWithTag("thisisasound");
-        musicObjects = musicObjects.OrderBy(go => go.name).ToArray();
-        musicTracks = musicObjects.Select(go => go.GetComponent<AudioSource>()).ToArray();
-        //the death of TrackedTween
-        activeTweenIDs = new int[musicTracks.Length];
+        activeTweenIDs = new int[currentSongTracks.Length];
     }
 
-    //kaikki tarpeelline on täs
     void DriftCall()
     {
         CurrentMusState = carController.IsTurboActive ? CarMusicState.Turbo : CarMusicState.Drift;
@@ -78,13 +84,12 @@ public class musicControl : MonoBehaviour
 
     private void FadeTracks()
     {
-        //tarkistaa staten ku funktio alkaa, ei tarvi muualla
         if (CurrentMusState == LatestMusState) return;
 
         int stateIndex = (int)CurrentMusState; //current on oikeesti se viimeisin lol
         int previousStateIndex = (int)LatestMusState;
-        AudioSource NextTrack = musicTracks[stateIndex];
-        AudioSource PreviousTrack = musicTracks[previousStateIndex];
+        AudioSource NextTrack = currentSongTracks[stateIndex];
+        AudioSource PreviousTrack = currentSongTracks[previousStateIndex];
 
         LeanTween.cancel(activeTweenIDs[stateIndex]);
         LeanTween.cancel(activeTweenIDs[previousStateIndex]);
@@ -104,9 +109,8 @@ public class musicControl : MonoBehaviour
 
     public void StartMusicTracks()
     {
-        foreach (AudioSource track in musicTracks) track.Play();
+        foreach (AudioSource track in currentSongTracks) track.Play();
     }
-    //when
     public void StartFinalLapTrack()
     {
         Debug.Log("jos näitä logeja on enemmän ku yks jokin on paskana.");
@@ -117,18 +121,43 @@ public class musicControl : MonoBehaviour
         StopMusicTracks();
         finalLapTrack.Play();
     }
-    //when 2
     public void StopMusicTracks(bool endRaceEvent = false, bool stopFinalLap = false)
     {
-        foreach (AudioSource track in musicTracks) track.Stop();
-
+        foreach (AudioSource track in currentSongTracks) track.Stop();
         if (endRaceEvent || stopFinalLap && finalLapTrack != null) finalLapTrack.Stop();
+    }
+
+    //dashboard methodit
+    /* public void ChangeSong(string newSongName)
+    {
+        StopMusicTracks();
+        currentSong = songs.First(s => s.name == newSongName);
+        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
+    } */
+    public void NextSong()
+    {
+        StopMusicTracks();
+        currentSong = songs[songs.IndexOf(currentSong) + 1] ?? currentSong;
+        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
+        StartMusicTracks();
+    }
+    public void PreviousSong()
+    {
+        StopMusicTracks();
+        currentSong = songs[songs.IndexOf(currentSong) - 1] ?? currentSong;
+        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
+        StartMusicTracks();
+    }
+    public void RandomSong()
+    {
+        StopMusicTracks();
+        StartMusicTracks();
     }
 
     public void PausedMusicHandler()
     {
         bool isPaused = GameManager.IsPaused;
-        foreach (AudioSource track in musicTracks)
+        foreach (AudioSource track in currentSongTracks)
         {
             if (isPaused) track.Pause();
             else track.UnPause();

@@ -690,7 +690,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1756011281811333056, guid: 7455ed7a4f74bfa45b78c46530f2aca5, type: 3}
       propertyPath: m_Navigation.m_Mode
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1756011281811333056, guid: 7455ed7a4f74bfa45b78c46530f2aca5, type: 3}
       propertyPath: m_Colors.m_NormalColor.a
@@ -723,7 +723,7 @@ PrefabInstance:
     - target: {fileID: 1756011281811333056, guid: 7455ed7a4f74bfa45b78c46530f2aca5, type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
-      objectReference: {fileID: 8838175397292722294}
+      objectReference: {fileID: 2880143164227828054}
     - target: {fileID: 1756011281811333056, guid: 7455ed7a4f74bfa45b78c46530f2aca5, type: 3}
       propertyPath: m_Colors.m_SelectedColor.b
       value: 0.31475917
@@ -1885,6 +1885,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4072036967274402716, guid: 7455ed7a4f74bfa45b78c46530f2aca5, type: 3}
   m_PrefabInstance: {fileID: 4586573206132942486}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2880143164227828054 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1756011281811333056, guid: 7455ed7a4f74bfa45b78c46530f2aca5, type: 3}
+  m_PrefabInstance: {fileID: 4586573206132942486}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3133440051643781727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &3133440051643781727 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1502793971549959369, guid: 7455ed7a4f74bfa45b78c46530f2aca5, type: 3}
@@ -2676,14 +2687,3 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &8838175397292722294 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1756011281811333056, guid: 7455ed7a4f74bfa45b78c46530f2aca5, type: 3}
-  m_PrefabInstance: {fileID: 7131761478751459254}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8512898825237488511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button

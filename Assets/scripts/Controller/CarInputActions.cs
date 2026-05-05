@@ -1005,7 +1005,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f3c37e3d-5f7b-423e-9a24-a3626b2764e2"",
-                    ""path"": ""<Keyboard>/enter"",
+                    ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
