@@ -26,8 +26,6 @@ public class BaseCarController : MonoBehaviour
     protected readonly Func<Wheel, bool> frontWheelPredicate = w => w.Axel == Axel.Front;
     protected readonly Func<Wheel, bool> rearWheelPredicate = w => w.Axel == Axel.Rear;
     [Header("Trail settings")]
-    public float MoveInput;
-    public float SteerInput;
     public Vector2 MovementInputs;
     protected Vector3 _CenterofMass;
     public float TargetTorque;
@@ -75,7 +73,7 @@ public class BaseCarController : MonoBehaviour
 
         public bool IsGrounded()
         {
-            return WheelCollider.GetGroundHit(out WheelHit hit);
+            return WheelCollider.GetGroundHit(out _);
         }
 
         public void Brake(float BrakeAcceleration)
@@ -90,17 +88,10 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-    virtual protected void OnValidate()
+    virtual protected void Awake()
     {
         MpsMaxSpeed = MaxSpeed / 3.6f;
         turnSensitivityRange = MaxTurnSensitivity - MinTurnSensitivity;
-    }
-
-    virtual protected void Awake()
-    {
-        //AutoAssignWheelsAndMaterials();
-        MpsMaxSpeed = MaxSpeed / 3.6f;
-        Debug.Log(MpsMaxSpeed);
         TryGetComponent(out turbo);
     }
 
@@ -108,7 +99,6 @@ public class BaseCarController : MonoBehaviour
     {
         carCollider = GetComponentInChildren<Collider>();
         CarExtents = carCollider.bounds.size;
-        //AutoAssignWheelsAndMaterials();
         ClearWheelTrails();
     }
 
@@ -189,7 +179,7 @@ public class BaseCarController : MonoBehaviour
     {
         foreach (Wheel wheel in Wheels)
         {
-            if (wheel.Axel == Axel.Front) wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, MovementInputs.y * TurnSensitivity * (IsDrifting ? 0.8f : 0.35f), 0.6f);           
+            if (wheel.Axel == Axel.Front) wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, MovementInputs.x * TurnSensitivity * (IsDrifting ? 0.8f : 0.35f), 0.6f);           
         }
     }
 

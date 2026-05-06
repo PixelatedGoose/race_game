@@ -65,7 +65,8 @@ public class PlayerCarController : BaseCarController
 
     protected void Update()
     {
-        GetInputs();
+        //GetInputs();
+        if (!Controls.CarControls.Drift.IsPressed()) StopDrifting();
         Animatewheels();
         // detect connection state changes and print once when it changes
         bool currentlyConnected = (LGM != null) && LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0);
@@ -118,11 +119,11 @@ public class PlayerCarController : BaseCarController
 
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
-        SteerInput = ctx.ReadValue<Vector2>().x;
+        MovementInputs = ctx.ReadValue<Vector2>();
     }
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
-        SteerInput = 0f;
+        MovementInputs = Vector2.zero;
     }
 
     void OnApplicationFocus(bool focus)
@@ -194,7 +195,7 @@ public class PlayerCarController : BaseCarController
             MaxSpeed = Mathf.Lerp(MaxSpeed, DriftMaxSpeed, Time.deltaTime * 0.1f);
 
         
-        if (Mathf.Abs(SteerInput) > 0.1f)
+        if (Mathf.Abs(MovementInputs.x) > 0.1f)
         {
             CarRb.AddTorque(Vector3.up * Time.deltaTime, ForceMode.Acceleration);
         }
@@ -203,32 +204,31 @@ public class PlayerCarController : BaseCarController
 
 
 
-    void GetInputs()
-    {
-        //reads inputs and assigns them to values 
-        // read non-wheel input (keyboard / gamepad) and mark last-non-wheel time when active
-        SteerInput = Controls.CarControls.Move.ReadValue<Vector2>().x;
-        float nonWheelMove = Mathf.Abs(SteerInput) + Mathf.Abs(Controls.CarControls.MoveForward.ReadValue<float>()) + Mathf.Abs(Controls.CarControls.MoveBackward.ReadValue<float>());
-        if (nonWheelMove > 0.001f || Controls.CarControls.Drift.IsPressed() || Controls.CarControls.Brake.IsPressed())
-        {
-            if (LGM != null)
-            {
-                LGM.useLogitechWheel = false;
-                LGM.allowAutoEnable = true;
-                LGM.StopAllForceFeedback();
-            }
-        }
+    // void GetInputs()
+    // {
+    //     //reads inputs and assigns them to values 
+    //     // read non-wheel input (keyboard / gamepad) and mark last-non-wheel time when active
+    //     float nonWheelMove = Mathf.Abs(MovementInputs.y) + Mathf.Abs(Controls.CarControls.MoveForward.ReadValue<float>()) + Mathf.Abs(Controls.CarControls.MoveBackward.ReadValue<float>());
+    //     if (nonWheelMove > 0.001f || Controls.CarControls.Drift.IsPressed() || Controls.CarControls.Brake.IsPressed())
+    //     {
+    //         if (LGM != null)
+    //         {
+    //             LGM.useLogitechWheel = false;
+    //             LGM.allowAutoEnable = true;
+    //             LGM.StopAllForceFeedback();
+    //         }
+    //     }
         
-        if (Controls.CarControls.MoveForward.IsPressed())
-            MoveInput = Controls.CarControls.MoveForward.ReadValue<float>();
-        else if (Controls.CarControls.MoveBackward.IsPressed())
-            MoveInput = -Controls.CarControls.MoveBackward.ReadValue<float>();
-        else
-            MoveInput = 0f;
+    //     if (Controls.CarControls.MoveForward.IsPressed())
+    //         MovementInputs.y = Controls.CarControls.MoveForward.ReadValue<float>();
+    //     else if (Controls.CarControls.MoveBackward.IsPressed())
+    //         MovementInputs.y = -Controls.CarControls.MoveBackward.ReadValue<float>();
+    //     else
+    //         MovementInputs.y = 0f;
 
-        if (!Controls.CarControls.Drift.IsPressed())
-            StopDrifting();
-    }
+    //     if (!Controls.CarControls.Drift.IsPressed())
+    //         StopDrifting();
+    // }
 
     void Applyturnsensitivity(float speed)
     {
@@ -270,16 +270,16 @@ public class PlayerCarController : BaseCarController
 
     private void UpdateTargetTorque()
     {
-        float inputValue = Mathf.Abs(MoveInput);
-        if (CurrentControlScheme == "Gamepad")
-        {
-            Vector2 moveVector = Controls.CarControls.Move.ReadValue<Vector2>();
-            inputValue = Mathf.Max(inputValue, Mathf.Abs(moveVector.y));
-        }
+        // float inputValue = Mathf.Abs(MovementInputs.y);
+        // if (CurrentControlScheme == "Gamepad")
+        // {
+        //     Vector2 moveVector = Controls.CarControls.Move.ReadValue<Vector2>();
+        //     inputValue = Mathf.Max(inputValue, Mathf.Abs(moveVector.y));
+        // }
 
-        float steerFactor = Mathf.Clamp01(Mathf.Abs(SteerInput));
+        float steerFactor = Mathf.Clamp01(Mathf.Abs(MovementInputs.x));
         float driftPowerMultiplier = IsDrifting ? Mathf.Lerp(0.65f, 0.85f, steerFactor) : 1.0f;
-        float targetMaxAcc = BaseMaxAccerelation * driftPowerMultiplier;
+        float targetMaxAcc = Acceleration * driftPowerMultiplier;
 
         SmoothedMaxAcceleration = Mathf.MoveTowards(
             SmoothedMaxAcceleration,
@@ -287,11 +287,12 @@ public class PlayerCarController : BaseCarController
             Time.deltaTime * 250f
         );
 
-        float rawTorque = MoveInput * SmoothedMaxAcceleration;
+        float rawTorque = MovementInputs.y * SmoothedMaxAcceleration;
         float forwardVel = Vector3.Dot(CarRb.linearVelocity, transform.forward);
         if (IsDrifting && forwardVel > 0.5f && rawTorque < 0f) rawTorque = 0f;
 
         TargetTorque = rawTorque;
+        Debug.Log(SmoothedMaxAcceleration + " " + IsDrifting);
 
         if (IsDrifting)
         {
@@ -326,7 +327,6 @@ public class PlayerCarController : BaseCarController
 
         IsDrifting = true;
 
-        Acceleration = BaseMaxAccerelation * 0.95f;
 
         foreach (var wheel in Wheels)
         {
@@ -349,7 +349,6 @@ public class PlayerCarController : BaseCarController
     {
         StopDrifting();
         OnDriftEndBoostTheCar();
-        Acceleration = BaseMaxAccerelation;
         TargetTorque = BaseTargetTorque;
         WheelEffects(false);
     }
@@ -359,7 +358,6 @@ public class PlayerCarController : BaseCarController
         if (IsDrifting)
         {
             IsDrifting = false;
-            Acceleration = BaseMaxAccerelation;
         }
         float DeltaTime = Time.deltaTime * 2.5f;
 

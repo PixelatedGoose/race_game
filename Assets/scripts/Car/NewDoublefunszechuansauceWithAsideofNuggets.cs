@@ -126,7 +126,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
-        MovementInputs = Vector3.zero;
+        MovementInputs = Vector2.zero;
     }
 
     override protected void Start()
