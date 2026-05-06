@@ -1036,8 +1036,8 @@ MonoBehaviour:
   TurbeReduce: 10
   TurbeRegen: 10
   TurbeWaitTime: 2
-  pixelCount: {fileID: 0}
-  carLights: {fileID: 0}
+  pixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
+  carLights: {fileID: 3931564701789026679}
   DriftTurnSpeedAtHighSpeed: 2
 --- !u!114 &2285249159904490474
 MonoBehaviour:
