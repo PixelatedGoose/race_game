@@ -2,10 +2,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(RacerScript))]
+[RequireComponent(typeof(PlayerInput))]
 public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 {
-    internal CarInputActions Controls;
-    public Material pixelCount;
+    public CarInputActions Controls { get; protected set; }
     RacerScript racerScript;
     LogitechMovement LGM;
     private string CurrentControlScheme;
@@ -29,34 +31,43 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     override protected void Awake()
     {
         Controls = new CarInputActions();
-        Controls.Enable();
         CarRb = GetComponent<Rigidbody>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
+        racerScript = GetComponent<RacerScript>();
+        TryGetComponent(out LGM);
+        
+        Controls.Enable();
         base.Awake();
+
+        CarRb.centerOfMass = _CenterofMass;
+
+        if (turbo != null)
+        {
+            Controls.CarControls.turbo.started += context => { turbo.Activate(); };
+            Controls.CarControls.turbo.performed += context => { turbo.Stop(); };
+        }
     }
 
     private void OnControlsChanged(PlayerInput input)
     {
         CurrentControlScheme = input.currentControlScheme;
-        if (LGM != null)
-            LGM.ReenableFromControlScheme(CurrentControlScheme);
+        if (LGM != null) LGM.ReenableFromControlScheme(CurrentControlScheme);
     }
+
     void OnAnyActionTriggered(InputAction.CallbackContext ctx)
     {
         var control = ctx.action?.activeControl;
-        if (control == null)
-            return;
-    
+        if (control == null) return;
+
     }
 
     private void OnEnable()
     {
+        // Add input event listeners
         Controls.Enable();
-        if (PlayerInput == null)
-            PlayerInput = GetComponent<PlayerInput>();
+        PlayerInput = GetComponent<PlayerInput>();
 
-        if (PlayerInput != null)
-            PlayerInput.onControlsChanged += OnControlsChanged;
+        PlayerInput.onControlsChanged += OnControlsChanged;
 
         Controls.CarControls.Get().actionTriggered += OnAnyActionTriggered;
 
@@ -67,10 +78,17 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Controls.CarControls.Drift.canceled  += OnDriftCanceled;
         Controls.CarControls.Brake.performed += OnBrakePerformed;
         Controls.CarControls.Brake.canceled  += OnBrakeCanceled;
+
+        if (turbo != null)
+        {
+            Controls.CarControls.turbo.started += context => { turbo.Activate(); };
+            Controls.CarControls.turbo.performed += context => { turbo.Stop(); };
+        }
     }
 
     private void OnDisable()
     {
+        // Remove input event listeners
         Controls.Disable();
         if (PlayerInput != null)
             PlayerInput.onControlsChanged -= OnControlsChanged;
@@ -84,8 +102,14 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Controls.CarControls.Drift.canceled  -= OnDriftCanceled;
         Controls.CarControls.Brake.performed -= OnBrakePerformed;
         Controls.CarControls.Brake.canceled -= OnBrakeCanceled;
-        if (LGM != null)
-            LGM.StopAllForceFeedback();
+
+        if (turbo != null)
+        {
+            Controls.CarControls.turbo.started -= context => { turbo.Activate(); };
+            Controls.CarControls.turbo.performed -= context => { turbo.Stop(); };
+        }
+
+        if (LGM != null) LGM.StopAllForceFeedback();
     }
 
     private void OnDestroy()
@@ -93,28 +117,21 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Controls.Disable();
         Controls.Dispose();
 
-        if (LGM != null)
-            LGM.StopAllForceFeedback();
+        if (LGM != null) LGM.StopAllForceFeedback();
     }
 
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
-        SteerInput = ctx.ReadValue<Vector2>().x;
-        MoveInput = ctx.ReadValue<Vector2>().y;
+        MovementInputs = ctx.ReadValue<Vector2>();
     }
+
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
-        SteerInput = 0f;
-        MoveInput = 0f;
+        MovementInputs = Vector3.zero;
     }
 
     override protected void Start()
     {
-        racerScript = FindAnyObjectByType<RacerScript>();
-        LGM = FindAnyObjectByType<LogitechMovement>();
-
-        CarRb.centerOfMass = _CenterofMass;
-
         base.Start();
         
     }
@@ -122,25 +139,30 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     
     protected void Update()
     {
+        MovementInputs = Controls.CarControls.Move.ReadValue<Vector2>();
         Animatewheels();
-        GetInputs();
-        SteerInput = GetDriftSteer();
+
         Steer();
         CarMovement();
         ApplyDriftTurn();
         WheelEffects(IsDrifting);
     }
 
-    
+    //physics related will go here
     override protected void FixedUpdate()
     {
-        Applyturnsensitivity(CarRb.linearVelocity.magnitude);
+        TurnSensitivity = CarRb.linearVelocity.magnitude / MaxSpeed * turnSensitivityRange + MaxTurnSensitivity;
         base.FixedUpdate();
-        Decelerate();
-
-        base.FixedUpdate();
+        // HandleTurbo();
     }
 
+    //que
+//    protected void HandleTurbo()
+//     {
+//         if (!CanUseTurbo) return;
+//         Turbe.TURBO(this);
+//         TurbeMeter();
+//     }
 
     void GetInputs()
     {
@@ -179,31 +201,23 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         transform.Rotate(0f, appliedTurn, 0f);
     }
 
+
     //Arcade car style movement
     protected void CarMovement()
     {
-        float forwardValue = Mathf.Abs(MoveInput);
-        //this might look like slop, but for now i did this way 
-        float direction = MoveInput != 0 ? Mathf.Sign(MoveInput) : Mathf.Sign(Vector3.Dot(CarRb.linearVelocity, transform.forward));
-       
-        float targetSpeed = Mathf.MoveTowards(CarRb.linearVelocity.magnitude, MaxSpeed  * forwardValue, Acceleration * Time.deltaTime);
-        Vector3 flatForwardVelocity = transform.forward * targetSpeed * direction;
-        CarRb.linearVelocity = new Vector3(flatForwardVelocity.x, CarRb.linearVelocity.y, flatForwardVelocity.z);
-    }
-
-
-    void Applyturnsensitivity(float speed)
-    {
-        float speedKph = speed * 3.6f;
-        TurnSensitivity = Mathf.Lerp(
-            TurnSensitivityAtLowSpeed,
-            TurnSensitivityAtHighSpeed,
-            Mathf.Clamp01(speedKph / Mathf.Max(MaxSpeed, 0.1f)));
+        Vector3 flatForwardVelocity = 
+        transform.forward * Mathf.MoveTowards(
+            CarRb.linearVelocity.magnitude,
+            MaxSpeed * Mathf.Abs(MovementInputs.y), 
+            Acceleration * Time.deltaTime
+        );
+        flatForwardVelocity.y = CarRb.linearVelocity.y;
+        CarRb.linearVelocity = flatForwardVelocity;
     }
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
     {
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
             wheel.Brake(BrakeAcceleration);
         }
@@ -211,7 +225,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnBrakeCanceled(InputAction.CallbackContext ctx)
     {
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
             wheel.SetTorque(TargetTorque);
         }
