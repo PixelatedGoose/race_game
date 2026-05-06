@@ -5,6 +5,8 @@ using Logitech;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(RacerScript))]
 public class PlayerCarController : BaseCarController
 {
     public CarInputActions Controls { get; protected set; }
@@ -24,12 +26,17 @@ public class PlayerCarController : BaseCarController
     override protected void Awake()
     {
         Controls = new CarInputActions();
-        Controls.Enable();
         PlayerInput = GetComponent<PlayerInput>();
         TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
-        //AutoAssignWheelsAndMaterials();
+        CarRb = GetComponent<Rigidbody>();
+        racerScript = GetComponent<RacerScript>();
+        TryGetComponent(out LGM);
 
+        CarRb.centerOfMass = _CenterofMass;
+
+        Controls.Enable();
+        if (LGM != null) LGM.InitializeLogitechWheel(); 
         base.Awake();
 
         if (turbo != null)
@@ -41,27 +48,6 @@ public class PlayerCarController : BaseCarController
 
     override protected void Start()
     {
-
-        BaseMaxAccerelation = Acceleration;
-        SmoothedMaxAcceleration = BaseMaxAccerelation;
-        BaseTargetTorque = TargetTorque;
-
-        if (LGM == null)
-        {
-            LGM = FindFirstObjectByType<LogitechMovement>();
-        }
-        if (CarRb == null)
-            CarRb = GetComponent<Rigidbody>();
-        CarRb.centerOfMass = _CenterofMass;
-        racerScript = FindAnyObjectByType<RacerScript>();
-
-
-        if (LGM != null)
-        {
-            LGM.InitializeLogitechWheel(); 
-        }
-
-
         base.Start();
     }
 
@@ -247,8 +233,8 @@ public class PlayerCarController : BaseCarController
     void Applyturnsensitivity(float speed)
     {
         TurnSensitivity = Mathf.Lerp(
-            TurnSensitivityAtLowSpeed,
-            TurnSensitivityAtHighSpeed,
+            MaxTurnSensitivity,
+            MinTurnSensitivity,
             Mathf.Clamp01(speed / MaxSpeed));
     }
 
