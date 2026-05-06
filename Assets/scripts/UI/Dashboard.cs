@@ -10,6 +10,7 @@ public class Dashboard : MonoBehaviour
     [SerializeField] private bool ShouldDashboardOpen = false;
     private RectTransform rect;
     private Button[] dashboardButtons;
+    private MusicManager musicManager;
 
     private Button firstSelectedButton;
     [SerializeField] private Button firstSelectedDashboardButton;
@@ -19,6 +20,7 @@ public class Dashboard : MonoBehaviour
         firstSelectedButton = EventSystem.current.firstSelectedGameObject.GetComponent<Button>();
         rect = GetComponent<RectTransform>();
         dashboardButtons = GetComponentsInChildren<Button>();
+        musicManager = FindFirstObjectByType<MusicManager>();
         foreach (var b in dashboardButtons) b.interactable = false;
         Controls = new();
         Controls.CarControls.OpenDashboard.performed += ctx => ToggleDashboard();
@@ -56,14 +58,14 @@ public class Dashboard : MonoBehaviour
 
     public void PreviousTrack()
     {
-        
+        musicManager.PreviousSong();
     }
     public void NextTrack()
     {
-        
+        musicManager.NextSong();
     }
     public void RandomTrack()
     {
-        //vaiha currentSong tai jotain vastaavaa MusicManagerista
+        musicManager.RandomSong();
     }
 }

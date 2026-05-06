@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -127,31 +126,49 @@ public class MusicManager : MonoBehaviour
         if (endRaceEvent || stopFinalLap && finalLapTrack != null) finalLapTrack.Stop();
     }
 
-    //dashboard methodit
     /* public void ChangeSong(string newSongName)
     {
         StopMusicTracks();
         currentSong = songs.First(s => s.name == newSongName);
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
     } */
-    public void NextSong()
+    /* public void ChangeSongByIndex(int change)
     {
+        int newSongIndex = songs.IndexOf(currentSong);
         StopMusicTracks();
-        currentSong = songs[songs.IndexOf(currentSong) + 1] ?? currentSong;
+        //jos biisi on listan lengthin sisällä, siirry siihen
+        //jos se on ulkopuolella (viimesestä ensimmäiseen tai vice versa), mene joko alkuun tai loppuun
+        //also btw tää ei ees oo tehty loppuun; ethän käytä thanks
+        currentSong = songs[currentSongIndex >= 0 && currentSongIndex < songs.Count ? currentSongIndex + change : (currentSongIndex + change)] ?? currentSong;
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
         StartMusicTracks();
+    } */
+    //dashboard methodit
+    public void NextSong()
+    {
+        int newSongIndex = (songs.IndexOf(currentSong) + 1) < songs.Count ? songs.IndexOf(currentSong) + 1 : 0;
+        StopMusicTracks();
+        currentSong = songs[newSongIndex] ?? currentSong;
+        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
+        StartMusicTracks();
+        Debug.Log($"changed to song: {currentSong.name}");
     }
     public void PreviousSong()
     {
+        int newSongIndex = (songs.IndexOf(currentSong) - 1) >= 0 ? songs.IndexOf(currentSong) - 1 : songs.Count - 1;
         StopMusicTracks();
-        currentSong = songs[songs.IndexOf(currentSong) - 1] ?? currentSong;
+        currentSong = songs[newSongIndex] ?? currentSong;
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
         StartMusicTracks();
+        Debug.Log($"changed to song: {currentSong.name}");
     }
     public void RandomSong()
     {
         StopMusicTracks();
+        currentSong = songs[UnityEngine.Random.Range(0, songs.Count)] ?? currentSong;
+        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
         StartMusicTracks();
+        Debug.Log($"changed to song: {currentSong.name}");
     }
 
     public void PausedMusicHandler()
