@@ -206,14 +206,14 @@ public class LogitechMovement : MonoBehaviour
         // only apply wheel inputs if wheel activity is at least as recent as non-wheel activity
         if (PlayerCar.LastWheelInputTime >= PlayerCar.LastNonWheelInputTime)
         {
-            PlayerCar.SteerInput = steer;
+            PlayerCar.MovementInputs.x = steer;
 
             if (clutch > 0.1f)
-                PlayerCar.MoveInput = -clutch;
+                PlayerCar.MovementInputs.y = -clutch;
             else if (throttle > 0.1f)
-                PlayerCar.MoveInput = throttle;
+                PlayerCar.MovementInputs.y = throttle;
             else
-                PlayerCar.MoveInput = 0f;
+                PlayerCar.MovementInputs.y = 0f;
         }
     }
 
