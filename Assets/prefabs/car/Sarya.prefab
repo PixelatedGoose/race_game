@@ -997,8 +997,8 @@ MonoBehaviour:
   Deceleration: 1
   BrakeAcceleration: 500
   TurnSensitivity: 1
-  TurnSensitivityAtHighSpeed: 17.5
-  TurnSensitivityAtLowSpeed: 30
+  MinTurnSensitivity: 17.5
+  MaxTurnSensitivity: 30
   MaxSpeed: 180
   Wheels:
   - WheelModel: {fileID: 3356778135624283465}
@@ -1027,6 +1027,7 @@ MonoBehaviour:
     trailRenderer: {fileID: 6188845243956253520}
   MoveInput: 0
   SteerInput: 0
+  MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60
   BaseSpeed: 180
@@ -1036,8 +1037,8 @@ MonoBehaviour:
   TurbeReduce: 10
   TurbeRegen: 10
   TurbeWaitTime: 2
-  pixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   carLights: {fileID: 3931564701789026679}
+  PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   DriftTurnSpeedAtHighSpeed: 2
 --- !u!114 &2285249159904490474
 MonoBehaviour:
@@ -1055,8 +1056,8 @@ MonoBehaviour:
   Deceleration: 1
   BrakeAcceleration: 200
   TurnSensitivity: 1
-  TurnSensitivityAtHighSpeed: 17.5
-  TurnSensitivityAtLowSpeed: 30
+  MinTurnSensitivity: 17.5
+  MaxTurnSensitivity: 30
   MaxSpeed: 180
   Wheels:
   - WheelModel: {fileID: 3356778135624283465}
@@ -1085,6 +1086,7 @@ MonoBehaviour:
     trailRenderer: {fileID: 6188845243956253520}
   MoveInput: 0
   SteerInput: 0
+  MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60
   BaseSpeed: 130
