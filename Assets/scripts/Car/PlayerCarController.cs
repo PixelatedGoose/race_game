@@ -233,8 +233,8 @@ public class PlayerCarController : BaseCarController
     void Applyturnsensitivity(float speed)
     {
         TurnSensitivity = Mathf.Lerp(
-            TurnSensitivityAtLowSpeed,
-            TurnSensitivityAtHighSpeed,
+            MaxTurnSensitivity,
+            MinTurnSensitivity,
             Mathf.Clamp01(speed / MaxSpeed));
     }
 

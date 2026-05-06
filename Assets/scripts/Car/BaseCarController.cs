@@ -14,8 +14,9 @@ public class BaseCarController : MonoBehaviour
     [SerializeField] protected float BrakeAcceleration = 500.0f;
     [Header("turn asetukset")]
     [SerializeField] protected float TurnSensitivity = 1.0f;
-    [SerializeField] protected float TurnSensitivityAtHighSpeed = 17.5f;
-    [SerializeField] protected float TurnSensitivityAtLowSpeed = 30.0f;
+    [SerializeField] protected float MinTurnSensitivity = 17.5f;
+    [SerializeField] protected float MaxTurnSensitivity = 30.0f;
+    protected float turnSensitivityRange;
     public float MaxSpeed = 180.0f;
     /// <summary>
     /// Max speed in meters per second.
@@ -91,6 +92,7 @@ public class BaseCarController : MonoBehaviour
     virtual protected void OnValidate()
     {
         MpsMaxSpeed = MaxSpeed / 3.6f;
+        turnSensitivityRange = MaxTurnSensitivity - MinTurnSensitivity;
     }
 
     virtual protected void Awake()

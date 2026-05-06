@@ -130,7 +130,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     //physics related will go here
     override protected void FixedUpdate()
     {
-        Applyturnsensitivity(CarRb.linearVelocity.magnitude);
+        TurnSensitivity = CarRb.linearVelocity.magnitude / MaxSpeed * turnSensitivityRange + MaxTurnSensitivity;
         base.FixedUpdate();
         // HandleTurbo();
     }
@@ -154,20 +154,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     //Arcade car style movement
     protected void CarMovement()
     {
-        float forwardValue = Mathf.Abs(MoveInput);
-       
-        float targetSpeed = Mathf.MoveTowards(CarRb.linearVelocity.magnitude, MaxSpeed  * forwardValue, Acceleration * Time.deltaTime);
-        Vector3 flatForwardVelocity = transform.forward * targetSpeed;
-        CarRb.linearVelocity = new Vector3(flatForwardVelocity.x, CarRb.linearVelocity.y, flatForwardVelocity.z);
-    }
-
-
-    void Applyturnsensitivity(float speed)
-    {
-        TurnSensitivity = Mathf.Lerp(
-            TurnSensitivityAtLowSpeed,
-            TurnSensitivityAtHighSpeed,
-            Mathf.Clamp01(speed / MaxSpeed));
+        Vector3 flatForwardVelocity = transform.forward * Mathf.MoveTowards(CarRb.linearVelocity.magnitude, MaxSpeed  * Mathf.Abs(MoveInput), Acceleration * Time.deltaTime);
+        flatForwardVelocity.y = CarRb.linearVelocity.y;
+        CarRb.linearVelocity = flatForwardVelocity;
     }
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
