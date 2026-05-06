@@ -28,6 +28,7 @@ public class BaseCarController : MonoBehaviour
     [Header("Trail settings")]
     public float MoveInput;
     public float SteerInput;
+    public Vector2 MovementInputs;
     protected Vector3 _CenterofMass;
     public float TargetTorque;
     public Rigidbody CarRb { get; protected set; }
@@ -175,7 +176,7 @@ public class BaseCarController : MonoBehaviour
 
     protected void Decelerate()
     {
-        if (MoveInput == 0)
+        if (MovementInputs.y == 0)
         {
             if (CarRb.linearVelocity.magnitude < 0.1f) CarRb.linearVelocity = Vector3.zero;
             else CarRb.linearVelocity = Vector3.Lerp(CarRb.linearVelocity, Vector3.zero, Time.deltaTime);
@@ -188,7 +189,7 @@ public class BaseCarController : MonoBehaviour
     {
         foreach (Wheel wheel in Wheels)
         {
-            if (wheel.Axel == Axel.Front) wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, SteerInput * TurnSensitivity * (IsDrifting ? 0.8f : 0.35f), 0.6f);           
+            if (wheel.Axel == Axel.Front) wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, MovementInputs.y * TurnSensitivity * (IsDrifting ? 0.8f : 0.35f), 0.6f);           
         }
     }
 
