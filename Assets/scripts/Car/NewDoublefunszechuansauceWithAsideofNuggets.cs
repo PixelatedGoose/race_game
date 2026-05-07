@@ -1,4 +1,5 @@
- using UnityEngine;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -14,20 +15,33 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     private Material carLightsMaterial;
     public Material PixelCount;
 
-    float DriftDirection;
-    float DriftTurnSpeed = 5f;
-    [SerializeField] float DriftTurn = 2f;
-    float driftMultiplier = 1.2f;
+    float DriftTurnSpeed = 3.5f;
+    float DriftTurn = 1.2f;
     float SteerDeadzone = 0.2f;
     float CurrentDriftAngle = 0f;
 
-    float RightDriftAngle = 45f;
-    float LeftDriftAngle = -45f;
+    float DriftDirection = 0f;
+
+    float RightDriftAngle = 9f;
+    float LeftDriftAngle = -9f;
+  
+
+    public float driftLockTime = 0.22f;
+    public float steerSmooth = 8f;
+    public float driftBiasSet = 5.5f;
+
+    float basePixel;
+    float minPixel = 32f;
+
+    float recoverTime = 8f;
+
+    Coroutine PixelRecovery;
+
 
     float GetSteerSign(float steer) => Mathf.Abs(steer) > SteerDeadzone ? Mathf.Sign(steer) : 0f;
 
-
-
+  
+      
     override protected void Awake()
     {
         Controls = new CarInputActions();
@@ -132,6 +146,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     override protected void Start()
     {
         base.Start();
+
+        basePixel = PixelCount.GetFloat("_pixelcount");
+        print(PixelCount.GetFloat("_pixelcount"));
     }
 
     //movement or anykind of input related will go here
@@ -139,11 +156,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         MovementInputs = Controls.CarControls.Move.ReadValue<Vector2>();
         Animatewheels();
-
+        MovementInputs.x = GetDriftSteer();
         Steer();
         CarMovement();
         ApplySpeedLimit();
         Decelerate();
+        ApplyDriftTurn();
     }
 
     //physics related will go here
@@ -169,10 +187,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     //Arcade car style movement
     protected void CarMovement()
     {
+        float forwardSpeed = Vector3.Dot(CarRb.linearVelocity, transform.forward);
         Vector3 flatForwardVelocity = 
         transform.forward * Mathf.MoveTowards(
-            CarRb.linearVelocity.magnitude,
-            MaxSpeed * Mathf.Sign(MovementInputs.y), 
+            forwardSpeed,
+            MaxSpeed * MovementInputs.y, 
             Acceleration * Time.deltaTime
         );
         flatForwardVelocity.y = CarRb.linearVelocity.y;
@@ -181,9 +200,28 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnCollisionEnter(Collision collision)
     {
+        if (PixelCount == null || collision.impulse.magnitude < 0.1f) return;
 
+
+        float impact = Mathf.Clamp01(collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f));
+        impact = Mathf.SmoothStep(0f, 1f, impact);
+
+        if (PixelRecovery != null) StopCoroutine(PixelRecovery);
+        PixelRecovery = StartCoroutine(PixelRecover(Mathf.Lerp(basePixel, minPixel, impact), Mathf.Max(0.1f, recoverTime * impact)));
     }
 
+    IEnumerator PixelRecover(float hitPixel, float recover)
+    {
+        float elapsed = 0f;
+        while (elapsed < recover)
+        {
+            elapsed += Time.deltaTime;
+            PixelCount.SetFloat("_pixelcount", Mathf.Lerp(hitPixel, basePixel, elapsed / recover));
+            yield return null;
+        }
+        PixelCount.SetFloat("_pixelcount", basePixel);
+        PixelRecovery = null;
+    }
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
     {
@@ -200,15 +238,22 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
             wheel.SetTorque(TargetTorque);
         }
     }
+    
+    float GetDriftSteer()
+    {
+        if (!IsDrifting) return MovementInputs.x;
+
+        if (Mathf.Approximately(DriftDirection, 0f)) DriftDirection = GetSteerSign(MovementInputs.x);
+
+        return DriftDirection;
+    }
 
     void ApplyDriftTurn()
     {
-        if (!IsDrifting) return;
-
+        if (!IsDrifting)
+            return;
         
-        float speedRatio = Mathf.Clamp01(CarRb.linearVelocity.magnitude / Mathf.Max(MaxSpeed, 0.01f));
-
-        float newAngle = Mathf.Clamp(CurrentDriftAngle + DriftDirection * Mathf.Lerp(DriftTurnSpeed, DriftTurn, speedRatio) * driftMultiplier * Time.deltaTime, LeftDriftAngle, RightDriftAngle);
+        float newAngle = Mathf.Clamp(CurrentDriftAngle + DriftDirection * Mathf.Lerp(DriftTurnSpeed, 2f, Mathf.Clamp01(CarRb.linearVelocity.magnitude / Mathf.Max(MaxSpeed, 0.01f))) * Time.deltaTime, LeftDriftAngle, RightDriftAngle);
 
         CurrentDriftAngle = newAngle;
 
@@ -220,7 +265,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
         IsDrifting = true;
-        DriftDirection = 0f;
         ApplyDriftTurn();
         WheelEffects(true);
     }
@@ -228,6 +272,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     void OnDriftCanceled(InputAction.CallbackContext ctx)
     {
         IsDrifting = false;
+        CurrentDriftAngle = 0f;
         DriftDirection = 0f;
         WheelEffects(false);
     }
