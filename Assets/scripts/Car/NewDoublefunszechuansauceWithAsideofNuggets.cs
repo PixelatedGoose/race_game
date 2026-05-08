@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.Splines.Examples;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -33,7 +35,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     float basePixel;
     float minPixel = 32f;
 
-    float recoverTime = 8f;
+    float recoverTime = 4f;
 
     Coroutine PixelRecovery;
 
@@ -148,7 +150,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         base.Start();
 
         basePixel = PixelCount.GetFloat("_pixelcount");
-        print(PixelCount.GetFloat("_pixelcount"));
     }
 
     //movement or anykind of input related will go here
@@ -252,21 +253,38 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         if (!IsDrifting)
             return;
-        
-        float newAngle = Mathf.Clamp(CurrentDriftAngle + DriftDirection * Mathf.Lerp(DriftTurnSpeed, 2f, Mathf.Clamp01(CarRb.linearVelocity.magnitude / Mathf.Max(MaxSpeed, 0.01f))) * Time.deltaTime, LeftDriftAngle, RightDriftAngle);
-
-        CurrentDriftAngle = newAngle;
-
-        transform.Rotate(0f, newAngle - CurrentDriftAngle, 0f);
+        transform.Rotate(0f, Mathf.Clamp(CurrentDriftAngle + DriftDirection * Mathf.Lerp(DriftTurnSpeed, 2f, Mathf.Clamp01(CarRb.linearVelocity.magnitude / Mathf.Max(MaxSpeed, 0.01f))) * Time.deltaTime, LeftDriftAngle, RightDriftAngle), 0f);
     }
 
 
     // your car is drifting bro better go and call your insurance company
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
+
+        CarRb.angularDamping = 0.02f;
+        CarRb.linearDamping = 0.08f;
+
+        AdjustWheelsForDrift();
         IsDrifting = true;
         ApplyDriftTurn();
         WheelEffects(true);
+    }
+
+    void AdjustWheelsBackToNormal()
+    {
+        foreach (Wheel wheel in Wheels)
+        {
+            WheelFrictionCurve forwwardfriction = wheel.WheelCollider.forwardFriction;
+            forwwardfriction.asymptoteValue = 1f; forwwardfriction.asymptoteSlip = 0.8f;
+            forwwardfriction.extremumValue = 1f; forwwardfriction.extremumSlip = 0.6f;
+            wheel.WheelCollider.forwardFriction = forwwardfriction;
+
+            if (wheel.Axel == Axel.Front)
+            {
+                WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
+                sidewaysFriction.stiffness = 6f; wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
+            }
+        }  
     }
 
     void OnDriftCanceled(InputAction.CallbackContext ctx)
@@ -274,6 +292,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         IsDrifting = false;
         CurrentDriftAngle = 0f;
         DriftDirection = 0f;
+        CarRb.linearDamping = 0f;
+        AdjustSuspension();
+        AdjustWheelsBackToNormal();
         WheelEffects(false);
     }
 
