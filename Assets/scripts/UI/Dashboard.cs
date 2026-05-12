@@ -56,6 +56,8 @@ public class Dashboard : MonoBehaviour
         }
     }
 
+    //TODO: toggle shuffle ja yksittäisen trackin looppaus
+
     public void PreviousTrack()
     {
         musicManager.PreviousSong();
@@ -64,8 +66,16 @@ public class Dashboard : MonoBehaviour
     {
         musicManager.NextSong();
     }
-    public void RandomTrack()
+    public void Shuffle()
     {
         musicManager.RandomSong();
+    }
+    public void LoopSingular()
+    {
+        
+    }
+    public void Respawn()
+    {
+        GameManager.racerscript.FadeGameViewAndRespawn();
     }
 }

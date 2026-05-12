@@ -130,7 +130,7 @@ public class AiCarController : BaseCarController
         foreach (BaseCarController other in GameManager.spawnedCars)
         {
             if (other == this) continue;
-
+            Debug.Log(other.CarRb);
             Vector3 toOther = other.CarRb.position - CarRb.position;
             float distance = Vector3.Distance(other.CarRb.position, CarRb.position);
             float otherSafeRadius = Mathf.Max(other.CarExtents.x, other.CarExtents.z) * 0.5f;
