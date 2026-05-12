@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -40,7 +41,7 @@ public class PauseMenu : MonoBehaviour
     {
         fullMenu.SetActive(false);
         optionsPanel.SetActive(false);
-        racerScript = FindFirstObjectByType<RacerScript>();
+        racerScript = FindFirstObjectByType<RacerScript>();  
     }
 
     void PauseMenuCheck()

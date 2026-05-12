@@ -519,7 +519,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""KeyboardVectorMain"",
                     ""id"": ""35a3b0c2-4411-4aad-9e99-47e668b40bd7"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -574,7 +574,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""KeyboardVectorAlt"",
                     ""id"": ""7e7e9c15-a482-4dfc-a7d1-c36ff5fd8d70"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
