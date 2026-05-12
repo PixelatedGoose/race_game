@@ -49,6 +49,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88c64612206c3a48b2fce788619f0dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  songs:
+  - name: Test 1
+    baseTrack: {fileID: 3833293767795636323}
+    driftTrack: {fileID: 7408274763976493500}
+    turboTrack: {fileID: 6010168533840727549}
+    defaultVolume: 0.3
+  - name: Test 2
+    baseTrack: {fileID: 3833293767795636323}
+    driftTrack: {fileID: 7408274763976493500}
+    turboTrack: {fileID: 6010168533840727549}
+    defaultVolume: 0.3
+  - name: 2321321
+    baseTrack: {fileID: 3833293767795636323}
+    driftTrack: {fileID: 7408274763976493500}
+    turboTrack: {fileID: 6010168533840727549}
+    defaultVolume: 0.3
+  - name: Gdsfsadsa
+    baseTrack: {fileID: 3833293767795636323}
+    driftTrack: {fileID: 7408274763976493500}
+    turboTrack: {fileID: 6010168533840727549}
+    defaultVolume: 0.3
+  - name: mr fucker marvin
+    baseTrack: {fileID: 3833293767795636323}
+    driftTrack: {fileID: 7408274763976493500}
+    turboTrack: {fileID: 6010168533840727549}
+    defaultVolume: 0.3
+  currentSongTracks: []
   resultsTrack: {fileID: 3331578579186659588}
   finalLapTrack: {fileID: 6656484741767390160}
 --- !u!1 &1457124757711282208

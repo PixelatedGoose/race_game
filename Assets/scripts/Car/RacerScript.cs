@@ -28,7 +28,7 @@ public class RacerScript : MonoBehaviour
     private int totalLaps;
 
     private Transform respawnPoint;
-    private musicControl musicControl;
+    private MusicManager musicManager;
     private SFXManager sfxmngr;
 
     private GameObject finalLapImg;
@@ -40,7 +40,7 @@ public class RacerScript : MonoBehaviour
     {
         Controls = new CarInputActions();
         Controls.Enable();
-        musicControl = FindAnyObjectByType<musicControl>();
+        musicManager = FindAnyObjectByType<MusicManager>();
         sfxmngr = FindAnyObjectByType<SFXManager>();
         carController = GetComponent<PlayerCarController>();
         winmenu = FindAnyObjectByType<winmenu>(FindObjectsInactive.Include);
@@ -151,7 +151,7 @@ public class RacerScript : MonoBehaviour
     {
         racestarted = true;
         startTimer = true;
-        musicControl.StartMusicTracks();
+        musicManager.StartMusicTracks();
     }
 
     void HandleStart()
@@ -178,7 +178,7 @@ public class RacerScript : MonoBehaviour
             //FINAL LAP CHECK
             if (currentLap == totalLaps)
             {
-                //musicControl.StartFinalLapTrack();
+                //musicManager.StartFinalLapTrack();
                 LeanTween.value(finalLapImg, finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, 0.0f, 0.6f).setOnUpdate((float val) => { finalLapImg.GetComponent<RectTransform>().anchoredPosition = new Vector2(val, finalLapImg.GetComponent<RectTransform>().anchoredPosition.y); }).setEaseInOutCirc()
                 .setOnComplete(() => LeanTween.value(finalLapImg, finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, -530.0f, 2.4f).setOnUpdate((float val) => { finalLapImg.GetComponent<RectTransform>().anchoredPosition = new Vector2(val, finalLapImg.GetComponent<RectTransform>().anchoredPosition.y); }) .setEaseInExpo());
             }
@@ -225,7 +225,7 @@ public class RacerScript : MonoBehaviour
         for (int i = 0; i < checkpointStates.Length; i++) checkpointStates[i] = false;
         if (startFinishLine != null) startFinishLine.gameObject.SetActive(false);
 
-        musicControl.StopMusicTracks(true);
+        musicManager.StopMusicTracks(true);
         sfxmngr.raceFinished.Play();
         finishedImg.color = new(1f, 1f, 1f, 1f);
         //TODO: erittäin paska tapa ottaa nämä...
@@ -248,7 +248,7 @@ public class RacerScript : MonoBehaviour
         yield return new WaitForSecondsRealtime(2.5f);
 
         if (GameManager.instance.CarUI != null) GameManager.instance.CarUI.SetActive(false);
-        musicControl.resultsTrack.Play();
+        musicManager.resultsTrack.Play();
         winmenu.OnRaceEnd();
         Destroy(FindFirstObjectByType<OptionCategories>(FindObjectsInactive.Include));
     }
