@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using Unity.Splines.Examples;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -22,7 +22,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     float SteerDeadzone = 0.2f;
     float CurrentDriftAngle = 0f;
 
-    float DriftDirection = 0f;
+    float FirstDriftDirection = 0f;
+    float DriftDirectionSteer = 0f;
 
     float RightDriftAngle = 9f;
     float LeftDriftAngle = -9f;
@@ -42,7 +43,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     float basePixel;
     float minPixel = 32f;
 
-    float recoverTime = 4f;
+    float recoverTime = 2f;
 
     Coroutine PixelRecovery;
 
@@ -51,6 +52,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
 
     float GetSteerSign(float steer) => Mathf.Abs(steer) > SteerDeadzone ? Mathf.Sign(steer) : 0f;
+
 
   
       
@@ -181,7 +183,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         TurnSensitivity = CarRb.linearVelocity.magnitude / MaxSpeed * turnSensitivityRange + MaxTurnSensitivity;
         base.FixedUpdate();
-        ApplyDriftForce();
         ApplyDriftTurn();
         // HandleTurbo();
     }
@@ -194,46 +195,29 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 //         TurbeMeter();
 //     }
 
-
-
-
-
     //Arcade car style movement
     protected void CarMovement()
     {
-        Vector3 velocity = CarRb.linearVelocity;
-        float forwardSpeed = Vector3.Dot(velocity, transform.forward);
-        float targetForward = Mathf.MoveTowards(
-            forwardSpeed,
-            MaxSpeed * MovementInputs.y,
+        Vector3 flatForwardVelocity = 
+        transform.forward * Mathf.MoveTowards(
+            Vector3.Dot(CarRb.linearVelocity, transform.forward),
+            MaxSpeed * MovementInputs.y, 
             Acceleration * Time.deltaTime
         );
-
-        Vector3 finalVelocity = transform.forward * targetForward;
-
-        if (IsDrifting)
-        {
-            finalVelocity += transform.right * Vector3.Dot(velocity, transform.right);
-        }
-        else
-        {
-            finalVelocity += transform.right * Mathf.MoveTowards(Vector3.Dot(velocity, transform.right), 0f, driftLateralDamping * Time.deltaTime);
-        }
-
-        finalVelocity.y = velocity.y;
-        CarRb.linearVelocity = finalVelocity;
+        flatForwardVelocity.y = CarRb.linearVelocity.y;
+        CarRb.linearVelocity = flatForwardVelocity;
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (PixelCount == null || collision.impulse.magnitude < 0.1f) return;
 
-
         float impact = Mathf.Clamp01(collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f));
         impact = Mathf.SmoothStep(0f, 1f, impact);
 
         if (PixelRecovery != null) StopCoroutine(PixelRecovery);
         PixelRecovery = StartCoroutine(PixelRecover(Mathf.Lerp(basePixel, minPixel, impact), Mathf.Max(0.1f, recoverTime * impact)));
+
     }
 
     IEnumerator PixelRecover(float hitPixel, float recover)
@@ -257,6 +241,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         }
     }
 
+
     void OnBrakeCanceled(InputAction.CallbackContext ctx)
     {
         foreach (Wheel wheel in Wheels)
@@ -269,38 +254,18 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         if (!IsDrifting) return MovementInputs.x;
 
-        if (Mathf.Approximately(DriftDirection, 0f)) DriftDirection = GetSteerSign(MovementInputs.x);
+        if (Mathf.Approximately(FirstDriftDirection, 0f)) FirstDriftDirection = GetSteerSign(MovementInputs.x);
 
-        return DriftDirection;
+        return FirstDriftDirection;
     }
 
     void ApplyDriftTurn()
     {
         if (!IsDrifting)
             return;
-        CarRb.AddTorque(Vector3.up * DriftDirection * Mathf.Lerp(DriftTurnSpeed, 2f, Mathf.Clamp01(CarRb.linearVelocity.magnitude / Mathf.Max(MaxSpeed, 0.01f))), ForceMode.Acceleration);
+        CarRb.AddRelativeTorque(Vector3.up * FirstDriftDirection * Mathf.Lerp(DriftTurnSpeed, 2f, Mathf.Clamp01(CarRb.linearVelocity.magnitude / Mathf.Max(MaxSpeed, 0.01f))), ForceMode.Acceleration);
+
     }
-
-    void ApplyDriftForce()
-    {
-        if (!IsDrifting)
-            return;
-
-        if (!Mathf.Approximately(GetSteerSign(MovementInputs.x), 0f))
-        {
-            DriftDirection = Mathf.MoveTowards(DriftDirection, Mathf.Lerp(DriftDirection, GetSteerSign(MovementInputs.x), driftInputBias), driftDirectionLerp * Time.fixedDeltaTime);
-        }
-
-        if (Mathf.Approximately(DriftDirection, 0f))
-            return;
-
-        Vector3 velocity = CarRb.linearVelocity;
-        float delta = ( DriftDirection * MaxSpeed * driftLateralSpeedFactor * Mathf.Clamp01( Mathf.Abs(Vector3.Dot(velocity, transform.forward))/ Mathf.Max(MaxSpeed, 0.01f)) - Vector3.Dot(velocity, transform.right)) * driftLateralControl;
-        Vector3 lateralForce = transform.right * (delta * driftForceMultiplier);
-
-        CarRb.AddForce(lateralForce, ForceMode.VelocityChange);
-    }
-
 
     // your car is drifting bro better go and call your insurance company
     void OnDriftPerformed(InputAction.CallbackContext ctx)
@@ -308,7 +273,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         float inputSign = GetSteerSign(MovementInputs.x);
         if (Mathf.Approximately(inputSign, 0f))
             inputSign = Mathf.Sign(Vector3.Dot(CarRb.linearVelocity, transform.right));
-        DriftDirection = inputSign;
+        FirstDriftDirection = inputSign;
 
         CarRb.angularDamping = 0.02f;
         CarRb.linearDamping = 0.08f;
@@ -322,10 +287,16 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         foreach (Wheel wheel in Wheels)
         {
-            WheelFrictionCurve forwwardfriction = wheel.WheelCollider.forwardFriction;
-            forwwardfriction.asymptoteValue = 1f; forwwardfriction.asymptoteSlip = 0.8f;
-            forwwardfriction.extremumValue = 1f; forwwardfriction.extremumSlip = 0.6f;
-            wheel.WheelCollider.forwardFriction = forwwardfriction;
+            WheelFrictionCurve forwardfriction = wheel.WheelCollider.forwardFriction;
+            forwardfriction.asymptoteValue = 1f; 
+            forwardfriction.asymptoteSlip = 0.8f;
+            forwardfriction.extremumValue = 1f; 
+            forwardfriction.extremumSlip = 0.6f;
+            wheel.WheelCollider.forwardFriction = forwardfriction;
+            wheel.WheelCollider.forwardFriction = new()
+            {
+                
+            };
 
             if (wheel.Axel == Axel.Front)
             {
@@ -339,7 +310,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         IsDrifting = false;
         CurrentDriftAngle = 0f;
-        DriftDirection = 0f;
+        FirstDriftDirection = 0f;
         CarRb.angularDamping = baseAngularDamping;
         CarRb.linearDamping = baseLinearDamping;
         AdjustSuspension();
