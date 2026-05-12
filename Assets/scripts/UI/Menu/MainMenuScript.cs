@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
     {
         if (playConfirmPanel != null) playConfirmPanel.SetActive(false);
 
-        LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEase(LeanTweenType.easeOutBounce).setOnStart(() => { menuMusic.Play(); });
+        LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEaseOutBounce().setOnStart(() => { menuMusic.Play(); });
     }
 
     public void MainMenuMusic(bool active)

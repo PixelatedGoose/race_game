@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -7,48 +6,47 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    private GameObject Optionspanel;
+    private GameObject optionsPanel;
     private Selectable firstSelected;
 
     private CarInputActions Controls;
     private RacerScript racerScript;
     private GameObject fullMenu;
-    private musicControl musicCtrl;
+    private MusicManager musicMngr;
 
     void Awake()
     {
         Controls = new CarInputActions();
-        Controls.Enable();
-        Controls.CarControls.pausemenu.performed += PauseMenuCheck;
+        Controls.CarControls.pausemenu.performed += ctx => PauseMenuCheck();
 
         fullMenu = transform.Find("menuCanvas").gameObject;
-        Optionspanel = GetComponentInChildren<OptionScript>().gameObject;
+        optionsPanel = GetComponentInChildren<OptionScript>().gameObject;
         firstSelected = EventSystem.current.firstSelectedGameObject.GetComponent<Selectable>();
-        musicCtrl = FindFirstObjectByType<musicControl>();
+        musicMngr = FindFirstObjectByType<MusicManager>();
     }
 
     private void OnEnable() => Controls.Enable();
     private void OnDisable()
     {
-        Controls.CarControls.pausemenu.performed -= PauseMenuCheck;
+        Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
         Controls.Disable();
     }
     private void OnDestroy()
     {
-        Controls.CarControls.pausemenu.performed -= PauseMenuCheck;
+        Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
         Controls.Disable();
     }
 
     void Start()
     {
         fullMenu.SetActive(false);
-        Optionspanel.SetActive(false);
-        racerScript = FindFirstObjectByType<RacerScript>();
+        optionsPanel.SetActive(false);
+        racerScript = FindFirstObjectByType<RacerScript>();  
     }
 
-    void PauseMenuCheck(InputAction.CallbackContext context)
+    void PauseMenuCheck()
     {
-        if (!Optionspanel.activeSelf && !racerScript.raceFinished && racerScript.racestarted) TogglePauseMenu();
+        if (!optionsPanel.activeSelf && !racerScript.raceFinished && racerScript.racestarted) TogglePauseMenu();
     }
 
     public void TogglePauseMenu()
@@ -57,7 +55,7 @@ public class PauseMenu : MonoBehaviour
         LeanTween.cancel(fullMenu);
         SFXManager SFXMngr = FindFirstObjectByType<SFXManager>();
         Time.timeScale = fullMenu.activeSelf ? 0 : 1;
-        if (musicCtrl != null) musicCtrl.PausedMusicHandler();
+        if (musicMngr != null) musicMngr.PausedMusicHandler();
         if (SFXMngr != null && racerScript.racestarted) SFXMngr.PauseStateHandler();
 
         if (!fullMenu.activeSelf) return;
@@ -69,7 +67,7 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Destroy(musicCtrl); //sillä emme pidä ongelmista
+        Destroy(musicMngr); //sillä emme pidä ongelmista
         SceneManager.LoadSceneAsync("MainMenu");
     }
     public void RestartGame()

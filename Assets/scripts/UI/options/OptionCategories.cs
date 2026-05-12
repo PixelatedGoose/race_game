@@ -65,7 +65,7 @@ public class OptionCategories : MonoBehaviour
     //TODO: parempi tapa ylös liikkumisen tarkistamiseen (OnMove callback todennäkösesti)
     public void SelectNearestOption()
     {
-        if (Controls.CarControls.Move.ReadValue<Vector2>().y <= 0f) return;
+        if (Controls.CarControls.UIMove.ReadValue<Vector2>().y <= 0f) return;
 
         Selectable nearestOption = currentCategory.GetChild(currentCategory.childCount - 1).GetComponentInChildren<Selectable>();
         nearestOption.Select();
