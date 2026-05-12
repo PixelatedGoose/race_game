@@ -97,13 +97,14 @@ public class RacerScript : MonoBehaviour
         if (GameManager.instance.CarUI != null) finalLapImg = GameManager.instance.CarUI.transform.Find("finalLap").gameObject;
         if (PlayerPrefs.GetInt("Reverse") == 1)
         {
+            //TODO: tapa euler anglet
             foreach (Transform checkpoint in checkpoints) checkpoint.eulerAngles = new(checkpoint.eulerAngles.x, checkpoint.eulerAngles.y + 180.0f, checkpoint.eulerAngles.z);
             startFinishLine.eulerAngles = new(startFinishLine.eulerAngles.x, startFinishLine.eulerAngles.y + 180.0f, startFinishLine.eulerAngles.z);
         }
     }
 
     //helper method fadeaamiselle
-    private void FadeGameViewAndRespawn(float length = 0.25f)
+    public void FadeGameViewAndRespawn(float length = 0.25f)
     {
         if (GameManager.IsPaused || !racestarted || raceFinished || FadeState) return;
 

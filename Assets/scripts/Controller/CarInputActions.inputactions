@@ -687,17 +687,6 @@
                 },
                 {
                     "name": "",
-                    "id": "53eaf567-679f-4ba6-8b41-0c75c3757690",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UISubmit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "07b30940-332e-40b1-addf-0e3dab324f65",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
