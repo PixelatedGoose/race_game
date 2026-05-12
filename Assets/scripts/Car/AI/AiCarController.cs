@@ -33,7 +33,6 @@ public class AiCarController : BaseCarController
     private Vector3 targetPoint;
     private int currentWaypointIndex = 0;
     private int waypointSize;
-    private BaseCarController.Wheel[] frontWheels = Array.Empty<BaseCarController.Wheel>();
     private float targetTorque;
     private float moveInput = 0f;
     private int waypointSign = 1;
@@ -56,7 +55,6 @@ public class AiCarController : BaseCarController
 
     override protected void Awake()
     {
-        frontWheels = Wheels.Where(w => w.Axel == Axel.Front).ToArray();
         if (CarRb == null) CarRb = GetComponentInChildren<Rigidbody>();
         CarRb.centerOfMass = DEFAULT_CENTER_OF_MASS;
     }
@@ -101,7 +99,7 @@ public class AiCarController : BaseCarController
             );
 
             // Turn wheels
-            foreach (Wheel wheel in frontWheels) wheel.WheelCollider.steerAngle = CarRb.rotation.y;
+            foreach (Wheel wheel in Wheels.FrontWheels) wheel.collider.steerAngle = CarRb.rotation.y;
         }
 
         AvoidObstacles();
@@ -116,8 +114,8 @@ public class AiCarController : BaseCarController
 
         foreach (Wheel wheel in Wheels)
         {
-            wheel.WheelCollider.motorTorque = targetTorque;
-            wheel.WheelCollider.brakeTorque = 0f;
+            wheel.collider.motorTorque = targetTorque;
+            wheel.collider.brakeTorque = 0f;
         }
     }
 

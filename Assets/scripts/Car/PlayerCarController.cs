@@ -251,7 +251,7 @@ public class PlayerCarController : BaseCarController
     {
         UpdateTargetTorque();
         AdjustSuspension();
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
             if (Controls.CarControls.Brake.IsPressed()) wheel.Brake(BrakeAcceleration);
             else wheel.SetTorque(TargetTorque);
@@ -292,7 +292,6 @@ public class PlayerCarController : BaseCarController
         if (IsDrifting && forwardVel > 0.5f && rawTorque < 0f) rawTorque = 0f;
 
         TargetTorque = rawTorque;
-        Debug.Log(SmoothedMaxAcceleration + " " + IsDrifting);
 
         if (IsDrifting)
         {
@@ -328,16 +327,16 @@ public class PlayerCarController : BaseCarController
         IsDrifting = true;
 
 
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
-            if (wheel.WheelCollider == null) continue;
-            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            if (wheel.collider == null) continue;
+            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
             sideways.extremumSlip   = 0.9f;
             sideways.asymptoteSlip  = 1.6f;
             sideways.extremumValue  = 1.0f;
             sideways.asymptoteValue = 1.2f;
             sideways.stiffness      = 2.0f;
-            wheel.WheelCollider.sidewaysFriction = sideways;
+            wheel.collider.sidewaysFriction = sideways;
         }
 
         CarRb.angularDamping = 0.03f;
@@ -363,14 +362,14 @@ public class PlayerCarController : BaseCarController
 
         CarRb.angularDamping = Mathf.Lerp(CarRb.angularDamping, 0.1f, DeltaTime);
         
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
-            if (wheel.WheelCollider == null) continue;
-            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            if (wheel.collider == null) continue;
+            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
             sideways.stiffness = Mathf.Lerp(sideways.stiffness, 5f, DeltaTime);
             sideways.extremumSlip  = Mathf.Lerp(sideways.extremumSlip, 0.15f, DeltaTime);
             sideways.asymptoteSlip = Mathf.Lerp(sideways.asymptoteSlip, 0.1f, DeltaTime);
-            wheel.WheelCollider.sidewaysFriction = sideways;
+            wheel.collider.sidewaysFriction = sideways;
         }
     }
 

@@ -10,7 +10,7 @@ using UnityEngine.XR;
 [RequireComponent(typeof(PlayerInput))]
 public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 {
-    public CarInputActions Controls { get; protected set; }
+    public CarInputActions Controls { get; protected set; } = new CarInputActions();
     RacerScript racerScript;
     LogitechMovement LGM;
     private string CurrentControlScheme;
@@ -18,10 +18,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     override protected void Awake()
     {
-        Controls = new CarInputActions();
         CarRb = GetComponent<Rigidbody>();
-        TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         racerScript = GetComponent<RacerScript>();
+        TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         TryGetComponent(out LGM);
         
         Controls.Enable();
@@ -111,11 +110,13 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
         MovementInputs = ctx.ReadValue<Vector2>();
+        Steer();
     }
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
         MovementInputs = Vector2.zero;
+        Steer();
     }
 
     override protected void Start()
@@ -131,7 +132,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         Steer();
         CarMovement();
-        ApplySpeedLimit();
         Decelerate();
     }
 
@@ -155,12 +155,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     //Arcade car style movement
     protected void CarMovement()
     {
-        Vector3 flatForwardVelocity = 
-        transform.forward * Mathf.MoveTowards(
-            CarRb.linearVelocity.magnitude,
-            MaxSpeed * Mathf.Abs(MovementInputs.y), 
+        Vector3 flatForwardVelocity = Vector3.Lerp(
+            CarRb.linearVelocity,
+            MaxSpeed * Mathf.Abs(MovementInputs.y) * transform.forward, 
             Acceleration * Time.deltaTime
         );
+
         flatForwardVelocity.y = CarRb.linearVelocity.y;
         CarRb.linearVelocity = flatForwardVelocity;
     }
