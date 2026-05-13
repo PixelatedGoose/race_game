@@ -306,7 +306,6 @@ public class SelectionMenuNewestComboDoubleTroubleExtraSauce : MonoBehaviour
     }
 
     //helper
-    //TODO: päivitä ottamaan huomioon autot (pieni juttu)
     private void ThePanelThing()
     {
         nextButton.SetActive(false);

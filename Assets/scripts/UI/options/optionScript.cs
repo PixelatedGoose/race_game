@@ -20,11 +20,9 @@ public class OptionScript : MonoBehaviour
         OptionsList = GetComponentsInChildren<OptionComponent>(true).ToList();
         if (OptionsList.Count != 0) InitializeOptions();
     }
-
     void Start()
     {
         InitializeVolumeSliders();
-        gameObject.SetActive(false);
     }
 
     public void InitializeOptions()
@@ -41,8 +39,12 @@ public class OptionScript : MonoBehaviour
         //MISTER BARBER DID I NOT TELL YOU TO REMOVE EVERYTHING???
         foreach (var i in AllMixerGroups) main.SetFloat($"{i}_value", Mathf.Log10(PlayerPrefs.GetFloat($"{i}_value_value")) * 20);
 
+        //TODO: korjaa mikä ikinä aiheuttaa errorin restartin yhteydes
         List<AudioSlider> audioSliders = GetComponentsInChildren<AudioSlider>(true).ToList();
-        foreach (var i in audioSliders) { i.volumeSlider.onValueChanged.AddListener((value) => { main.SetFloat(i.volumeSlider.name, Mathf.Log10(i.volumeSlider.value) * 20); }); }
+        foreach (var i in audioSliders)
+        {
+            i.volumeSlider.onValueChanged.AddListener((value) => { main.SetFloat(i.volumeSlider.name, Mathf.Log10(i.volumeSlider.value) * 20); });
+        }
     }
 
     private void InitSpecificOptionValue(Toggle toggle)

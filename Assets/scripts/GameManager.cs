@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+        spawnedCars.Clear();
         Controls = new();
         Controls.Enable();
 
