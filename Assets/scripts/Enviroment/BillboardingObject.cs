@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class BillboardingObject : MonoBehaviour
 {
-    [Header("Variation")]
-    public bool allowScaling = true;
-    public bool allowMirroring = true;
-
     [Tooltip("Minimum scale increase in percent (0 = original size)")]
     [Range(0f, 1f)] public float minScalePercent = 0f;
 
@@ -39,28 +35,16 @@ public class BillboardingObject : MonoBehaviour
     void ApplyVariation()
     {
         originalScale = transform.localScale;
-
         Vector3 scale = originalScale;
-        float factor = 1f;
 
-        if (allowScaling)
-        {
-            factor = 1f + Random.Range(minScalePercent, maxScalePercent);
-            scale *= factor;
-        }
-
-        if (allowMirroring && Random.value > 0.5f)
-        {
-            scale.x *= -1f;
-        }
+        float factor = 1f + Random.Range(minScalePercent, maxScalePercent);
+        scale *= factor;
+        if (Random.value > 0.5f) scale.x *= -1f;
 
         transform.localScale = scale;
 
-        // Compensate for center pivot - lift object so base stays grounded
-        if (allowScaling && factor != 1f)
-        {
-            float heightIncrease = (factor - 1f) * objectHeight * 0.5f;
-            transform.position += Vector3.up * heightIncrease;
-        }
+        if (factor == 1f) return;
+        float heightIncrease = (factor - 1f) * objectHeight * 0.5f;
+        transform.position += Vector3.up * heightIncrease;
     }
 }

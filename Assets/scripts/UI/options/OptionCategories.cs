@@ -24,17 +24,16 @@ public class OptionCategories : MonoBehaviour
     void OnEnable()
     {
         Controls.Enable();
-        Controls.CarControls.carskinright.performed += ctx => ChangeCategoryManual(true);
-        Controls.CarControls.carskinleft.performed += ctx => ChangeCategoryManual(false);
+        Controls.CarControls.carskinright.performed += ctx => ChangeCategory(true);
+        Controls.CarControls.carskinleft.performed += ctx => ChangeCategory(false);
     }
     void OnDestroy()
     {
         Controls.Disable();
-        Controls.CarControls.carskinright.performed -= ctx => ChangeCategoryManual(true);
-        Controls.CarControls.carskinleft.performed -= ctx => ChangeCategoryManual(false);
+        Controls.CarControls.carskinright.performed -= ctx => ChangeCategory(true);
+        Controls.CarControls.carskinleft.performed -= ctx => ChangeCategory(false);
     }
-    //TODO: nvm NVM tää on paskana
-    private void ChangeCategoryManual(bool change)
+    private void ChangeCategory(bool change)
     {
         if (index > CategoryButtonList.Count - 1 || index < 0) return;
         try
@@ -53,10 +52,8 @@ public class OptionCategories : MonoBehaviour
     public void ChangeCategory()
     {
         int previousButtonIndex = index;
-        int currentButtonIndex = CategoryButtonList.IndexOf(currentlySelected.GetComponent<Button>());
-        if (previousButtonIndex == currentButtonIndex) return;
-        index = previousButtonIndex > currentButtonIndex ? index -= 1 : index += 1 ;
-        //Debug.Log($"index: {index}, prev: {previousButtonIndex}, cur: {currentButtonIndex}");
+        index = CategoryButtonList.IndexOf(currentlySelected.GetComponent<Button>());
+        if (previousButtonIndex == index) return;
 
         currentCategory.gameObject.SetActive(true);
         foreach (var a in CategoryContents) if (a != currentCategory) a.gameObject.SetActive(false);
@@ -65,7 +62,7 @@ public class OptionCategories : MonoBehaviour
     //TODO: parempi tapa ylös liikkumisen tarkistamiseen (OnMove callback todennäkösesti)
     public void SelectNearestOption()
     {
-        if (Controls.CarControls.Move.ReadValue<Vector2>().y <= 0f) return;
+        if (Controls.CarControls.UIMove.ReadValue<Vector2>().y <= 0f) return;
 
         Selectable nearestOption = currentCategory.GetChild(currentCategory.childCount - 1).GetComponentInChildren<Selectable>();
         nearestOption.Select();
