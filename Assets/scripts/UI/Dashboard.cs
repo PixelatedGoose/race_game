@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,7 +10,9 @@ public class Dashboard : MonoBehaviour
     private int dashboardCloseTween = -1;
     [SerializeField] private bool ShouldDashboardOpen = false;
     private RectTransform rect;
-    private Button[] dashboardButtons;
+    private Selectable[] dashboardButtons;
+    [SerializeField] private Toggle shuffleToggle;
+    [SerializeField] private Toggle loopToggle;
     private MusicManager musicManager;
 
     private Button firstSelectedButton;
@@ -19,7 +22,7 @@ public class Dashboard : MonoBehaviour
     {
         firstSelectedButton = EventSystem.current.firstSelectedGameObject.GetComponent<Button>();
         rect = GetComponent<RectTransform>();
-        dashboardButtons = GetComponentsInChildren<Button>();
+        dashboardButtons = GetComponentsInChildren<Selectable>();
         musicManager = FindFirstObjectByType<MusicManager>();
         foreach (var b in dashboardButtons) b.interactable = false;
         Controls = new();
@@ -68,11 +71,11 @@ public class Dashboard : MonoBehaviour
     }
     public void Shuffle()
     {
-        musicManager.RandomSong();
+        musicManager.shuffleSong = shuffleToggle.isOn;
     }
     public void LoopSingular()
     {
-        
+        musicManager.loopSong = loopToggle.isOn;
     }
     public void Respawn()
     {

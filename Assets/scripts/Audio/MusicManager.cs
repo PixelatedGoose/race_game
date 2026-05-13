@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,6 @@ public class Song
     public AudioSource baseTrack;
     public AudioSource driftTrack;
     public AudioSource turboTrack;
-    public float defaultVolume;
 }
 public class MusicManager : MonoBehaviour
 {
@@ -20,6 +20,8 @@ public class MusicManager : MonoBehaviour
     private enum CarMusicState {Main, Drift, Turbo};
     private CarMusicState CurrentMusState = CarMusicState.Main;
     private CarMusicState LatestMusState = CarMusicState.Main;
+    public bool shuffleSong;
+    public bool loopSong;
     private int[] activeTweenIDs;
 
     //uniikkeja yksittäisiä biisejä, siksi en laita näille tageja tai arrayta
@@ -106,9 +108,38 @@ public class MusicManager : MonoBehaviour
         }
     }
 
+    //TODO: playlist alkaa eikä vaa yks biisi joka sitte aina vaihetaan
+    /* public IEnumerator BeginSongPlaylist()
+    {
+        if (shuffleSong) currentSong = songs[UnityEngine.Random.Range(0, songs.Count)] ?? currentSong;
+        else currentSong = songs[0];
+        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
+
+        foreach (AudioSource a in currentSongTracks) a.loop = loopSong;
+        StartMusicTracks();
+        
+        while (true)
+        {
+            if (!currentSong.baseTrack.isPlaying && !GameManager.IsPaused)
+            {
+                Debug.Log("song ended! switching to next track...");
+                NextSong();
+                yield return null;
+            }
+        }
+    } */
     public void StartMusicTracks()
     {
-        foreach (AudioSource track in currentSongTracks) track.Play();
+        foreach (AudioSource track in currentSongTracks)
+        {
+            track.loop = loopSong;
+            track.Play();
+        }
+    }
+    public void StopMusicTracks(bool endRaceEvent = false)
+    {
+        foreach (AudioSource track in currentSongTracks) track.Stop();
+        if (endRaceEvent && finalLapTrack != null) finalLapTrack.Stop();
     }
     public void StartFinalLapTrack()
     {
@@ -119,11 +150,6 @@ public class MusicManager : MonoBehaviour
         Controls.CarControls.turbo.canceled -= ctx => TurboCanceled();
         StopMusicTracks();
         finalLapTrack.Play();
-    }
-    public void StopMusicTracks(bool endRaceEvent = false, bool stopFinalLap = false)
-    {
-        foreach (AudioSource track in currentSongTracks) track.Stop();
-        if (endRaceEvent || stopFinalLap && finalLapTrack != null) finalLapTrack.Stop();
     }
 
     /* public void ChangeSong(string newSongName)
@@ -150,6 +176,7 @@ public class MusicManager : MonoBehaviour
         StopMusicTracks();
         currentSong = songs[newSongIndex] ?? currentSong;
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
+        foreach (AudioSource a in currentSongTracks) a.loop = loopSong;
         StartMusicTracks();
         Debug.Log($"changed to song: {currentSong.name}");
     }
@@ -159,6 +186,7 @@ public class MusicManager : MonoBehaviour
         StopMusicTracks();
         currentSong = songs[newSongIndex] ?? currentSong;
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
+        foreach (AudioSource a in currentSongTracks) a.loop = loopSong;
         StartMusicTracks();
         Debug.Log($"changed to song: {currentSong.name}");
     }
