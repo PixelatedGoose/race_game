@@ -292,7 +292,6 @@ public class PlayerCarController : BaseCarController
         if (IsDrifting && forwardVel > 0.5f && rawTorque < 0f) rawTorque = 0f;
 
         TargetTorque = rawTorque;
-        Debug.Log(SmoothedMaxAcceleration + " " + IsDrifting);
 
         if (IsDrifting)
         {

@@ -87,20 +87,6 @@ public class ScoreManager : MonoBehaviour
     public float GetDriftTime() => driftTime;
     public void  SetScoreMultiplier(float m) => scoreMultiplier = m;
 
-    public void SetOnGrass(bool grassContact)
-    {
-        isOnGrass = grassContact;
-        if (isOnGrass && isDriftingActive && driftCompoundMultiplier > 1.01f)
-        {
-            multCounter ??= FindFirstObjectByType<MultCounter>(FindObjectsInactive.Include);
-            touchedGrassWhileDrifting = true;
-            Debug.Log($"[ScoreManager] Grass hit - mult: x{driftCompoundMultiplier:F2}, time: {driftTime:F2}s");
-            multCounter?.UpdateMultiplierText(1f);
-            if (driftMultLost != null) driftMultLost.Play();
-        }
-    }
-
-
     void UpdateBaseScore(float dt, Vector3 vel)
     {
         if (isOnGrass || racerScript == null || racerScript.raceFinished) return;
@@ -132,7 +118,6 @@ public class ScoreManager : MonoBehaviour
         isDriftingActive = true;  driftStartScore = scoreFloat;
         driftSessionBaseGain = 0f; driftCompoundMultiplier = 0.93f;
         driftTime = 0f; touchedGrassWhileDrifting = false;
-        multCounter?.StartMultiplier(1f, 0f, 1);
     }
 
     void EndDrift()
@@ -157,6 +142,7 @@ public class ScoreManager : MonoBehaviour
         if (dt <= 0f || carController?.CarRb == null) return 0f;
         if (vel.magnitude < minForwardSpeed) return 0f;
         if (Mathf.Abs(Vector3.Dot(vel, carController.transform.right)) < minLateralSpeed) return 0f;
+        
         float sharpness = Mathf.Abs(carController.GetDriftSharpness());
         if (sharpness < minSharpnessForScoring) return 0f;
 
