@@ -152,7 +152,7 @@ public class RacerScript : MonoBehaviour
     {
         racestarted = true;
         startTimer = true;
-        musicManager.StartMusicTracks();
+        StartCoroutine(musicManager.BeginSongPlaylist());
     }
 
     void HandleStart()

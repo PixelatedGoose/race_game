@@ -60,7 +60,6 @@ public class Dashboard : MonoBehaviour
     }
 
     //TODO: toggle shuffle ja yksittäisen trackin looppaus
-
     public void PreviousTrack()
     {
         musicManager.PreviousSong();
@@ -75,7 +74,7 @@ public class Dashboard : MonoBehaviour
     }
     public void LoopSingular()
     {
-        musicManager.loopSong = loopToggle.isOn;
+        musicManager.SetLoop(loopToggle.isOn);
     }
     public void Respawn()
     {

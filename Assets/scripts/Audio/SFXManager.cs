@@ -32,17 +32,26 @@ public class SFXManager : MonoBehaviour
     void Awake()
     {
         soundList = GetComponentsInChildren<AudioSource>().Where(a => a.CompareTag("soundFX")).ToList();
+        AudioSource buttonClick = interactableSounds.First(a => a.name == "1_BUTTON");
+        AudioSource toggleOn = interactableSounds.First(a => a.name == "2_1_TOGGLEON");
+        AudioSource toggleOff = interactableSounds.First(a => a.name == "2_2_TOGGLEOFF");
+        AudioSource dropdownOpen = interactableSounds.First(a => a.name == "3_1_DROPDOWNOPEN");
+
         foreach (var i in interactables)
         {
             Selectable tester = GetInteractableComponent(i);
             
-            if (tester is Button button) button.onClick.AddListener(() => { interactableSounds[0].Play(); });
-            else if (tester is Toggle toggle) toggle.onValueChanged.AddListener((value) => { interactableSounds[1].Play(); });
-            else if (tester is Slider slider) slider.onValueChanged.AddListener((value) => { interactableSounds[2].Play(); });
+            if (tester is Button button) button.onClick.AddListener(() => { buttonClick.Play(); });
+            else if (tester is Toggle toggle) toggle.onValueChanged.AddListener((value) =>
+            {
+                if (value) toggleOn.Play();
+                else toggleOff.Play();
+            });
+            //else if (tester is Slider slider) slider.onValueChanged.AddListener((value) => {});
             else if (tester is TMP_Dropdown dropdown)
             {
                 DropdownOpenSFX openSFX = dropdown.gameObject.AddComponent<DropdownOpenSFX>();
-                openSFX.dropdownOpen = interactableSounds[3];
+                openSFX.dropdownOpen = dropdownOpen;
                 //TODO: dropdown SFX jollai muulla event paskalla
             }
         }
@@ -53,13 +62,13 @@ public class SFXManager : MonoBehaviour
     //voi aiheuttaa hieman paskasta toimintaa mutta tbf emme ole idiootteja
 
     /// <param name="obj"></param>
-    /// <returns>Selectable component (e.g. Button, Toggle, Slider or Dropdown)</returns>
+    /// <returns>Selectable component (e.g. Button, Toggle)</returns>
     /// <exception cref="NullReferenceException"></exception>
     private Selectable GetInteractableComponent(GameObject obj)
     {
         if (obj.TryGetComponent(out Button button)) return button;
         else if (obj.TryGetComponent(out Toggle toggle)) return toggle;
-        else if (obj.TryGetComponent(out Slider slider)) return slider;
+        //else if (obj.TryGetComponent(out Slider slider)) return slider;
         else if (obj.TryGetComponent(out TMP_Dropdown dropdown)) return dropdown;
 
         List<Transform> objList = new(obj.GetComponentsInChildren<Transform>());
@@ -68,7 +77,7 @@ public class SFXManager : MonoBehaviour
         {
             if (i.gameObject.TryGetComponent(out Button buttonFromObj)) return buttonFromObj;
             else if (i.gameObject.TryGetComponent(out Toggle toggleFromObj)) return toggleFromObj;
-            else if (i.gameObject.TryGetComponent(out Slider sliderFromObj)) return sliderFromObj;
+            //else if (i.gameObject.TryGetComponent(out Slider sliderFromObj)) return sliderFromObj;
             else if (i.gameObject.TryGetComponent(out TMP_Dropdown dropdownFromObj)) return dropdownFromObj;
         }
 

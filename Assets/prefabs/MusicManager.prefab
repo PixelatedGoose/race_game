@@ -49,19 +49,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   songs:
-  - name: Test 1
+  - name: the driftening or some shit
     baseTrack: {fileID: 3833293767795636323}
     driftTrack: {fileID: 7408274763976493500}
     turboTrack: {fileID: 6010168533840727549}
-  - name: Test 2
+  - name: Fuck
     baseTrack: {fileID: 3923083967160925386}
     driftTrack: {fileID: 5880681993786084935}
     turboTrack: {fileID: 6662910679994851052}
-  - name: 2321321
+  - name: the driftening or some shit copy
     baseTrack: {fileID: 3833293767795636323}
     driftTrack: {fileID: 7408274763976493500}
     turboTrack: {fileID: 6010168533840727549}
   currentSongTracks: []
+  shuffleSong: 0
+  loopSong: 0
   resultsTrack: {fileID: 3331578579186659588}
   finalLapTrack: {fileID: 6656484741767390160}
 --- !u!1 &1457124757711282208
@@ -238,7 +240,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 418434143124186974, guid: 3b98bec6362893c4588f31bafaf63d26, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: f5eb30bd93428444d831337a8ec3c135, type: 3}
+  m_Resource: {fileID: 8300000, guid: 058fa7b7472ad4a4390163cdb53b7f34, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1
@@ -367,7 +369,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 418434143124186974, guid: 3b98bec6362893c4588f31bafaf63d26, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: f5eb30bd93428444d831337a8ec3c135, type: 3}
+  m_Resource: {fileID: 8300000, guid: 058fa7b7472ad4a4390163cdb53b7f34, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1
@@ -496,7 +498,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 418434143124186974, guid: 3b98bec6362893c4588f31bafaf63d26, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: f5eb30bd93428444d831337a8ec3c135, type: 3}
+  m_Resource: {fileID: 8300000, guid: 058fa7b7472ad4a4390163cdb53b7f34, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1

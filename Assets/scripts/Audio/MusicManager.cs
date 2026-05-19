@@ -109,27 +109,24 @@ public class MusicManager : MonoBehaviour
     }
 
     //TODO: playlist alkaa eikä vaa yks biisi joka sitte aina vaihetaan
-    /* public IEnumerator BeginSongPlaylist()
+    public IEnumerator BeginSongPlaylist()
     {
-        if (shuffleSong) currentSong = songs[UnityEngine.Random.Range(0, songs.Count)] ?? currentSong;
-        else currentSong = songs[0];
-        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
-
-        foreach (AudioSource a in currentSongTracks) a.loop = loopSong;
         StartMusicTracks();
         
-        while (true)
+        //tää silti pitää saaha toimimaan...
+        while (!currentSong.baseTrack.isPlaying && !GameManager.IsPaused)
         {
-            if (!currentSong.baseTrack.isPlaying && !GameManager.IsPaused)
-            {
-                Debug.Log("song ended! switching to next track...");
-                NextSong();
-                yield return null;
-            }
+            Debug.Log("song ended! switching to next track...");
+            NextSong();
+            yield return null;
         }
-    } */
+    }
+
     public void StartMusicTracks()
     {
+        if (shuffleSong) currentSong = songs[UnityEngine.Random.Range(0, songs.Count)] ?? currentSong;
+        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
+
         foreach (AudioSource track in currentSongTracks)
         {
             track.loop = loopSong;
@@ -175,8 +172,6 @@ public class MusicManager : MonoBehaviour
         int newSongIndex = (songs.IndexOf(currentSong) + 1) < songs.Count ? songs.IndexOf(currentSong) + 1 : 0;
         StopMusicTracks();
         currentSong = songs[newSongIndex] ?? currentSong;
-        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
-        foreach (AudioSource a in currentSongTracks) a.loop = loopSong;
         StartMusicTracks();
         Debug.Log($"changed to song: {currentSong.name}");
     }
@@ -185,18 +180,21 @@ public class MusicManager : MonoBehaviour
         int newSongIndex = (songs.IndexOf(currentSong) - 1) >= 0 ? songs.IndexOf(currentSong) - 1 : songs.Count - 1;
         StopMusicTracks();
         currentSong = songs[newSongIndex] ?? currentSong;
-        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
-        foreach (AudioSource a in currentSongTracks) a.loop = loopSong;
         StartMusicTracks();
         Debug.Log($"changed to song: {currentSong.name}");
     }
-    public void RandomSong()
+    /* public void RandomSong()
     {
         StopMusicTracks();
         currentSong = songs[UnityEngine.Random.Range(0, songs.Count)] ?? currentSong;
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
         StartMusicTracks();
         Debug.Log($"changed to song: {currentSong.name}");
+    } */
+    public void SetLoop(bool loop)
+    {
+        loopSong = loop;
+        foreach (AudioSource a in currentSongTracks) a.loop = loop;
     }
 
     public void PausedMusicHandler()
