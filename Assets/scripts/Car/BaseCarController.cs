@@ -60,6 +60,7 @@ public class BaseCarController : MonoBehaviour
         MpsMaxSpeed = MaxSpeed / 3.6f;
         turnSensitivityRange = MaxTurnSensitivity - MinTurnSensitivity;
         TryGetComponent(out turbo);
+        AutoAssignWheelsAndMaterials();
     }
 
     virtual protected void Start()

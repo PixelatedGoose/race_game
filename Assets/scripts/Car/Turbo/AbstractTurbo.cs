@@ -41,7 +41,8 @@ public abstract class Turbo : MonoBehaviour
         if (amount <= 0) return;
 
         carController.IsTurboActive = true;
-        StopCoroutine(turboCoroutine);
+
+        if (turboCoroutine != null) StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Consume());
     }
 

@@ -4,8 +4,8 @@ using System.Linq;
 using UnityEngine;
 
 // This is a script containing 2 different classes, Wheel and Wheels, 
-// where Wheels is in effect an array containing Wheel
-// Wheels also contains utility functions and other things
+// where Wheels is basically an array containing 4 instances of Wheel.
+// Wheels also contains utility functions.
 
 public class Wheel
 {
