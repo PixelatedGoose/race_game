@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -18,23 +16,18 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     private Material carLightsMaterial;
     public Material PixelCount;
 
-    float DriftTurnSpeed = 3.5f;
-    float DriftTurn = 1.2f;
+
     float SteerDeadzone = 0.2f;
-    float CurrentDriftAngle = 0f;
 
     float FirstDriftDirection = 0f;
     float DriftDirectionSteer = 0f;
 
-    float RightDriftAngle = 9f;
-    float LeftDriftAngle = -9f;
-
     private float driftRearSidewaysStiffness = 2.0f;
     private float driftSteerMultiplierMin = 0f;
     private float driftSteerMultiplierMax = 2f;
-    [SerializeField] private float driftSameSteerBoost = 0.7f;
-    [SerializeField] private float driftOppositeSteerBoost = 0.35f;
-    [SerializeField] private float driftInitialSteerMultiplier = 0.6f;
+    private float driftSameSteerBoost = 0.4f;
+    private float driftOppositeSteerBoost = 0.75f;
+    private float driftInitialSteerMultiplier = 0.6f;
 
     private readonly Dictionary<WheelCollider, float> rearSidewaysStiffnessCache = new();
   
@@ -84,7 +77,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         if (turbo != null)
         {
             Controls.CarControls.turbo.started += context => { turbo.Activate(); };
-            Controls.CarControls.turbo.performed += context => { turbo.Stop(); };
+            Controls.CarControls.turbo.canceled += context => { turbo.Stop(); };
         }
     }
 
@@ -223,14 +216,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Vector3 newVelocity = forward * forwardSpeed;
         if (IsDrifting)
         {
-            Vector3 right = transform.right;
-            newVelocity += right * Vector3.Dot(CarRb.linearVelocity, right);
+            newVelocity += transform.right * Vector3.Dot(CarRb.linearVelocity, transform.right);
             Vector3 horizontal = new Vector3(newVelocity.x, 0f, newVelocity.z);
             if (horizontal.magnitude > 0.01f && Mathf.Abs(forwardSpeed) > 0.01f)
             {
                 horizontal = horizontal / horizontal.magnitude * Mathf.Abs(forwardSpeed);
-                newVelocity.x = horizontal.x;
-                newVelocity.z = horizontal.z;
+                newVelocity.x = horizontal.x; newVelocity.z = horizontal.z;
             }
         }
 
@@ -298,22 +289,20 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         float initialFactor = 1f;
         if (driftLockTimestamp > 0f && driftLockTime > 0f)
         {
-            float t = Mathf.Clamp01((Time.time - driftLockTimestamp) / driftLockTime);
-            initialFactor = Mathf.Lerp(driftInitialSteerMultiplier, 1f, t);
+            initialFactor = Mathf.Lerp(driftInitialSteerMultiplier, 1f, Mathf.Clamp01((Time.time - driftLockTimestamp) / driftLockTime));
         }
         driftMultiplier *= driftSameSteerBoost * initialFactor;
-        float lerpSpeed = driftDirectionLerp;
         bool isOpposite = false;
 
         if (!Mathf.Approximately(inputSign, 0f) && inputSign != FirstDriftDirection)
         {
-            steerDirection = inputSign;
             driftMultiplier = RemapSteerToDriftMultiplier(MovementInputs.x, inputSign) * driftOppositeSteerBoost;
             isOpposite = true;
         }
 
-        if (isOpposite) lerpSpeed *= 0.5f;
-        DriftDirectionSteer = Mathf.Lerp(DriftDirectionSteer, steerDirection, Time.deltaTime * lerpSpeed);
+        if (isOpposite) driftMultiplier *= 0.5f;
+        
+        DriftDirectionSteer = Mathf.Lerp(DriftDirectionSteer, steerDirection, Time.deltaTime * driftDirectionLerp);
         return DriftDirectionSteer * driftMultiplier;
     }
 
@@ -322,6 +311,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         return Mathf.Abs(steer) < SteerDeadzone ? 0f : steer;
     }
 
+    
     float RemapSteerToDriftMultiplier(float steer, float driftDirection)
     {
         if (Mathf.Approximately(driftDirection, 0f)) return 0f;
@@ -331,6 +321,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         return Remap(steer, -1f, 1f, outMin, outMax);
     }
 
+    //this is to remap the normal left to right values from -1 - 1 to -1, 0, 1, 2. for better feeling for this drift 
     static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
     {
         if (Mathf.Approximately(inMin, inMax)) return outMin;
@@ -372,7 +363,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     void EndDrift()
     {
         IsDrifting = false;
-        CurrentDriftAngle = 0f;
         FirstDriftDirection = 0f;
         DriftDirectionSteer = 0f;
         driftLockTimestamp = -1f;
