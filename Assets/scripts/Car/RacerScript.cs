@@ -152,7 +152,7 @@ public class RacerScript : MonoBehaviour
     {
         racestarted = true;
         startTimer = true;
-        StartCoroutine(musicManager.BeginSongPlaylist());
+        musicManager.StartMusicPlayback();
     }
 
     void HandleStart()
@@ -179,7 +179,7 @@ public class RacerScript : MonoBehaviour
             //FINAL LAP CHECK
             if (currentLap == totalLaps)
             {
-                //musicManager.StartFinalLapTrack();
+                //musicManager.StartFinalLapSong();
                 LeanTween.value(finalLapImg, finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, 0.0f, 0.6f).setOnUpdate((float val) => { finalLapImg.GetComponent<RectTransform>().anchoredPosition = new Vector2(val, finalLapImg.GetComponent<RectTransform>().anchoredPosition.y); }).setEaseInOutCirc()
                 .setOnComplete(() => LeanTween.value(finalLapImg, finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, -530.0f, 2.4f).setOnUpdate((float val) => { finalLapImg.GetComponent<RectTransform>().anchoredPosition = new Vector2(val, finalLapImg.GetComponent<RectTransform>().anchoredPosition.y); }) .setEaseInExpo());
             }
@@ -226,7 +226,7 @@ public class RacerScript : MonoBehaviour
         for (int i = 0; i < checkpointStates.Length; i++) checkpointStates[i] = false;
         if (startFinishLine != null) startFinishLine.gameObject.SetActive(false);
 
-        musicManager.StopMusicTracks(true);
+        musicManager.StopSong(true);
         sfxmngr.raceFinished.Play();
         finishedImg.color = new(1f, 1f, 1f, 1f);
         //TODO: erittäin paska tapa ottaa nämä...

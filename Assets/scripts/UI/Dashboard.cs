@@ -42,17 +42,16 @@ public class Dashboard : MonoBehaviour
 
     private void ToggleDashboard()
     {
+        LeanTween.cancel(rect);
         ShouldDashboardOpen = !ShouldDashboardOpen;
         if (ShouldDashboardOpen)
         {
-            LeanTween.cancel(dashboardOpenTween);
             foreach (var b in dashboardButtons) b.interactable = true;
             firstSelectedDashboardButton.Select();
             dashboardOpenTween = LeanTween.value(rect.anchoredPosition.x, -5.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true).id;
         }
         else
         {
-            LeanTween.cancel(dashboardCloseTween);
             foreach (var b in dashboardButtons) b.interactable = false;
             firstSelectedButton.Select();
             dashboardCloseTween = LeanTween.value(rect.anchoredPosition.x, 265.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true).id;
@@ -60,6 +59,10 @@ public class Dashboard : MonoBehaviour
     }
 
     //TODO: toggle shuffle ja yksittäisen trackin looppaus
+    public void PlayAndPause()
+    {
+        musicManager.PauseSong();
+    }
     public void PreviousTrack()
     {
         musicManager.PreviousSong();
