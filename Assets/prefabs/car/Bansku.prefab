@@ -2064,7 +2064,7 @@ MonoBehaviour:
   MinTurnSensitivity: 17.5
   MaxTurnSensitivity: 30
   SteerStrength: 10
-  MaxSpeed: 180
+  MaxSpeed: 130
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60
@@ -2179,6 +2179,7 @@ MonoBehaviour:
   consumeRate: 10
   regenerationRate: 10
   waitTime: 1
+  maxSpeedMultiplier: 1.3
 --- !u!1 &6464818183039503655
 GameObject:
   m_ObjectHideFlags: 0

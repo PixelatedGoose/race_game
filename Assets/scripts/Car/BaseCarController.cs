@@ -17,7 +17,8 @@ public class BaseCarController : MonoBehaviour
     [SerializeField] protected float MaxTurnSensitivity = 30.0f;
     [SerializeField] protected float SteerStrength = 10.0f;
     protected float turnSensitivityRange;
-    public float MaxSpeed = 180.0f;
+    public float MaxSpeed = 130.0f;
+    private float BaseMaxSpeed;
     /// <summary>
     /// Max speed in meters per second.
     /// </summary>
@@ -50,13 +51,11 @@ public class BaseCarController : MonoBehaviour
     [NonSerialized] public bool CanUseTurbo = true;
     protected Collider carCollider;
     public Vector3 CarExtents { get; protected set; }
-    protected Turbo turbo;
-
-
+    protected AbstractTurbo turbo;
 
     virtual protected void Awake()
     {
-
+        BaseMaxSpeed = MaxSpeed;
         MpsMaxSpeed = MaxSpeed / 3.6f;
         turnSensitivityRange = MaxTurnSensitivity - MinTurnSensitivity;
         TryGetComponent(out turbo);
@@ -72,6 +71,7 @@ public class BaseCarController : MonoBehaviour
 
     virtual protected void FixedUpdate()
     {
+        Debug.Log(MaxSpeed);
         ApplySpeedLimit();
     }
 
@@ -125,6 +125,8 @@ public class BaseCarController : MonoBehaviour
         //     Wheels.Add(wheel);
         // }
     }
+
+    public void ResetMaxSpeed() => MaxSpeed = BaseMaxSpeed;
 
     protected void AdjustSuspension()
     {

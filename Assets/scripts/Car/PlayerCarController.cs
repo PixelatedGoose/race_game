@@ -42,7 +42,7 @@ public class PlayerCarController : BaseCarController
         if (turbo != null)
         {
             Controls.CarControls.turbo.started += context => { turbo.Activate(); };
-            Controls.CarControls.turbo.performed += context => { turbo.Stop(); };
+            Controls.CarControls.turbo.canceled += context => { turbo.Stop(); };
         }
     }
 
@@ -189,10 +189,10 @@ public class PlayerCarController : BaseCarController
     {
         if (!IsDrifting) return;
 
-        if (IsTurboActive)
-            MaxSpeed = Mathf.Lerp(MaxSpeed, BaseSpeed + Turbesped, Time.deltaTime * 0.5f);
-        else
-            MaxSpeed = Mathf.Lerp(MaxSpeed, DriftMaxSpeed, Time.deltaTime * 0.1f);
+        // if (IsTurboActive)
+        //     MaxSpeed = Mathf.Lerp(MaxSpeed, BaseSpeed + Turbesped, Time.deltaTime * 0.5f);
+        // else
+        //     MaxSpeed = Mathf.Lerp(MaxSpeed, DriftMaxSpeed, Time.deltaTime * 0.1f);
 
         
         if (Mathf.Abs(MovementInputs.x) > 0.1f)
@@ -300,7 +300,7 @@ public class PlayerCarController : BaseCarController
 
         if (!IsDrifting)
         {
-            MaxSpeed = Mathf.Lerp(MaxSpeed, IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed, Time.deltaTime);
+            // MaxSpeed = Mathf.Lerp(MaxSpeed, IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed, Time.deltaTime);
         }
     }
 
@@ -383,44 +383,44 @@ public class PlayerCarController : BaseCarController
 
         float turbe = Mathf.InverseLerp(6f, 10f, driftmultiplier);
         float TurbeStrength = Mathf.Lerp(1f, 3f, turbe);
-        float Duration = 3.5f;
+        // float Duration = 3.5f;
 
         if (TurbeBoost != null)
             StopCoroutine(TurbeBoost);
 
-        TurbeBoost = StartCoroutine(BoostCoroutine(TurbeStrength, Duration));
+        // TurbeBoost = StartCoroutine(BoostCoroutine(TurbeStrength, Duration));
     }
 
-    protected IEnumerator BoostCoroutine(float turboStrength, float durationOverride = -1f)
-    {
+    // protected IEnumerator BoostCoroutine(float turboStrength, float durationOverride = -1f)
+    // {
 
-        float GetCurrentBaseSpeed() => IsDrifting
-            ? (IsTurboActive ? BaseSpeed + Turbesped : DriftMaxSpeed)
-            : (IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed);
+    //     float GetCurrentBaseSpeed() => IsDrifting
+    //         ? (IsTurboActive ? BaseSpeed + Turbesped : DriftMaxSpeed)
+    //         : (IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed);
 
-        float originalSpeed = GetCurrentBaseSpeed();
-        float boostedMax = Mathf.Max(BaseSpeed + Turbesped, originalSpeed + turboStrength);
+    //     float originalSpeed = GetCurrentBaseSpeed();
+    //     float boostedMax = Mathf.Max(BaseSpeed + Turbesped, originalSpeed + turboStrength);
 
 
-        float duration = durationOverride > 0f
-            ? durationOverride
-            : Mathf.Lerp(2.5f, 4.5f, Mathf.InverseLerp(2f, 5f, turboStrength));
+    //     float duration = durationOverride > 0f
+    //         ? durationOverride
+    //         : Mathf.Lerp(2.5f, 4.5f, Mathf.InverseLerp(2f, 5f, turboStrength));
 
-        float timer = 0f;
+    //     float timer = 0f;
 
-        while (timer < duration)
-        {
-            timer += Time.deltaTime;
-            float smooth = Mathf.SmoothStep(0f, 1f, timer / duration);
+    //     while (timer < duration)
+    //     {
+    //         timer += Time.deltaTime;
+    //         float smooth = Mathf.SmoothStep(0f, 1f, timer / duration);
 
-            float expo = 1f - Mathf.Exp(-12f * timer / duration);
-            CarRb.AddForce(transform.forward * turboStrength * 2.5f * expo * Time.deltaTime, ForceMode.VelocityChange);
+    //         float expo = 1f - Mathf.Exp(-12f * timer / duration);
+    //         CarRb.AddForce(transform.forward * turboStrength * 2.5f * expo * Time.deltaTime, ForceMode.VelocityChange);
 
-            MaxSpeed = Mathf.Lerp(MaxSpeed, Mathf.Lerp(boostedMax, GetCurrentBaseSpeed(), smooth), Time.deltaTime * 2f);
+    //         MaxSpeed = Mathf.Lerp(MaxSpeed, Mathf.Lerp(boostedMax, GetCurrentBaseSpeed(), smooth), Time.deltaTime * 2f);
 
-            yield return null;
-        }
-        MaxSpeed = GetCurrentBaseSpeed();
-        TurbeBoost = null;
-    }
+    //         yield return null;
+    //     }
+    //     MaxSpeed = GetCurrentBaseSpeed();
+    //     TurbeBoost = null;
+    // }
 }

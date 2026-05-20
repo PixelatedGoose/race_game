@@ -5,7 +5,7 @@ using UnityEngine;
 // Override the Use() function to apply logic when player is using turbo
 
 [RequireComponent(typeof(BaseCarController))]
-public abstract class Turbo : MonoBehaviour
+public abstract class AbstractTurbo : MonoBehaviour
 {
     [Tooltip("How strong the turbo is")]
     [SerializeField] protected float strength = 10f;
@@ -49,16 +49,15 @@ public abstract class Turbo : MonoBehaviour
     public virtual void Stop()
     {
         carController.IsTurboActive = false;
-        StopCoroutine(turboCoroutine);
+        if (turboCoroutine != null) StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Regenerate());
     }
-
 
     protected virtual IEnumerator Consume()
     {
         while (amount > 0)
         {
-            amount = Mathf.Lerp(amount, 0, consumeRate * Time.deltaTime);
+            amount = amount > 1E-03f ? Mathf.Lerp(amount, 0, consumeRate * Time.deltaTime) : 0;
             Use();
             yield return null;
         }
