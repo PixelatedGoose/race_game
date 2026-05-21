@@ -14,6 +14,7 @@ public class Dashboard : MonoBehaviour
 
     private Button firstSelectedButton;
     [SerializeField] private Button firstSelectedDashboardButton;
+    private CarColors colors;
 
     private void Awake()
     {
@@ -79,5 +80,10 @@ public class Dashboard : MonoBehaviour
     public void Respawn()
     {
         GameManager.racerscript.FadeGameViewAndRespawn();
+    }
+    public void Lights()
+    {
+        if (colors == null) colors = GameManager.CurrentCar.GetComponent<CarColors>();
+        colors.ToggleLights();
     }
 }

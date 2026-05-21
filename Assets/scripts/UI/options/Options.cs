@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine.Audio;
 using TMPro;
 
-public class OptionScript : MonoBehaviour
+public class Options : MonoBehaviour
 {
     public Material pixelCount;
     private List<OptionComponent> OptionsList;
@@ -23,6 +23,7 @@ public class OptionScript : MonoBehaviour
     void Start()
     {
         InitializeVolumeSliders();
+        gameObject.SetActive(false);
     }
 
     public void InitializeOptions()
