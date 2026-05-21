@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using TMPro;
 
-public class winmenu : MonoBehaviour
+public class WinMenu : MonoBehaviour
 {
     private GameObject[] endButtons;
     private GameObject[] otherStuff;

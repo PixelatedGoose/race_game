@@ -83,7 +83,7 @@ public class Dashboard : MonoBehaviour
     }
     public void Lights()
     {
-        if (colors == null) colors = GameManager.CurrentCar.GetComponent<CarColors>();
+        if (colors == null) colors = GameManager.CurrentCar.GetComponentInChildren<CarColors>();
         colors.ToggleLights();
     }
 }

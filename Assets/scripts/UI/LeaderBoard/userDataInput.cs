@@ -21,7 +21,7 @@ public class userDataInput : MonoBehaviour
     };
     [SerializeField] private Text bannedPopup;
     private Button enter;
-    private winmenu winmenu;
+    private WinMenu winmenu;
     private HashSet<string> bannedRegexWords;
 
     void OnEnable()
@@ -38,7 +38,7 @@ public class userDataInput : MonoBehaviour
 
     void Start()
     {
-        winmenu = GetComponent<winmenu>();
+        winmenu = GetComponent<WinMenu>();
     }
     
     [Serializable]

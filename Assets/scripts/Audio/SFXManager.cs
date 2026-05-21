@@ -17,6 +17,7 @@ public class SFXManager : MonoBehaviour
     public AudioSource nextLap;
     public AudioSource raceFinished;
     public AudioSource playerRespawn;
+    [SerializeField] private AudioSource lights;
 
     [ContextMenu("Assign SFX")]
     void FindSounds()
@@ -56,6 +57,8 @@ public class SFXManager : MonoBehaviour
                 //TODO: dropdown SFX jollai muulla event paskalla
             }
         }
+
+        GameManager.CurrentCar.GetComponentInChildren<CarColors>().lights = lights;
     }
 
     //TODO: muuttaa hiukan paremmaks, mutta tarpeeks hyvä atm

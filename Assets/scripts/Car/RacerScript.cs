@@ -34,7 +34,7 @@ public class RacerScript : MonoBehaviour
     private GameObject finalLapImg;
 
     private PlayerCarController carController;
-    private winmenu winmenu;
+    private WinMenu winmenu;
 
     void Awake()
     {
@@ -43,7 +43,7 @@ public class RacerScript : MonoBehaviour
         musicManager = FindAnyObjectByType<MusicManager>();
         sfxmngr = FindAnyObjectByType<SFXManager>();
         carController = GetComponent<PlayerCarController>();
-        winmenu = FindAnyObjectByType<winmenu>(FindObjectsInactive.Include);
+        winmenu = FindAnyObjectByType<WinMenu>(FindObjectsInactive.Include);
     }
 
     private void OnEnable()
