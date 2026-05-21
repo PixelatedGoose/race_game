@@ -1251,6 +1251,7 @@ MonoBehaviour:
   carLightsToggle: {fileID: 3418866985226279291}
   nextLap: {fileID: 721027988876801893}
   raceFinished: {fileID: 4651818402737710863}
+  playerRespawn: {fileID: 6360050011651059256}
 --- !u!1 &5151634483069621634
 GameObject:
   m_ObjectHideFlags: 0
