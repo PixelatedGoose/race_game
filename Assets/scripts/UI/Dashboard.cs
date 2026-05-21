@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,8 +5,6 @@ using UnityEngine.UI;
 public class Dashboard : MonoBehaviour
 {
     private CarInputActions Controls;
-    private int dashboardOpenTween = -1;
-    private int dashboardCloseTween = -1;
     [SerializeField] private bool ShouldDashboardOpen = false;
     private RectTransform rect;
     private Selectable[] dashboardButtons;
@@ -48,13 +45,13 @@ public class Dashboard : MonoBehaviour
         {
             foreach (var b in dashboardButtons) b.interactable = true;
             firstSelectedDashboardButton.Select();
-            dashboardOpenTween = LeanTween.value(rect.anchoredPosition.x, -5.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true).id;
+            LeanTween.value(rect.anchoredPosition.x, -5.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true);
         }
         else
         {
             foreach (var b in dashboardButtons) b.interactable = false;
             firstSelectedButton.Select();
-            dashboardCloseTween = LeanTween.value(rect.anchoredPosition.x, 265.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true).id;
+            LeanTween.value(rect.anchoredPosition.x, 320.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true);
         }
     }
 

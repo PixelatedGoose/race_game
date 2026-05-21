@@ -16,6 +16,7 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioSource carLightsToggle;
     public AudioSource nextLap;
     public AudioSource raceFinished;
+    public AudioSource playerRespawn;
 
     [ContextMenu("Assign SFX")]
     void FindSounds()

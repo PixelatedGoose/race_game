@@ -109,6 +109,7 @@ public class RacerScript : MonoBehaviour
         if (GameManager.IsPaused || !racestarted || raceFinished || FadeState) return;
 
         FadeState = true;
+        sfxmngr.playerRespawn.Play();
         LeanTween.value(respawnfade.GetComponent<RawImage>().color.a, 1f, length).setOnUpdate((float val) =>
         {
             var img = respawnfade.GetComponent<RawImage>();
