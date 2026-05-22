@@ -1014,7 +1014,7 @@ MonoBehaviour:
     Axel: 0
     trailRenderer: {fileID: 9005531565795757299}
   - WheelModel: {fileID: 742366007508499148}
-    WheelCollider: {fileID: 8795832801714016059}
+    WheelCollider: {fileID: 4594780843961564118}
     WheelEffectobj: {fileID: 3172822010265455929}
     SmokeParticle: {fileID: 234832648449404130}
     Axel: 1
@@ -1025,8 +1025,6 @@ MonoBehaviour:
     SmokeParticle: {fileID: 688611208309200021}
     Axel: 1
     trailRenderer: {fileID: 6188845243956253520}
-  MoveInput: 0
-  SteerInput: 0
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60
@@ -1039,7 +1037,26 @@ MonoBehaviour:
   TurbeWaitTime: 2
   carLights: {fileID: 3931564701789026679}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
-  DriftTurnSpeedAtHighSpeed: 2
+  driftRearSidewaysStiffness: 1.6
+  counterSteerGripMultiplier: 1.35
+  driftYawAssist: 3.5
+  counterYawMultiplier: 0.4
+  driftAngularDrag: 0.5
+  driftLinearDrag: 0.05
+  steerDeadzone: 0.15
+  driftforwardStabilize: 0
+  driftLockTime: 0.22
+  steerSmooth: 8
+  driftBiasSet: 5.5
+  driftLateralSpeedFactor: 1
+  driftLateralControl: 1
+  driftLateralDamping: 1
+  driftForceMultiplier: 4
+  driftInputBias: 0.6
+  driftDirectionLerp: 8
+  driftInputBiasLowSpeed: 0.2
+  driftAssistMinSpeed: 3
+  driftAssistMaxSpeed: 18
 --- !u!114 &2285249159904490474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1084,8 +1101,6 @@ MonoBehaviour:
     SmokeParticle: {fileID: 688611208309200021}
     Axel: 1
     trailRenderer: {fileID: 6188845243956253520}
-  MoveInput: 0
-  SteerInput: 0
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60
@@ -1129,7 +1144,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 3
-  lights: {fileID: 0}
 --- !u!114 &2608171001088632632
 MonoBehaviour:
   m_ObjectHideFlags: 0
