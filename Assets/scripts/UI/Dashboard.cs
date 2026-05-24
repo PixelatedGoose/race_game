@@ -5,21 +5,22 @@ using UnityEngine.UI;
 public class Dashboard : MonoBehaviour
 {
     private CarInputActions Controls;
-    private int dashboardOpenTween = -1;
-    private int dashboardCloseTween = -1;
     [SerializeField] private bool ShouldDashboardOpen = false;
     private RectTransform rect;
-    private Button[] dashboardButtons;
+    private Selectable[] dashboardButtons;
+    [SerializeField] private Toggle shuffleToggle;
+    [SerializeField] private Toggle loopToggle;
     private MusicManager musicManager;
 
     private Button firstSelectedButton;
     [SerializeField] private Button firstSelectedDashboardButton;
+    private CarColors colors;
 
     private void Awake()
     {
         firstSelectedButton = EventSystem.current.firstSelectedGameObject.GetComponent<Button>();
         rect = GetComponent<RectTransform>();
-        dashboardButtons = GetComponentsInChildren<Button>();
+        dashboardButtons = GetComponentsInChildren<Selectable>();
         musicManager = FindFirstObjectByType<MusicManager>();
         foreach (var b in dashboardButtons) b.interactable = false;
         Controls = new();
@@ -39,25 +40,27 @@ public class Dashboard : MonoBehaviour
 
     private void ToggleDashboard()
     {
+        LeanTween.cancel(rect);
         ShouldDashboardOpen = !ShouldDashboardOpen;
         if (ShouldDashboardOpen)
         {
-            LeanTween.cancel(dashboardOpenTween);
             foreach (var b in dashboardButtons) b.interactable = true;
             firstSelectedDashboardButton.Select();
-            dashboardOpenTween = LeanTween.value(rect.anchoredPosition.x, -5.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true).id;
+            LeanTween.value(rect.anchoredPosition.x, -5.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true);
         }
         else
         {
-            LeanTween.cancel(dashboardCloseTween);
             foreach (var b in dashboardButtons) b.interactable = false;
             firstSelectedButton.Select();
-            dashboardCloseTween = LeanTween.value(rect.anchoredPosition.x, 265.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true).id;
+            LeanTween.value(rect.anchoredPosition.x, 320.0f, 0.4f).setOnUpdate((float val) => { rect.anchoredPosition = new Vector2(val, rect.anchoredPosition.y); }).setEaseInOutCirc().setIgnoreTimeScale(true);
         }
     }
 
     //TODO: toggle shuffle ja yksittäisen trackin looppaus
-
+    public void PlayAndPause()
+    {
+        musicManager.PauseSong();
+    }
     public void PreviousTrack()
     {
         musicManager.PreviousSong();
@@ -68,14 +71,19 @@ public class Dashboard : MonoBehaviour
     }
     public void Shuffle()
     {
-        musicManager.RandomSong();
+        musicManager.shuffleSong = shuffleToggle.isOn;
     }
     public void LoopSingular()
     {
-        
+        musicManager.SetLoop(loopToggle.isOn);
     }
     public void Respawn()
     {
         GameManager.racerscript.FadeGameViewAndRespawn();
+    }
+    public void Lights()
+    {
+        if (colors == null) colors = GameManager.CurrentCar.GetComponentInChildren<CarColors>();
+        colors.ToggleLights();
     }
 }
