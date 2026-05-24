@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,9 +10,9 @@ public class Dashboard : MonoBehaviour
     private MusicManager musicManager;
     private CarColors colors;
 
-    [SerializeField] private bool ShouldDashboardOpen = false;
+    private bool ShouldDashboardOpen = false;
     private RectTransform rect;
-    private Selectable[] dashboardButtons;
+    private List<Selectable> dashboardButtons;
     private Button firstSelectedButton;
     [SerializeField] private Button firstSelectedDashboardButton;
     [SerializeField] private Toggle shuffleToggle;
@@ -27,8 +29,9 @@ public class Dashboard : MonoBehaviour
         firstSelectedButton = EventSystem.current.firstSelectedGameObject.GetComponent<Button>();
         rect = GetComponent<RectTransform>();
         rectedImage = rected.GetComponent<Image>();
-        dashboardButtons = GetComponentsInChildren<Selectable>();
+        dashboardButtons = GetComponentsInChildren<Selectable>().ToList();
         musicManager = FindFirstObjectByType<MusicManager>();
+        colors = GameManager.CurrentCar.GetComponentInChildren<CarColors>();
         foreach (var b in dashboardButtons) b.interactable = false;
 
         Controls = new();
@@ -49,7 +52,7 @@ public class Dashboard : MonoBehaviour
     //hell has been established
     private void Update()
     {
-        if (oldSelected == selected || !ShouldDashboardOpen) return;
+        if (oldSelected == selected || !ShouldDashboardOpen || !dashboardButtons.Any(b => b.name == selected.name)) return;
 
         oldSelected = selected;
         SetSelectionRectPosition();
@@ -103,7 +106,6 @@ public class Dashboard : MonoBehaviour
     }
     public void Lights()
     {
-        if (colors == null) colors = GameManager.CurrentCar.GetComponentInChildren<CarColors>();
         colors.ToggleLights();
     }
 
