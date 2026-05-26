@@ -58,7 +58,7 @@ public class SFXManager : MonoBehaviour
             }
         }
 
-        GameManager.CurrentCar.GetComponentInChildren<CarColors>().lights = lights;
+        if (GameManager.CurrentCar != null) GameManager.CurrentCar.GetComponentInChildren<CarColors>().lights = lights;
     }
 
     //TODO: muuttaa hiukan paremmaks, mutta tarpeeks hyvä atm

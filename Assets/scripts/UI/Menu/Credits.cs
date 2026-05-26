@@ -31,8 +31,8 @@ public class Credits : MonoBehaviour
         tasks = new string[]
         {
             "PixelatedGoose\nPROJECT LEAD\ngraphical design, map design, shaders",
-            "Vizl87\nLEAD PROGRAMMER\ncar controller",
-            "ThatOneGuy\nCOMPOSER, PROGRAMMER\nmusic and sfx, selection menus",
+            "Vizl87\nLEAD PROGRAMMER\ncar movement programming",
+            "ThatOneGuy\nCOMPOSER, PROGRAMMER\nmusic and sfx, UI/UX",
             "Leobold\nPROGRAMMER\nvisuals, refactoring scripts",
             "lamelemon\nPROGRAMMER\nai cars, refactoring scripts",
             "rojp\nDESIGNER\nother help, car textures",
@@ -41,7 +41,7 @@ public class Credits : MonoBehaviour
         {
             "- all pixel art graphics\n- all map design\n- all shaders\n- leaderboard system",
             "- car controller\n- wheel support\n- score system",
-            "- all music and sound effects\n- selection menus\n- some graphics assets\n- bug fixing",
+            "- all music and sound effects\n- selection menus\n- some graphics assets\n- dashboard",
             "- map lighting\n- refactoring scripts",
             "- AI cars\n- user input check system",
             "- car textures\n- ideas",

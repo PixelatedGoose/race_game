@@ -3,12 +3,13 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using UnityEngine.SceneManagement;
 
 public class LeaderBoard : MonoBehaviour
 {
-    [Header("UI References")]
+    [Header("UI")]
     [SerializeField] private TextMeshProUGUI[] racerNameTexts = new TextMeshProUGUI[5];
-    [SerializeField] private TextMeshProUGUI[] timeTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] scoreTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] mapTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] carTexts = new TextMeshProUGUI[5];
@@ -18,20 +19,34 @@ public class LeaderBoard : MonoBehaviour
     [SerializeField] private bool showMapColumn = true;
     [SerializeField] private bool showScoreColumn = true;
     [SerializeField] private bool loadCar = false;
+    private List<string> maps;
+    [SerializeField] private string mapName = "Shoreline Day";
 
     private RaceResultHandler resultHandler;
     private Coroutine updateCoroutine;
 
     void Start()
     {
+        //TODO: vaiha coroutine startissa asetukseksi
+        maps = GameManager.maps.ToList();
         resultHandler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
         UpdateLeaderboard();
         updateCoroutine = StartCoroutine(UpdateLeaderboardRoutine());
+        GameManager.Controls.CarControls.carskinleft.performed += context => ChangeLeaderboardMap(false);
+        GameManager.Controls.CarControls.carskinright.performed += context => ChangeLeaderboardMap(true);
     }
-
     void OnDestroy()
     {
         if (updateCoroutine != null) StopCoroutine(updateCoroutine);
+        GameManager.Controls.CarControls.carskinleft.performed -= context => ChangeLeaderboardMap(false);
+        GameManager.Controls.CarControls.carskinright.performed -= context => ChangeLeaderboardMap(true);
+    }
+
+    private void ChangeLeaderboardMap(bool forward)
+    {
+        int current = maps.IndexOf(mapName);
+        mapName = forward ? maps[current + 1] : maps[current - 1];
+        UpdateLeaderboard();
     }
 
     private IEnumerator UpdateLeaderboardRoutine()
@@ -55,27 +70,22 @@ public class LeaderBoard : MonoBehaviour
         }
 
         List<RaceResultData> sortedResults = collection.results.OrderBy(r => r.score).Reverse().Take(5).ToList();
-
-        for (int i = 0; i < 5; i++)
-        {
-            if (i < sortedResults.Count) DisplayResult(i, sortedResults[i]);
-            else ClearSlot(i);
-        }
+        foreach (var r in sortedResults) Debug.Log(r.map);
+        for (int i = 0; i < sortedResults.Count; i++) DisplayResult(i, sortedResults[i]);
     }
 
     private void DisplayResult(int index, RaceResultData result)
     {
-        if (racerNameTexts[index] != null) racerNameTexts[index].text = result.racerName;
-        if (timeTexts[index] != null) timeTexts[index].text = result.time.ToString("F2") + "s";
-        if (showScoreColumn && scoreTexts[index] != null) scoreTexts[index].text = result.score.ToString();
-        if (showMapColumn && mapTexts[index] != null) mapTexts[index].text = result.map;
-        if (loadCar) carTexts[index].text = result.carName;
+        Debug.Log($"{result.racerName} {result.time:F2} {result.score} {result.map} {result.carName}");
+        racerNameTexts[index].text = racerNameTexts[index] != null ? result.racerName : "";
+        if (showScoreColumn) scoreTexts[index].text = scoreTexts[index] != null ? result.score.ToString() : "";
+        if (showMapColumn) mapTexts[index].text = mapTexts[index] != null ? result.map : "";
+        if (loadCar) carTexts[index].text = carTexts[index] != null ? result.carName : "";
     }
 
     private void ClearSlot(int index)
     {
         if (racerNameTexts[index] != null) racerNameTexts[index].text = "---";
-        if (timeTexts[index] != null) timeTexts[index].text = "---";
         if (scoreTexts[index] != null) scoreTexts[index].text = "---";
         if (mapTexts[index] != null) mapTexts[index].text = "---";
         if (loadCar && carTexts[index] != null) carTexts[index].text = "---";
