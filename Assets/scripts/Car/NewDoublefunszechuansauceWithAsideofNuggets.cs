@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Logitech;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
@@ -12,8 +12,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     LogitechMovement LGM;
     PlayerInput PlayerInput;
-
+    
     string CurrentControlScheme;
+
+    // Logitech input timing (copied from PlayerCarController)
+    internal float LastNonWheelInputTime = 0f;
+    internal float LastWheelInputTime = 0f;
 
     [Header("Visuals")]
     [SerializeField] private GameObject carLights;
@@ -76,6 +80,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected override void Start()
     {
+        TryGetComponent(out LGM);
+        if (LGM != null) LGM.InitializeLogitechWheel(); 
         base.Start();
 
         basePixel = PixelCount.GetFloat("_pixelcount");
@@ -88,6 +94,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         PlayerInput = GetComponent<PlayerInput>();
 
         PlayerInput.onControlsChanged += OnControlsChanged;
+
+        // mirror PlayerCarController: track any input action so wheel auto-enable and FF can be managed
+        Controls.CarControls.Get().actionTriggered += OnAnyActionTriggered;
 
         Controls.CarControls.Move.performed += OnMovePerformed;
         Controls.CarControls.Move.canceled += OnMoveCanceled;
@@ -115,6 +124,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Controls.CarControls.Brake.performed -= OnBrakePerformed;
         Controls.CarControls.Brake.canceled -= OnBrakeCanceled;
 
+        Controls.CarControls.Get().actionTriggered -= OnAnyActionTriggered;
+
         if (LGM != null)
             LGM.StopAllForceFeedback();
     }
@@ -134,6 +145,26 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         if (LGM != null)
             LGM.ReenableFromControlScheme(CurrentControlScheme);
+    }
+
+    void OnAnyActionTriggered(InputAction.CallbackContext ctx)
+    {
+        var control = ctx.action?.activeControl;
+        if (control == null)
+            return;
+
+        var device = control.device;
+        if (device is Keyboard || device is Mouse)
+            CurrentControlScheme = "Keyboard";
+        else if (device is Gamepad)
+            CurrentControlScheme = "Gamepad";
+
+
+        if (LGM != null)
+        {
+            LGM.allowAutoEnable = true;
+            LGM.StopAllForceFeedback();
+        }
     }
 
     void OnMovePerformed(InputAction.CallbackContext ctx)
@@ -164,6 +195,14 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         ApplySpeedLimit();
 
         Decelerate();
+
+        if (LGM != null && LGM.useLogitechWheel)
+        {
+            LGM.allowAutoEnable = true;
+            LogitechGSDK.LogiUpdate();
+            LGM.GetLogitechInputs();
+            LGM.ApplyForceFeedback();  
+        }
     }
 
     protected override void FixedUpdate()
@@ -192,6 +231,18 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         }
 
         return grounded;
+    }
+
+
+    void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+        {
+            if (LGM != null && LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0))
+            {
+                LogitechGSDK.LogiUpdate();
+            }
+        }
     }
 
     protected void CarMovement()
@@ -341,40 +392,40 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         return Vector3.Angle(transform.forward, flatVelocity.normalized);
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (PixelCount == null  || collision.impulse.magnitude < 0.1f ) 
-            return;
+    // void OnCollisionEnter(Collision collision)
+    // {
+    //     if (PixelCount == null  || collision.impulse.magnitude < 0.1f ) 
+    //         return;
 
-        float impact = Mathf.Clamp01(collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f));
+    //     float impact = Mathf.Clamp01(collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f));
 
-        impact = Mathf.SmoothStep(0f, 1f, impact);
+    //     impact = Mathf.SmoothStep(0f, 1f, impact);
 
-        if (PixelRecovery != null)
-        {
-            StopCoroutine(PixelRecovery);
-        }
+    //     if (PixelRecovery != null)
+    //     {
+    //         StopCoroutine(PixelRecovery);
+    //     }
 
-        PixelRecovery = StartCoroutine(PixelRecover(Mathf.Lerp(basePixel, minPixel, impact),Mathf.Max(0.1f, recoverTime * impact)
-            )
-        );
-    }
+    //     PixelRecovery = StartCoroutine(PixelRecover(Mathf.Lerp(basePixel, minPixel, impact),Mathf.Max(0.1f, recoverTime * impact)
+    //         )
+    //     );
+    // }
 
-    IEnumerator PixelRecover(float hitPixel, float recover)
-    {
-        float elapsed = 0f;
+    // IEnumerator PixelRecover(float hitPixel, float recover)
+    // {
+    //     float elapsed = 0f;
 
-        while (elapsed < recover)
-        {
-            elapsed += Time.deltaTime;
+    //     while (elapsed < recover)
+    //     {
+    //         elapsed += Time.deltaTime;
 
-            PixelCount.SetFloat("_pixelcount",Mathf.Lerp(hitPixel, basePixel, elapsed / recover));
+    //         PixelCount.SetFloat("_pixelcount",Mathf.Lerp(hitPixel, basePixel, elapsed / recover));
 
-            yield return null;
-        }
+    //         yield return null;
+    //     }
 
-        PixelCount.SetFloat("_pixelcount", basePixel);
+    //     PixelCount.SetFloat("_pixelcount", basePixel);
 
-        PixelRecovery = null;
-    }
+    //     PixelRecovery = null;
+    // }
 }

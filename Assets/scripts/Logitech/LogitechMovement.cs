@@ -85,7 +85,7 @@ public class LogitechMovement : MonoBehaviour
             GetLogitechInputs();
         }
 
-        // manual re-enable is handled via control-scheme events from PlayerCarController
+
 
         // periodically scan device indices to help locate the active device
         if (enableDebugLogs && Time.time - lastDeviceScanTime > deviceScanInterval)
@@ -267,5 +267,4 @@ public class LogitechMovement : MonoBehaviour
         //     LogitechGSDK.LogiStopDirtRoadEffect(0);
     }
 
-// ...existing code...
 }
