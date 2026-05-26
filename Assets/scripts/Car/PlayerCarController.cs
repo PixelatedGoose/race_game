@@ -54,13 +54,14 @@ public class PlayerCarController : BaseCarController
     override protected void FixedUpdate()
     {
         float speed = CarRb.linearVelocity.magnitude;
+        Debug.Log("max speed 1: " + MaxSpeed);
         UpdateDriftSpeed();
         Move();
         Steer();
-        Decelerate();
         Applyturnsensitivity(speed);
         WheelEffects(IsDrifting);
         base.FixedUpdate();
+        Debug.Log("max speed 2: " + MaxSpeed);
     }
 
     protected void Update()

@@ -15,13 +15,14 @@ public abstract class AbstractTurbo : MonoBehaviour
     [Range(0f, 100f)]
     [SerializeField] protected float startingAmount = 100.0f;
     [Tooltip("How much turbo is consumed per second")]
-    [SerializeField] protected float consumeRate = 10f;
+    [SerializeField] protected float consumeRate = 20f;
     [Tooltip("How much turbo is regenerated per second")]
-    [SerializeField] protected float regenerationRate = 10f;
+    [SerializeField] protected float regenerationRate = 20f;
     [Tooltip("How long to wait to start recharging turbo")]
     [SerializeField] protected float waitTime = 1f;
     protected WaitForSeconds waiter;
-    protected float amount;
+    [Range(0f, 100f)]
+    [SerializeField] protected float amount;
     protected BaseCarController carController;
     protected Coroutine turboCoroutine;
 
@@ -57,7 +58,7 @@ public abstract class AbstractTurbo : MonoBehaviour
     {
         while (amount > 0)
         {
-            amount = amount > 1E-03f ? Mathf.Lerp(amount, 0, consumeRate * Time.deltaTime) : 0;
+            amount = amount > 1E-3f ? Mathf.Lerp(amount, 0, consumeRate * Time.deltaTime) : 0;
             Use();
             yield return null;
         }

@@ -132,7 +132,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         Steer();
         CarMovement();
-        Decelerate();
     }
 
     //physics related will go here
