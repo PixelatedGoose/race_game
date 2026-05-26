@@ -19,7 +19,7 @@ public class PauseMenu : MonoBehaviour
         Controls.CarControls.pausemenu.performed += ctx => PauseMenuCheck();
 
         fullMenu = transform.Find("menuCanvas").gameObject;
-        optionsPanel = GetComponentInChildren<OptionScript>().gameObject;
+        optionsPanel = GetComponentInChildren<Options>().gameObject;
         firstSelected = EventSystem.current.firstSelectedGameObject.GetComponent<Selectable>();
         musicMngr = FindFirstObjectByType<MusicManager>();
     }
