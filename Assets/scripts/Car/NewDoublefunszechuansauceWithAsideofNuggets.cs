@@ -15,10 +15,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     
     string CurrentControlScheme;
 
-    // Logitech input timing (copied from PlayerCarController)
-    internal float LastNonWheelInputTime = 0f;
-    internal float LastWheelInputTime = 0f;
-
     [Header("Visuals")]
     [SerializeField] private GameObject carLights;
     [SerializeField] private Material PixelCount;
@@ -27,19 +23,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     [SerializeField] private float steerDeadzone = 0.15f;
 
     [Header(" Drift")]
-    [SerializeField] private float driftTurnStrength = 12f;
-    [SerializeField] private float driftSidewaysDamping = 0.95f;
-    [SerializeField] private float driftForwardBoost = 1.01f;
-    [SerializeField] private float driftRotationSpeed = 10f;
-    [SerializeField] private float driftOutwardForce = 10f;
-    [SerializeField] private float counterSteerStrength = 0.6f;
-    [SerializeField] private float driftSteerMultiplier = 0.22f;
-    [SerializeField] private float driftMinSpeed = 8f;
-    [SerializeField] private float driftTightenTurnBoost = 1.15f;
-    [SerializeField] private float driftTightenDamping = 0.9f;
-    [SerializeField] private float driftWidenDamping = 0.98f;
-    [SerializeField] private float driftHighSpeedTurnBoost = 1.25f;
-    [SerializeField] private float driftHighSpeedOutwardBoost = 1.15f;
+    [SerializeField] float normalAngularDrag = 1.2f;
+    [SerializeField] float driftAngularDrag = 0.05f;
+
+    float rawSteerInput;
+
+
 
     [Header("Grounding")]
     [SerializeField] private int minGroundedWheelsForDrive = 2;
@@ -51,19 +40,18 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     Coroutine PixelRecovery;
 
-    float driftDirectionLocked;
-
     protected override void Awake()
     {
         Controls = new CarInputActions();
+
+        PlayerInput = GetComponent<PlayerInput>();
+        LGM = FindFirstObjectByType<LogitechMovement>();
 
         CarRb = GetComponent<Rigidbody>();
 
         TurbeBar = GameManager.instance.CarUI
             .transform.Find("TurbeDisplay")
             .GetComponentInChildren<Image>();
-
-        TryGetComponent(out LGM);
 
         Controls.Enable();
 
@@ -80,7 +68,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected override void Start()
     {
-        TryGetComponent(out LGM);
         if (LGM != null) LGM.InitializeLogitechWheel(); 
         base.Start();
 
@@ -91,12 +78,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         Controls.Enable();
 
-        PlayerInput = GetComponent<PlayerInput>();
-
-        PlayerInput.onControlsChanged += OnControlsChanged;
-
-        // mirror PlayerCarController: track any input action so wheel auto-enable and FF can be managed
-        Controls.CarControls.Get().actionTriggered += OnAnyActionTriggered;
+        if (PlayerInput != null)
+            PlayerInput.onControlsChanged += OnControlsChanged;
 
         Controls.CarControls.Move.performed += OnMovePerformed;
         Controls.CarControls.Move.canceled += OnMoveCanceled;
@@ -124,8 +107,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Controls.CarControls.Brake.performed -= OnBrakePerformed;
         Controls.CarControls.Brake.canceled -= OnBrakeCanceled;
 
-        Controls.CarControls.Get().actionTriggered -= OnAnyActionTriggered;
-
         if (LGM != null)
             LGM.StopAllForceFeedback();
     }
@@ -143,64 +124,52 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         CurrentControlScheme = input.currentControlScheme;
 
-        if (LGM != null)
-            LGM.ReenableFromControlScheme(CurrentControlScheme);
-    }
-
-    void OnAnyActionTriggered(InputAction.CallbackContext ctx)
-    {
-        var control = ctx.action?.activeControl;
-        if (control == null)
+        if (LGM == null)
             return;
 
-        var device = control.device;
-        if (device is Keyboard || device is Mouse)
-            CurrentControlScheme = "Keyboard";
-        else if (device is Gamepad)
-            CurrentControlScheme = "Gamepad";
-
-
-        if (LGM != null)
+        if (CurrentControlScheme == "Keyboard")
+        {
+            LGM.useLogitechWheel = false;
+            LGM.allowAutoEnable = true;
+        }
+        else if (CurrentControlScheme == "Gamepad")
         {
             LGM.allowAutoEnable = true;
-            LGM.StopAllForceFeedback();
         }
     }
 
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
+        if (LGM != null && LGM.useLogitechWheel)
+            return;
+
         MovementInputs = ctx.ReadValue<Vector2>();
+        MovementInputs.x = ApplySteerDeadzone(MovementInputs.x);
+        rawSteerInput = MovementInputs.x;
     }
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
+        if (LGM != null && LGM.useLogitechWheel)
+            return;
+
         MovementInputs = Vector2.zero;
+        rawSteerInput = 0f;
     }
 
     protected void Update()
     {
-        MovementInputs = Controls.CarControls.Move.ReadValue<Vector2>();
-
-        MovementInputs.x = ApplySteerDeadzone(MovementInputs.x);
-
+  
         Animatewheels();
 
         Steer();
 
-        if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
-        {
-            CarMovement();
-        }
 
-        ApplySpeedLimit();
-
-        Decelerate();
 
         if (LGM != null && LGM.useLogitechWheel)
         {
             LGM.allowAutoEnable = true;
             LogitechGSDK.LogiUpdate();
-            LGM.GetLogitechInputs();
             LGM.ApplyForceFeedback();  
         }
     }
@@ -208,12 +177,19 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     protected override void FixedUpdate()
     {
         TurnSensitivity = CarRb.linearVelocity.magnitude / MaxSpeed * turnSensitivityRange + MaxTurnSensitivity;
-
-        if (IsDrifting)
+        
+        if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
-            DriftPhysics();
+            if (LGM == null || !LGM.useLogitechWheel)
+            {
+                CarMovement();
+            }
+            if (IsDrifting){
+                DriftPhysics();
+            }
+            ApplySpeedLimit();
+            Decelerate();
         }
-
         base.FixedUpdate();
     }
 
@@ -247,99 +223,125 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected void CarMovement()
     {
-        Vector3 forward = transform.forward;
+        Vector3 moveDir = transform.forward;
+        if (IsDrifting)
+        {
+            // Project velocity onto the car's local plane so it works on hills
+            Vector3 slopeVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
+            if (slopeVel.sqrMagnitude > 1f) moveDir = slopeVel.normalized;
+        }
 
-        float currentSign = Mathf.Abs(Vector3.Dot(CarRb.linearVelocity, forward)) > 0.1f ? Mathf.Sign(Vector3.Dot(CarRb.linearVelocity, forward)) : Mathf.Sign(MovementInputs.y);
+        float forwardDot = Vector3.Dot(CarRb.linearVelocity, moveDir);
+
+        float currentSign = Mathf.Abs(forwardDot) > 0.1f ? Mathf.Sign(forwardDot) : Mathf.Sign(MovementInputs.y);
         float signedSpeed = CarRb.linearVelocity.magnitude * currentSign;
-        float forwardSpeed = Mathf.MoveTowards(
-            signedSpeed,
-            MaxSpeed * MovementInputs.y,
-            Acceleration * Time.deltaTime
-        );
+        float forwardSpeed = Mathf.MoveTowards(signedSpeed, MaxSpeed * MovementInputs.y, Acceleration * Time.fixedDeltaTime);
 
-        Vector3 horiz = forward * forwardSpeed;
-            if (IsDrifting)
-            {
-                if (!Mathf.Approximately(driftDirectionLocked, 0f))
-                {
-                    float absInput = Mathf.Abs(MovementInputs.x);
-                    if (absInput > steerDeadzone)
-                    {
-                        bool counterSteering = Mathf.Sign(MovementInputs.x) != driftDirectionLocked;
-                        float scale = counterSteering ? counterSteerStrength : 1f;
-                        MovementInputs.x = driftDirectionLocked * absInput * scale;
-                    }
-                }
+        Vector3 horiz = moveDir * forwardSpeed;
 
-                MovementInputs.x *= driftSteerMultiplier;
-            }
-        CarRb.linearVelocity = new Vector3(horiz.x, CarRb.linearVelocity.y, horiz.z);
+
+        CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
+
+        foreach (var wheel in Wheels)
+        {
+
+        }
     }
-
-
-
-
 
     void DriftPhysics()
     {
-        Vector3 flatVelocity = Vector3.ProjectOnPlane( CarRb.linearVelocity, Vector3.up);
+        Vector3 velocity = CarRb.linearVelocity;
+        
+        // Use the car's up vector (hill slope) instead of pure world up
+        // otherwise drifting on slopes makes the car fly instantly
+        Vector3 groundNormal = transform.up;
 
-        if (flatVelocity.magnitude < driftMinSpeed) return;
+        velocity = Vector3.ProjectOnPlane(velocity, groundNormal);
 
-        if (Mathf.Approximately(driftDirectionLocked, 0f))
+        float speed = velocity.magnitude;
+        if (speed < 0.1f) return;
+
+        Vector3 velocityDir = velocity / speed;
+
+        Vector3 right = Vector3.Cross(groundNormal, velocityDir).normalized;
+
+        float steer = rawSteerInput;
+
+        float speed01 = Mathf.Clamp01(speed / MaxSpeed);
+        float speedSteerMultiplier = Mathf.Pow(1f - speed01, 2.2f);
+
+        float slopeAngle = Vector3.Angle(groundNormal, Vector3.up);
+        float slopeDamp = Mathf.Lerp(1f, 0.55f, slopeAngle / 45f);
+
+        float steerStrength = 0.1421f * speedSteerMultiplier * slopeDamp;
+
+        float inertia = Mathf.Lerp(6f, 2.2f, speed01);
+
+        Vector3 desiredDirection = velocityDir + right * steer * steerStrength;
+
+        desiredDirection = Vector3.ProjectOnPlane(desiredDirection, groundNormal).normalized;
+
+        Vector3 targetVel = desiredDirection * speed;
+
+        Vector3 verticalVel = Vector3.Project(CarRb.linearVelocity, groundNormal);
+        Vector3 horizontalVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, groundNormal);
+
+        float time = Mathf.Clamp01(inertia * Time.fixedDeltaTime);
+
+        Vector3 dir = Vector3.Slerp(horizontalVel.normalized, targetVel.normalized, time);
+        horizontalVel = dir * horizontalVel.magnitude;
+
+        CarRb.linearVelocity = horizontalVel + verticalVel;
+        
+        float visualSteerStrength = 0.55f * slopeDamp;
+        Vector3 visualDesiredDirection = velocityDir + right * steer * visualSteerStrength;
+        
+        Vector3 visualDirection = Vector3.Slerp(velocityDir, visualDesiredDirection, Mathf.Abs(steer));
+        visualDirection = Vector3.ProjectOnPlane(visualDirection, groundNormal).normalized;
+
+        Quaternion targetRot = Quaternion.LookRotation(visualDirection, groundNormal);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 4.5f * Time.fixedDeltaTime);
+    }
+        
+    void SetDriftFriction(bool drifting)
+    {
+        foreach (Wheel wheel in Wheels)
         {
-            if (Mathf.Abs(MovementInputs.x) <= steerDeadzone)
-                return;
+            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            WheelFrictionCurve forward = wheel.WheelCollider.forwardFriction;
 
-            driftDirectionLocked = Mathf.Sign(MovementInputs.x);
+            if (drifting){
+                sideways.stiffness = 0.5f;
+                forward.stiffness = 1.0f;
+            }
+            else{
+                sideways.stiffness = 5.0f;
+                forward.stiffness = 5.0f;
+            }
+
+            wheel.WheelCollider.sidewaysFriction = sideways;
+            wheel.WheelCollider.forwardFriction = forward;
         }
-
-        float driftDir = driftDirectionLocked;
-        bool counterSteering = Mathf.Abs(MovementInputs.x) > steerDeadzone && Mathf.Sign(MovementInputs.x) != driftDir;
-
-        Vector3 forward = transform.forward * Vector3.Dot(flatVelocity, transform.forward);
-
-        float damping = driftSidewaysDamping;
-        if (counterSteering)
-            damping = Mathf.Lerp(driftSidewaysDamping, driftWidenDamping, 0.75f);
-        else
-            damping = Mathf.Lerp(driftSidewaysDamping, driftTightenDamping, 0.75f);
-
-        Vector3 sideways = transform.right * Vector3.Dot(flatVelocity, transform.right) * damping;
-
-        CarRb.linearVelocity = new Vector3(forward.x + sideways.x,  CarRb.linearVelocity.y, forward.z + sideways.z) * driftForwardBoost;
-
-        float speed01 = Mathf.Clamp01(flatVelocity.magnitude / Mathf.Max(0.1f, MaxSpeed));
-        float speedTurnBoost = Mathf.Lerp(1f, driftHighSpeedTurnBoost, speed01);
-        float speedOutwardBoost = Mathf.Lerp(1f, driftHighSpeedOutwardBoost, speed01);
-
-        float turnScale = counterSteering ? counterSteerStrength : driftTightenTurnBoost;
-        float turnForce = driftTurnStrength * turnScale * speedTurnBoost;
-
-        CarRb.AddTorque(Vector3.up * driftDir * turnForce, ForceMode.Acceleration);
-
-        float outwardScale = counterSteering ? counterSteerStrength : 1f;
-        CarRb.AddForce(transform.right * driftDir * driftOutwardForce * outwardScale * speedOutwardBoost, ForceMode.Acceleration);
-
-        flatVelocity = Vector3.ProjectOnPlane(CarRb.linearVelocity, Vector3.up);
-
-        if (flatVelocity.sqrMagnitude < 0.5f) return;
-
-        CarRb.MoveRotation(Quaternion.Slerp(CarRb.rotation, Quaternion.LookRotation(flatVelocity.normalized), driftRotationSpeed * Time.fixedDeltaTime));
     }
 
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {
-        if (IsDrifting)
-            return;
-
-        if (CarRb.linearVelocity.magnitude < driftMinSpeed)
-            return;
 
         IsDrifting = true;
 
-        driftDirectionLocked = 0f;
+        // 🔥 THIS is your WheelCollider "loose drift feel"
+        CarRb.angularDamping = driftAngularDrag;
 
+        foreach (var wheel in Wheels)
+        {
+            if (wheel.WheelCollider == null) continue;
+
+            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            sideways.stiffness = 2.0f;
+            wheel.WheelCollider.sidewaysFriction = sideways;
+        }
+
+        AdjustWheelsForDrift();
         WheelEffects(true);
     }
 
@@ -352,10 +354,23 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         IsDrifting = false;
 
-        driftDirectionLocked = 0f;
+        SetDriftFriction(false);
+
+        CarRb.angularDamping = normalAngularDrag;
+
+        foreach (var wheel in Wheels)
+        {
+            if (wheel.WheelCollider == null) continue;
+
+            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            sideways.stiffness = 5.0f;
+            wheel.WheelCollider.sidewaysFriction = sideways;
+    }
+
 
         WheelEffects(false);
     }
+
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
     {
@@ -392,40 +407,40 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         return Vector3.Angle(transform.forward, flatVelocity.normalized);
     }
 
-    // void OnCollisionEnter(Collision collision)
-    // {
-    //     if (PixelCount == null  || collision.impulse.magnitude < 0.1f ) 
-    //         return;
+    void OnCollisionEnter(Collision collision)
+    {
+        if (PixelCount == null  || collision.impulse.magnitude < 0.1f ) 
+            return;
 
-    //     float impact = Mathf.Clamp01(collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f));
+        float impact = Mathf.Clamp01(collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f));
 
-    //     impact = Mathf.SmoothStep(0f, 1f, impact);
+        impact = Mathf.SmoothStep(0f, 1f, impact);
 
-    //     if (PixelRecovery != null)
-    //     {
-    //         StopCoroutine(PixelRecovery);
-    //     }
+        if (PixelRecovery != null)
+        {
+            StopCoroutine(PixelRecovery);
+        }
 
-    //     PixelRecovery = StartCoroutine(PixelRecover(Mathf.Lerp(basePixel, minPixel, impact),Mathf.Max(0.1f, recoverTime * impact)
-    //         )
-    //     );
-    // }
+        PixelRecovery = StartCoroutine(PixelRecover(Mathf.Lerp(basePixel, minPixel, impact),Mathf.Max(0.1f, recoverTime * impact)
+            )
+        );
+    }
 
-    // IEnumerator PixelRecover(float hitPixel, float recover)
-    // {
-    //     float elapsed = 0f;
+    IEnumerator PixelRecover(float hitPixel, float recover)
+    {
+        float elapsed = 0f;
 
-    //     while (elapsed < recover)
-    //     {
-    //         elapsed += Time.deltaTime;
+        while (elapsed < recover)
+        {
+            elapsed += Time.deltaTime;
 
-    //         PixelCount.SetFloat("_pixelcount",Mathf.Lerp(hitPixel, basePixel, elapsed / recover));
+            PixelCount.SetFloat("_pixelcount",Mathf.Lerp(hitPixel, basePixel, elapsed / recover));
 
-    //         yield return null;
-    //     }
+            yield return null;
+        }
 
-    //     PixelCount.SetFloat("_pixelcount", basePixel);
+        PixelCount.SetFloat("_pixelcount", basePixel);
 
-    //     PixelRecovery = null;
-    // }
+        PixelRecovery = null;
+    }
 }
