@@ -103,14 +103,4 @@ public class RaceResultHandler
 
         return loadedData;
     }
-
-    public int GetNextRacerNumber()
-    {
-        RaceResultCollection collection = Load();
-        if (collection == null || collection.results == null || collection.results.Count == 0)
-        {
-            return 1;
-        }
-        return collection.results.Count + 1;
-    }
 }

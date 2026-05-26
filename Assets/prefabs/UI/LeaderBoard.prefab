@@ -3684,11 +3684,13 @@ MonoBehaviour:
   - {fileID: 219647251660354355}
   - {fileID: 7996167986750984185}
   - {fileID: 7243884115142449890}
+  useUpdateCoroutine: 0
   updateInterval: 7
   showMapColumn: 1
   showScoreColumn: 1
   loadCar: 1
-  mapName: 
+  allowSwitching: 1
+  selectedMap: 
 --- !u!114 &5947277260953461170
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -117,11 +117,6 @@ public class MusicManager : MonoBehaviour
     private IEnumerator SongPlaybackHandler()
     {
         Debug.Log($"started playback coroutine");
-
-        //TODO: saaha tää paska toimimaan
-        //jos pausettaa pelin, biisi alkaa alusta
-        //muita mahollisia bugeja liittyen looppaukseen ja shuffleen
-
         //varmistetaan, että AudioSourcen .Pause() ei alota seuraavaa trackkia; ainoastaan NextSong() saa tehä niin
         while (currentSong.baseTrack.isPlaying || GameManager.IsPaused || musicPlaybackManuallyPaused)
         {
