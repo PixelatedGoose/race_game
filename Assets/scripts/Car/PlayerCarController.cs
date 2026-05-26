@@ -79,7 +79,6 @@ public class PlayerCarController : BaseCarController
         if (LGM != null && LGM.useLogitechWheel && LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0))
         {
             LogitechGSDK.LogiUpdate();
-            LGM.GetLogitechInputs();
             LGM.ApplyForceFeedback(); 
         }
     }
@@ -93,8 +92,7 @@ public class PlayerCarController : BaseCarController
     private void OnControlsChanged(PlayerInput input)
     {
         CurrentControlScheme = input.currentControlScheme;
-        if (LGM != null)
-            LGM.ReenableFromControlScheme(CurrentControlScheme);
+
     }
 
     void OnAnyActionTriggered(InputAction.CallbackContext ctx)
