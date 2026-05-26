@@ -22,7 +22,7 @@ public class MusicManager : MonoBehaviour
     private CarMusicState LatestMusState = CarMusicState.Main;
     public bool shuffleSong;
     public bool loopSong;
-    private bool musicPlaybackManuallyPaused = false;
+    public bool musicPlaybackManuallyPaused = false;
     private int[] activeTweenIDs;
 
     //uniikkeja yksittäisiä biisejä, siksi en laita näille tageja tai arrayta
@@ -123,9 +123,9 @@ public class MusicManager : MonoBehaviour
         //muita mahollisia bugeja liittyen looppaukseen ja shuffleen
 
         //varmistetaan, että AudioSourcen .Pause() ei alota seuraavaa trackkia; ainoastaan NextSong() saa tehä niin
-        while (currentSong.baseTrack.isPlaying || GameManager.IsPaused || !musicPlaybackManuallyPaused)
+        while (currentSong.baseTrack.isPlaying || GameManager.IsPaused || musicPlaybackManuallyPaused)
         {
-            Debug.Log($"song still playing");
+            //Debug.Log($"song still playing");
             yield return null;
         }
 
@@ -137,6 +137,7 @@ public class MusicManager : MonoBehaviour
 
     public void PlaySong()
     {
+        musicPlaybackManuallyPaused = false;
         foreach (AudioSource track in currentSongTracks) track.Play();
         Debug.Log($"started playing song: {currentSong.name} / tracks are: {currentSong.baseTrack}, {currentSong.driftTrack}, {currentSong.turboTrack}");
     }
@@ -152,13 +153,13 @@ public class MusicManager : MonoBehaviour
     }
     public void PauseSong()
     {
-        musicPlaybackManuallyPaused = !musicPlaybackManuallyPaused;
-        Debug.Log($"song paused: {musicPlaybackManuallyPaused}");
         foreach (AudioSource track in currentSongTracks)
         {
-            if (musicPlaybackManuallyPaused) track.Pause();
+            if (track.isPlaying) track.Pause();
             else track.UnPause();
         }
+        musicPlaybackManuallyPaused = !currentSong.baseTrack.isPlaying;
+        Debug.Log($"song paused: {musicPlaybackManuallyPaused}");
     }
     public void StopSong(bool endRaceEvent = false)
     {
@@ -171,25 +172,25 @@ public class MusicManager : MonoBehaviour
     public void NextSong()
     {
         int newSongIndex = shuffleSong ? UnityEngine.Random.Range(0, songs.Count) : (songs.IndexOf(currentSong) + 1) % songs.Count;
+        StopSong();
         currentSong = songs[newSongIndex];
         Debug.Log($"shuffle state: {shuffleSong}");
         SetLoop(loopSong);
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
 
-        StopSong();
         PlaySong();
         Debug.Log($"to NEXT song: {currentSong.name}; index {newSongIndex}");
     }
     public void PreviousSong()
     {
         int newSongIndex = shuffleSong ? UnityEngine.Random.Range(0, songs.Count) : songs.IndexOf(currentSong) - 1;
+        StopSong();
         currentSong = songs[newSongIndex < 0 ? songs.Count - 1 : newSongIndex];
         if (newSongIndex < 0) newSongIndex = songs.Count - 1; //jotta newSongIndex ei tee hauskuuksia
         Debug.Log($"shuffle state: {shuffleSong}");
         SetLoop(loopSong);
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
 
-        StopSong();
         PlaySong();
         Debug.Log($"to PREVIOUS song: {currentSong.name}; index {newSongIndex}");
     }

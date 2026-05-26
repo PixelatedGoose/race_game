@@ -95,10 +95,12 @@ public class Dashboard : MonoBehaviour
     public void Shuffle()
     {
         musicManager.shuffleSong = shuffleToggle.isOn;
+        shuffleToggle.image.color = shuffleToggle.isOn ? Color.clear : Color.white;
     }
     public void LoopSingular()
     {
         musicManager.SetLoop(loopToggle.isOn);
+        loopToggle.image.color = loopToggle.isOn ? Color.clear : Color.white;
     }
     public void Respawn()
     {
