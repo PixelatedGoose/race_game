@@ -248,7 +248,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void DriftPhysics()
     {
-        float startTime = DateTime.Now.Ticks;
 
         Vector3 velocity = CarRb.linearVelocity;
         
@@ -302,7 +301,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Quaternion targetRot = Quaternion.LookRotation(visualDirection, groundNormal);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 4.5f * Time.fixedDeltaTime);
     
-        Debug.Log("time taken to do the sloppening: " + (DateTime.Now.Ticks - startTime));
     }
         
     void SetDriftFriction(bool drifting)
