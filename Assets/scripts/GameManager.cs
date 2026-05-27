@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] cars;
     [NonSerialized] public static HashSet<BaseCarController> spawnedCars = new();
 
-    public static string sceneSelected => SceneManager.GetActiveScene().name;
+    public static string SceneSelected => SceneManager.GetActiveScene().name;
     private readonly string[] maps = new string[]
     {
         "shoreline",
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         Controls = new();
         Controls.Enable();
 
-        if (maps.Contains(sceneSelected) && cars.Length > 0)
+        if (maps.Contains(SceneSelected) && cars.Length > 0)
         {
             GameObject selectedCar = cars.FirstOrDefault(c => c.name == PlayerPrefs.GetString("SelectedCar"));
             if (selectedCar == null) selectedCar = cars[0];

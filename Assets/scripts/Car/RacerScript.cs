@@ -180,7 +180,7 @@ public class RacerScript : MonoBehaviour
             //FINAL LAP CHECK
             if (currentLap == totalLaps)
             {
-                //musicManager.StartFinalLapSong();
+                //musicManager.PlayFinalLapSong();
                 LeanTween.value(finalLapImg, finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, 0.0f, 0.6f).setOnUpdate((float val) => { finalLapImg.GetComponent<RectTransform>().anchoredPosition = new Vector2(val, finalLapImg.GetComponent<RectTransform>().anchoredPosition.y); }).setEaseInOutCirc()
                 .setOnComplete(() => LeanTween.value(finalLapImg, finalLapImg.GetComponent<RectTransform>().anchoredPosition.x, -530.0f, 2.4f).setOnUpdate((float val) => { finalLapImg.GetComponent<RectTransform>().anchoredPosition = new Vector2(val, finalLapImg.GetComponent<RectTransform>().anchoredPosition.y); }) .setEaseInExpo());
             }
