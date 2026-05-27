@@ -13,6 +13,7 @@ public class LeaderBoard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] scoreTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] mapTexts = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] carTexts = new TextMeshProUGUI[5];
+    [SerializeField] private TextMeshProUGUI leaderboardSelectedMap;
 
     [Header("Settings")]
     [SerializeField] private bool useUpdateCoroutine = false;
@@ -28,17 +29,16 @@ public class LeaderBoard : MonoBehaviour
     {
         maps = FormattedMapNames();
         selectedMap = maps[0];
-    }
-    void Start()
-    {
         resultHandler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
+
         UpdateLeaderboard();
         if (useUpdateCoroutine) updateCoroutine = StartCoroutine(UpdateLeaderboardRoutine());
-        if (!allowSwitching)
+        if (!allowSwitching && GameManager.maps.Contains(GameManager.SceneSelected))
         {
-            selectedMap = GameManager.maps.Contains(GameManager.SceneSelected) ? FormatMapName(GameManager.SceneSelected, PlayerPrefs.GetInt("SpawnAI") == 1) : selectedMap = maps[0];
+            selectedMap = FormatMapName(GameManager.SceneSelected, PlayerPrefs.GetInt("SpawnAI") == 1);
             return;
         }
+        
         GameManager.Controls.CarControls.carskinleft.performed += context => ChangeLeaderboardMap(false);
         GameManager.Controls.CarControls.carskinright.performed += context => ChangeLeaderboardMap(true);
     }
@@ -110,6 +110,7 @@ public class LeaderBoard : MonoBehaviour
         }
 
         List<RaceResultData> sortedResults = collection.results.Where(r => r.map == selectedMap).OrderByDescending(r => r.score).Take(5).ToList();
+        leaderboardSelectedMap.text = selectedMap;
         int remainder = sortedResults.Count;
         for (int i = 0; i < remainder; i++) DisplayResult(i, sortedResults[i]);
         for (int i = remainder; i < 5; i++) ClearSlot(i);

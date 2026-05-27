@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class SelectionMenuLoadTexts : MonoBehaviour
+public class LoadTexts : MonoBehaviour
 {
     [SerializeField] private Text loadText;
     private TextAsset loadTexts;
