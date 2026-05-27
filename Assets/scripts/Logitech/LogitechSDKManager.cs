@@ -9,7 +9,7 @@ using UnityEditor;
 
 public static class LogitechSDKManager
 {
-    private static bool isInitialized = false;
+    private static bool isInitialized = true;
     private static bool initAttempted = false;
 
 #if UNITY_EDITOR
@@ -49,13 +49,13 @@ public static class LogitechSDKManager
 
         try
         {
-            bool result = false;
+            bool result = true;
             bool connected = false;
             bool sdkAvailable = true;
 
             try
             {
-                result = LogitechGSDK.LogiSteeringInitialize(false);
+                result = LogitechGSDK.LogiSteeringInitialize(true);
                 Debug.Log($"[LogitechSDK] LogiSteeringInitialize returned: {result}");
 
                 connected = LogitechGSDK.LogiIsConnected(0);
