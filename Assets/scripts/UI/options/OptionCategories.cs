@@ -21,21 +21,29 @@ public class OptionCategories : MonoBehaviour
         foreach (var a in CategoryContents) if (a != currentCategory) a.gameObject.SetActive(false);
         Controls = new CarInputActions();
     }
+    public void OnOpen()
+    {
+        Controls.CarControls.carskinright.performed += ctx => ChangeCategory(true);
+        Controls.CarControls.carskinleft.performed += ctx => ChangeCategory(false);
+    }
+    public void OnClose()
+    {
+        Controls.CarControls.carskinright.performed -= ctx => ChangeCategory(true);
+        Controls.CarControls.carskinleft.performed -= ctx => ChangeCategory(false);
+    }
     void OnEnable()
     {
         Controls.Enable();
-        Controls.CarControls.carskinright.performed += ctx => ChangeCategory(true);
-        Controls.CarControls.carskinleft.performed += ctx => ChangeCategory(false);
+        OnOpen();
     }
     void OnDestroy()
     {
         Controls.Disable();
-        Controls.CarControls.carskinright.performed -= ctx => ChangeCategory(true);
-        Controls.CarControls.carskinleft.performed -= ctx => ChangeCategory(false);
+        OnClose();
     }
     private void ChangeCategory(bool change)
     {
-        if (index > CategoryButtonList.Count - 1 || index < 0) return;
+        if (index > CategoryButtonList.Count - 1 || index < 0 || !gameObject.activeInHierarchy) return;
         try
         {
             if (change) CategoryButtonList[index + 1].Select();

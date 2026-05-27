@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
+  optionCategories: {fileID: 3576096650015553796}
   main: {fileID: 24100000, guid: 3b98bec6362893c4588f31bafaf63d26, type: 2}
 --- !u!114 &796379923150682379
 MonoBehaviour:

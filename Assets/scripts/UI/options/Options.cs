@@ -9,6 +9,7 @@ public class Options : MonoBehaviour
 {
     public Material pixelCount;
     private List<OptionComponent> OptionsList;
+    [SerializeField] private OptionCategories optionCategories;
     [SerializeField] private AudioMixer main;
     public AudioMixerGroup[] AllMixerGroups { get { return main.FindMatchingGroups(string.Empty); } }
     private const bool DefaultToggleValue = true;

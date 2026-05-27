@@ -31,13 +31,12 @@ public class LeaderBoard : MonoBehaviour
     }
     void Start()
     {
-        //TODO: vaiha coroutine startissa asetukseksi
         resultHandler = new RaceResultHandler(Application.persistentDataPath, "race_result.json");
         UpdateLeaderboard();
         if (useUpdateCoroutine) updateCoroutine = StartCoroutine(UpdateLeaderboardRoutine());
         if (!allowSwitching)
         {
-            //TODO: implementtaa defaultiksi mappi jossa pelaaja on atm; jos ei löydy, käyttää ekaa indeksiä (Shoreline Day)
+            selectedMap = GameManager.maps.Contains(GameManager.SceneSelected) ? FormatMapName(GameManager.SceneSelected, PlayerPrefs.GetInt("SpawnAI") == 1) : selectedMap = maps[0];
             return;
         }
         GameManager.Controls.CarControls.carskinleft.performed += context => ChangeLeaderboardMap(false);
@@ -50,26 +49,36 @@ public class LeaderBoard : MonoBehaviour
         GameManager.Controls.CarControls.carskinright.performed -= context => ChangeLeaderboardMap(true);
     }
 
+    //olen pahoillani tästä
     private void ChangeLeaderboardMap(bool forward)
     {
+        if (!gameObject.activeInHierarchy) return;
+
         int current = maps.IndexOf(selectedMap);
-        //olen pahoillani tästä
         int next = forward ? (current + 1) % maps.Count :
         (current - 1) < 0 ? maps.Count - 1 : current - 1 ;
         selectedMap = maps[next];
         UpdateLeaderboard();
     }
 
+    private string FormatMapName(string name, bool appendAI)
+    {
+        StringBuilder normal = new(name);
+        normal.Replace('_', ' ');
+
+        if (!normal.ToString().Contains("night")) normal.Append(" day");
+        if (appendAI) normal.Append(" [AI]");
+
+        string formattedName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(normal.ToString());
+        return formattedName;
+    }
     private List<string> FormattedMapNames()
     {
         List<string> poopoohead = new();
         List<string> baseMaps = GameManager.maps.ToList();
         foreach (string map in baseMaps)
         {
-            StringBuilder normal = new(map);
-            normal.Replace('_', ' ');
-            if (!normal.ToString().Contains("night")) normal.Append(" day");
-            string formattedBaseName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(normal.ToString());
+            string formattedBaseName = FormatMapName(map, false);
 
             StringBuilder ai = new(formattedBaseName);
             ai.Append(" [AI]");
@@ -77,7 +86,6 @@ public class LeaderBoard : MonoBehaviour
             poopoohead.Add(formattedBaseName);
             poopoohead.Add(ai.ToString());
         }
-        foreach (var a in poopoohead) Debug.Log($"hi my name is {a}");
         return poopoohead;
     }
 
