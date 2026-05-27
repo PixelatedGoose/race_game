@@ -13,7 +13,7 @@ public class MultCounter : MonoBehaviour
     public TextMeshProUGUI multiplierText;
     private PlayerCarController playerScript; 
     
-    private bool isDrifting, isCoolingDown, useFullCooldown;
+    private bool isDrifting, useFullCooldown;
     private int currentFrame;
     private readonly float twoThirds = 2f / 3f;
     private float lastMultiplier;
