@@ -55,14 +55,7 @@ public class BaseCarController : MonoBehaviour
     public float BaseTargetTorque { get; protected set; }
     public float SmoothedMaxAcceleration { get; protected set; }
     [Header("turbe asetukset")]
-    protected Image TurbeBar;
     public bool IsTurboActive { get; set; } = false;
-    public float TurbeAmount { get; protected set; } = 100.0f;
-    [SerializeField] protected float TurbeMax = 100.0f;
-    public float Turbepush = 15.0f;
-    [SerializeField] protected float TurbeReduce = 10.0f;
-    [SerializeField] protected float TurbeRegen = 10.0f;
-    [SerializeField] protected float TurbeWaitTime = 2.0f;
     protected Coroutine TurbeRegeneration = null;
     [NonSerialized] public bool CanDrift = true;
     [NonSerialized] public bool CanUseTurbo = true;

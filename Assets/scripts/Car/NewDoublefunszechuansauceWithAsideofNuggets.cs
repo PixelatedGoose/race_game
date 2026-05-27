@@ -20,7 +20,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         CarRb = GetComponent<Rigidbody>();
         racerScript = GetComponent<RacerScript>();
-        TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         TryGetComponent(out LGM);
         
         Controls.Enable();

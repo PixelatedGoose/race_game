@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Extend this class to create a new type of turbo
 // Override the Use() function to apply logic when player is using turbo
@@ -25,6 +26,7 @@ public abstract class AbstractTurbo : MonoBehaviour
     [SerializeField] protected float amount;
     protected BaseCarController carController;
     protected Coroutine turboCoroutine;
+    protected Image TurboBar;
 
     // Used for running the specific turbo's logic when the player wants to use turbo.
     protected abstract void Use();
@@ -32,6 +34,7 @@ public abstract class AbstractTurbo : MonoBehaviour
     protected virtual void Awake()
     {
         carController = GetComponent<BaseCarController>();
+        TurboBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
 
         amount = startingAmount / 100f * maxAmount;
         waiter = new WaitForSeconds(waitTime);
