@@ -108,6 +108,31 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
+    public float GetDriftSharpness()
+    {
+        if (!IsDrifting)
+            return 0f;
+
+        Vector3 flatVelocity = CarRb.linearVelocity;
+        flatVelocity.y = 0f;
+
+        if (flatVelocity.sqrMagnitude < 0.1f)
+            return 0f;
+
+        return Vector3.Angle(transform.forward, flatVelocity.normalized);
+    }
+    
+    protected void Decelerate()
+    {
+        if (MovementInputs.y == 0)
+        {
+            if (CarRb.linearVelocity.magnitude < 0.1f) CarRb.linearVelocity = Vector3.zero;
+            else CarRb.linearVelocity = Vector3.Lerp(CarRb.linearVelocity, Vector3.zero, Time.deltaTime);
+        }
+    }
+
+
+
     protected void Steer()
     {
         Wheels.SteerAngle = Mathf.Lerp(Wheels.SteerAngle, MovementInputs.x * TurnSensitivity, SteerStrength * Time.deltaTime);

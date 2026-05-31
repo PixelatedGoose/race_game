@@ -300,21 +300,6 @@ public class PlayerCarController : BaseCarController
         }
     }
 
-
-
-    public float GetDriftSharpness()
-    {
-        //Checks the drifts sharpness so scoremanager can see how good of a drift you're doing
-        if (IsDrifting)
-        {
-            Vector3 velocity = CarRb.linearVelocity;
-            Vector3 forward = transform.forward;
-            float angle = Vector3.Angle(forward, velocity);
-            return angle;  
-        }
-        return 0.0f;
-    }
-
     //i hate this so much, its always somewhat broken but for now....... its not broken.
     void OnDriftPerformed(InputAction.CallbackContext ctx)
     {

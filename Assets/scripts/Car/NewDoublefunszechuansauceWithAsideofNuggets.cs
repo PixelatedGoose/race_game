@@ -25,6 +25,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     [Header(" Drift")]
     [SerializeField] float normalAngularDrag = 1.2f;
     [SerializeField] float driftAngularDrag = 0.05f;
+    float AllowedDriftAngle = 45f;
 
     float rawSteerInput;
 
@@ -50,6 +51,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         PlayerInput = GetComponent<PlayerInput>();
         LGM = FindFirstObjectByType<LogitechMovement>();
+
+        CarRb = GetComponent<Rigidbody>();
+
+        // TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
+
         Controls.Enable();
 
         base.Awake();
@@ -150,7 +156,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         if (LGM != null && LGM.useLogitechWheel)
             return;
-
         MovementInputs = Vector2.zero;
         Steer();
         rawSteerInput = 0f;
@@ -158,9 +163,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected void Update()
     {
-  
         Animatewheels();
-
         Steer();
         CarMovement();
 
@@ -180,10 +183,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
-            if (LGM == null || !LGM.useLogitechWheel)
-            {
-                CarMovement();
-            }
+            
+            CarMovement();
+            
             if (IsDrifting){
                 DriftPhysics();
             }
@@ -197,13 +199,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         foreach (Wheel wheel in Wheels)
         {
-            if (wheel.collider == null)
-                continue;
-
             if (wheel.IsGrounded())
                 grounded++;
         }
-
         return grounded;
     }
 
@@ -224,7 +222,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Vector3 moveDir = transform.forward;
         if (IsDrifting)
         {
-            // Project velocity onto the car's local plane so it works on hills
             Vector3 slopeVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
             if (slopeVel.sqrMagnitude > 1f) moveDir = slopeVel.normalized;
         }
@@ -240,10 +237,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
 
-        foreach (var wheel in Wheels)
-        {
-
-        }
     }
 
     void DriftPhysics()
@@ -251,56 +244,64 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         Vector3 velocity = CarRb.linearVelocity;
         
-        // Use the car's up vector (hill slope) instead of pure world up
-        // otherwise drifting on slopes makes the car fly instantly
         Vector3 groundNormal = transform.up;
 
         velocity = Vector3.ProjectOnPlane(velocity, groundNormal);
+        if (velocity.magnitude < 0.1f) return;
 
-        float speed = velocity.magnitude;
-        if (speed < 0.1f) return;
+        Vector3 velocityDirection = velocity / velocity.magnitude;
 
-        Vector3 velocityDir = velocity / speed;
-
-        Vector3 right = Vector3.Cross(groundNormal, velocityDir).normalized;
+        Vector3 rightorleft = Vector3.Cross(groundNormal, velocityDirection).normalized;
 
         float steer = rawSteerInput;
 
-        float speed01 = Mathf.Clamp01(speed / MaxSpeed);
-        float speedSteerMultiplier = Mathf.Pow(1f - speed01, 2.2f);
+        float steerStrength = 
+            0.1421f 
+            * Mathf.Pow(1f - Mathf.Clamp01(velocity.magnitude / MaxSpeed), 2.2f)
+            * Mathf.Lerp(
+                1f, 
+                0.55f, 
+                Vector3.Angle(groundNormal, Vector3.up) / AllowedDriftAngle
+            );
 
-        float slopeAngle = Vector3.Angle(groundNormal, Vector3.up);
-        float slopeDamp = Mathf.Lerp(1f, 0.55f, slopeAngle / 45f);
-
-        float steerStrength = 0.1421f * speedSteerMultiplier * slopeDamp;
-
-        float inertia = Mathf.Lerp(6f, 2.2f, speed01);
-
-        Vector3 desiredDirection = velocityDir + right * steer * steerStrength;
+        Vector3 desiredDirection = velocityDirection + rightorleft * steer * steerStrength;
 
         desiredDirection = Vector3.ProjectOnPlane(desiredDirection, groundNormal).normalized;
 
-        Vector3 targetVel = desiredDirection * speed;
+        Vector3 targetVelocity = desiredDirection * velocity.magnitude;
 
-        Vector3 verticalVel = Vector3.Project(CarRb.linearVelocity, groundNormal);
         Vector3 horizontalVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, groundNormal);
 
-        float time = Mathf.Clamp01(inertia * Time.fixedDeltaTime);
+        float time = Mathf.Clamp01(
+            Mathf.Lerp(
+                6f, 
+                2.2f, 
+                Mathf.Clamp01(velocity.sqrMagnitude / (MaxSpeed*MaxSpeed))
+            ) * Time.fixedDeltaTime
+        );
 
-        Vector3 dir = Vector3.Slerp(horizontalVel.normalized, targetVel.normalized, time);
-        horizontalVel = dir * horizontalVel.magnitude;
+        Vector3 direction = Vector3.Slerp(horizontalVel.normalized, targetVelocity.normalized, time);
+        horizontalVel = direction * horizontalVel.magnitude;
 
-        CarRb.linearVelocity = horizontalVel + verticalVel;
-        
-        float visualSteerStrength = 0.55f * slopeDamp;
-        Vector3 visualDesiredDirection = velocityDir + right * steer * visualSteerStrength;
-        
-        Vector3 visualDirection = Vector3.Slerp(velocityDir, visualDesiredDirection, Mathf.Abs(steer));
+        CarRb.linearVelocity = horizontalVel + 
+            Vector3.Project(CarRb.linearVelocity, groundNormal);
+                    
+        Vector3 visualDirection = Vector3.Slerp(
+            velocityDirection, 
+            velocityDirection + 0.55f * Mathf.Lerp(
+                1f, 
+                0.55f, 
+                Vector3.Angle(groundNormal, Vector3.up) / AllowedDriftAngle
+            ) * steer * rightorleft, 
+            Mathf.Abs(steer)
+        );
+
         visualDirection = Vector3.ProjectOnPlane(visualDirection, groundNormal).normalized;
-
-        Quaternion targetRot = Quaternion.LookRotation(visualDirection, groundNormal);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 4.5f * Time.fixedDeltaTime);
-    
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            Quaternion.LookRotation(visualDirection, groundNormal),
+            4.5f * Time.fixedDeltaTime
+        );
     }
         
     void SetDriftFriction(bool drifting)
@@ -329,7 +330,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         IsDrifting = true;
 
-        // 🔥 THIS is your WheelCollider "loose drift feel"
         CarRb.angularDamping = driftAngularDrag;
 
         foreach (Wheel wheel in Wheels)
@@ -372,23 +372,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         return Mathf.Abs(steer) < steerDeadzone ? 0f : steer;
     }
 
-    public float GetDriftSharpness()
-    {
-        if (!IsDrifting)
-            return 0f;
-
-        Vector3 flatVelocity = CarRb.linearVelocity;
-        flatVelocity.y = 0f;
-
-        if (flatVelocity.sqrMagnitude < 0.1f)
-            return 0f;
-
-        return Vector3.Angle(transform.forward, flatVelocity.normalized);
-    }
-
     void OnCollisionEnter(Collision collision)
     {
-        if (PixelCount == null  || collision.impulse.magnitude < 0.1f ) 
+        if (PixelCount == null  || collision.impulse.sqrMagnitude < 0.1f ) 
             return;
 
         float impact = Mathf.Clamp01(collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f));
@@ -425,7 +411,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         }
 
         PixelCount.SetFloat("_pixelcount", basePixel);
-
         PixelRecovery = null;
     }
 }
