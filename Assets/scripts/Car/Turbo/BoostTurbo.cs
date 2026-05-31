@@ -1,10 +1,23 @@
 using UnityEngine;
 
-public class BoostTurbo : Turbo
+public class BoostTurbo : AbstractTurbo
 {
+    [SerializeField] private float maxSpeedMultiplier = 1.3f;
+
     protected override void Use()
     {
-        carController.CarRb.AddForce(Vector3.ProjectOnPlane(carController.transform.forward, Vector3.up).normalized * strength, ForceMode.Acceleration);
-        carController.TargetTorque = Mathf.Min(carController.BaseTargetTorque * 1.5f, carController.Acceleration);
+        carController.CarRb.linearVelocity += strength * Time.deltaTime * carController.transform.forward;
+    }
+
+    public override void Activate()
+    {
+        base.Activate();
+        carController.MaxSpeed *= maxSpeedMultiplier;
+    }
+
+    public override void Stop()
+    {
+        base.Stop();
+        carController.ResetMaxSpeed();
     }
 }
