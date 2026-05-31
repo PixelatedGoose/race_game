@@ -884,6 +884,7 @@ GameObject:
   - component: {fileID: 8914551668265311642}
   - component: {fileID: 5630865942300931916}
   - component: {fileID: 4668002584326815313}
+  - component: {fileID: 7447685734788043401}
   m_Layer: 0
   m_Name: car
   m_TagString: Untagged
@@ -955,7 +956,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Acceleration: 700
-  Deceleration: 1
   BrakeAcceleration: 200
   TurnSensitivity: 1
   MinTurnSensitivity: 17.5
@@ -967,11 +967,6 @@ MonoBehaviour:
   Turbesped: 60
   BaseSpeed: 120
   DriftMaxSpeed: 100
-  TurbeMax: 40
-  Turbepush: 50
-  TurbeReduce: 15
-  TurbeRegen: 15
-  TurbeWaitTime: 2
   carLights: {fileID: 4688250000957293257}
 --- !u!114 &8914551668265311642
 MonoBehaviour:
@@ -1005,6 +1000,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 3
+  lights: {fileID: 0}
 --- !u!114 &4668002584326815313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1035,6 +1031,26 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &7447685734788043401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3496182830567923885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e35e307104177d64d9b0766a3f513f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoostTurbo
+  strength: 30
+  maxAmount: 40
+  startingAmount: 100
+  consumeRate: 15
+  regenerationRate: 15
+  waitTime: 2
+  amount: 0
+  maxSpeedMultiplier: 1.5
 --- !u!1 &3689803584756702517
 GameObject:
   m_ObjectHideFlags: 0

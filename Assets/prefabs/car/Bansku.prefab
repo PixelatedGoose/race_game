@@ -2058,7 +2058,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Acceleration: 700
-  Deceleration: 1
   BrakeAcceleration: 150
   TurnSensitivity: 1
   MinTurnSensitivity: 17.5
@@ -2070,11 +2069,6 @@ MonoBehaviour:
   Turbesped: 60
   BaseSpeed: 150
   DriftMaxSpeed: 100
-  TurbeMax: 85
-  Turbepush: 17.5
-  TurbeReduce: 20
-  TurbeRegen: 15
-  TurbeWaitTime: 2
   carLights: {fileID: 1820963566959711912}
 --- !u!114 &8984414616937260121
 MonoBehaviour:
@@ -2119,6 +2113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 3
+  lights: {fileID: 0}
 --- !u!114 &3840663368446193145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2173,13 +2168,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35e307104177d64d9b0766a3f513f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoostTurbo
-  strength: 10
-  maxAmount: 100
+  strength: 17.5
+  maxAmount: 85
   startingAmount: 100
-  consumeRate: 10
-  regenerationRate: 10
-  waitTime: 1
-  maxSpeedMultiplier: 1.3
+  consumeRate: 20
+  regenerationRate: 15
+  waitTime: 2
+  amount: 0
+  maxSpeedMultiplier: 1.4
 --- !u!1 &6464818183039503655
 GameObject:
   m_ObjectHideFlags: 0
