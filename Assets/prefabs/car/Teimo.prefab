@@ -212,6 +212,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -10
       objectReference: {fileID: 0}
+    - target: {fileID: 5282953261142955619, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_LinearDamping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6752286418973455843, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -23.779999

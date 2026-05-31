@@ -27,7 +27,6 @@ public class PlayerCarController : BaseCarController
     {
         Controls = new CarInputActions();
         PlayerInput = GetComponent<PlayerInput>();
-        TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
         CarRb = GetComponent<Rigidbody>();
         racerScript = GetComponent<RacerScript>();
@@ -57,7 +56,6 @@ public class PlayerCarController : BaseCarController
         UpdateDriftSpeed();
         Move();
         Steer();
-        Decelerate();
         Applyturnsensitivity(speed);
         WheelEffects(IsDrifting);
         base.FixedUpdate();
@@ -79,7 +77,6 @@ public class PlayerCarController : BaseCarController
         if (LGM != null && LGM.useLogitechWheel && LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0))
         {
             LogitechGSDK.LogiUpdate();
-            LGM.GetLogitechInputs();
             LGM.ApplyForceFeedback(); 
         }
     }
@@ -93,8 +90,7 @@ public class PlayerCarController : BaseCarController
     private void OnControlsChanged(PlayerInput input)
     {
         CurrentControlScheme = input.currentControlScheme;
-        if (LGM != null)
-            LGM.ReenableFromControlScheme(CurrentControlScheme);
+
     }
 
     void OnAnyActionTriggered(InputAction.CallbackContext ctx)

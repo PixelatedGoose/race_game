@@ -95,18 +95,33 @@ public class Wheels
     }
 
     [SerializeField] protected Wheel[] wheels = new Wheel[4];
-    public Wheel[] FrontWheels { get; private set; }= new Wheel[2];
+    public Wheel[] FrontWheels { get; private set; } = new Wheel[2];
     public Wheel[] RearWheels { get; private set; } = new Wheel[2];
     public float MotorTorque {
         get
         {
-            return FrontWheels[0].collider.motorTorque;
+            return wheels[0].collider.motorTorque;
         }
         set
         {
             foreach (Wheel wheel in FrontWheels)
             {
-                wheel.collider.motorTorque = value;
+                wheel.SetTorque(value);
+            }
+        }
+    }
+
+    public float BrakeTorque
+    {
+        get
+        {
+            return wheels[0].collider.brakeTorque;
+        }
+        set
+        {
+            foreach (Wheel wheel in wheels)
+            {
+                wheel.Brake(value);
             }
         }
     }

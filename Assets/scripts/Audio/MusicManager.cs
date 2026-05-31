@@ -22,7 +22,7 @@ public class MusicManager : MonoBehaviour
     private CarMusicState LatestMusState = CarMusicState.Main;
     public bool shuffleSong;
     public bool loopSong;
-    private bool musicPlaybackManuallyPaused = false;
+    public bool musicPlaybackManuallyPaused = false;
     private int[] activeTweenIDs;
 
     //uniikkeja yksittäisiä biisejä, siksi en laita näille tageja tai arrayta
@@ -114,18 +114,18 @@ public class MusicManager : MonoBehaviour
         PlaySong();
         StartCoroutine(SongPlaybackHandler());
     }
-
     private IEnumerator SongPlaybackHandler()
     {
         Debug.Log($"started playback coroutine");
 
         //TODO: saaha tää paska toimimaan
         //jos pausettaa pelin, biisi alkaa alusta
-        //previous song ei toimi (index out of range)
         //muita mahollisia bugeja liittyen looppaukseen ja shuffleen
-        while (currentSong.baseTrack.isPlaying || musicPlaybackManuallyPaused)
+
+        //varmistetaan, että AudioSourcen .Pause() ei alota seuraavaa trackkia; ainoastaan NextSong() saa tehä niin
+        while (currentSong.baseTrack.isPlaying || GameManager.IsPaused || musicPlaybackManuallyPaused)
         {
-            Debug.Log($"song still playing");
+            //Debug.Log($"song still playing");
             yield return null;
         }
 
@@ -137,27 +137,11 @@ public class MusicManager : MonoBehaviour
 
     public void PlaySong()
     {
+        musicPlaybackManuallyPaused = false;
         foreach (AudioSource track in currentSongTracks) track.Play();
-        Debug.Log($"started playing song: {currentSong.name}");
-        Debug.Log($"tracks for {currentSong.name} are: {currentSong.baseTrack}, {currentSong.driftTrack}, {currentSong.turboTrack}");
+        Debug.Log($"started playing song: {currentSong.name} / tracks are: {currentSong.baseTrack}, {currentSong.driftTrack}, {currentSong.turboTrack}");
     }
-    public void PauseSong()
-    {
-        musicPlaybackManuallyPaused = !musicPlaybackManuallyPaused;
-        Debug.Log($"song paused state set to: {musicPlaybackManuallyPaused}");
-        foreach (AudioSource track in currentSongTracks)
-        {
-            if (musicPlaybackManuallyPaused) track.Pause();
-            else track.UnPause();
-        }
-    }
-    public void StopSong(bool endRaceEvent = false)
-    {
-        foreach (AudioSource track in currentSongTracks) track.Stop();
-        Debug.Log($"stopped playing song: {currentSong.name}");
-        if (endRaceEvent && finalLapTrack != null) finalLapTrack.Stop();
-    }
-    public void StartFinalLapSong()
+    public void PlayFinalLapSong()
     {
         Debug.Log("jos näitä logeja on enemmän ku yks jokin on paskana.");
         Controls.CarControls.Drift.started -= ctx => DriftCall();
@@ -165,66 +149,56 @@ public class MusicManager : MonoBehaviour
         Controls.CarControls.turbo.started -= ctx => TurboCall();
         Controls.CarControls.turbo.canceled -= ctx => TurboCanceled();
         StopSong();
-        finalLapTrack.Play();
+        finalLapTrack.Play(); //final lap biisillä on vaa base trackki
+    }
+    public void PauseSong()
+    {
+        foreach (AudioSource track in currentSongTracks)
+        {
+            if (track.isPlaying) track.Pause();
+            else track.UnPause();
+        }
+        musicPlaybackManuallyPaused = !currentSong.baseTrack.isPlaying;
+        Debug.Log($"song paused: {musicPlaybackManuallyPaused}");
+    }
+    public void StopSong(bool endRaceEvent = false)
+    {
+        foreach (AudioSource track in currentSongTracks) track.Stop();
+        Debug.Log($"stopped playing song: {currentSong.name}");
+        if (endRaceEvent && finalLapTrack != null) finalLapTrack.Stop();
     }
 
-    /* public void ChangeSong(string newSongName)
-    {
-        StopSong();
-        currentSong = songs.First(s => s.name == newSongName);
-        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
-        PlaySong();
-    } */
-    /* public void ChangeSongByIndex(int change)
-    {
-        int newSongIndex = songs.IndexOf(currentSong);
-        StopSong();
-        //jos biisi on listan lengthin sisällä, siirry siihen
-        //jos se on ulkopuolella (viimesestä ensimmäiseen tai vice versa), mene joko alkuun tai loppuun
-        //also btw tää ei ees oo tehty loppuun; ethän käytä thanks
-        currentSong = songs[currentSongIndex >= 0 && currentSongIndex < songs.Count ? currentSongIndex + change : (currentSongIndex + change)] ?? currentSong;
-        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
-        PlaySong();
-    } */
     //dashboard methodit
     public void NextSong()
     {
         int newSongIndex = shuffleSong ? UnityEngine.Random.Range(0, songs.Count) : (songs.IndexOf(currentSong) + 1) % songs.Count;
+        StopSong();
         currentSong = songs[newSongIndex];
         Debug.Log($"shuffle state: {shuffleSong}");
         SetLoop(loopSong);
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
 
-        StopSong();
         PlaySong();
         Debug.Log($"to NEXT song: {currentSong.name}; index {newSongIndex}");
     }
     public void PreviousSong()
     {
         int newSongIndex = shuffleSong ? UnityEngine.Random.Range(0, songs.Count) : songs.IndexOf(currentSong) - 1;
+        StopSong();
         currentSong = songs[newSongIndex < 0 ? songs.Count - 1 : newSongIndex];
         if (newSongIndex < 0) newSongIndex = songs.Count - 1; //jotta newSongIndex ei tee hauskuuksia
         Debug.Log($"shuffle state: {shuffleSong}");
         SetLoop(loopSong);
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
 
-        StopSong();
         PlaySong();
         Debug.Log($"to PREVIOUS song: {currentSong.name}; index {newSongIndex}");
     }
-    /* public void RandomSong()
-    {
-        StopMusicTracks();
-        currentSong = songs[UnityEngine.Random.Range(0, songs.Count)] ?? currentSong;
-        currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
-        StartMusicTracks();
-        Debug.Log($"RANDOM selected song: {currentSong.name}; index {songs[songs.IndexOf(currentSong)]}");
-    } */
     public void SetLoop(bool loop)
     {
         loopSong = loop;
         foreach (AudioSource a in currentSongTracks) a.loop = loop;
-        Debug.Log($"loop state of current song set to {loop}");
+        Debug.Log($"loop state of {currentSong.name} set to {loop}");
     }
 
     public void PausedMusicHandler()
