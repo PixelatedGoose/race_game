@@ -1,6 +1,5 @@
 using UnityEngine;
 using Logitech;
-using NUnit.Framework;
 
 
 #if UNITY_EDITOR

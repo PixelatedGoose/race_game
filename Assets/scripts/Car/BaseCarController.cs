@@ -164,6 +164,20 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
+    public float GetDriftSharpness()
+    {
+        if (!IsDrifting)
+            return 0f;
+
+        Vector3 flatVelocity = CarRb.linearVelocity;
+        flatVelocity.y = 0f;
+
+        if (flatVelocity.sqrMagnitude < 0.1f)
+            return 0f;
+
+        return Vector3.Angle(transform.forward, flatVelocity.normalized);
+    }
+    
     protected void Decelerate()
     {
         if (MovementInputs.y == 0)

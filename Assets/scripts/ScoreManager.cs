@@ -29,7 +29,7 @@ public class ScoreManager : MonoBehaviour
     public event Action<int> OnScoreChanged;
     public float CurrentDriftMultiplier => isDriftingActive ? driftCompoundMultiplier : 0f;
 
-    PlayerCarController carController;
+    BaseCarController NUGGETS;
     RacerScript racerScript;
 
     [SerializeField] float scoreFloat, driftTime, driftCompoundMultiplier = 0.65f;
@@ -44,7 +44,12 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
-        carController = FindFirstObjectByType<PlayerCarController>();
+        NUGGETS = FindFirstObjectByType<NewDoublefunszechuansauceWithAsideofNuggets>();
+        if (NUGGETS == null)
+        {
+            NUGGETS = FindFirstObjectByType<PlayerCarController>();
+        }
+        
         racerScript  = FindFirstObjectByType<RacerScript>();
         multCounter  ??= FindFirstObjectByType<MultCounter>(FindObjectsInactive.Include);
     }
@@ -52,7 +57,7 @@ public class ScoreManager : MonoBehaviour
     void Update()
     {
         float dt  = Time.deltaTime;
-        Vector3 vel = carController?.CarRb != null ? carController.CarRb.linearVelocity : Vector3.zero;
+        Vector3 vel = NUGGETS?.CarRb != null ? NUGGETS.CarRb.linearVelocity : Vector3.zero;
 
         if (racerScript != null)
         {
@@ -90,14 +95,14 @@ public class ScoreManager : MonoBehaviour
     void UpdateBaseScore(float dt, Vector3 vel)
     {
         if (isOnGrass || racerScript == null || racerScript.raceFinished) return;
-        float fwd   = Mathf.Max(0f, Vector3.Dot(vel, carController.transform.forward));
+        float fwd   = Mathf.Max(0f, Vector3.Dot(vel, NUGGETS.transform.forward));
         float factor = Mathf.Clamp01(fwd / Mathf.Max(0.0001f, maxForwardSpeedForBase));
         scoreFloat += basePointsPerSecond * (1f + factor * baseSpeedMultiplier) * scoreMultiplier * dt;
     }
 
     void UpdateDriftState(float deltatime, Vector3 velocity)
     {
-        bool canDrift = !isOnGrass && carController != null && carController.IsDrifting;
+        bool canDrift = !isOnGrass && NUGGETS != null && NUGGETS.IsDrifting;
         if (canDrift)
         {
             if (!isDriftingActive) StartDrift();
@@ -139,16 +144,15 @@ public class ScoreManager : MonoBehaviour
 
     float ComputeDriftMultiplierIncrement(Vector3 vel, float dt)
     {
-        if (dt <= 0f || carController?.CarRb == null) return 0f;
+        if (dt <= 0f || NUGGETS?.CarRb == null) return 0f;
         if (vel.magnitude < minForwardSpeed) return 0f;
-        if (Mathf.Abs(Vector3.Dot(vel, carController.transform.right)) < minLateralSpeed) return 0f;
-        
-        float sharpness = Mathf.Abs(carController.GetDriftSharpness());
+        if (Mathf.Abs(Vector3.Dot(vel, NUGGETS.transform.right)) < minLateralSpeed) return 0f;
+        float sharpness = Mathf.Abs(NUGGETS.GetDriftSharpness());
         if (sharpness < minSharpnessForScoring) return 0f;
 
         driftTime += dt;
         float sharpBonus = Mathf.Pow(Mathf.InverseLerp(minSharpnessForScoring, peakSharpness, sharpness), sharpnessExponent);
-        float fwd = Mathf.Max(0f, Vector3.Dot(vel, carController.transform.forward));
+        float fwd = Mathf.Max(0f, Vector3.Dot(vel, NUGGETS.transform.forward));
         float speedFactor = Mathf.Clamp01(fwd / Mathf.Max(0.5f, maxForwardSpeedForBase));
         return (1f + sharpBonus + driftTime / timeScale) * (1f + speedFactor);
     }
