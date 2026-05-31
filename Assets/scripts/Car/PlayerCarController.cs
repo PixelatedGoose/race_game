@@ -27,7 +27,6 @@ public class PlayerCarController : BaseCarController
     {
         Controls = new CarInputActions();
         PlayerInput = GetComponent<PlayerInput>();
-        TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
         carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
         CarRb = GetComponent<Rigidbody>();
         racerScript = GetComponent<RacerScript>();
@@ -41,8 +40,8 @@ public class PlayerCarController : BaseCarController
 
         if (turbo != null)
         {
-            Controls.CarControls.turbo.started += context => { turbo.Activate(); };
-            Controls.CarControls.turbo.performed += context => { turbo.Stop(); };
+            Controls.CarControls.turbo.performed += context => { turbo.Activate(); };
+            Controls.CarControls.turbo.canceled += context => { turbo.Stop(); };
         }
     }
 
@@ -57,7 +56,6 @@ public class PlayerCarController : BaseCarController
         UpdateDriftSpeed();
         Move();
         Steer();
-        Decelerate();
         Applyturnsensitivity(speed);
         WheelEffects(IsDrifting);
         base.FixedUpdate();
@@ -187,10 +185,10 @@ public class PlayerCarController : BaseCarController
     {
         if (!IsDrifting) return;
 
-        if (IsTurboActive)
-            MaxSpeed = Mathf.Lerp(MaxSpeed, BaseSpeed + Turbesped, Time.deltaTime * 0.5f);
-        else
-            MaxSpeed = Mathf.Lerp(MaxSpeed, DriftMaxSpeed, Time.deltaTime * 0.1f);
+        // if (IsTurboActive)
+        //     MaxSpeed = Mathf.Lerp(MaxSpeed, BaseSpeed + Turbesped, Time.deltaTime * 0.5f);
+        // else
+        //     MaxSpeed = Mathf.Lerp(MaxSpeed, DriftMaxSpeed, Time.deltaTime * 0.1f);
 
         
         if (Mathf.Abs(MovementInputs.x) > 0.1f)
@@ -249,7 +247,7 @@ public class PlayerCarController : BaseCarController
     {
         UpdateTargetTorque();
         AdjustSuspension();
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
             if (Controls.CarControls.Brake.IsPressed()) wheel.Brake(BrakeAcceleration);
             else wheel.SetTorque(TargetTorque);
@@ -298,7 +296,7 @@ public class PlayerCarController : BaseCarController
 
         if (!IsDrifting)
         {
-            MaxSpeed = Mathf.Lerp(MaxSpeed, IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed, Time.deltaTime);
+            // MaxSpeed = Mathf.Lerp(MaxSpeed, IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed, Time.deltaTime);
         }
     }
 
@@ -310,16 +308,16 @@ public class PlayerCarController : BaseCarController
         IsDrifting = true;
 
 
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
-            if (wheel.WheelCollider == null) continue;
-            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            if (wheel.collider == null) continue;
+            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
             sideways.extremumSlip   = 0.9f;
             sideways.asymptoteSlip  = 1.6f;
             sideways.extremumValue  = 1.0f;
             sideways.asymptoteValue = 1.2f;
             sideways.stiffness      = 2.0f;
-            wheel.WheelCollider.sidewaysFriction = sideways;
+            wheel.collider.sidewaysFriction = sideways;
         }
 
         CarRb.angularDamping = 0.03f;
@@ -345,14 +343,14 @@ public class PlayerCarController : BaseCarController
 
         CarRb.angularDamping = Mathf.Lerp(CarRb.angularDamping, 0.1f, DeltaTime);
         
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
-            if (wheel.WheelCollider == null) continue;
-            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            if (wheel.collider == null) continue;
+            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
             sideways.stiffness = Mathf.Lerp(sideways.stiffness, 5f, DeltaTime);
             sideways.extremumSlip  = Mathf.Lerp(sideways.extremumSlip, 0.15f, DeltaTime);
             sideways.asymptoteSlip = Mathf.Lerp(sideways.asymptoteSlip, 0.1f, DeltaTime);
-            wheel.WheelCollider.sidewaysFriction = sideways;
+            wheel.collider.sidewaysFriction = sideways;
         }
     }
 
@@ -366,44 +364,44 @@ public class PlayerCarController : BaseCarController
 
         float turbe = Mathf.InverseLerp(6f, 10f, driftmultiplier);
         float TurbeStrength = Mathf.Lerp(1f, 3f, turbe);
-        float Duration = 3.5f;
+        // float Duration = 3.5f;
 
         if (TurbeBoost != null)
             StopCoroutine(TurbeBoost);
 
-        TurbeBoost = StartCoroutine(BoostCoroutine(TurbeStrength, Duration));
+        // TurbeBoost = StartCoroutine(BoostCoroutine(TurbeStrength, Duration));
     }
 
-    protected IEnumerator BoostCoroutine(float turboStrength, float durationOverride = -1f)
-    {
+    // protected IEnumerator BoostCoroutine(float turboStrength, float durationOverride = -1f)
+    // {
 
-        float GetCurrentBaseSpeed() => IsDrifting
-            ? (IsTurboActive ? BaseSpeed + Turbesped : DriftMaxSpeed)
-            : (IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed);
+    //     float GetCurrentBaseSpeed() => IsDrifting
+    //         ? (IsTurboActive ? BaseSpeed + Turbesped : DriftMaxSpeed)
+    //         : (IsTurboActive ? BaseSpeed + Turbesped : BaseSpeed);
 
-        float originalSpeed = GetCurrentBaseSpeed();
-        float boostedMax = Mathf.Max(BaseSpeed + Turbesped, originalSpeed + turboStrength);
+    //     float originalSpeed = GetCurrentBaseSpeed();
+    //     float boostedMax = Mathf.Max(BaseSpeed + Turbesped, originalSpeed + turboStrength);
 
 
-        float duration = durationOverride > 0f
-            ? durationOverride
-            : Mathf.Lerp(2.5f, 4.5f, Mathf.InverseLerp(2f, 5f, turboStrength));
+    //     float duration = durationOverride > 0f
+    //         ? durationOverride
+    //         : Mathf.Lerp(2.5f, 4.5f, Mathf.InverseLerp(2f, 5f, turboStrength));
 
-        float timer = 0f;
+    //     float timer = 0f;
 
-        while (timer < duration)
-        {
-            timer += Time.deltaTime;
-            float smooth = Mathf.SmoothStep(0f, 1f, timer / duration);
+    //     while (timer < duration)
+    //     {
+    //         timer += Time.deltaTime;
+    //         float smooth = Mathf.SmoothStep(0f, 1f, timer / duration);
 
-            float expo = 1f - Mathf.Exp(-12f * timer / duration);
-            CarRb.AddForce(transform.forward * turboStrength * 2.5f * expo * Time.deltaTime, ForceMode.VelocityChange);
+    //         float expo = 1f - Mathf.Exp(-12f * timer / duration);
+    //         CarRb.AddForce(transform.forward * turboStrength * 2.5f * expo * Time.deltaTime, ForceMode.VelocityChange);
 
-            MaxSpeed = Mathf.Lerp(MaxSpeed, Mathf.Lerp(boostedMax, GetCurrentBaseSpeed(), smooth), Time.deltaTime * 2f);
+    //         MaxSpeed = Mathf.Lerp(MaxSpeed, Mathf.Lerp(boostedMax, GetCurrentBaseSpeed(), smooth), Time.deltaTime * 2f);
 
-            yield return null;
-        }
-        MaxSpeed = GetCurrentBaseSpeed();
-        TurbeBoost = null;
-    }
+    //         yield return null;
+    //     }
+    //     MaxSpeed = GetCurrentBaseSpeed();
+    //     TurbeBoost = null;
+    // }
 }

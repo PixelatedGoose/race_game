@@ -2,29 +2,45 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Linq;
+using Unity.Splines.Examples;
 
 public class BaseCarController : MonoBehaviour
 {
     [Header("Auton asetukset")]
     //movement reworking jälkeen Acceleration ei tarvi olla 700 enää, 10 on jo hyvä 
     public float Acceleration = 700.0f;
-    public float Deceleration = 700.0f;
     [SerializeField] protected float BrakeAcceleration = 500.0f;
     [Header("turn asetukset")]
     [SerializeField] protected float TurnSensitivity = 1.0f;
     [SerializeField] protected float MinTurnSensitivity = 17.5f;
     [SerializeField] protected float MaxTurnSensitivity = 30.0f;
+    [SerializeField] protected float SteerStrength = 10.0f;
     protected float turnSensitivityRange;
-    public float MaxSpeed = 180.0f;
-    /// <summary>
-    /// Max speed in meters per second.
-    /// </summary>
-    public float MpsMaxSpeed { get; protected set; }
-    [SerializeField] protected List<Wheel> Wheels;
-    protected readonly Func<Wheel, bool> frontWheelPredicate = w => w.Axel == Axel.Front;
-    protected readonly Func<Wheel, bool> rearWheelPredicate = w => w.Axel == Axel.Rear;
+    public float MaxSpeed
+    {
+        get
+        {
+            return CarRb.maxLinearVelocity * 3.6f;
+        }
+        set
+        {
+            CarRb.maxLinearVelocity = value / 3.6f;
+        }
+    }
+    public float MpsMaxSpeed
+    {
+        get
+        {
+            return CarRb.maxLinearVelocity;
+        }
+        set
+        {
+            CarRb.maxLinearVelocity = value;
+        }
+    }
+    [SerializeField] protected float BaseMaxSpeed = 130f;
+    [SerializeField] protected Wheels Wheels;
     [Header("Trail settings")]
     public Vector2 MovementInputs;
     protected Vector3 _CenterofMass;
@@ -39,60 +55,20 @@ public class BaseCarController : MonoBehaviour
     public float BaseTargetTorque { get; protected set; }
     public float SmoothedMaxAcceleration { get; protected set; }
     [Header("turbe asetukset")]
-    protected Image TurbeBar;
     public bool IsTurboActive { get; set; } = false;
-    public float TurbeAmount { get; protected set; } = 100.0f;
-    [SerializeField] protected float TurbeMax = 100.0f;
-    public float Turbepush = 15.0f;
-    [SerializeField] protected float TurbeReduce = 10.0f;
-    [SerializeField] protected float TurbeRegen = 10.0f;
-    [SerializeField] protected float TurbeWaitTime = 2.0f;
     protected Coroutine TurbeRegeneration = null;
     [NonSerialized] public bool CanDrift = true;
     [NonSerialized] public bool CanUseTurbo = true;
     protected Collider carCollider;
     public Vector3 CarExtents { get; protected set; }
-    protected Turbo turbo;
-
-    public enum Axel
-    {
-        Front,
-        Rear
-    }
-
-    [Serializable]
-    public class Wheel
-    {
-        public GameObject WheelModel;
-        public WheelCollider WheelCollider;
-
-        public GameObject WheelEffectobj;
-        public ParticleSystem SmokeParticle;
-        public Axel Axel;
-        public TrailRenderer trailRenderer;
-
-        public bool IsGrounded()
-        {
-            return WheelCollider.GetGroundHit(out _);
-        }
-
-        public void Brake(float BrakeAcceleration)
-        {
-            WheelCollider.brakeTorque = BrakeAcceleration * 15f;
-        }
-
-        public void SetTorque(float TargetTorque)
-        {
-            WheelCollider.motorTorque = TargetTorque;
-            WheelCollider.brakeTorque = 0f;
-        }
-    }
+    protected AbstractTurbo turbo;
 
     virtual protected void Awake()
     {
-        MpsMaxSpeed = MaxSpeed / 3.6f;
+        MaxSpeed = BaseMaxSpeed;
         turnSensitivityRange = MaxTurnSensitivity - MinTurnSensitivity;
         TryGetComponent(out turbo);
+        AutoAssignWheelsAndMaterials();
     }
 
     virtual protected void Start()
@@ -102,65 +78,33 @@ public class BaseCarController : MonoBehaviour
         ClearWheelTrails();
     }
 
-    virtual protected void FixedUpdate()
-    {
-        ApplySpeedLimit();
-    }
-
-    virtual protected void ApplySpeedLimit()
-    {
-        if (CarRb.linearVelocity.magnitude > MpsMaxSpeed) CarRb.linearVelocity = MpsMaxSpeed * CarRb.linearVelocity.normalized;
-    }
+    virtual protected void FixedUpdate() {}
+    public void ResetMaxSpeed() => MaxSpeed = BaseMaxSpeed;
 
     [ContextMenu("Auto Assign Wheels")]
     protected void AutoAssignWheelsAndMaterials()
     {
-        Wheels.Clear();
-
         var Colliders = GetComponentsInChildren<WheelCollider>(true);
         var Meshes = transform.GetComponentsInChildren<Transform>().First(obj => obj.name == "meshes");
         
         var Effects = transform.GetComponentsInChildren<Transform>().First(obj => obj.name == "wheelEffectobj");
 
-        foreach (WheelCollider WheelCollider in Colliders)
-        {
-            Wheel wheel = new()
-            {
-                WheelCollider = WheelCollider
-            };
-
-            Transform Mesh = Meshes.Find(WheelCollider.name);
-
-            wheel.WheelModel = Mesh != null ? Mesh.gameObject : null;
-
-            Transform Effect = Effects.transform.Find(WheelCollider.name);
-
-            wheel.WheelEffectobj = Effect != null ? Effect.gameObject : null;
-            TrailRenderer trailRenderer = wheel.WheelEffectobj != null ? wheel.WheelEffectobj.GetComponentInChildren<TrailRenderer>(true) : null;
-            if (trailRenderer != null && (trailRenderer.sharedMaterial == null || trailRenderer.sharedMaterial.shader == null || !trailRenderer.sharedMaterial.shader.isSupported))
-            {
-                trailRenderer.sharedMaterial = new Material(Shader.Find("Sprites/Default"));
-            }
-            trailRenderer.enabled = true;
-            wheel.trailRenderer = trailRenderer;
-            wheel.SmokeParticle = wheel.WheelEffectobj != null
-                ? wheel.WheelEffectobj.GetComponentInChildren<ParticleSystem>(true)
-                : WheelCollider.transform.GetComponentInChildren<ParticleSystem>(true);
-
-            wheel.Axel = WheelCollider.name.IndexOf("front", StringComparison.OrdinalIgnoreCase) >= 0 ? Axel.Front : Axel.Rear;
-
-            Wheels.Add(wheel);
-        }
+        Wheels = new Wheels(
+            GetComponentsInChildren<WheelCollider>(true),
+            transform.GetComponentsInChildren<Transform>().First(obj => obj.name == "meshes"),
+            transform.GetComponentsInChildren<Transform>().First(obj => obj.name == "wheelEffectobj")
+        );
     }
+
 
     protected void AdjustSuspension()
     {
         foreach (Wheel wheel in Wheels)
         {
-            JointSpring suspensionSpring = wheel.WheelCollider.suspensionSpring;
+            JointSpring suspensionSpring = wheel.collider.suspensionSpring;
             suspensionSpring.spring = 8000.0f;
             suspensionSpring.damper = 5000.0f;
-            wheel.WheelCollider.suspensionSpring = suspensionSpring;
+            wheel.collider.suspensionSpring = suspensionSpring;
         }
     }
 
@@ -191,10 +135,7 @@ public class BaseCarController : MonoBehaviour
 
     protected void Steer()
     {
-        foreach (Wheel wheel in Wheels)
-        {
-            if (wheel.Axel == Axel.Front) wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, MovementInputs.x * TurnSensitivity * (IsDrifting ? 0.8f : 0.35f), 0.6f);           
-        }
+        Wheels.SteerAngle = Mathf.Lerp(Wheels.SteerAngle, MovementInputs.x * TurnSensitivity, SteerStrength * Time.deltaTime);
     }
 
 
@@ -202,24 +143,24 @@ public class BaseCarController : MonoBehaviour
     {
         foreach (Wheel wheel in Wheels)
         {
-            JointSpring suspensionSpring = wheel.WheelCollider.suspensionSpring;
+            JointSpring suspensionSpring = wheel.collider.suspensionSpring;
             suspensionSpring.spring = 500.0f;
             suspensionSpring.damper = 2500.0f;
-            wheel.WheelCollider.suspensionSpring = suspensionSpring;
+            wheel.collider.suspensionSpring = suspensionSpring;
 
-            WheelFrictionCurve forwardFriction = wheel.WheelCollider.forwardFriction;
+            WheelFrictionCurve forwardFriction = wheel.collider.forwardFriction;
             forwardFriction.extremumSlip = 0.45f;
             forwardFriction.asymptoteSlip = 0.6f;
             forwardFriction.extremumValue = 1;
             forwardFriction.asymptoteValue = 1;
             forwardFriction.stiffness = 5.5f;
-            wheel.WheelCollider.forwardFriction = forwardFriction;
+            wheel.collider.forwardFriction = forwardFriction;
 
-            if (wheel.Axel == Axel.Front)
+            if (wheel.axel == Wheel.Axel.Front)
             {
-                WheelFrictionCurve sidewaysFriction = wheel.WheelCollider.sidewaysFriction;
+                WheelFrictionCurve sidewaysFriction = wheel.collider.sidewaysFriction;
                 sidewaysFriction.stiffness = 2f;
-                wheel.WheelCollider.sidewaysFriction = sidewaysFriction;
+                wheel.collider.sidewaysFriction = sidewaysFriction;
             }
         }        
     }
@@ -228,8 +169,8 @@ public class BaseCarController : MonoBehaviour
     {
         foreach (Wheel wheel in Wheels)
         {
-            wheel.WheelCollider.GetWorldPose(out Vector3 pos, out Quaternion rot);
-            wheel.WheelModel.transform.SetPositionAndRotation(pos, rot);
+            wheel.collider.GetWorldPose(out Vector3 pos, out Quaternion rot);
+            wheel.model.transform.SetPositionAndRotation(pos, rot);
         }
     }
 
@@ -240,15 +181,13 @@ public class BaseCarController : MonoBehaviour
     /// </summary>
     protected void WheelEffects(bool enabled)
     {
-        foreach (Wheel wheel in Wheels)
+        foreach (Wheel wheel in Wheels.RearWheels)
         {
-            if (wheel.Axel != Axel.Rear) continue;
-
             wheel.trailRenderer.emitting = enabled && wheel.IsGrounded();
 
-            if (wheel.SmokeParticle == null) continue;
-            if (wheel.trailRenderer.emitting) wheel.SmokeParticle.Play();
-            else wheel.SmokeParticle.Stop();
+            if (wheel.smokeParticle == null) continue;
+            if (wheel.trailRenderer.emitting) wheel.smokeParticle.Play();
+            else wheel.smokeParticle.Stop();
         }
     }
 

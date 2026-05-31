@@ -3,16 +3,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Logitech;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
 public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 {
-    public CarInputActions Controls { get; protected set; }
-
+    public CarInputActions Controls { get; protected set; } = new CarInputActions();
+    RacerScript racerScript;
     LogitechMovement LGM;
     PlayerInput PlayerInput;
-    
     string CurrentControlScheme;
 
     [Header("Visuals")]
@@ -43,6 +43,10 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected override void Awake()
     {
+        CarRb = GetComponent<Rigidbody>();
+        racerScript = GetComponent<RacerScript>();
+        TryGetComponent(out LGM);
+        
         Controls = new CarInputActions();
 
         PlayerInput = GetComponent<PlayerInput>();
@@ -50,7 +54,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         CarRb = GetComponent<Rigidbody>();
 
-        TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
+        // TurbeBar = GameManager.instance.CarUI.transform.Find("TurbeDisplay").GetComponentInChildren<Image>();
 
         Controls.Enable();
 
@@ -143,6 +147,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
             return;
 
         MovementInputs = ctx.ReadValue<Vector2>();
+        Steer();
         MovementInputs.x = ApplySteerDeadzone(MovementInputs.x);
         rawSteerInput = MovementInputs.x;
     }
@@ -152,6 +157,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         if (LGM != null && LGM.useLogitechWheel)
             return;
         MovementInputs = Vector2.zero;
+        Steer();
         rawSteerInput = 0f;
     }
 
@@ -159,6 +165,10 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         Animatewheels();
         Steer();
+        CarMovement();
+
+
+
         if (LGM != null && LGM.useLogitechWheel)
         {
             LGM.allowAutoEnable = true;
@@ -179,8 +189,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
             if (IsDrifting){
                 DriftPhysics();
             }
-            ApplySpeedLimit();
-            Decelerate();
         }
         base.FixedUpdate();
     }
@@ -233,6 +241,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void DriftPhysics()
     {
+
         Vector3 velocity = CarRb.linearVelocity;
         
         Vector3 groundNormal = transform.up;
@@ -299,8 +308,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         foreach (Wheel wheel in Wheels)
         {
-            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
-            WheelFrictionCurve forward = wheel.WheelCollider.forwardFriction;
+            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
+            WheelFrictionCurve forward = wheel.collider.forwardFriction;
 
             if (drifting){
                 sideways.stiffness = 0.5f;
@@ -311,8 +320,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
                 forward.stiffness = 5.0f;
             }
 
-            wheel.WheelCollider.sidewaysFriction = sideways;
-            wheel.WheelCollider.forwardFriction = forward;
+            wheel.collider.sidewaysFriction = sideways;
+            wheel.collider.forwardFriction = forward;
         }
     }
 
@@ -323,23 +332,18 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         CarRb.angularDamping = driftAngularDrag;
 
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
-            if (wheel.WheelCollider == null) continue;
-
-            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
             sideways.stiffness = 2.0f;
-            wheel.WheelCollider.sidewaysFriction = sideways;
+            wheel.collider.sidewaysFriction = sideways;
         }
 
         AdjustWheelsForDrift();
         WheelEffects(true);
     }
 
-    void OnDriftCanceled(InputAction.CallbackContext ctx)
-    {
-        EndDrift();
-    }
+    void OnDriftCanceled(InputAction.CallbackContext ctx) => EndDrift();
 
     void EndDrift()
     {
@@ -349,34 +353,19 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         CarRb.angularDamping = normalAngularDrag;
 
-        foreach (var wheel in Wheels)
+        foreach (Wheel wheel in Wheels)
         {
-            if (wheel.WheelCollider == null) continue;
-
-            WheelFrictionCurve sideways = wheel.WheelCollider.sidewaysFriction;
+            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
             sideways.stiffness = 5.0f;
-            wheel.WheelCollider.sidewaysFriction = sideways;
-    }
-
+            wheel.collider.sidewaysFriction = sideways;
+        }
 
         WheelEffects(false);
     }
 
-    void OnBrakePerformed(InputAction.CallbackContext ctx)
-    {
-        foreach (Wheel wheel in Wheels)
-        {
-            wheel.Brake(BrakeAcceleration);
-        }
-    }
 
-    void OnBrakeCanceled(InputAction.CallbackContext ctx)
-    {
-        foreach (Wheel wheel in Wheels)
-        {
-            wheel.SetTorque(TargetTorque);
-        }
-    }
+    void OnBrakePerformed(InputAction.CallbackContext ctx) => Wheels.BrakeTorque = BrakeAcceleration;
+    void OnBrakeCanceled(InputAction.CallbackContext ctx) => Wheels.MotorTorque = TargetTorque;
 
     float ApplySteerDeadzone(float steer)
     {
@@ -396,7 +385,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         {
             StopCoroutine(PixelRecovery);
         }
-        PixelRecovery = StartCoroutine(PixelRecover(Mathf.Lerp(basePixel, minPixel, impact),Mathf.Max(0.1f, recoverTime * impact)
+
+        PixelRecovery = StartCoroutine(
+            PixelRecover(
+                Mathf.Lerp(basePixel, minPixel, impact),
+                Mathf.Max(0.1f, recoverTime * impact)
             )
         );
     }
@@ -408,7 +401,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         while (elapsed < recover)
         {
             elapsed += Time.deltaTime;
-            PixelCount.SetFloat("_pixelcount",Mathf.Lerp(hitPixel, basePixel, elapsed / recover));
+
+            PixelCount.SetFloat(
+                "_pixelcount",
+                Mathf.Lerp(hitPixel, basePixel, elapsed / recover)
+            );
+
             yield return null;
         }
 
