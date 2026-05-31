@@ -924,7 +924,7 @@ Rigidbody:
   m_GameObject: {fileID: 3496182830567923885}
   serializedVersion: 5
   m_Mass: 500
-  m_LinearDamping: 1
+  m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -955,7 +955,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Acceleration: 700
-  Deceleration: 1
   BrakeAcceleration: 200
   TurnSensitivity: 1
   MinTurnSensitivity: 17.5
@@ -967,11 +966,6 @@ MonoBehaviour:
   Turbesped: 60
   BaseSpeed: 120
   DriftMaxSpeed: 100
-  TurbeMax: 40
-  Turbepush: 50
-  TurbeReduce: 15
-  TurbeRegen: 15
-  TurbeWaitTime: 2
   carLights: {fileID: 4688250000957293257}
 --- !u!114 &8914551668265311642
 MonoBehaviour:
@@ -1005,6 +999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 3
+  lights: {fileID: 0}
 --- !u!114 &4668002584326815313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2910,9 +2905,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 4630930074355124730}
     m_Modifications:
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2100000, guid: c592b0c98d9a3f34b9b1113514a0334c, type: 2}
     - target: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3256,9 +3255,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 1774433722831486201}
     m_Modifications:
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2100000, guid: c592b0c98d9a3f34b9b1113514a0334c, type: 2}
     - target: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

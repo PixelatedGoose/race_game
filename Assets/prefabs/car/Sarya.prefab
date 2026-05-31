@@ -995,70 +995,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewDoublefunszechuansauceWithAsideofNuggets
   Acceleration: 10
-  Deceleration: 700
   BrakeAcceleration: 500
   TurnSensitivity: 1
   MinTurnSensitivity: 17.5
   MaxTurnSensitivity: 30
-  MaxSpeed: 180
-  Wheels:
-  - WheelModel: {fileID: 3356778135624283465}
-    WheelCollider: {fileID: 1611016019681196766}
-    WheelEffectobj: {fileID: 253234819805006193}
-    SmokeParticle: {fileID: 8370427124804131512}
-    Axel: 0
-    trailRenderer: {fileID: 8160355021072943683}
-  - WheelModel: {fileID: 2001825485098282248}
-    WheelCollider: {fileID: 4322213742954386768}
-    WheelEffectobj: {fileID: 4233654236648341}
-    SmokeParticle: {fileID: 5735925340106288723}
-    Axel: 0
-    trailRenderer: {fileID: 9005531565795757299}
-  - WheelModel: {fileID: 742366007508499148}
-    WheelCollider: {fileID: 4594780843961564118}
-    WheelEffectobj: {fileID: 3172822010265455929}
-    SmokeParticle: {fileID: 234832648449404130}
-    Axel: 1
-    trailRenderer: {fileID: 5158449423416874759}
-  - WheelModel: {fileID: 4416569952393853735}
-    WheelCollider: {fileID: 8795832801714016059}
-    WheelEffectobj: {fileID: 6565481224098539492}
-    SmokeParticle: {fileID: 688611208309200021}
-    Axel: 1
-    trailRenderer: {fileID: 6188845243956253520}
+  SteerStrength: 10
+  BaseMaxSpeed: 130
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60
   BaseSpeed: 180
   DriftMaxSpeed: 140
-  TurbeMax: 100
-  Turbepush: 15
-  TurbeReduce: 10
-  TurbeRegen: 10
-  TurbeWaitTime: 2
   carLights: {fileID: 3931564701789026679}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
-  driftSteerMultiplier: 0.22
-  driftMinSpeed: 8
-  driftForwardPreservation: 0.995
-  driftSideDamping: 0.92
-  driftSidePush: 12
-  driftMaxSpeedMultiplier: 1.25
-  driftSpeedGainRate: 0.15
-  driftMaxSpeed: 160
-  driftDecay: 0.92
-  boostPower: 8
-  boostExponent: 2
-  driftYawSpeed: 3.5
-  driftYawResponsiveness: 8
-  driftLockDirection: 1
-  driftMinForwardSpeed: 10
   normalAngularDrag: 1.2
   driftAngularDrag: 0.05
-  driftTurnStrength: 2.2
-  driftSideSlip: 0.6
-  driftStability: 4.5
+  AllowedDriftAngle: 45
+  minDriftVelocity: 0.1
+  baseDriftSteerMultiplier: 0.1421
+  speedSteerFalloffExponent: 2.2
+  slopeSteerMultiplier: 0.55
+  lowSpeedDriftLerp: 6
+  highSpeedDriftLerp: 2.2
+  visualDriftAngle: 70
+  visualRotationSpeed: 4.5
   minGroundedWheelsForDrive: 2
 --- !u!114 &2285249159904490474
 MonoBehaviour:
@@ -1072,48 +1033,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Acceleration: 700
-  Deceleration: 1
+  Acceleration: 20000
   BrakeAcceleration: 200
   TurnSensitivity: 1
   MinTurnSensitivity: 17.5
   MaxTurnSensitivity: 30
-  MaxSpeed: 180
-  Wheels:
-  - WheelModel: {fileID: 3356778135624283465}
-    WheelCollider: {fileID: 1611016019681196766}
-    WheelEffectobj: {fileID: 253234819805006193}
-    SmokeParticle: {fileID: 8370427124804131512}
-    Axel: 0
-    trailRenderer: {fileID: 8160355021072943683}
-  - WheelModel: {fileID: 2001825485098282248}
-    WheelCollider: {fileID: 4322213742954386768}
-    WheelEffectobj: {fileID: 4233654236648341}
-    SmokeParticle: {fileID: 5735925340106288723}
-    Axel: 0
-    trailRenderer: {fileID: 9005531565795757299}
-  - WheelModel: {fileID: 742366007508499148}
-    WheelCollider: {fileID: 4594780843961564118}
-    WheelEffectobj: {fileID: 3172822010265455929}
-    SmokeParticle: {fileID: 234832648449404130}
-    Axel: 1
-    trailRenderer: {fileID: 5158449423416874759}
-  - WheelModel: {fileID: 4416569952393853735}
-    WheelCollider: {fileID: 8795832801714016059}
-    WheelEffectobj: {fileID: 6565481224098539492}
-    SmokeParticle: {fileID: 688611208309200021}
-    Axel: 1
-    trailRenderer: {fileID: 6188845243956253520}
+  SteerStrength: 10
+  BaseMaxSpeed: 130
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60
   BaseSpeed: 130
   DriftMaxSpeed: 100
-  TurbeMax: 100
-  Turbepush: 15
-  TurbeReduce: 20
-  TurbeRegen: 15
-  TurbeWaitTime: 2
   carLights: {fileID: 3931564701789026679}
 --- !u!114 &187602521392888673
 MonoBehaviour:
@@ -3094,11 +3025,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
---- !u!198 &688611208309200021 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 1474361404832501431}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2484262381890563312 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -3169,11 +3095,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
---- !u!198 &234832648449404130 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 2214012694476142272}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2933501743252706439 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -3188,9 +3109,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 49788654104543124}
     m_Modifications:
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2100000, guid: c592b0c98d9a3f34b9b1113514a0334c, type: 2}
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_Parameters.colorGradient.ctime0
       value: 65535
@@ -3265,11 +3190,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 4801577458313134991}
   m_PrefabAsset: {fileID: 0}
---- !u!96 &5158449423416874759 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
-  m_PrefabInstance: {fileID: 4801577458313134991}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5825387272512669656
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3279,9 +3199,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 2125808150819754723}
     m_Modifications:
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2100000, guid: c592b0c98d9a3f34b9b1113514a0334c, type: 2}
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: m_Parameters.colorGradient.ctime0
       value: 65535
@@ -3356,11 +3280,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 5825387272512669656}
   m_PrefabAsset: {fileID: 0}
---- !u!96 &6188845243956253520 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
-  m_PrefabInstance: {fileID: 5825387272512669656}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5936186763071157361
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3426,11 +3345,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
---- !u!198 &5735925340106288723 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 5936186763071157361}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7236641332555339318 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
@@ -3506,11 +3420,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3894528029076333127, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
   m_PrefabInstance: {fileID: 7625210733809598618}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &8370427124804131512 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2160474223364610594, guid: 24ea00dae8b3e7d4b8c81762da6a9772, type: 3}
-  m_PrefabInstance: {fileID: 7625210733809598618}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8361980000268918475
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3519,6 +3428,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6239771636095995330}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -3577,11 +3490,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 8361980000268918475}
   m_PrefabAsset: {fileID: 0}
---- !u!96 &8160355021072943683 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
-  m_PrefabInstance: {fileID: 8361980000268918475}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8777177124122466427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3590,6 +3498,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3591611932570582395}
     m_Modifications:
+    - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -3646,11 +3558,6 @@ PrefabInstance:
 --- !u!4 &2997131558614366896 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5789728420306051787, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
-  m_PrefabInstance: {fileID: 8777177124122466427}
-  m_PrefabAsset: {fileID: 0}
---- !u!96 &9005531565795757299 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 375170039098365064, guid: 3de68aa2c7c0e974382b849129aab9ac, type: 3}
   m_PrefabInstance: {fileID: 8777177124122466427}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8961229981457995164
