@@ -15,15 +15,16 @@ public abstract class AbstractTurbo : MonoBehaviour
     [Range(0f, 100f)]
     [SerializeField] protected float startingAmount = 100.0f;
     [Tooltip("How much turbo is consumed per second")]
-    [SerializeField] protected float consumeRate = 10f;
+    [SerializeField] protected float consumeRate = 20f;
     [Tooltip("How much turbo is regenerated per second")]
-    [SerializeField] protected float regenerationRate = 10f;
+    [SerializeField] protected float regenerationRate = 20f;
     [Tooltip("How long to wait to start recharging turbo")]
     [SerializeField] protected float waitTime = 1f;
-    protected WaitForSeconds waiter;
-    protected float amount;
+    protected WaitForSeconds waiter; // Waiter! Waiter! May I ask for seconds?
+    [SerializeField] protected float amount;
     protected BaseCarController carController;
     protected Coroutine turboCoroutine;
+    protected bool consuming;
 
     // Used for running the specific turbo's logic when the player wants to use turbo.
     protected abstract void Use();
@@ -38,7 +39,7 @@ public abstract class AbstractTurbo : MonoBehaviour
 
     public virtual void Activate()
     {
-        if (amount <= 0) return;
+        if (amount <= 0 || carController.IsTurboActive) return;
 
         carController.IsTurboActive = true;
 
@@ -57,7 +58,8 @@ public abstract class AbstractTurbo : MonoBehaviour
     {
         while (amount > 0)
         {
-            amount = amount > 1E-03f ? Mathf.Lerp(amount, 0, consumeRate * Time.deltaTime) : 0;
+            if (amount > 0.1f) amount -= consumeRate * Time.deltaTime;
+            else amount = 0;
             Use();
             yield return null;
         }
@@ -72,9 +74,11 @@ public abstract class AbstractTurbo : MonoBehaviour
 
         while (amount < maxAmount)
         {
-            amount = Mathf.Lerp(amount, maxAmount, regenerationRate * Time.deltaTime);
+            if (amount < maxAmount - 0.1f) amount += regenerationRate * Time.deltaTime;
+            else amount = maxAmount;
             yield return null;
         }
+        
         yield break;
     }
 }

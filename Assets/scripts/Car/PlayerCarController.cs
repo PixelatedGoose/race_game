@@ -41,7 +41,7 @@ public class PlayerCarController : BaseCarController
 
         if (turbo != null)
         {
-            Controls.CarControls.turbo.started += context => { turbo.Activate(); };
+            Controls.CarControls.turbo.performed += context => { turbo.Activate(); };
             Controls.CarControls.turbo.canceled += context => { turbo.Stop(); };
         }
     }
