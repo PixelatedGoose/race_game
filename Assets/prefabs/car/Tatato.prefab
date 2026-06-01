@@ -1043,14 +1043,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35e307104177d64d9b0766a3f513f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoostTurbo
-  strength: 30
+  strength: 50
   maxAmount: 40
   startingAmount: 100
   consumeRate: 15
   regenerationRate: 15
   waitTime: 2
   amount: 0
-  maxSpeedMultiplier: 1.5
+  maxSpeedMultiplier: 1.3
 --- !u!1 &3689803584756702517
 GameObject:
   m_ObjectHideFlags: 0

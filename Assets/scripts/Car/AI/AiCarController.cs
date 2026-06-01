@@ -25,10 +25,6 @@ public class AiCarController : BaseCarController
     [SerializeField] private float avoidanceLateralOffset = 2.0f;
     [SerializeField] private float maxAvoidanceOffset = 8f;
     public float SafeRadius { get; private set; }
-
-    [Header("Boost Settings")]
-    [Tooltip("Multiplier applied to speed and acceleration when boosting.")]
-    [SerializeField] private float boostMultiplier = 1.25f;
     [NonSerialized] public AiCarManager aiCarManager;
     private Vector3 targetPoint;
     private int currentWaypointIndex = 0;

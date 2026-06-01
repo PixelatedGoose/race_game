@@ -2174,8 +2174,7 @@ MonoBehaviour:
   consumeRate: 20
   regenerationRate: 15
   waitTime: 2
-  amount: 0
-  maxSpeedMultiplier: 1.4
+  maxSpeedMultiplier: 1.2
 --- !u!1 &6464818183039503655
 GameObject:
   m_ObjectHideFlags: 0

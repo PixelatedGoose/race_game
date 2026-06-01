@@ -22,7 +22,7 @@ public abstract class AbstractTurbo : MonoBehaviour
     [Tooltip("How long to wait to start recharging turbo")]
     [SerializeField] protected float waitTime = 1f;
     protected WaitForSeconds waiter; // Waiter! Waiter! May I ask for seconds?
-    [SerializeField] protected float amount;
+    protected float amount;
     protected BaseCarController carController;
     protected Coroutine turboCoroutine;
     protected bool consuming;

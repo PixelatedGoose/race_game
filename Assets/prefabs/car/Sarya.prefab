@@ -924,6 +924,7 @@ GameObject:
   - component: {fileID: 1311118830665507097}
   - component: {fileID: 2608171001088632632}
   - component: {fileID: 7780373918696615088}
+  - component: {fileID: 94803597688117432}
   m_Layer: 0
   m_Name: car
   m_TagString: Untagged
@@ -1115,6 +1116,26 @@ MonoBehaviour:
   useLogitechWheel: 0
   forceFeedbackMultiplier: 1
   allowAutoEnable: 1
+--- !u!114 &94803597688117432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013609153453077785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e35e307104177d64d9b0766a3f513f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoostTurbo
+  strength: 15
+  maxAmount: 100
+  startingAmount: 100
+  consumeRate: 20
+  regenerationRate: 15
+  waitTime: 2
+  amount: 0
+  maxSpeedMultiplier: 1.15
 --- !u!1 &3172822010265455929
 GameObject:
   m_ObjectHideFlags: 0

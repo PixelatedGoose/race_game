@@ -364,7 +364,7 @@ MonoBehaviour:
   regenerationRate: 15
   waitTime: 2
   amount: 0
-  maxSpeedMultiplier: 1.2
+  maxSpeedMultiplier: 1.1
 --- !u!146 &3428677423889735303 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 4200738069657535970, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
