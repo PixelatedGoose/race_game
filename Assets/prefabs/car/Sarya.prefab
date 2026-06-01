@@ -1011,6 +1011,16 @@ MonoBehaviour:
   steerDeadzone: 0.15
   normalAngularDrag: 1.2
   driftAngularDrag: 0.05
+  AllowedDriftAngle: 45
+  minDriftVelocity: 0.1
+  baseDriftSteerMultiplier: 0.72
+  speedSteerFalloffExponent: 2.2
+  slopeSteerMultiplier: 0.55
+  lowSpeedDriftLerp: 4
+  highSpeedDriftLerp: 2.2
+  visualDriftAngle: 10
+  visualRotationSpeed: 1.65
+  visualRotationSpeedMultiplier: 1
   minGroundedWheelsForDrive: 2
 --- !u!114 &2285249159904490474
 MonoBehaviour:

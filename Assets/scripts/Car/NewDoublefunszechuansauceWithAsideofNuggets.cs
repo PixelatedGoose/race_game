@@ -4,47 +4,38 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Logitech;
 using System;
+using NUnit.Framework;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
 public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 {
-    public CarInputActions Controls { get; protected set; } //= new CarInputActions();
-    RacerScript racerScript;
+    public CarInputActions Controls { get; protected set; } //new CarInputActions();
+
     LogitechMovement LGM;
     PlayerInput PlayerInput;
+
     string CurrentControlScheme;
 
-    [Header("Visuals")]
     [SerializeField] private GameObject carLights;
     [SerializeField] private Material PixelCount;
 
-    [Header("Steering")]
     [SerializeField] private float steerDeadzone = 0.15f;
-
-    [Header(" Drift")]
-    [SerializeField] float normalAngularDrag = 1.2f;
-    [SerializeField] float driftAngularDrag = 0.05f;
-    float AllowedDriftAngle = 45f;
-
     float rawSteerInput;
+    float smoothedDriftAngle;
 
-
-
-    [Header("Grounding")]
     [SerializeField] private int minGroundedWheelsForDrive = 2;
+    float smoothedSteer;
 
     float basePixel;
     float minPixel = 32f;
-
     float recoverTime = 2f;
-
     Coroutine PixelRecovery;
+
 
     protected override void Awake()
     {
         CarRb = GetComponent<Rigidbody>();
-        racerScript = GetComponent<RacerScript>();
         TryGetComponent(out LGM);
         
         Controls = new CarInputActions();
@@ -165,9 +156,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         Animatewheels();
         Steer();
-        CarMovement();
-
-
 
         if (LGM != null && LGM.useLogitechWheel)
         {
@@ -183,12 +171,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
-            
             CarMovement();
-            
+
             if (IsDrifting){
                 DriftPhysics();
             }
+            Decelerate();
         }
         base.FixedUpdate();
     }
@@ -219,91 +207,104 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected void CarMovement()
     {
-        Vector3 moveDir = transform.forward;
-        if (IsDrifting)
-        {
-            Vector3 slopeVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
-            if (slopeVel.sqrMagnitude > 1f) moveDir = slopeVel.normalized;
-        }
+        Vector3 moveDir =
+        IsDrifting
+            ? Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up).normalized
+            : transform.forward;
 
         float forwardDot = Vector3.Dot(CarRb.linearVelocity, moveDir);
 
         float currentSign = Mathf.Abs(forwardDot) > 0.1f ? Mathf.Sign(forwardDot) : Mathf.Sign(MovementInputs.y);
         float signedSpeed = CarRb.linearVelocity.magnitude * currentSign;
-        float forwardSpeed = Mathf.MoveTowards(signedSpeed, MaxSpeed * MovementInputs.y, Acceleration * Time.fixedDeltaTime);
+        float accelMultiplier = IsDrifting ? 0.25f : 1f;
+        float targetSpeed = MaxSpeed * MovementInputs.y;
+
+        if (IsDrifting)
+        {
+            Vector3 slopeVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
+            targetSpeed = Mathf.Max(Mathf.Abs(signedSpeed), Mathf.Abs(targetSpeed));
+            if (slopeVel.sqrMagnitude > 1f) moveDir = slopeVel.normalized;
+        }
+
+        float forwardSpeed = Mathf.MoveTowards(
+            signedSpeed,
+            targetSpeed,
+            Acceleration * accelMultiplier * Time.fixedDeltaTime
+        );
 
         Vector3 horiz = moveDir * forwardSpeed;
-
-
         CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
-
     }
 
+    //before you even fucking ask lamelemon, YES i used AI a lot bcs the deadline is too close
     void DriftPhysics()
     {
+        ApplyDriftForce();
+        ApplyDriftRotation();
+    }
 
-        Vector3 velocity = CarRb.linearVelocity;
-        
-        Vector3 groundNormal = transform.up;
+    void ApplyDriftForce()
+    {
+        Vector3 vel = CarRb.linearVelocity;
+        Vector3 up = transform.up;
 
-        velocity = Vector3.ProjectOnPlane(velocity, groundNormal);
-        if (velocity.magnitude < 0.1f) return;
+        Vector3 planar = Vector3.ProjectOnPlane(vel, up);
+        float speed = planar.magnitude;
 
-        Vector3 velocityDirection = velocity / velocity.magnitude;
+        if (speed < 0.2f) return;
 
-        Vector3 rightorleft = Vector3.Cross(groundNormal, velocityDirection).normalized;
+        Vector3 forward = planar / speed;
+        Vector3 right = Vector3.Cross(up, forward);
 
         float steer = rawSteerInput;
 
-        float steerStrength = 
-            0.1421f 
-            * Mathf.Pow(1f - Mathf.Clamp01(velocity.magnitude / MaxSpeed), 2.2f)
-            * Mathf.Lerp(
-                1f, 
-                0.55f, 
-                Vector3.Angle(groundNormal, Vector3.up) / AllowedDriftAngle
+        smoothedSteer = Mathf.Lerp(smoothedSteer, steer, 8f * Time.fixedDeltaTime);
+
+        float speed01 = Mathf.Clamp01(speed / MaxSpeed);
+
+        float driftStrength = Mathf.Lerp(45f, 10f, speed01);
+
+        float steerResponse = Mathf.SmoothStep(0f, 1f, Mathf.Abs(smoothedSteer));
+
+        Vector3 sideForce =
+            right * smoothedSteer * driftStrength * steerResponse;
+
+        Vector3 lateralVelocity = Vector3.Project(planar, right);
+
+        Vector3 damping =
+            -lateralVelocity * 0.01f; 
+
+        CarRb.linearVelocity += (sideForce + damping) * Time.fixedDeltaTime;
+    }
+
+    void ApplyDriftRotation()
+    {
+        Vector3 vel = CarRb.linearVelocity;
+        Vector3 up = transform.up;
+
+        Vector3 planar = Vector3.ProjectOnPlane(vel, up);
+
+        if (planar.sqrMagnitude < 0.01f) return;
+
+        Vector3 velocityDir = planar.normalized;
+
+        float steer = rawSteerInput;
+
+        Vector3 targetDir =
+            Vector3.RotateTowards(
+                transform.forward,
+                velocityDir + transform.right * steer * 0.8f,
+                6f * Time.fixedDeltaTime,
+                0f
             );
 
-        Vector3 desiredDirection = velocityDirection + rightorleft * steer * steerStrength;
+        Quaternion targetRot = Quaternion.LookRotation(targetDir, up);
 
-        desiredDirection = Vector3.ProjectOnPlane(desiredDirection, groundNormal).normalized;
-
-        Vector3 targetVelocity = desiredDirection * velocity.magnitude;
-
-        Vector3 horizontalVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, groundNormal);
-
-        float time = Mathf.Clamp01(
-            Mathf.Lerp(
-                6f, 
-                2.2f, 
-                Mathf.Clamp01(velocity.sqrMagnitude / (MaxSpeed*MaxSpeed))
-            ) * Time.fixedDeltaTime
-        );
-
-        Vector3 direction = Vector3.Slerp(horizontalVel.normalized, targetVelocity.normalized, time);
-        horizontalVel = direction * horizontalVel.magnitude;
-
-        CarRb.linearVelocity = horizontalVel + 
-            Vector3.Project(CarRb.linearVelocity, groundNormal);
-                    
-        Vector3 visualDirection = Vector3.Slerp(
-            velocityDirection, 
-            velocityDirection + 0.55f * Mathf.Lerp(
-                1f, 
-                0.55f, 
-                Vector3.Angle(groundNormal, Vector3.up) / AllowedDriftAngle
-            ) * steer * rightorleft, 
-            Mathf.Abs(steer)
-        );
-
-        visualDirection = Vector3.ProjectOnPlane(visualDirection, groundNormal).normalized;
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            Quaternion.LookRotation(visualDirection, groundNormal),
-            4.5f * Time.fixedDeltaTime
+        CarRb.MoveRotation(
+            Quaternion.Slerp(CarRb.rotation, targetRot, 9f * Time.fixedDeltaTime)
         );
     }
-        
+
     void SetDriftFriction(bool drifting)
     {
         foreach (Wheel wheel in Wheels)
@@ -312,12 +313,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
             WheelFrictionCurve forward = wheel.collider.forwardFriction;
 
             if (drifting){
-                sideways.stiffness = 0.5f;
-                forward.stiffness = 1.0f;
+                sideways.stiffness = 0.3f;
+                forward.stiffness = 0.6f;
             }
             else{
-                sideways.stiffness = 5.0f;
-                forward.stiffness = 5.0f;
+                sideways.stiffness = 5f;
+                forward.stiffness = 5f;
             }
 
             wheel.collider.sidewaysFriction = sideways;
@@ -329,17 +330,10 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
 
         IsDrifting = true;
+        
 
-        CarRb.angularDamping = driftAngularDrag;
+        SetDriftFriction(true);
 
-        foreach (Wheel wheel in Wheels)
-        {
-            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
-            sideways.stiffness = 2.0f;
-            wheel.collider.sidewaysFriction = sideways;
-        }
-
-        AdjustWheelsForDrift();
         WheelEffects(true);
     }
 
@@ -348,17 +342,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     void EndDrift()
     {
         IsDrifting = false;
-
+        smoothedDriftAngle = 0f;
         SetDriftFriction(false);
-
-        CarRb.angularDamping = normalAngularDrag;
-
-        foreach (Wheel wheel in Wheels)
-        {
-            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
-            sideways.stiffness = 5.0f;
-            wheel.collider.sidewaysFriction = sideways;
-        }
 
         WheelEffects(false);
     }
