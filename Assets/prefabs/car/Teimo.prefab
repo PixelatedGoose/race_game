@@ -275,7 +275,10 @@ PrefabInstance:
     - {fileID: 4449406509289786658, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
     - {fileID: 898646450694620876, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6884080606728841104}
   m_SourcePrefab: {fileID: 100100000, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
 --- !u!1 &24393547810998541 stripped
 GameObject:
@@ -337,6 +340,31 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4311437797761288238, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3369349845262797437 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6884080606728841104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3369349845262797437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e35e307104177d64d9b0766a3f513f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoostTurbo
+  strength: 15
+  maxAmount: 90
+  startingAmount: 100
+  consumeRate: 20
+  regenerationRate: 15
+  waitTime: 2
+  amount: 0
+  maxSpeedMultiplier: 1.1
 --- !u!146 &3428677423889735303 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 4200738069657535970, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
