@@ -8,16 +8,12 @@ public class MainMenu : MonoBehaviour
     private int musictweenIDstart = -1;
     private int musictweenIDend = -1;
 
-    [SerializeField] private GameObject playConfirmPanel;
-
     void Awake()
     {
         Time.timeScale = 1;
     }
     void Start()
     {
-        if (playConfirmPanel != null) playConfirmPanel.SetActive(false);
-
         LeanTween.moveLocalY(fullMenu, 0.0f, 1.5f).setEaseOutBounce().setOnStart(() => { menuMusic.Play(); });
     }
 

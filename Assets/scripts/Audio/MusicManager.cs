@@ -24,6 +24,7 @@ public class MusicManager : MonoBehaviour
     public bool loopSong;
     public bool musicPlaybackManuallyPaused = false;
     private int[] activeTweenIDs;
+    public Coroutine songPlayback {get; protected set;}
 
     //uniikkeja yksittäisiä biisejä, siksi en laita näille tageja tai arrayta
     public AudioSource resultsTrack;
@@ -112,12 +113,12 @@ public class MusicManager : MonoBehaviour
     public void StartMusicPlayback()
     {
         PlaySong();
-        StartCoroutine(SongPlaybackHandler());
+        songPlayback = StartCoroutine(SongPlaybackHandler());
     }
     private IEnumerator SongPlaybackHandler()
     {
         Debug.Log($"started playback coroutine");
-        //varmistetaan, että AudioSourcen .Pause() ei alota seuraavaa trackkia; ainoastaan NextSong() saa tehä niin
+        //varmistetaan, että AudioSourcen .Pause() (TAI ALT TABAAMINEN ILMEISESTI???) ei alota seuraavaa trackkia; ainoastaan NextSong() saa tehä niin
         while (currentSong.baseTrack.isPlaying || GameManager.IsPaused || musicPlaybackManuallyPaused)
         {
             //Debug.Log($"song still playing");
@@ -126,7 +127,7 @@ public class MusicManager : MonoBehaviour
 
         Debug.Log($"song '{currentSong.name}' ended! switching to next track...");
         NextSong();
-        yield return StartCoroutine(SongPlaybackHandler());
+        yield return songPlayback;
         yield break;
     }
 

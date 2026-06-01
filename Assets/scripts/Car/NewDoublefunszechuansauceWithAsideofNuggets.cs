@@ -9,7 +9,7 @@ using System;
 [RequireComponent(typeof(PlayerInput))]
 public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 {
-    public CarInputActions Controls { get; protected set; } = new CarInputActions();
+    public CarInputActions Controls { get; protected set; } //= new CarInputActions();
     RacerScript racerScript;
     LogitechMovement LGM;
     PlayerInput PlayerInput;

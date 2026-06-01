@@ -227,7 +227,7 @@ public class RacerScript : MonoBehaviour
         for (int i = 0; i < checkpointStates.Length; i++) checkpointStates[i] = false;
         if (startFinishLine != null) startFinishLine.gameObject.SetActive(false);
 
-        musicManager.StopSong(true);
+        musicManager.StopCoroutine(musicManager.songPlayback);
         sfxmngr.raceFinished.Play();
         finishedImg.color = new(1f, 1f, 1f, 1f);
         //TODO: erittäin paska tapa ottaa nämä...

@@ -50,7 +50,7 @@ public class LeaderBoard : MonoBehaviour
     }
 
     //olen pahoillani tästä
-    private void ChangeLeaderboardMap(bool forward)
+    public void ChangeLeaderboardMap(bool forward)
     {
         if (!gameObject.activeInHierarchy) return;
 
@@ -110,7 +110,7 @@ public class LeaderBoard : MonoBehaviour
         }
 
         List<RaceResultData> sortedResults = collection.results.Where(r => r.map == selectedMap).OrderByDescending(r => r.score).Take(5).ToList();
-        leaderboardSelectedMap.text = selectedMap;
+        if (leaderboardSelectedMap != null) leaderboardSelectedMap.text = selectedMap;
         int remainder = sortedResults.Count;
         for (int i = 0; i < remainder; i++) DisplayResult(i, sortedResults[i]);
         for (int i = remainder; i < 5; i++) ClearSlot(i);
