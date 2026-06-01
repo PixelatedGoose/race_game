@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     [NonSerialized] public static HashSet<BaseCarController> spawnedCars = new();
 
     public static string SceneSelected => SceneManager.GetActiveScene().name;
-    private readonly string[] maps = new string[]
+    public static readonly string[] maps = new string[]
     {
         "shoreline",
         "shoreline_night",

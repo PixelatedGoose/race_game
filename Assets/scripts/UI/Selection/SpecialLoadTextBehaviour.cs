@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(SelectionMenuLoadTexts))]
 public class SpecialLoadTextBehaviour : MonoBehaviour
 {
     [SerializeField] private Image loadingImage;

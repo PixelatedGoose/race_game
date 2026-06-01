@@ -20,10 +20,6 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 138890378139104270, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: c592b0c98d9a3f34b9b1113514a0334c, type: 2}
     - target: {fileID: 251722276886359576, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_Name
       value: Front- and backlights
@@ -60,10 +56,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 50
       objectReference: {fileID: 0}
-    - target: {fileID: 664903612923758694, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - target: {fileID: 1384954644508646451, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: c592b0c98d9a3f34b9b1113514a0334c, type: 2}
+      objectReference: {fileID: 2100000, guid: 281a41acce25a054a98cb1211cc83cfa, type: 2}
+    - target: {fileID: 1552793469703290869, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 281a41acce25a054a98cb1211cc83cfa, type: 2}
     - target: {fileID: 2136980685887261712, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: checkpoints.Array.size
       value: 2
@@ -168,14 +168,10 @@ PrefabInstance:
       propertyPath: Wheels.Array.data[3].WheelEffectobj
       value: 
       objectReference: {fileID: 1975435450685398690}
-    - target: {fileID: 2329382784887801794, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - target: {fileID: 2506942273287056747, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2865107287730210175, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2100000, guid: 6087d768d9793b449b7134276e09e853, type: 2}
     - target: {fileID: 3582652508530400840, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: turnSensitivty
       value: 12
@@ -256,6 +252,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7549060196153983620, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 281a41acce25a054a98cb1211cc83cfa, type: 2}
     - target: {fileID: 8808136006470933881, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_text
       value: Time
