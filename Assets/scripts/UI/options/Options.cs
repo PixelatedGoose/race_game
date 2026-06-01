@@ -9,6 +9,7 @@ public class Options : MonoBehaviour
 {
     public Material pixelCount;
     private List<OptionComponent> OptionsList;
+    [SerializeField] private OptionCategories optionCategories;
     [SerializeField] private AudioMixer main;
     public AudioMixerGroup[] AllMixerGroups { get { return main.FindMatchingGroups(string.Empty); } }
     private const bool DefaultToggleValue = true;
@@ -44,7 +45,8 @@ public class Options : MonoBehaviour
         List<AudioSlider> audioSliders = GetComponentsInChildren<AudioSlider>(true).ToList();
         foreach (var i in audioSliders)
         {
-            i.volumeSlider.onValueChanged.AddListener((value) => { main.SetFloat(i.volumeSlider.name, Mathf.Log10(i.volumeSlider.value) * 20); });
+            var volumeSlider = i.GetComponent<Slider>();
+            volumeSlider.onValueChanged.AddListener((value) => { main.SetFloat(volumeSlider.name, Mathf.Log10(volumeSlider.value) * 20); });
         }
     }
 

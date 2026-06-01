@@ -60,6 +60,7 @@ public class Dashboard : MonoBehaviour
 
     private void ToggleDashboard()
     {
+        if (GameManager.racerscript.raceFinished || !GameManager.racerscript.racestarted) return;
         LeanTween.cancel(rect);
         ShouldDashboardOpen = !ShouldDashboardOpen;
         if (ShouldDashboardOpen)
