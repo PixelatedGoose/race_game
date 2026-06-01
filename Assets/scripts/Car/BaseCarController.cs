@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
-using Unity.Splines.Examples;
+using System.Collections;
 
 public class BaseCarController : MonoBehaviour
 {
@@ -62,6 +60,7 @@ public class BaseCarController : MonoBehaviour
     protected Collider carCollider;
     public Vector3 CarExtents { get; protected set; }
     protected AbstractTurbo turbo;
+    private Coroutine MaxSpeedDecay;
 
     virtual protected void Awake()
     {
@@ -198,5 +197,44 @@ public class BaseCarController : MonoBehaviour
             wheel.trailRenderer.emitting = false;
             wheel.trailRenderer.Clear();
         }
+    }
+
+    /// <summary>
+    /// Decays max speed after delay seconds over decayTime amount of seconds.
+    /// </summary>
+    /// <param name="delay">How long to wait before starting to decay?</param>
+    /// <param name="decayTime">How long should the decay take?</param>
+    /// <param name="overrideLast">Should the previous decay coroutine be overridden, if there is one. If there is one and this is false then this one is ignored.</param>
+    public void DecayMaxSpeed(float delay, float decayTime, bool overrideLast)
+    {
+        if (overrideLast && MaxSpeedDecay != null) StopCoroutine(MaxSpeedDecay);
+        MaxSpeedDecay = StartCoroutine(MaxSpeedDecayer(delay, decayTime));
+    }
+
+    /// <summary>
+    /// Decays max speed after delay seconds over decayTime amount of seconds.
+    /// </summary>
+    /// <param name="delay">How long to wait before starting to decay?</param>
+    /// <param name="decayTime">How long should the decay take?</param>
+    public void DecayMaxSpeed(float delay, float decayTime)
+    {
+        if (MaxSpeed <= BaseMaxSpeed) return;
+        if (MaxSpeedDecay != null) StopCoroutine(MaxSpeedDecay);
+        MaxSpeedDecay = StartCoroutine(MaxSpeedDecayer(delay, decayTime));
+    }
+
+    private IEnumerator MaxSpeedDecayer(float delay, float decayTime)
+    {
+        if (delay > 0) yield return new WaitForSeconds(delay);
+
+        float decrement = MaxSpeed / decayTime;
+        while (MaxSpeed > BaseMaxSpeed)
+        {
+            MaxSpeed -= decrement * Time.deltaTime;
+            yield return null;
+        }
+
+        ResetMaxSpeed();
+        yield break;
     }
 }

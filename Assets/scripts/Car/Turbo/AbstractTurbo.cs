@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public abstract class AbstractTurbo : MonoBehaviour
 {
     [Tooltip("How strong the turbo is")]
-    [SerializeField] protected float strength = 10f;
+    [SerializeField] protected float strenght = 10f;
     [Tooltip("Maximum amount of turbo")]
     [SerializeField] protected float maxAmount = 100f;
     [Tooltip("Starting % amount of turbo.")]
@@ -21,8 +21,10 @@ public abstract class AbstractTurbo : MonoBehaviour
     [SerializeField] protected float regenerationRate = 20f;
     [Tooltip("How long to wait to start recharging turbo")]
     [SerializeField] protected float waitTime = 1f;
+    [SerializeField] protected float maxSpeedMultiplier = 1.3f;
+    [SerializeField] protected float maxSpeedDecayDuration = 4f;
     protected WaitForSeconds waiter; // Waiter! Waiter! May I ask for seconds?
-    [SerializeField] protected float amount;
+    protected float amount;
     protected BaseCarController carController;
     protected Coroutine turboCoroutine;
     protected bool consuming;
@@ -45,6 +47,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         if (amount <= 0 || carController.IsTurboActive) return;
 
         carController.IsTurboActive = true;
+        carController.MaxSpeed *= maxSpeedMultiplier;
 
         if (turboCoroutine != null) StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Consume());
@@ -55,6 +58,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         carController.IsTurboActive = false;
         if (turboCoroutine != null) StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Regenerate());
+        carController.DecayMaxSpeed(0, maxSpeedDecayDuration);
     }
 
     protected virtual IEnumerator Consume()
@@ -63,6 +67,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         {
             if (amount > 0.1f) amount -= consumeRate * Time.deltaTime;
             else amount = 0;
+            TurboBar.fillAmount = amount / maxAmount;
             Use();
             yield return null;
         }
@@ -79,6 +84,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         {
             if (amount < maxAmount - 0.1f) amount += regenerationRate * Time.deltaTime;
             else amount = maxAmount;
+            TurboBar.fillAmount = amount / maxAmount;
             yield return null;
         }
         
