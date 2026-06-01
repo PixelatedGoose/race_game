@@ -2,12 +2,20 @@ using UnityEngine;
 
 public class BoostPad : MonoBehaviour
 {
-    private Rigidbody target;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() => target = GameManager.CurrentCar.GetComponentInChildren<Rigidbody>();
+    [SerializeField] private float maxSpeedMultiplier = 1.2f;
+    [SerializeField] private float boostStrenght = 10;
+    [SerializeField] private float decayDelay = 4f;
+    [SerializeField] private float decayDuration = 3f;
+
 
     void OnTriggerEnter(Collider trigger)
     {
-        Debug.Log("ronny touched things");
+        BaseCarController car = trigger.GetComponentInParent<BaseCarController>();
+        if (car != null)
+        {
+            car.MaxSpeed *= maxSpeedMultiplier;
+            car.CarRb.linearVelocity += boostStrenght * car.transform.forward;
+            car.DecayMaxSpeed(decayDelay, decayDuration);
+        }
     }
 }
