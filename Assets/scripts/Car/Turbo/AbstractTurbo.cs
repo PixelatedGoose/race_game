@@ -63,6 +63,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         {
             if (amount > 0.1f) amount -= consumeRate * Time.deltaTime;
             else amount = 0;
+            TurboBar.fillAmount = amount / maxAmount;
             Use();
             yield return null;
         }
@@ -79,6 +80,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         {
             if (amount < maxAmount - 0.1f) amount += regenerationRate * Time.deltaTime;
             else amount = maxAmount;
+            TurboBar.fillAmount = amount / maxAmount;
             yield return null;
         }
         
