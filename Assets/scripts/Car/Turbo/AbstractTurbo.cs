@@ -21,6 +21,7 @@ public abstract class AbstractTurbo : MonoBehaviour
     [SerializeField] protected float regenerationRate = 20f;
     [Tooltip("How long to wait to start recharging turbo")]
     [SerializeField] protected float waitTime = 1f;
+    [SerializeField] protected float maxSpeedMultiplier = 1.3f;
     protected WaitForSeconds waiter; // Waiter! Waiter! May I ask for seconds?
     protected float amount;
     protected BaseCarController carController;
@@ -45,6 +46,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         if (amount <= 0 || carController.IsTurboActive) return;
 
         carController.IsTurboActive = true;
+        carController.MaxSpeed *= maxSpeedMultiplier;
 
         if (turboCoroutine != null) StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Consume());
@@ -55,6 +57,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         carController.IsTurboActive = false;
         if (turboCoroutine != null) StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Regenerate());
+        carController.ResetMaxSpeed();
     }
 
     protected virtual IEnumerator Consume()
