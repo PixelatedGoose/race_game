@@ -30,12 +30,14 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     float recoverTime = 2f;
     private bool isBraking = false;
     Coroutine PixelRecovery;
+    private MultCounter multCounter;
 
 
     protected override void Awake()
     {
         CarRb = GetComponent<Rigidbody>();
         TryGetComponent(out LGM);
+        multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
         
         Controls = new CarInputActions();
 
@@ -166,8 +168,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected override void FixedUpdate()
     {
-        TurnSensitivity = MaxTurnSensitivity - CarRb.linearVelocity.magnitude / BaseMaxSpeed * turnSensitivityRange;
-        
+        base.FixedUpdate();
+
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
             CarMovement();
@@ -177,7 +179,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
             }
             Decelerate();
         }
-        base.FixedUpdate();
     }
 
     int GetGroundedWheelCount()
@@ -368,6 +369,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.layer == grassLayer.value)
+        {
+            multCounter.ResetMultiplier();
+        }
+
         if (PixelCount == null  || collision.impulse.sqrMagnitude < 0.1f ) 
             return;
 
