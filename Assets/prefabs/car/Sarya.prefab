@@ -1944,13 +1944,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2831e5b66e7145d4a913f2e5600c814c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewDoublefunszechuansauceWithAsideofNuggets
-  Acceleration: 10
-  BrakeAcceleration: 500
+  Acceleration: 400
+  BrakeAcceleration: 200
   TurnSensitivity: 1
-  MinTurnSensitivity: 17.5
+  MinTurnSensitivity: 18
   MaxTurnSensitivity: 30
   SteerStrength: 10
   BaseMaxSpeed: 130
+  maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60
@@ -1979,6 +1980,7 @@ MonoBehaviour:
   MaxTurnSensitivity: 30
   SteerStrength: 10
   BaseMaxSpeed: 130
+  maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
   Turbesped: 60

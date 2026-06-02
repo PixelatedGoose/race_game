@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform playerSpawn;
     [SerializeField] private Transform reverse_playerSpawn;
     [SerializeField] private GameObject[] cars;
+    #if UNITY_EDITOR
+    [SerializeField] private int carSpawnIndex;
+    [SerializeField] private bool spawnFromIndex = false;
+    #endif
     [NonSerialized] public static HashSet<BaseCarController> spawnedCars = new();
 
     public static string SceneSelected => SceneManager.GetActiveScene().name;
@@ -42,12 +46,17 @@ public class GameManager : MonoBehaviour
             GameObject selectedCar = cars.FirstOrDefault(c => c.name == PlayerPrefs.GetString("SelectedCar"));
             if (selectedCar == null) selectedCar = cars[0];
             Transform spawn = PlayerPrefs.GetInt("Reverse") == 1 ? reverse_playerSpawn : playerSpawn;
+            
+            #if UNITY_EDITOR
+                Controls.CarControls.Debug_Win.performed += context => ManualRaceEnd();
+
+                if (spawnFromIndex) selectedCar = cars[carSpawnIndex];
+            #endif
+            
             CurrentCar = Instantiate(selectedCar, spawn.position, spawn.rotation);
             racerscript = CurrentCar.GetComponentInChildren<RacerScript>();
             spawnedCars.Add(CurrentCar.GetComponentInChildren<BaseCarController>());
-            #if UNITY_EDITOR
-                Controls.CarControls.Debug_Win.performed += context => ManualRaceEnd();
-            #endif
+            
         }
     }
 
