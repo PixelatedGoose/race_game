@@ -1956,7 +1956,7 @@ MonoBehaviour:
   Turbesped: 60
   BaseSpeed: 180
   DriftMaxSpeed: 140
-  carLights: {fileID: 0}
+  carLights: {fileID: 6917815699065409072}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
   minGroundedWheelsForDrive: 2
@@ -2016,6 +2016,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf77673f73d573c489fdc8dfb2a2c314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftLights:
+  - {fileID: 5073507633022649398}
+  - {fileID: 3741931284097662304}
+  - {fileID: 2682404312635917335}
+  rightLights:
+  - {fileID: 1679135823892316890}
+  - {fileID: 7005527435657339934}
+  - {fileID: 7961062769976980888}
   duration: 3
   lights: {fileID: 0}
 --- !u!114 &2608171001088632632
@@ -4791,7 +4799,7 @@ GameObject:
   - component: {fileID: 7375155751556986327}
   m_Layer: 0
   m_Name: right light volumetric (2)
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4934,7 +4942,7 @@ GameObject:
   - component: {fileID: 1651032557060849260}
   m_Layer: 0
   m_Name: right light
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5112,7 +5120,7 @@ GameObject:
   - component: {fileID: 2104089002346644832}
   m_Layer: 0
   m_Name: right light volumetric (3)
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

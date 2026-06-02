@@ -1575,6 +1575,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf77673f73d573c489fdc8dfb2a2c314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftLights:
+  - {fileID: 8626021873866209199}
+  - {fileID: 3218057308712791919}
+  - {fileID: 8587786505589714111}
+  rightLights:
+  - {fileID: 3063798549429020249}
+  - {fileID: 5794285554768761449}
+  - {fileID: 2665777762044019240}
   duration: 3
   lights: {fileID: 0}
 --- !u!114 &4668002584326815313
@@ -2190,7 +2198,7 @@ GameObject:
   - component: {fileID: 5494736505497822815}
   m_Layer: 0
   m_Name: right light
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3953,7 +3961,7 @@ GameObject:
   - component: {fileID: 8782582728590557502}
   m_Layer: 0
   m_Name: right light volumetric (2)
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4863,7 +4871,7 @@ GameObject:
   - component: {fileID: 3149440072763090954}
   m_Layer: 0
   m_Name: right light volumetric (3)
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
