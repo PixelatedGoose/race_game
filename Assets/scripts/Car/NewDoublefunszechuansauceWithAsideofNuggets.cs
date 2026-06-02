@@ -28,6 +28,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     float basePixel;
     float minPixel = 32f;
     float recoverTime = 2f;
+    private bool isBraking = false;
     Coroutine PixelRecovery;
 
 
@@ -132,21 +133,21 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
-
-
         MovementInputs = ctx.ReadValue<Vector2>();
         Steer();
         MovementInputs.x = ApplySteerDeadzone(MovementInputs.x);
         rawSteerInput = MovementInputs.x;
-        
+
+        if (isBraking) return;
+        Wheels.MotorTorque = MovementInputs.y * Acceleration;
     }
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
-        if (LGM != null && LGM.useLogitechWheel)
-            return;
+        if (LGM != null && LGM.useLogitechWheel) return;
         MovementInputs = Vector2.zero;
         Steer();
+        Wheels.MotorTorque = 0;
         rawSteerInput = 0f;
     }
 
@@ -165,7 +166,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected override void FixedUpdate()
     {
-        TurnSensitivity = CarRb.linearVelocity.magnitude / MaxSpeed * turnSensitivityRange + MaxTurnSensitivity;
+        TurnSensitivity = MaxTurnSensitivity - CarRb.linearVelocity.magnitude / BaseMaxSpeed * turnSensitivityRange;
         
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
@@ -231,7 +232,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         );
 
         Vector3 horiz = moveDir * forwardSpeed;
-        CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
+        // CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
     }
 
     //before you even fucking ask lamelemon, YES i used AI a lot bcs the deadline is too close
@@ -348,8 +349,17 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     }
 
 
-    void OnBrakePerformed(InputAction.CallbackContext ctx) => Wheels.BrakeTorque = BrakeAcceleration;
-    void OnBrakeCanceled(InputAction.CallbackContext ctx) => Wheels.MotorTorque = TargetTorque;
+    void OnBrakePerformed(InputAction.CallbackContext ctx)
+    {
+        Wheels.BrakeTorque = BrakeAcceleration;
+        isBraking = true;
+    }
+    void OnBrakeCanceled(InputAction.CallbackContext ctx)
+    {
+        isBraking = false;
+        Wheels.MotorTorque = MovementInputs.y * Acceleration;
+        Wheels.BrakeTorque = 0f;
+    }
 
     float ApplySteerDeadzone(float steer)
     {

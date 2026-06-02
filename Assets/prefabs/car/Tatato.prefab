@@ -1452,6 +1452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8070669712328928004}
   - component: {fileID: 4688050318836244363}
+  - component: {fileID: 3740221173234281205}
   - component: {fileID: 4725582504891344223}
   - component: {fileID: 8914551668265311642}
   - component: {fileID: 5630865942300931916}
@@ -1519,7 +1520,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4725582504891344223
+--- !u!114 &3740221173234281205
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1527,6 +1528,32 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3496182830567923885}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2831e5b66e7145d4a913f2e5600c814c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewDoublefunszechuansauceWithAsideofNuggets
+  Acceleration: 1000
+  BrakeAcceleration: 200
+  TurnSensitivity: 1
+  MinTurnSensitivity: 18
+  MaxTurnSensitivity: 30
+  SteerStrength: 10
+  BaseMaxSpeed: 140
+  maxSpeedDecayDuration: 1
+  MovementInputs: {x: 0, y: 0}
+  TargetTorque: 10
+  carLights: {fileID: 4688250000957293257}
+  PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
+  steerDeadzone: 0.15
+  minGroundedWheelsForDrive: 2
+--- !u!114 &4725582504891344223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3496182830567923885}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
   m_Name: 
@@ -1538,11 +1565,9 @@ MonoBehaviour:
   MaxTurnSensitivity: 30
   SteerStrength: 10
   BaseMaxSpeed: 130
+  maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
-  Turbesped: 60
-  BaseSpeed: 120
-  DriftMaxSpeed: 100
   carLights: {fileID: 4688250000957293257}
 --- !u!114 &8914551668265311642
 MonoBehaviour:

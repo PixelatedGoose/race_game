@@ -37,19 +37,16 @@ public class BaseCarController : MonoBehaviour
             CarRb.maxLinearVelocity = value;
         }
     }
-    [SerializeField] protected float BaseMaxSpeed = 130f;
+    public float BaseMaxSpeed = 130f;
+    [SerializeField] protected float maxSpeedDecayDuration = 1.0f;
     [SerializeField] protected Wheels Wheels;
     [Header("Trail settings")]
     public Vector2 MovementInputs;
     protected Vector3 _CenterofMass;
-    public float TargetTorque;
+    public float TargetTorque = 10f;
     public Rigidbody CarRb { get; protected set; }
-    public float Turbesped = 60.0f;
-    public float BaseSpeed = 180f;
-    public float DriftMaxSpeed = 140f;
     [Header("Drift asetukset")]
     public bool IsDrifting { get; protected set; } = false;
-    public float BaseMaxAccerelation { get; protected set; }
     public float BaseTargetTorque { get; protected set; }
     public float SmoothedMaxAcceleration { get; protected set; }
     [Header("turbe asetukset")]
@@ -130,8 +127,6 @@ public class BaseCarController : MonoBehaviour
         }
     }
 
-
-
     protected void Steer()
     {
         Wheels.SteerAngle = Mathf.Lerp(Wheels.SteerAngle, MovementInputs.x * TurnSensitivity, SteerStrength * Time.deltaTime);
@@ -205,10 +200,10 @@ public class BaseCarController : MonoBehaviour
     /// <param name="delay">How long to wait before starting to decay?</param>
     /// <param name="decayTime">How long should the decay take?</param>
     /// <param name="overrideLast">Should the previous decay coroutine be overridden, if there is one. If there is one and this is false then this one is ignored.</param>
-    public void DecayMaxSpeed(float delay, float decayTime, bool overrideLast)
+    public void DecayMaxSpeed(float delay, bool overrideLast)
     {
         if (overrideLast && MaxSpeedDecay != null) StopCoroutine(MaxSpeedDecay);
-        MaxSpeedDecay = StartCoroutine(MaxSpeedDecayer(delay, decayTime));
+        MaxSpeedDecay = StartCoroutine(MaxSpeedDecayer(delay));
     }
 
     /// <summary>
@@ -216,18 +211,17 @@ public class BaseCarController : MonoBehaviour
     /// </summary>
     /// <param name="delay">How long to wait before starting to decay?</param>
     /// <param name="decayTime">How long should the decay take?</param>
-    public void DecayMaxSpeed(float delay, float decayTime)
+    public void DecayMaxSpeed(float delay)
     {
-        if (MaxSpeed <= BaseMaxSpeed) return;
         if (MaxSpeedDecay != null) StopCoroutine(MaxSpeedDecay);
-        MaxSpeedDecay = StartCoroutine(MaxSpeedDecayer(delay, decayTime));
+        MaxSpeedDecay = StartCoroutine(MaxSpeedDecayer(delay));
     }
 
-    private IEnumerator MaxSpeedDecayer(float delay, float decayTime)
+    private IEnumerator MaxSpeedDecayer(float delay)
     {
         if (delay > 0) yield return new WaitForSeconds(delay);
 
-        float decrement = MaxSpeed / decayTime;
+        float decrement = (MaxSpeed - BaseMaxSpeed) / maxSpeedDecayDuration;
         while (MaxSpeed > BaseMaxSpeed)
         {
             MaxSpeed -= decrement * Time.deltaTime;
