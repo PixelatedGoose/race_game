@@ -1,10 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using Logitech;
-using System;
-using NUnit.Framework;
+
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
@@ -134,13 +132,13 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
-        if (LGM != null && LGM.useLogitechWheel)
-            return;
+
 
         MovementInputs = ctx.ReadValue<Vector2>();
         Steer();
         MovementInputs.x = ApplySteerDeadzone(MovementInputs.x);
         rawSteerInput = MovementInputs.x;
+        
     }
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
@@ -262,7 +260,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         float speed01 = Mathf.Clamp01(speed / MaxSpeed);
 
-        float driftStrength = Mathf.Lerp(45f, 10f, speed01);
+        float driftStrength = Mathf.MoveTowards(52f, 10f, speed01);
+        print(driftStrength);
 
         float steerResponse = Mathf.SmoothStep(0f, 1f, Mathf.Abs(smoothedSteer));
 

@@ -54,7 +54,7 @@ public static class LogitechSDKManager
 
             try
             {
-                result = LogitechGSDK.LogiSteeringInitialize(true);
+                result = LogitechGSDK.LogiSteeringInitialize(false);
                 Debug.Log($"[LogitechSDK] LogiSteeringInitialize returned: {result}");
 
                 connected = LogitechGSDK.LogiIsConnected(0);

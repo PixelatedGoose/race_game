@@ -14,13 +14,13 @@ public class LogitechMovement : MonoBehaviour
 
     public bool allowAutoEnable = true;
 
-    private PlayerCarController playerCar;
+    private NewDoublefunszechuansauceWithAsideofNuggets NUGGETS;
     private int activeDeviceIndex = 0;
 
     void Awake()
     {
         Instance = this;
-        playerCar = FindFirstObjectByType<PlayerCarController>();
+        NUGGETS = FindFirstObjectByType<NewDoublefunszechuansauceWithAsideofNuggets>();
     }
 
     void Update()
@@ -75,11 +75,9 @@ public class LogitechMovement : MonoBehaviour
         float steer = state.lX / 32768f;
         float throttle = Mathf.Clamp01(-state.lY / 32768f);
 
-        if (playerCar == null) return;
+        if (NUGGETS == null) return;
 
-        // ONLY override steering when wheel is active
-        playerCar.MovementInputs = new Vector2(steer, throttle);
-        playerCar.LastWheelInputTime = Time.time;
+        NUGGETS.MovementInputs = new Vector2(steer, throttle);
     }
 
     internal void ApplyForceFeedback()
@@ -87,10 +85,10 @@ public class LogitechMovement : MonoBehaviour
         if (!logitechInitialized) return;
         if (!LogitechGSDK.LogiIsConnected(0)) return;
 
-        int spring = Mathf.RoundToInt(40 * forceFeedbackMultiplier);
+        int spring = Mathf.RoundToInt(80 * forceFeedbackMultiplier);
         LogitechGSDK.LogiPlaySpringForce(0, 0, 100, spring);
 
-        int damper = Mathf.RoundToInt(10 * forceFeedbackMultiplier);
+        int damper = Mathf.RoundToInt(30 * forceFeedbackMultiplier);
         LogitechGSDK.LogiPlayDamperForce(0, damper);
     }
 

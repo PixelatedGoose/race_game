@@ -1010,18 +1010,6 @@ MonoBehaviour:
   carLights: {fileID: 3931564701789026679}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
-  normalAngularDrag: 1.2
-  driftAngularDrag: 0.05
-  AllowedDriftAngle: 45
-  minDriftVelocity: 0.1
-  baseDriftSteerMultiplier: 0.72
-  speedSteerFalloffExponent: 2.2
-  slopeSteerMultiplier: 0.55
-  lowSpeedDriftLerp: 4
-  highSpeedDriftLerp: 2.2
-  visualDriftAngle: 10
-  visualRotationSpeed: 1.65
-  visualRotationSpeedMultiplier: 1
   minGroundedWheelsForDrive: 2
 --- !u!114 &2285249159904490474
 MonoBehaviour:
@@ -1138,14 +1126,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35e307104177d64d9b0766a3f513f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoostTurbo
-  strength: 15
+  strenght: 10
   maxAmount: 100
   startingAmount: 100
   consumeRate: 20
   regenerationRate: 15
   waitTime: 2
-  amount: 0
   maxSpeedMultiplier: 1.15
+  maxSpeedDecayDuration: 4
 --- !u!1 &3172822010265455929
 GameObject:
   m_ObjectHideFlags: 0
