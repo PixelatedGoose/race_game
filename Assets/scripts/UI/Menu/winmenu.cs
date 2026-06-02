@@ -2,11 +2,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using TMPro;
+using UnityEngine.UI;
 
 public class WinMenu : MonoBehaviour
 {
     private GameObject[] endButtons;
     private GameObject[] otherStuff;
+    [SerializeField] private Image endBG;
     public void OnRaceEnd()
     {
         TMP_InputField playerInput = GetComponentInChildren<TMP_InputField>();
@@ -31,6 +33,7 @@ public class WinMenu : MonoBehaviour
 
         GameObject leaderboard = transform.Find("leaderboardholder").gameObject;
         LeanTween.value(leaderboard, leaderboard.GetComponent<RectTransform>().anchoredPosition.y, 0.0f, 2f).setOnUpdate((float val) => { leaderboard.GetComponent<RectTransform>().anchoredPosition = new Vector2(leaderboard.GetComponent<RectTransform>().anchoredPosition.x, val); }).setEaseInOutQuart();
+        LeanTween.value(endBG.color.a, 1.0f, 1.0f).setOnUpdate((float val) => { endBG.color = new(endBG.color.r, endBG.color.g, endBG.color.b, val); }).setEaseInOutQuart();
     }
 
     public void RestartGame()

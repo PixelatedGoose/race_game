@@ -50,9 +50,17 @@ public class Dashboard : MonoBehaviour
     }
 
     //hell has been established
+    //hell has been established twice
     private void Update()
     {
-        if (oldSelected == selected || !ShouldDashboardOpen || !dashboardButtons.Any(b => b.name == selected.name)) return;
+        if (oldSelected == selected || !ShouldDashboardOpen) return;
+        //TODO: pitäs päästä eroon LINQistä tässä ja yksinkertastaa tätä if/else-if paskiaista
+        //hack fixattu toistaseksi
+        else if (!dashboardButtons.Any(b => b.name == selected.name))
+        {
+            rectedImage.color = Color.clear;
+            return;
+        }
 
         oldSelected = selected;
         SetSelectionRectPosition();

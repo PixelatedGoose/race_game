@@ -696,8 +696,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1043515588595869270}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.96346706, y: 0, z: 0, w: 0.26782706}
-  m_LocalPosition: {x: 0.54, y: 0.99, z: -2.354}
+  m_LocalRotation: {x: 0.96346706, y: -0, z: -0, w: 0.26782706}
+  m_LocalPosition: {x: 0.5400009, y: 0.99, z: -2.354}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -955,7 +955,7 @@ Transform:
   m_GameObject: {fileID: 1047796215578061068}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.54, y: 0.99, z: -2.354}
+  m_LocalPosition: {x: -0.5400009, y: 0.99, z: -2.354}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1342,7 +1342,7 @@ GameObject:
   - component: {fileID: 4292786669111888498}
   m_Layer: 0
   m_Name: right light volumetric (2)
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2202,7 +2202,7 @@ GameObject:
   - component: {fileID: 1319726960385895893}
   m_Layer: 0
   m_Name: right light volumetric (3)
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2698,7 +2698,7 @@ Transform:
   m_GameObject: {fileID: 5092357349460894956}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.562, y: 0.99, z: -2.354}
+  m_LocalPosition: {x: 0.5620003, y: 0.99, z: -2.354}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3375,7 +3375,7 @@ MonoBehaviour:
   Turbesped: 60
   BaseSpeed: 150
   DriftMaxSpeed: 100
-  carLights: {fileID: 0}
+  carLights: {fileID: 5405213374494192738}
 --- !u!114 &8984414616937260121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3418,6 +3418,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf77673f73d573c489fdc8dfb2a2c314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftLights:
+  - {fileID: 7442678116609901918}
+  - {fileID: 6342013764739871646}
+  - {fileID: 4399250234327090777}
+  rightLights:
+  - {fileID: 5848994311679177114}
+  - {fileID: 1863970626352702895}
+  - {fileID: 1885816230433618787}
   duration: 3
   lights: {fileID: 0}
 --- !u!114 &3840663368446193145
@@ -3723,8 +3731,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6710274058006720380}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.96346706, y: 0, z: 0, w: 0.26782706}
-  m_LocalPosition: {x: -0.54, y: 0.99, z: -2.354}
+  m_LocalRotation: {x: 0.96346706, y: -0, z: -0, w: 0.26782706}
+  m_LocalPosition: {x: -0.5400009, y: 0.99, z: -2.354}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5168,7 +5176,7 @@ GameObject:
   - component: {fileID: 1445733188719039790}
   m_Layer: 0
   m_Name: right light
-  m_TagString: ll
+  m_TagString: rl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

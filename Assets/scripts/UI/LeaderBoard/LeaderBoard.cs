@@ -66,7 +66,7 @@ public class LeaderBoard : MonoBehaviour
         StringBuilder normal = new(name);
         normal.Replace('_', ' ');
 
-        if (!normal.ToString().Contains("night")) normal.Append(" day");
+        //if (!normal.ToString().Contains("night")) normal.Append(" day");
         if (appendAI) normal.Append(" [AI]");
 
         string formattedName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(normal.ToString());
