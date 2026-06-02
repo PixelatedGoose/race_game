@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 640007097622318639, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_TagString
+      value: rl
+      objectReference: {fileID: 0}
     - target: {fileID: 1384954644508646451, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -75,7 +79,7 @@ PrefabInstance:
     - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: carLights
       value: 
-      objectReference: {fileID: 1632364530625525117}
+      objectReference: {fileID: 4696615603691038456}
     - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -212,6 +216,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -10
       objectReference: {fileID: 0}
+    - target: {fileID: 4504855449075092153, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_TagString
+      value: rl
+      objectReference: {fileID: 0}
     - target: {fileID: 5282953261142955619, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_LinearDamping
       value: 0
@@ -256,10 +264,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: leftLights.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: rightLights.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'leftLights.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4571366898463171814}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'leftLights.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1136293574069240319}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'leftLights.Array.data[2]'
+      value: 
+      objectReference: {fileID: 4290805697733684211}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'rightLights.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2742241426441007234}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'rightLights.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8531176219915453555}
+    - target: {fileID: 7173994414538769933, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: 'rightLights.Array.data[2]'
+      value: 
+      objectReference: {fileID: 6569633100796364147}
     - target: {fileID: 7549060196153983620, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 281a41acce25a054a98cb1211cc83cfa, type: 2}
+    - target: {fileID: 8333534453079258259, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_TagString
+      value: rl
+      objectReference: {fileID: 0}
     - target: {fileID: 8808136006470933881, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_text
       value: Time
@@ -278,6 +326,18 @@ PrefabInstance:
     - {fileID: 4596069863458778694, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
     - {fileID: 4449406509289786658, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
     - {fileID: 898646450694620876, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 251722276886359576, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 8937187433823955878, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 8454381205374057481, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 1431481651787786484, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 8456793692795361967, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 4407869268877122009, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 2129793223011001669, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 1717751878954602409, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 653177044551860577, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 7847413206808412447, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 7152683882716909962, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 4424748577128236173, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
@@ -307,14 +367,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2059570226978143746, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
+--- !u!108 &1136293574069240319 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 1881926351905643162, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
 --- !u!96 &1455910521379221355 stripped
 TrailRenderer:
   m_CorrespondingSourceObject: {fileID: 138890378139104270, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
-  m_PrefabInstance: {fileID: 1574323594844740453}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1632364530625525117 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 251722276886359576, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1883850972809249671 stripped
@@ -340,6 +400,11 @@ GameObject:
 --- !u!1 &2480926479404300013 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4014707876218826120, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &2742241426441007234 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 3735587438435560423, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &3318118432821318475 stripped
@@ -397,6 +462,7 @@ MonoBehaviour:
   regenerationRate: 15
   waitTime: 2
   maxSpeedMultiplier: 1.1
+  maxSpeedDecayDuration: 4
 --- !u!146 &3428677423889735303 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 4200738069657535970, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
@@ -422,9 +488,29 @@ TrailRenderer:
   m_CorrespondingSourceObject: {fileID: 2329382784887801794, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
+--- !u!108 &4290805697733684211 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 3338609864038412438, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &4571366898463171814 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 3074233474846883715, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4696615603691038456 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6121700269092978077, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &5083216551636659793 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 6003905725016634676, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &6569633100796364147 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 5689480678889037334, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
 --- !u!198 &6677864309872752332 stripped
@@ -440,5 +526,10 @@ ParticleSystem:
 --- !u!146 &7880516231917043929 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 8684111291001936828, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+  m_PrefabInstance: {fileID: 1574323594844740453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &8531176219915453555 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 7187126416183303958, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
