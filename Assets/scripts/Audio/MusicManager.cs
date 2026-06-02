@@ -24,7 +24,6 @@ public class MusicManager : MonoBehaviour
     public bool loopSong;
     public bool musicPlaybackManuallyPaused = false;
     private int[] activeTweenIDs;
-    public Coroutine songPlayback {get; protected set;}
 
     //uniikkeja yksittäisiä biisejä, siksi en laita näille tageja tai arrayta
     public AudioSource resultsTrack;
@@ -113,9 +112,13 @@ public class MusicManager : MonoBehaviour
     public void StartMusicPlayback()
     {
         PlaySong();
-        songPlayback = StartCoroutine(SongPlaybackHandler());
+        StartCoroutine(SongPlaybackHandler());
     }
-    private IEnumerator SongPlaybackHandler()
+    public void StopMusicPlayback()
+    {
+        StopAllCoroutines();
+    }
+    public IEnumerator SongPlaybackHandler()
     {
         Debug.Log($"started playback coroutine");
         //varmistetaan, että AudioSourcen .Pause() (TAI ALT TABAAMINEN ILMEISESTI???) ei alota seuraavaa trackkia; ainoastaan NextSong() saa tehä niin
@@ -127,7 +130,7 @@ public class MusicManager : MonoBehaviour
 
         Debug.Log($"song '{currentSong.name}' ended! switching to next track...");
         NextSong();
-        yield return songPlayback;
+        yield return StartCoroutine(SongPlaybackHandler());
         yield break;
     }
 
