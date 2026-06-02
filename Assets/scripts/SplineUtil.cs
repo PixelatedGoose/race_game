@@ -104,6 +104,25 @@ public static class SplineUtil
     public static bool SampleSplineInterval(Spline spline, Transform containerTransform, float interval, 
         out Vector3[] positions, out Vector3[] tangents, out Vector3[] upVectors)
     {
+        float[] tValues;
+        return SampleSplineInterval(spline, containerTransform, interval, out positions, out tangents, out upVectors, out tValues);
+    }
+
+    /// <summary>
+    /// Returns the positions, tangents, upVectors, and t values for points along a spline separated by distance 'interval'.
+    /// Includes the beginning and end of the spline.
+    /// </summary>
+    /// <param name="spline">The spline to sample</param>
+    /// <param name="containerTransform">The transform of the object holding the spline</param>
+    /// <param name="interval">The distance between sample points</param>
+    /// <param name="positions">The output position array</param>
+    /// <param name="tangents">The output tangent array</param>
+    /// <param name="upVectors">The output upVector array</param>
+    /// <param name="tValues">The output t coordinate array</param>
+    /// <returns>whether or not the operation succeeded</returns>
+    public static bool SampleSplineInterval(Spline spline, Transform containerTransform, float interval,
+        out Vector3[] positions, out Vector3[] tangents, out Vector3[] upVectors, out float[] tValues)
+    {
         float splineLength = GetSplineLength(spline, containerTransform);
 
         if (interval <= 0 || interval > splineLength)
@@ -111,12 +130,14 @@ public static class SplineUtil
             positions = null;
             tangents = null;
             upVectors = null;
+            tValues = null;
             return false;
         }
 
         List<Vector3> positionList = new List<Vector3>();
         List<Vector3> tangentList = new List<Vector3>();
         List<Vector3> upVectorList = new List<Vector3>();
+        List<float> tValueList = new List<float>();
 
         float tInc = interval / splineLength;
         for (float t = 0; t <= 1f; t += tInc)
@@ -127,6 +148,7 @@ public static class SplineUtil
                 positions = null;
                 tangents = null;
                 upVectors = null;
+                tValues = null;
                 return false;
             }
 
@@ -137,6 +159,7 @@ public static class SplineUtil
             positionList.Add(newPosition);
             tangentList.Add(newTangent);
             upVectorList.Add(newUpVector);
+            tValueList.Add(t);
 
             if (t < 0.999f && t + tInc > 1f)
                 t = 1f - tInc; // ensure that very end of spline gets sampled no matter what
@@ -145,6 +168,7 @@ public static class SplineUtil
         positions = positionList.ToArray();
         tangents = tangentList.ToArray();
         upVectors = upVectorList.ToArray();
+        tValues = tValueList.ToArray();
         return true;
     }
 }
