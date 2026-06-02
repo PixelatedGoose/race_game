@@ -995,18 +995,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2831e5b66e7145d4a913f2e5600c814c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewDoublefunszechuansauceWithAsideofNuggets
-  Acceleration: 10
-  BrakeAcceleration: 500
+  Acceleration: 400
+  BrakeAcceleration: 200
   TurnSensitivity: 1
-  MinTurnSensitivity: 17.5
+  MinTurnSensitivity: 18
   MaxTurnSensitivity: 30
   SteerStrength: 10
   BaseMaxSpeed: 130
+  maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
-  Turbesped: 60
-  BaseSpeed: 180
-  DriftMaxSpeed: 140
   carLights: {fileID: 3931564701789026679}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
@@ -1030,11 +1028,9 @@ MonoBehaviour:
   MaxTurnSensitivity: 30
   SteerStrength: 10
   BaseMaxSpeed: 130
+  maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
-  Turbesped: 60
-  BaseSpeed: 130
-  DriftMaxSpeed: 100
   carLights: {fileID: 3931564701789026679}
 --- !u!114 &187602521392888673
 MonoBehaviour:
@@ -1133,7 +1129,6 @@ MonoBehaviour:
   regenerationRate: 15
   waitTime: 2
   maxSpeedMultiplier: 1.15
-  maxSpeedDecayDuration: 4
 --- !u!1 &3172822010265455929
 GameObject:
   m_ObjectHideFlags: 0

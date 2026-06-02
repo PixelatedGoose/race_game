@@ -28,6 +28,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     float basePixel;
     float minPixel = 32f;
     float recoverTime = 2f;
+    private bool isBraking = false;
     Coroutine PixelRecovery;
 
 
@@ -132,12 +133,12 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
-
-
         MovementInputs = ctx.ReadValue<Vector2>();
         Steer();
         MovementInputs.x = ApplySteerDeadzone(MovementInputs.x);
         rawSteerInput = MovementInputs.x;
+
+        if (isBraking) return;
         Wheels.MotorTorque = MovementInputs.y * Acceleration;
     }
 
@@ -348,8 +349,17 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     }
 
 
-    void OnBrakePerformed(InputAction.CallbackContext ctx) => Wheels.BrakeTorque = BrakeAcceleration;
-    void OnBrakeCanceled(InputAction.CallbackContext ctx) => Wheels.MotorTorque = MovementInputs.y * Acceleration;
+    void OnBrakePerformed(InputAction.CallbackContext ctx)
+    {
+        Wheels.BrakeTorque = BrakeAcceleration;
+        isBraking = true;
+    }
+    void OnBrakeCanceled(InputAction.CallbackContext ctx)
+    {
+        isBraking = false;
+        Wheels.MotorTorque = MovementInputs.y * Acceleration;
+        Wheels.BrakeTorque = 0f;
+    }
 
     float ApplySteerDeadzone(float steer)
     {

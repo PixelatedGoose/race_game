@@ -77,6 +77,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1632364530625525117}
     - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: Wheels.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -277,6 +281,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 5754048565416957583}
+    - targetCorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6884080606728841104}
   m_SourcePrefab: {fileID: 100100000, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
@@ -345,6 +352,32 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5754048565416957583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3369349845262797437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2831e5b66e7145d4a913f2e5600c814c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewDoublefunszechuansauceWithAsideofNuggets
+  Acceleration: 1000
+  BrakeAcceleration: 200
+  TurnSensitivity: 1
+  MinTurnSensitivity: 20.5
+  MaxTurnSensitivity: 30
+  SteerStrength: 10
+  BaseMaxSpeed: 130
+  maxSpeedDecayDuration: 1
+  MovementInputs: {x: 0, y: 0}
+  TargetTorque: 10
+  carLights: {fileID: 1632364530625525117}
+  PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
+  steerDeadzone: 0.15
+  minGroundedWheelsForDrive: 2
 --- !u!114 &6884080606728841104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,13 +390,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35e307104177d64d9b0766a3f513f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoostTurbo
-  strength: 15
+  strenght: 10
   maxAmount: 90
   startingAmount: 100
   consumeRate: 20
   regenerationRate: 15
   waitTime: 2
-  amount: 0
   maxSpeedMultiplier: 1.1
 --- !u!146 &3428677423889735303 stripped
 WheelCollider:

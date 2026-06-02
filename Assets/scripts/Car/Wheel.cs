@@ -37,7 +37,7 @@ public class Wheel
     public void SetTorque(float TargetTorque)
     {
         collider.motorTorque = TargetTorque;
-        collider.brakeTorque = 0f;
+        // collider.brakeTorque = 0f;
     }
 }
 
