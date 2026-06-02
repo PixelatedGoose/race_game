@@ -150,14 +150,15 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Steer();
         MovementInputs.x = ApplySteerDeadzone(MovementInputs.x);
         rawSteerInput = MovementInputs.x;
+        Wheels.MotorTorque = MovementInputs.y * Acceleration;
     }
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
-        if (LGM != null && LGM.useLogitechWheel)
-            return;
+        if (LGM != null && LGM.useLogitechWheel) return;
         MovementInputs = Vector2.zero;
         Steer();
+        Wheels.MotorTorque = 0;
         rawSteerInput = 0f;
     }
 
@@ -166,8 +167,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Animatewheels();
         Steer();
         CarMovement();
-
-
 
         if (LGM != null && LGM.useLogitechWheel)
         {
@@ -235,7 +234,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Vector3 horiz = moveDir * forwardSpeed;
 
 
-        CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
+        // CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
 
     }
 
@@ -365,7 +364,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
 
     void OnBrakePerformed(InputAction.CallbackContext ctx) => Wheels.BrakeTorque = BrakeAcceleration;
-    void OnBrakeCanceled(InputAction.CallbackContext ctx) => Wheels.MotorTorque = TargetTorque;
+    void OnBrakeCanceled(InputAction.CallbackContext ctx) => Wheels.MotorTorque = MovementInputs.y * Acceleration;
 
     float ApplySteerDeadzone(float steer)
     {

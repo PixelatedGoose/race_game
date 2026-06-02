@@ -30,7 +30,8 @@ public class Wheel
 
     public void Brake(float BrakeAcceleration)
     {
-        collider.brakeTorque = BrakeAcceleration * 15f;
+        collider.brakeTorque = BrakeAcceleration;
+        collider.motorTorque = 0f;
     }
 
     public void SetTorque(float TargetTorque)
@@ -104,7 +105,7 @@ public class Wheels
         }
         set
         {
-            foreach (Wheel wheel in FrontWheels)
+            foreach (Wheel wheel in wheels)
             {
                 wheel.SetTorque(value);
             }

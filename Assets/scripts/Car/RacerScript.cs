@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
 
+[RequireComponent(typeof(PlayerCarController))]
 public class RacerScript : MonoBehaviour
 {
     private GameObject respawnfade;
@@ -256,5 +257,5 @@ public class RacerScript : MonoBehaviour
     }
     
     //leo teki (trust)
-    void StopCarSmooth() => GetComponent<PlayerCarController>().BaseSpeed = 0f;
+    void StopCarSmooth() => GetComponent<PlayerCarController>().BaseMaxSpeed = 0f;
 }
