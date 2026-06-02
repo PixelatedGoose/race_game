@@ -166,7 +166,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected override void FixedUpdate()
     {
-        TurnSensitivity = CarRb.linearVelocity.magnitude / MaxSpeed * turnSensitivityRange + MaxTurnSensitivity;
+        TurnSensitivity = MaxTurnSensitivity - CarRb.linearVelocity.magnitude / BaseMaxSpeed * turnSensitivityRange;
         
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
