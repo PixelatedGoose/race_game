@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static CarInputActions Controls;
     public static GameManager instance;
     public static RacerScript racerscript;
+    public static SFXManager sfx;
     public GameObject CarUI;
 
     public static bool IsPaused => Time.timeScale == 0;
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
             CurrentCar = Instantiate(selectedCar, spawn.position, spawn.rotation);
             racerscript = CurrentCar.GetComponentInChildren<RacerScript>();
             spawnedCars.Add(CurrentCar.GetComponentInChildren<BaseCarController>());
+            sfx = FindAnyObjectByType<SFXManager>();
             #if UNITY_EDITOR
                 Controls.CarControls.Debug_Win.performed += context => ManualRaceEnd();
             #endif
