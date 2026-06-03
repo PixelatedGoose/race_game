@@ -1528,7 +1528,7 @@ WheelCollider:
     m_AsymptoteValue: 1
     m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.15
+    m_ExtremumSlip: 0.3
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
@@ -2388,7 +2388,7 @@ WheelCollider:
     m_AsymptoteValue: 1
     m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.15
+    m_ExtremumSlip: 0.3
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
@@ -3022,7 +3022,7 @@ WheelCollider:
     m_AsymptoteValue: 1
     m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.15
+    m_ExtremumSlip: 0.3
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
@@ -3379,6 +3379,7 @@ MonoBehaviour:
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
   minGroundedWheelsForDrive: 2
+  driftAmount: 0.5
 --- !u!114 &7026640168309599442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3587,7 +3588,7 @@ WheelCollider:
     m_AsymptoteValue: 1
     m_Stiffness: 7
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.15
+    m_ExtremumSlip: 0.3
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.1
     m_AsymptoteValue: 1
