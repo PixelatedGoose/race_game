@@ -65,18 +65,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    #if UNITY_EDITOR
         void OnDisable()
         {
             Controls.Disable();
-            Controls.CarControls.Debug_Win.performed -= context => ManualRaceEnd();
+            #if UNITY_EDITOR
+                Controls.CarControls.Debug_Win.performed -= context => ManualRaceEnd();
+            #endif
         }
         void OnDestroy()
         {
             Controls.Disable();
-            Controls.CarControls.Debug_Win.performed -= context => ManualRaceEnd();
+            #if UNITY_EDITOR
+                Controls.CarControls.Debug_Win.performed -= context => ManualRaceEnd();
+            #endif
         }
-    #endif
 
     public void ManualRaceEnd()
     {

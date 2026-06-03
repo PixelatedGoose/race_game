@@ -8,32 +8,32 @@ public class PauseMenu : MonoBehaviour
     private GameObject optionsPanel;
     private Selectable firstSelected;
 
+    private CarInputActions Controls;
     private RacerScript racerScript;
     private GameObject fullMenu;
     private MusicManager musicMngr;
 
     void Awake()
     {
-        GameManager.Controls.CarControls.pausemenu.performed += ctx => PauseMenuCheck();
+        Controls = new CarInputActions();
+        Controls.CarControls.pausemenu.performed += ctx => PauseMenuCheck();
 
         fullMenu = transform.Find("menuCanvas").gameObject;
-        Debug.Log(fullMenu);
         optionsPanel = GetComponentInChildren<Options>().gameObject;
-        Debug.Log(optionsPanel);
         firstSelected = EventSystem.current.firstSelectedGameObject.GetComponent<Selectable>();
-        Debug.Log(firstSelected);
         musicMngr = FindFirstObjectByType<MusicManager>();
-        Debug.Log(musicMngr);
     }
 
-    private void OnEnable()
+    private void OnEnable() => Controls.Enable();
+    private void OnDisable()
     {
-        GameManager.Controls.Enable();
+        Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
+        Controls.Disable();
     }
     private void OnDestroy()
     {
-        GameManager.Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
-        GameManager.Controls.Disable();
+        Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
+        Controls.Disable();
     }
 
     void Start()
@@ -44,6 +44,7 @@ public class PauseMenu : MonoBehaviour
 
     void PauseMenuCheck()
     {
+        Debug.Log("checking for pause menu");
         if (!optionsPanel.activeSelf && !racerScript.raceFinished && racerScript.racestarted) TogglePauseMenu();
     }
 
