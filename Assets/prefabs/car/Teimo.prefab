@@ -442,7 +442,7 @@ MonoBehaviour:
   maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 10
-  carLights: {fileID: 0}
+  carLights: {fileID: 4696615603691038456}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
   minGroundedWheelsForDrive: 2
