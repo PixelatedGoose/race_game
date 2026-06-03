@@ -172,6 +172,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         base.FixedUpdate();
 
+        if (Wheels.TouchingGrass())
+        {
+            multCounter.ResetMultiplier();
+        }
+
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
             // CarMovement();
@@ -361,10 +366,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == grassLayer.value)
-        {
-            multCounter.ResetMultiplier();
-        }
 
         if (PixelCount == null  || collision.impulse.sqrMagnitude < 0.1f ) 
             return;
