@@ -307,7 +307,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7931227733456490809}
+        m_TargetAssemblyTypeName: userDataInput, Assembly-CSharp
+        m_MethodName: UpdateUserName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls:
@@ -335,6 +347,18 @@ MonoBehaviour:
       - m_Target: {fileID: 7931227733456490809}
         m_TargetAssemblyTypeName: userDataInput, Assembly-CSharp
         m_MethodName: UpdateUserName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7931227733456490809}
+        m_TargetAssemblyTypeName: userDataInput, Assembly-CSharp
+        m_MethodName: CheckForInvalidName
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -385,6 +409,22 @@ MonoBehaviour:
         - m_Target: {fileID: 1651543024826598922}
           m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
           m_MethodName: Play
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 11
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7931227733456490809}
+          m_TargetAssemblyTypeName: userDataInput, Assembly-CSharp
+          m_MethodName: ReturnToInputField
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -855,9 +895,9 @@ RectTransform:
   - {fileID: 6982704297438100364}
   m_Father: {fileID: 9029688878624769544}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -56}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 832, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &316408462972273288
@@ -1153,9 +1193,9 @@ RectTransform:
   - {fileID: 1320808933970042513}
   m_Father: {fileID: 9029688878624769544}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -124}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 832, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5657935085314525909
@@ -2331,9 +2371,9 @@ RectTransform:
   - {fileID: 3172918411928521472}
   m_Father: {fileID: 9029688878624769544}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -192}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 832, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1842343438223478151
@@ -2411,9 +2451,9 @@ RectTransform:
   - {fileID: 6938161379781821722}
   m_Father: {fileID: 9029688878624769544}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -260}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 832, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8170086753068243349
@@ -3029,9 +3069,9 @@ RectTransform:
   - {fileID: 2449839297960702826}
   m_Father: {fileID: 9029688878624769544}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -328}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 832, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8353956092433003497

@@ -23,8 +23,8 @@ public class Options : MonoBehaviour
     }
     void Start()
     {
+        if (!gameObject.LeanIsTweening()) gameObject.SetActive(false);
         InitializeVolumeSliders();
-        gameObject.SetActive(false);
     }
 
     public void InitializeOptions()

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -39,7 +40,6 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         fullMenu.SetActive(false);
-        if (optionsPanel.activeSelf) Debug.LogWarning($"options are active on start, this may cause unexpected behaviour!");
         racerScript = FindFirstObjectByType<RacerScript>();  
     }
 
