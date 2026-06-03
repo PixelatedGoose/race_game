@@ -39,6 +39,8 @@ public class userDataInput : MonoBehaviour
     void Start()
     {
         winmenu = GetComponent<WinMenu>();
+        enter.interactable = false;
+
     }
     
     [Serializable]
