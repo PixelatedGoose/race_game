@@ -73,11 +73,15 @@ public class LogitechMovement : MonoBehaviour
         var state = LogitechGSDK.LogiGetStateUnity(0);
 
         float steer = state.lX / 32768f;
-        float throttle = Mathf.Clamp01(-state.lY / 32768f);
+
+        float throttle = -state.lY / 32768f;
+        float brake = -state.lRz / 32768f;
+
+        float moveY = Mathf.Clamp(throttle - brake, -1f, 1f);
 
         if (NUGGETS == null) return;
 
-        NUGGETS.MovementInputs = new Vector2(steer, throttle);
+        NUGGETS.MovementInputs = new Vector2(steer, moveY);
     }
 
     internal void ApplyForceFeedback()

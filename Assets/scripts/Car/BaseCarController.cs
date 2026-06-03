@@ -129,9 +129,16 @@ public class BaseCarController : MonoBehaviour
 
     protected void Steer()
     {
-        Wheels.SteerAngle = Mathf.Lerp(Wheels.SteerAngle, MovementInputs.x * TurnSensitivity, SteerStrength * Time.deltaTime);
-    }
+        float steer = MovementInputs.x;
 
+        steer *= Mathf.Abs(steer);
+
+        Wheels.SteerAngle = Mathf.Lerp(
+            Wheels.SteerAngle,
+            steer * TurnSensitivity,
+            5f * Time.deltaTime
+        );
+    }
 
     protected void AdjustWheelsForDrift()
     {
