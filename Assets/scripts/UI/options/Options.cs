@@ -48,7 +48,7 @@ public class Options : MonoBehaviour
         //MISTER BARBER DID I NOT TELL YOU TO REMOVE EVERYTHING???
         foreach (var i in AllMixerGroups)
         {
-            main.SetFloat($"{i.name}_value", Mathf.Log10(PlayerPrefs.HasKey($"{i}_value_value") ? PlayerPrefs.GetFloat($"{i}_value_value") : DefaultSliderValue) * 20);
+            main.SetFloat($"{i}_value", Mathf.Log10(PlayerPrefs.HasKey($"{i}_value_value") ? PlayerPrefs.GetFloat($"{i}_value_value") : DefaultSliderValue) * 20);
         }
         PlayerPrefs.Save();
     }
