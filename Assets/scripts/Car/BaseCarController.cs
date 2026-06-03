@@ -26,7 +26,7 @@ public class BaseCarController : MonoBehaviour
         set { CarRb.maxLinearVelocity = value; }
     }
     public float BaseMaxSpeed = 130f;
-    protected float BaseMpsMaxSpeed;
+    public float BaseMpsMaxSpeed { get; protected set; }
     [SerializeField] protected float maxSpeedDecayDuration = 1.0f;
     [SerializeField] protected Wheels Wheels;
     [Header("Trail settings")]
