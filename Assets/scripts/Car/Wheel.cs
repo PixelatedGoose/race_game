@@ -31,13 +31,11 @@ public class Wheel
     public void Brake(float BrakeAcceleration)
     {
         collider.brakeTorque = BrakeAcceleration;
-        collider.motorTorque = 0f;
     }
 
     public void SetTorque(float TargetTorque)
     {
         collider.motorTorque = TargetTorque;
-        // collider.brakeTorque = 0f;
     }
 }
 
