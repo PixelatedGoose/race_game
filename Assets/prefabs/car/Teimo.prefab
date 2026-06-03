@@ -336,7 +336,9 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2178736594537289893, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+    - {fileID: 6055393316180837957, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
     m_RemovedGameObjects:
     - {fileID: 1582980093828908133, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
     - {fileID: 4596069863458778694, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
@@ -356,9 +358,6 @@ PrefabInstance:
     - {fileID: 4424748577128236173, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 5754048565416957583}
     - targetCorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6884080606728841104}
@@ -436,33 +435,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4259080485278617880, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
   m_PrefabInstance: {fileID: 1574323594844740453}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5754048565416957583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3369349845262797437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2831e5b66e7145d4a913f2e5600c814c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewDoublefunszechuansauceWithAsideofNuggets
-  Acceleration: 1000
-  BrakeAcceleration: 200
-  TurnSensitivity: 1
-  MinTurnSensitivity: 20.5
-  MaxTurnSensitivity: 30
-  SteerStrength: 10
-  BaseMaxSpeed: 130
-  maxSpeedDecayDuration: 1
-  MovementInputs: {x: 0, y: 0}
-  TargetTorque: 10
-  carLights: {fileID: 4696615603691038456}
-  PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
-  steerDeadzone: 0.15
-  minGroundedWheelsForDrive: 2
-  driftAmount: 0.5
 --- !u!114 &6884080606728841104
 MonoBehaviour:
   m_ObjectHideFlags: 0

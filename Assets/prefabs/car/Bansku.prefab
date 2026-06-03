@@ -3284,11 +3284,8 @@ GameObject:
   - component: {fileID: 2409800051733554486}
   - component: {fileID: 6913598560885224959}
   - component: {fileID: 7068071530633742787}
-  - component: {fileID: 7026640168309599442}
   - component: {fileID: 8984414616937260121}
   - component: {fileID: 273639920665147954}
-  - component: {fileID: 3840663368446193145}
-  - component: {fileID: 8549656996012504847}
   - component: {fileID: 3903364310518964230}
   - component: {fileID: 7391189197080503322}
   m_Layer: 0
@@ -3380,29 +3377,6 @@ MonoBehaviour:
   steerDeadzone: 0.15
   minGroundedWheelsForDrive: 2
   driftAmount: 0.5
---- !u!114 &7026640168309599442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6334048508725160481}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Acceleration: 1000
-  BrakeAcceleration: 150
-  TurnSensitivity: 1
-  MinTurnSensitivity: 17.5
-  MaxTurnSensitivity: 30
-  SteerStrength: 10
-  BaseMaxSpeed: 130
-  maxSpeedDecayDuration: 1
-  MovementInputs: {x: 0, y: 0}
-  TargetTorque: 0
-  carLights: {fileID: 5405213374494192738}
 --- !u!114 &8984414616937260121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3455,48 +3429,6 @@ MonoBehaviour:
   - {fileID: 1885816230433618787}
   duration: 3
   lights: {fileID: 0}
---- !u!114 &3840663368446193145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6334048508725160481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0ba3bb882cbc814bbfe0ef28975fec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InputRecorder
---- !u!114 &8549656996012504847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6334048508725160481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: 53472e6d66c2c0f4ba2cc137f3d2721b, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: 
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &3903364310518964230
 MonoBehaviour:
   m_ObjectHideFlags: 0

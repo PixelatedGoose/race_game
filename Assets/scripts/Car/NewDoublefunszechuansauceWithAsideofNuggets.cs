@@ -2,17 +2,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Logitech;
-using UnityEditor.ShaderGraph.Internal;
 
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(PlayerInput))]
 public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 {
     public CarInputActions Controls { get; protected set; } //new CarInputActions();
 
     LogitechMovement LGM;
-    PlayerInput PlayerInput;
+    //PlayerInput PlayerInput;
 
     string CurrentControlScheme;
 
@@ -43,11 +41,10 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         
         TryGetComponent(out LGM);
         multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
-
         
         Controls = new CarInputActions();
 
-        PlayerInput = GetComponent<PlayerInput>();
+        //PlayerInput = GetComponent<PlayerInput>();
         LGM = FindFirstObjectByType<LogitechMovement>();
 
         CarRb = GetComponent<Rigidbody>();
@@ -73,14 +70,17 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         base.Start();
 
         basePixel = PixelCount.GetFloat("_pixelcount");
+
+        LGM.useLogitechWheel = false;
+        LGM.allowAutoEnable = true;
     }
 
     private void OnEnable()
     {
         Controls.Enable();
 
-        if (PlayerInput != null)
-            PlayerInput.onControlsChanged += OnControlsChanged;
+        /* if (PlayerInput != null)
+            PlayerInput.onControlsChanged += OnControlsChanged; */
 
         Controls.CarControls.Move.performed += OnMovePerformed;
         Controls.CarControls.Move.canceled += OnMoveCanceled;
@@ -96,8 +96,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         Controls.Disable();
 
-        if (PlayerInput != null)
-            PlayerInput.onControlsChanged -= OnControlsChanged;
+        /* if (PlayerInput != null)
+            PlayerInput.onControlsChanged -= OnControlsChanged; */
 
         Controls.CarControls.Move.performed -= OnMovePerformed;
         Controls.CarControls.Move.canceled -= OnMoveCanceled;
@@ -121,7 +121,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
             LGM.StopAllForceFeedback();
     }
 
-    private void OnControlsChanged(PlayerInput input)
+    /* private void OnControlsChanged(PlayerInput input)
     {
         CurrentControlScheme = input.currentControlScheme;
 
@@ -137,7 +137,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         {
             LGM.allowAutoEnable = true;
         }
-    }
+    } */
 
     void OnApplicationFocus(bool focus)
     {

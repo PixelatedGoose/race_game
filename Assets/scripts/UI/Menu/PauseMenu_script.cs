@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -9,27 +8,32 @@ public class PauseMenu : MonoBehaviour
     private GameObject optionsPanel;
     private Selectable firstSelected;
 
-    private CarInputActions Controls;
     private RacerScript racerScript;
     private GameObject fullMenu;
     private MusicManager musicMngr;
 
     void Awake()
     {
-        Controls = new CarInputActions();
-        Controls.CarControls.pausemenu.performed += ctx => PauseMenuCheck();
+        GameManager.Controls.CarControls.pausemenu.performed += ctx => PauseMenuCheck();
 
         fullMenu = transform.Find("menuCanvas").gameObject;
+        Debug.Log(fullMenu);
         optionsPanel = GetComponentInChildren<Options>().gameObject;
+        Debug.Log(optionsPanel);
         firstSelected = EventSystem.current.firstSelectedGameObject.GetComponent<Selectable>();
+        Debug.Log(firstSelected);
         musicMngr = FindFirstObjectByType<MusicManager>();
+        Debug.Log(musicMngr);
     }
 
-    private void OnEnable() => Controls.Enable();
+    private void OnEnable()
+    {
+        GameManager.Controls.Enable();
+    }
     private void OnDestroy()
     {
-        Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
-        Controls.Disable();
+        GameManager.Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
+        GameManager.Controls.Disable();
     }
 
     void Start()
@@ -45,6 +49,7 @@ public class PauseMenu : MonoBehaviour
 
     public void TogglePauseMenu()
     {
+        Debug.Log($"pause menu should open!");
         fullMenu.SetActive(!fullMenu.activeSelf);
         LeanTween.cancel(fullMenu);
         SFXManager SFXMngr = FindFirstObjectByType<SFXManager>();
