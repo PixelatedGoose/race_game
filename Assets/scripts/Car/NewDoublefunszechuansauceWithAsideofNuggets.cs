@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Logitech;
+using UnityEditor.ShaderGraph.Internal;
 
 
 [RequireComponent(typeof(Rigidbody))]
@@ -376,6 +377,14 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
                 "_pixelcount",
                 Mathf.Lerp(hitPixel, basePixel, elapsed / recover)
             );
+
+            //hackfixattu
+            if (PixelCount.GetFloat("_pixelcount") <= 0 && PixelRecovery != null)
+            {
+                StopCoroutine(PixelRecovery);
+                float savedPixelCount = PlayerPrefs.GetFloat("pixel_value") * 64f;
+                PixelCount.SetFloat("_pixelcount", savedPixelCount);
+            }
 
             yield return null;
         }
