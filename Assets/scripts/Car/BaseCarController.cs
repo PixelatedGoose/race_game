@@ -39,7 +39,7 @@ public class BaseCarController : MonoBehaviour
     }
     public float BaseMaxSpeed = 130f;
     [SerializeField] protected float maxSpeedDecayDuration = 1.0f;
-    [SerializeField] protected Wheels Wheels;
+    [SerializeField] internal Wheels Wheels;
     [Header("Trail settings")]
     public Vector2 MovementInputs;
     protected Vector3 _CenterofMass;
@@ -136,7 +136,7 @@ public class BaseCarController : MonoBehaviour
         Wheels.SteerAngle = Mathf.Lerp(
             Wheels.SteerAngle,
             steer * TurnSensitivity,
-            5f * Time.deltaTime
+            20f * Time.deltaTime
         );
     }
 
