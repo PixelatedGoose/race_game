@@ -33,7 +33,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     [Range(0f, 1f)]
     public float driftAmount = 0.5f;
 
-    float driftExitBlend = 1f;
 
     protected override void Awake()
     {
@@ -208,11 +207,9 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         float t = drifting ? driftAmount : 0f;
 
-        // Front = more control
         float frontSide = Mathf.Lerp(5f, 1.2f, t);
         float frontForward = Mathf.Lerp(7f, 3f, t);
 
-        // Rear = more slide
         float rearSide = Mathf.Lerp(5f, 0.9f, t);
         float rearForward = Mathf.Lerp(7f, 1.5f, t);
 
