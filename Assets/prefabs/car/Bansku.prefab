@@ -3290,6 +3290,7 @@ GameObject:
   - component: {fileID: 3840663368446193145}
   - component: {fileID: 8549656996012504847}
   - component: {fileID: 3903364310518964230}
+  - component: {fileID: 7391189197080503322}
   m_Layer: 0
   m_Name: car
   m_TagString: Untagged
@@ -3374,7 +3375,7 @@ MonoBehaviour:
   maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 10
-  carLights: {fileID: 5405213374494192738}
+  carLights: {fileID: 0}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
   minGroundedWheelsForDrive: 2
@@ -3514,6 +3515,21 @@ MonoBehaviour:
   regenerationRate: 15
   waitTime: 2
   maxSpeedMultiplier: 1.2
+--- !u!114 &7391189197080503322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6334048508725160481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0e6fbb8ef19c234ca285880fb02ce6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LogitechMovement
+  useLogitechWheel: 0
+  forceFeedbackMultiplier: 1
+  allowAutoEnable: 1
 --- !u!1 &6464818183039503655
 GameObject:
   m_ObjectHideFlags: 0
@@ -4544,7 +4560,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
