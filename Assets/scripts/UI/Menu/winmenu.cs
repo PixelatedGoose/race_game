@@ -3,18 +3,32 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class WinMenu : MonoBehaviour
 {
     private GameObject[] endButtons;
     private GameObject[] otherStuff;
     [SerializeField] private Image endBG;
+    private TMP_InputField playerInput;
+    private Coroutine selectInputField;
+
     public void OnRaceEnd()
     {
-        TMP_InputField playerInput = GetComponentInChildren<TMP_InputField>();
-        playerInput.Select();
-        playerInput.ActivateInputField();
+        playerInput = GetComponentInChildren<TMP_InputField>();
         gameObject.SetActive(true);
+        selectInputField = StartCoroutine(SelectInputField());
+    }
+    private IEnumerator SelectInputField()
+    {
+        if (playerInput != null)
+        {
+            yield return null;
+            playerInput.Select();
+            playerInput.ActivateInputField();
+            StopCoroutine(selectInputField);
+            selectInputField = null;
+        }
     }
     public void FinalizeRaceAndSaveData()
     {
