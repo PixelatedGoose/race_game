@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,13 +12,12 @@ public class Credits : MonoBehaviour
     private int index = 0;
 
     [Header("UI")]
-    [SerializeField] private Text thetext;
+    [SerializeField] private TMP_Text titleInfo;
 
     private string[] tasks;
-
-    [Header("specific tasks")]
     private string[] whatHeDo;
-    [SerializeField] private Text popupInfo;
+    private VertexGradient[] colors;
+    [SerializeField] private TMP_Text panelInfo;
     [SerializeField] private AudioSource creditsTrack;
 
     private int musictweenIDstart = -1;
@@ -46,6 +46,15 @@ public class Credits : MonoBehaviour
             "- AI cars\n- optimizing/refactoring scripts\n- user input check system",
             "- car models and textures\n- ideas"
         };
+        colors = new VertexGradient[]
+        {
+            new(Color.white, Color.white, new Color(0.735849f, 0.1677085f, 0.06594872f), new Color(0.735849f, 0.1677085f, 0.06594872f)),
+            new(Color.white, Color.white, new Color(0f, 0f, 0f), new Color(0f, 0f, 0f)),
+            new(Color.white, Color.white, new Color(0.2049662f, 0.5919524f, 0.9245283f), new Color(0.2049662f, 0.5919524f, 0.9245283f)),
+            new(Color.white, Color.white, new Color(0.1688768f, 0.6509434f, 0.369738f), new Color(0.1688768f, 0.6509434f, 0.369738f)),
+            new(Color.white, Color.white, new Color(0.9803922f, 0.9803922f, 0.8235294f), new Color(0.9803922f, 0.9803922f, 0.8235294f)),
+            new(Color.white, Color.white, new Color(0.724026f, 0.2741634f, 0.9528302f), new Color(0.724026f, 0.2741634f, 0.9528302f))
+        };
     }
 
     public void UpdateIconSelection()
@@ -56,13 +65,14 @@ public class Credits : MonoBehaviour
             bool hasIndex = int.TryParse(target.name.Substring(0, 1), out index);
             if (hasIndex)
             {
-                thetext.text = tasks[index];
-                popupInfo.text = whatHeDo[index];
+                titleInfo.text = tasks[index];
+                panelInfo.text = whatHeDo[index];
+                titleInfo.colorGradient = colors[index];
             }
             else
             {
-                thetext.text = "";
-                popupInfo.text = "";
+                titleInfo.text = "";
+                panelInfo.text = "";
             }
         }
     }
