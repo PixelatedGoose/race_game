@@ -39,6 +39,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         CarRb = GetComponent<Rigidbody>();
         TryGetComponent(out LGM);
         multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
+
         
         Controls = new CarInputActions();
 
@@ -202,7 +203,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         }
     }
 
-    //before you even fucking ask lamelemon, YES i used AI a lot bcs the deadline is too close
     void DriftPhysics()
     {
         ApplyDriftForce();
@@ -271,8 +271,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void SetDriftFriction(bool drifting)
     {
-        float side = drifting ? .3f : 5f;
-        float forward = drifting ? .6f : 5f;
+        float side = drifting ? .15f : 5f;
+        float forward = drifting ? 1.0f : 5f;
 
         foreach (Wheel wheel in Wheels)
         {
@@ -300,13 +300,14 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnDriftCanceled(InputAction.CallbackContext _) => EndDrift();
 
-    void EndDrift()
+    internal void EndDrift()
     {
         IsDrifting = false;
 
         SetDriftFriction(false);
         WheelEffects(false);
     }
+
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
     {
