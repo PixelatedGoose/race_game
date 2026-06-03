@@ -19,11 +19,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     [SerializeField] private Material PixelCount;
 
     [SerializeField] private float steerDeadzone = 0.15f;
-    float rawSteerInput;
-    float smoothedDriftAngle;
 
     [SerializeField] private int minGroundedWheelsForDrive = 2;
-    float smoothedSteer;
 
     float basePixel;
     float minPixel = 32f;
@@ -42,6 +39,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         CarRb = GetComponent<Rigidbody>();
         TryGetComponent(out LGM);
         multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
+
         
         Controls = new CarInputActions();
 
@@ -141,7 +139,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         MovementInputs = ctx.ReadValue<Vector2>();
         Steer();
-        rawSteerInput = MovementInputs.x;
 
         if (!isBraking) Wheels.MotorTorque = MovementInputs.y * Acceleration;
     }
@@ -152,7 +149,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         MovementInputs = Vector2.zero;
         Steer();
         Wheels.MotorTorque = 0;
-        rawSteerInput = 0f;
     }
 
     protected void Update()
@@ -179,7 +175,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
-            // CarMovement();
+
 
             if (IsDrifting){
                 DriftPhysics();
@@ -212,38 +208,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         }
     }
 
-    // protected void CarMovement()
-    // {
-    //     Vector3 moveDir =
-    //     IsDrifting
-    //         ? Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up).normalized
-    //         : transform.forward;
-
-    //     float forwardDot = Vector3.Dot(CarRb.linearVelocity, moveDir);
-
-    //     float currentSign = Mathf.Abs(forwardDot) > 0.1f ? Mathf.Sign(forwardDot) : Mathf.Sign(MovementInputs.y);
-    //     float signedSpeed = CarRb.linearVelocity.magnitude * currentSign;
-    //     float accelMultiplier = IsDrifting ? 0.25f : 1f;
-    //     float targetSpeed = MaxSpeed * MovementInputs.y;
-
-    //     if (IsDrifting)
-    //     {
-    //         Vector3 slopeVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
-    //         targetSpeed = Mathf.Max(Mathf.Abs(signedSpeed), Mathf.Abs(targetSpeed));
-    //         if (slopeVel.sqrMagnitude > 1f) moveDir = slopeVel.normalized;
-    //     }
-
-    //     float forwardSpeed = Mathf.MoveTowards(
-    //         signedSpeed,
-    //         targetSpeed,
-    //         Acceleration * accelMultiplier * Time.fixedDeltaTime
-    //     );
-
-    //     Vector3 horiz = moveDir * forwardSpeed;
-    //     // CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
-    // }
-
-    //before you even fucking ask lamelemon, YES i used AI a lot bcs the deadline is too close
     void DriftPhysics()
     {
         ApplyDriftForce();
@@ -312,8 +276,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void SetDriftFriction(bool drifting)
     {
-        float side = drifting ? .3f : 5f;
-        float forward = drifting ? .6f : 5f;
+        float side = drifting ? .15f : 5f;
+        float forward = drifting ? 1.0f : 5f;
 
         foreach (Wheel wheel in Wheels)
         {
@@ -333,7 +297,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         if (IsDrifting || MovementInputs.y < 0f)
             return;
 
-        smoothedSteer = MovementInputs.x;
         IsDrifting = true;
 
         SetDriftFriction(true);
@@ -342,14 +305,14 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnDriftCanceled(InputAction.CallbackContext _) => EndDrift();
 
-    void EndDrift()
+    internal void EndDrift()
     {
         IsDrifting = false;
-        smoothedSteer = 0f;
 
         SetDriftFriction(false);
         WheelEffects(false);
     }
+
 
     void OnBrakePerformed(InputAction.CallbackContext ctx)
     {

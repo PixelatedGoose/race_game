@@ -35,7 +35,7 @@ public class BaseCarController : MonoBehaviour
     public float TargetTorque = 10f;
     public Rigidbody CarRb { get; protected set; }
     [Header("Drift asetukset")]
-    public bool IsDrifting { get; protected set; } = false;
+    public bool IsDrifting { get; set; } = false;
     public float BaseTargetTorque { get; protected set; }
     public float SmoothedMaxAcceleration { get; protected set; }
     [Header("turbe asetukset")]
@@ -129,7 +129,7 @@ public class BaseCarController : MonoBehaviour
         Wheels.SteerAngle = Mathf.Lerp(
             Wheels.SteerAngle,
             steer * TurnSensitivity,
-            5f * Time.deltaTime
+            1.2f * Time.deltaTime
         );
     }
 

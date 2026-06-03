@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
 
-[RequireComponent(typeof(PlayerCarController))]
+[RequireComponent(typeof(NewDoublefunszechuansauceWithAsideofNuggets))]
 public class RacerScript : MonoBehaviour
 {
     private GameObject respawnfade;
@@ -34,7 +34,9 @@ public class RacerScript : MonoBehaviour
 
     private GameObject finalLapImg;
 
-    private PlayerCarController carController;
+    private NewDoublefunszechuansauceWithAsideofNuggets carController;
+    private MultCounter multCounter;
+    private ScoreManager scoreManager;
     private WinMenu winmenu;
 
     void Awake()
@@ -43,7 +45,9 @@ public class RacerScript : MonoBehaviour
         Controls.Enable();
         musicManager = FindAnyObjectByType<MusicManager>();
         sfxmngr = FindAnyObjectByType<SFXManager>();
-        carController = GetComponent<PlayerCarController>();
+        carController = GetComponent<NewDoublefunszechuansauceWithAsideofNuggets>();
+        scoreManager = GetComponent<ScoreManager>();
+        multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
         winmenu = FindAnyObjectByType<WinMenu>(FindObjectsInactive.Include);
     }
 
@@ -121,6 +125,12 @@ public class RacerScript : MonoBehaviour
         .setOnComplete(() =>
         {
             RespawnAtLastCheckpoint();
+            if (carController.IsDrifting)
+            {
+                carController.IsDrifting = false;
+                carController.EndDrift();
+                scoreManager.scoreFloat = 0f; multCounter.ResetMultiplier();
+            }
             LeanTween.value(respawnfade.GetComponent<RawImage>().color.a, 0f, 0.25f).setOnUpdate((float val) =>
             {
                 var img = respawnfade.GetComponent<RawImage>();
@@ -245,7 +255,7 @@ public class RacerScript : MonoBehaviour
         carController.Controls.Disable();
         raceFinished = true;
         startTimer = false;
-        carController.StopDrifting();
+        carController.EndDrift();
         carController.CanDrift = false; 
         carController.CanUseTurbo = false;
         yield return new WaitForSecondsRealtime(2.5f);
