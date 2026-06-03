@@ -23,8 +23,8 @@ public class Options : MonoBehaviour
     }
     void Start()
     {
-        if (!gameObject.LeanIsTweening()) gameObject.SetActive(false);
         InitializeVolumeSliders();
+        if (!gameObject.LeanIsTweening()) gameObject.SetActive(false);
     }
 
     public void InitializeOptions()
@@ -38,15 +38,19 @@ public class Options : MonoBehaviour
     }
     private void InitializeVolumeSliders()
     {
-        //MISTER BARBER DID I NOT TELL YOU TO REMOVE EVERYTHING???
-        foreach (var i in AllMixerGroups) main.SetFloat($"{i.name}_value", Mathf.Log10(PlayerPrefs.GetFloat($"{i}_value_value")) * 20);
-
         List<AudioSlider> audioSliders = GetComponentsInChildren<AudioSlider>(true).ToList();
         foreach (var i in audioSliders)
         {
             var volumeSlider = i.GetComponent<Slider>();
             volumeSlider.onValueChanged.AddListener((value) => { main.SetFloat(volumeSlider.name, Mathf.Log10(volumeSlider.value) * 20); });
         }
+
+        //MISTER BARBER DID I NOT TELL YOU TO REMOVE EVERYTHING???
+        foreach (var i in AllMixerGroups)
+        {
+            main.SetFloat($"{i.name}_value", Mathf.Log10(PlayerPrefs.HasKey($"{i}_value_value") ? PlayerPrefs.GetFloat($"{i}_value_value") : DefaultSliderValue) * 20);
+        }
+        PlayerPrefs.Save();
     }
 
     private void InitSpecificOptionValue(Toggle toggle)
@@ -83,7 +87,10 @@ public class Options : MonoBehaviour
         });
     }
 
-    public void SavePlayerPrefs() => PlayerPrefs.Save();
+    public void SavePlayerPrefs()
+    {
+        PlayerPrefs.Save();
+    }
 
     public void MenuOpenTween()
     {
