@@ -146,8 +146,6 @@ public class MultCounter : MonoBehaviour
         }
     }
 
-
-
     private IEnumerator MultiplierTimer()
     {
         float loopTimer = 0f;
@@ -155,7 +153,12 @@ public class MultCounter : MonoBehaviour
 
         while (isDrifting)
         {
-            if (playerScript.Wheels.TouchingGrass()) break;
+            if (playerScript.Wheels.TouchingGrass())
+            {
+                playerScript.EndDrift();
+                displayImage.sprite = numberSprites[0];
+                break;
+            }
 
             float mult = ScoreManager.instance.CurrentDriftMultiplier;
             

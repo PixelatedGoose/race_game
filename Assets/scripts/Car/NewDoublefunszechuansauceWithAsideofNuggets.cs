@@ -168,11 +168,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         base.FixedUpdate();
 
-        if (Wheels.TouchingGrass())
-        {
-            multCounter.ResetMultiplier();
-        }
-
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
 

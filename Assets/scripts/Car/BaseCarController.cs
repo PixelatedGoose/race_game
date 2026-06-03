@@ -59,6 +59,7 @@ public class BaseCarController : MonoBehaviour
 
     virtual protected void Start()
     {
+        ResetMaxSpeed();
         carCollider = GetComponentInChildren<Collider>();
         CarExtents = carCollider.bounds.size;
         ClearWheelTrails();
