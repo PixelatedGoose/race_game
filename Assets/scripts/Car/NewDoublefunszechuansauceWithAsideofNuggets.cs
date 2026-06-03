@@ -30,9 +30,8 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     private bool isBraking = false;
     Coroutine PixelRecovery;
     private MultCounter multCounter;
-    float steerSmoothedForce;
-    float steerSmoothed;
-    float sideVelSmoothed;
+    [Range(0f, 1f)]
+    public float driftAmount = 0.5f;
 
     float driftExitBlend = 1f;
 
@@ -141,6 +140,17 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         }
     }
 
+    void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+        {
+            if (LGM != null && LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0))
+            {
+                LogitechGSDK.LogiUpdate();
+            }
+        }
+    }
+
     void OnMovePerformed(InputAction.CallbackContext ctx)
     {
         MovementInputs = ctx.ReadValue<Vector2>();
@@ -174,17 +184,63 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         base.FixedUpdate();
 
+        if (IsDrifting){
+            DriftPhysics();
+        }
+
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
-
-
-            if (IsDrifting){
-                DriftPhysics();
-            }
             Decelerate();
         }
     }
 
+    void DriftPhysics()
+    {
+        Vector3 angVel = CarRb.angularVelocity;
+
+        angVel.y *= 0.97f; 
+
+        CarRb.angularVelocity = angVel;
+    }
+
+
+    void SetDriftFriction(bool drifting)
+    {
+        float t = drifting ? driftAmount : 0f;
+
+        // Front = more control
+        float frontSide = Mathf.Lerp(5f, 1.2f, t);
+        float frontForward = Mathf.Lerp(7f, 3f, t);
+
+        // Rear = more slide
+        float rearSide = Mathf.Lerp(5f, 0.9f, t);
+        float rearForward = Mathf.Lerp(7f, 1.5f, t);
+
+        foreach (Wheel wheel in Wheels.FrontWheels)
+        {
+            var side = wheel.collider.sidewaysFriction;
+            var forward = wheel.collider.forwardFriction;
+
+            side.stiffness = frontSide;
+            forward.stiffness = frontForward;
+
+            wheel.collider.sidewaysFriction = side;
+            wheel.collider.forwardFriction = forward;
+        }
+
+        foreach (Wheel wheel in Wheels.RearWheels)
+        {
+            var side = wheel.collider.sidewaysFriction;
+            var forward = wheel.collider.forwardFriction;
+
+            side.stiffness = rearSide;
+            forward.stiffness = rearForward;
+
+            wheel.collider.sidewaysFriction = side;
+            wheel.collider.forwardFriction = forward;
+        }
+    }
+    
     int GetGroundedWheelCount()
     {
         int grounded = 0;
@@ -197,47 +253,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         return grounded;
     }
 
-
-    void OnApplicationFocus(bool focus)
-    {
-        if (focus)
-        {
-            if (LGM != null && LGM.logitechInitialized && LogitechGSDK.LogiIsConnected(0))
-            {
-                LogitechGSDK.LogiUpdate();
-            }
-        }
-    }
-
-    void DriftPhysics()
-    {
-        float steer = MovementInputs.x;
-
-        float speedFactor = Mathf.Clamp01(CarRb.linearVelocity.magnitude / MaxSpeed);
-
-        CarRb.AddRelativeTorque(
-            transform.up * steer  * speedFactor,
-            ForceMode.Acceleration
-        );
-    }
-
-    void SetDriftFriction(bool drifting)
-    {
-        float side = drifting ? .15f : 5f;
-        float forward = drifting ? 1.0f : 5f;
-
-        foreach (Wheel wheel in Wheels)
-        {
-            var sidewaysfriction = wheel.collider.sidewaysFriction;
-            var forwardfriction = wheel.collider.forwardFriction;
-
-            sidewaysfriction.stiffness = side;
-            forwardfriction.stiffness = forward;
-
-            wheel.collider.sidewaysFriction = sidewaysfriction;
-            wheel.collider.forwardFriction = forwardfriction;
-        }
-    }
 
     void OnDriftPerformed(InputAction.CallbackContext _)
     {

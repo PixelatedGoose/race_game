@@ -123,10 +123,22 @@ public class BaseCarController : MonoBehaviour
 
     protected void Steer()
     {
+        float steer = MovementInputs.x;
+
+        if (IsDrifting)
+            steer = Mathf.Sign(steer) * Mathf.Pow(Mathf.Abs(steer), 0.7f);
+
+        float steerMultiplier = IsDrifting ? 0.8f : 0.35f;
+
+        float targetSteer = steer * TurnSensitivity * steerMultiplier;
+
         foreach (Wheel wheel in Wheels.FrontWheels)
-        {        
-            var _steerAngle = MovementInputs.x * TurnSensitivity * (IsDrifting ? 0.8f : 0.35f);
-            wheel.collider.steerAngle = Mathf.Lerp(wheel.collider.steerAngle, _steerAngle, 0.6f);            
+        {
+            wheel.collider.steerAngle = Mathf.Lerp(
+                wheel.collider.steerAngle,
+                targetSteer,
+                0.6f
+            );
         }
     }
     
