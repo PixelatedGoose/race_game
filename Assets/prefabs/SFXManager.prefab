@@ -1526,6 +1526,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8404144491123639657}
   - component: {fileID: 2460398106219105724}
+  - component: {fileID: 2717998326011428751}
   m_Layer: 0
   m_Name: engineLoop_2
   m_TagString: soundFX
@@ -1555,14 +1556,14 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5879779162841054519}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 2277384958350379266, guid: 3b98bec6362893c4588f31bafaf63d26, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 1f52e96b93c126845bee499c6c39defd, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 0
   Loop: 1
   Mute: 0
   Spatialize: 0
@@ -1645,6 +1646,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2717998326011428751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5879779162841054519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 916ac99c99f1a154ab44ad74c690b04e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EngineLoop
 --- !u!1 &6159225783869329270
 GameObject:
   m_ObjectHideFlags: 0

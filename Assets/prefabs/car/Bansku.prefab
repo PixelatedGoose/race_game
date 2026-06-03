@@ -3374,7 +3374,7 @@ MonoBehaviour:
   maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 10
-  carLights: {fileID: 1820963566959711912}
+  carLights: {fileID: 5405213374494192738}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
   minGroundedWheelsForDrive: 2
@@ -3400,9 +3400,6 @@ MonoBehaviour:
   maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
-  Turbesped: 60
-  BaseSpeed: 150
-  DriftMaxSpeed: 100
   carLights: {fileID: 5405213374494192738}
 --- !u!114 &8984414616937260121
 MonoBehaviour:
@@ -3517,7 +3514,6 @@ MonoBehaviour:
   regenerationRate: 15
   waitTime: 2
   maxSpeedMultiplier: 1.2
-  maxSpeedDecayDuration: 4
 --- !u!1 &6464818183039503655
 GameObject:
   m_ObjectHideFlags: 0
