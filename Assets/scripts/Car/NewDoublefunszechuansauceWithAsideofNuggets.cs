@@ -27,12 +27,18 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     float recoverTime = 2f;
     private bool isBraking = false;
     Coroutine PixelRecovery;
+    private MultCounter multCounter;
+    float steerSmoothedForce;
+    float steerSmoothed;
+    float sideVelSmoothed;
+
     float driftExitBlend = 1f;
 
     protected override void Awake()
     {
         CarRb = GetComponent<Rigidbody>();
         TryGetComponent(out LGM);
+        multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
         
         Controls = new CarInputActions();
 
@@ -133,8 +139,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         MovementInputs = ctx.ReadValue<Vector2>();
         Steer();
 
-        if (isBraking) return;
-        Wheels.MotorTorque = MovementInputs.y * Acceleration;
+        if (!isBraking) Wheels.MotorTorque = MovementInputs.y * Acceleration;
     }
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
@@ -160,17 +165,17 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected override void FixedUpdate()
     {
-        TurnSensitivity = MaxTurnSensitivity - CarRb.linearVelocity.magnitude / BaseMaxSpeed * turnSensitivityRange;
-        
+        base.FixedUpdate();
+
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
+
 
             if (IsDrifting){
                 DriftPhysics();
             }
             Decelerate();
         }
-        base.FixedUpdate();
     }
 
     int GetGroundedWheelCount()
@@ -196,7 +201,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
             }
         }
     }
-
 
     //before you even fucking ask lamelemon, YES i used AI a lot bcs the deadline is too close
     void DriftPhysics()
@@ -304,11 +308,26 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         WheelEffects(false);
     }
 
-    void OnBrakePerformed(InputAction.CallbackContext ctx) => Wheels.BrakeTorque = BrakeAcceleration;
-    void OnBrakeCanceled(InputAction.CallbackContext ctx) => Wheels.MotorTorque = TargetTorque;
+    void OnBrakePerformed(InputAction.CallbackContext ctx)
+    {
+        Wheels.BrakeTorque = BrakeAcceleration;
+        Wheels.MotorTorque = 0;
+        isBraking = true;
+    }
+    void OnBrakeCanceled(InputAction.CallbackContext ctx)
+    {
+        Wheels.BrakeTorque = 0;
+        Wheels.MotorTorque = MovementInputs.y * Acceleration;
+        isBraking = false;
+    }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.layer == grassLayer.value)
+        {
+            multCounter.ResetMultiplier();
+        }
+
         if (PixelCount == null  || collision.impulse.sqrMagnitude < 0.1f ) 
             return;
 

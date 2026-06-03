@@ -17,27 +17,16 @@ public class BaseCarController : MonoBehaviour
     protected float turnSensitivityRange;
     public float MaxSpeed
     {
-        get
-        {
-            return CarRb.maxLinearVelocity * 3.6f;
-        }
-        set
-        {
-            CarRb.maxLinearVelocity = value / 3.6f;
-        }
+        get { return CarRb.maxLinearVelocity * 3.6f; }
+        set { CarRb.maxLinearVelocity = value / 3.6f; }
     }
     public float MpsMaxSpeed
     {
-        get
-        {
-            return CarRb.maxLinearVelocity;
-        }
-        set
-        {
-            CarRb.maxLinearVelocity = value;
-        }
+        get { return CarRb.maxLinearVelocity; }
+        set { CarRb.maxLinearVelocity = value; }
     }
     public float BaseMaxSpeed = 130f;
+    public float BaseMpsMaxSpeed { get; protected set; }
     [SerializeField] protected float maxSpeedDecayDuration = 1.0f;
     [SerializeField] internal Wheels Wheels;
     [Header("Trail settings")]
@@ -58,11 +47,14 @@ public class BaseCarController : MonoBehaviour
     public Vector3 CarExtents { get; protected set; }
     protected AbstractTurbo turbo;
     private Coroutine MaxSpeedDecay;
+    protected LayerMask grassLayer;
 
     virtual protected void Awake()
     {
         MaxSpeed = BaseMaxSpeed;
+        BaseMpsMaxSpeed = BaseMaxSpeed / 3.6f;
         turnSensitivityRange = MaxTurnSensitivity - MinTurnSensitivity;
+        grassLayer = LayerMask.NameToLayer("Grass");
         TryGetComponent(out turbo);
         AutoAssignWheelsAndMaterials();
     }
@@ -74,7 +66,10 @@ public class BaseCarController : MonoBehaviour
         ClearWheelTrails();
     }
 
-    virtual protected void FixedUpdate() {}
+    virtual protected void FixedUpdate()
+    {
+        TurnSensitivity = MaxTurnSensitivity - CarRb.linearVelocity.magnitude / BaseMpsMaxSpeed * turnSensitivityRange;
+    }
     public void ResetMaxSpeed() => MaxSpeed = BaseMaxSpeed;
 
     [ContextMenu("Auto Assign Wheels")]
