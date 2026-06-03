@@ -39,9 +39,8 @@ public class Options : MonoBehaviour
     private void InitializeVolumeSliders()
     {
         //MISTER BARBER DID I NOT TELL YOU TO REMOVE EVERYTHING???
-        foreach (var i in AllMixerGroups) main.SetFloat($"{i}_value", Mathf.Log10(PlayerPrefs.GetFloat($"{i}_value_value")) * 20);
+        foreach (var i in AllMixerGroups) main.SetFloat($"{i.name}_value", Mathf.Log10(PlayerPrefs.GetFloat($"{i}_value_value")) * 20);
 
-        //TODO: korjaa mikä ikinä aiheuttaa errorin restartin yhteydes
         List<AudioSlider> audioSliders = GetComponentsInChildren<AudioSlider>(true).ToList();
         foreach (var i in audioSliders)
         {

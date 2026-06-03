@@ -3,6 +3,7 @@ using UnityEngine;
 [ExecuteAlways]
 public class EditorDisableWaterInEditMode : MonoBehaviour
 {
+    private void Awake() => Water();
     private void OnEnable() => Water();
     private void OnValidate() => Water();
 

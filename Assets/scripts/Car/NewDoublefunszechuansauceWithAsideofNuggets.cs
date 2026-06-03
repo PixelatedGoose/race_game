@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Logitech;
+using UnityEditor.ShaderGraph.Internal;
 
 
 [RequireComponent(typeof(Rigidbody))]
@@ -16,6 +17,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     string CurrentControlScheme;
 
     [SerializeField] private GameObject carLights;
+    private Material carLightsMaterial;
     [SerializeField] private Material PixelCount;
 
     [SerializeField] private float steerDeadzone = 0.15f;
@@ -37,6 +39,10 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     protected override void Awake()
     {
         CarRb = GetComponent<Rigidbody>();
+        carLightsMaterial = GetComponentInChildren<Renderer>().materials[1];
+        carLights.SetActive(false);
+        carLightsMaterial.SetVector("_EmissionColor", new Vector4(0f, 0f, 0f, 1f) * 2f);
+        
         TryGetComponent(out LGM);
         multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
 
@@ -314,12 +320,18 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Wheels.BrakeTorque = BrakeAcceleration;
         Wheels.MotorTorque = 0;
         isBraking = true;
+
+        carLights.SetActive(true);
+        carLightsMaterial.SetVector("_EmissionColor", new Vector4(1f, 0.0491371f, 0f, 1f) * 2f);
     }
     void OnBrakeCanceled(InputAction.CallbackContext ctx)
     {
         Wheels.BrakeTorque = 0;
         Wheels.MotorTorque = MovementInputs.y * Acceleration;
         isBraking = false;
+
+        carLights.SetActive(false);
+        carLightsMaterial.SetVector("_EmissionColor", new Vector4(0f, 0f, 0f, 1f) * 2f);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -365,6 +377,14 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
                 "_pixelcount",
                 Mathf.Lerp(hitPixel, basePixel, elapsed / recover)
             );
+
+            //hackfixattu
+            if (PixelCount.GetFloat("_pixelcount") <= 0 && PixelRecovery != null)
+            {
+                StopCoroutine(PixelRecovery);
+                float savedPixelCount = PlayerPrefs.GetFloat("pixel_value") * 64f;
+                PixelCount.SetFloat("_pixelcount", savedPixelCount);
+            }
 
             yield return null;
         }
