@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using UnityEngine.EventSystems;
 
 public class userDataInput : MonoBehaviour
 {
@@ -114,7 +115,7 @@ public class userDataInput : MonoBehaviour
 
     public void ReturnToInputField()
     {
-        if (enter.interactable) return;
+        if (EventSystem.current.currentSelectedGameObject != enter.gameObject && enter.interactable) return;
         inputField.Select();
     }
 

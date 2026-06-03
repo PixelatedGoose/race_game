@@ -40,14 +40,7 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         fullMenu.SetActive(false);
-        if (optionsPanel.activeSelf) optionsPanel.SetActive(false);
         racerScript = FindFirstObjectByType<RacerScript>();  
-    }
-
-    void Update()
-    {
-        Debug.Log($"{optionsPanel.activeSelf}");
-        Debug.Log($"{!optionsPanel.activeSelf && !racerScript.raceFinished && racerScript.racestarted}");
     }
 
     void PauseMenuCheck()
