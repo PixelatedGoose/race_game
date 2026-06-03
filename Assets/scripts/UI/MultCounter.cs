@@ -11,7 +11,7 @@ public class MultCounter : MonoBehaviour
     public Sprite[] numberSprites;
     public Image displayImage;
     public TextMeshProUGUI multiplierText;
-    private PlayerCarController playerScript; 
+    private NewDoublefunszechuansauceWithAsideofNuggets playerScript; 
     
     private bool isDrifting, useFullCooldown;
     private int currentFrame;
@@ -26,7 +26,7 @@ public class MultCounter : MonoBehaviour
     };
     public void Awake()
     {
-        playerScript = GameManager.CurrentCar.GetComponentInChildren<PlayerCarController>();
+        playerScript = GameManager.CurrentCar.GetComponentInChildren<NewDoublefunszechuansauceWithAsideofNuggets>();
     }
 
     private void OnEnable()
@@ -146,8 +146,6 @@ public class MultCounter : MonoBehaviour
         }
     }
 
-
-
     private IEnumerator MultiplierTimer()
     {
         float loopTimer = 0f;
@@ -155,6 +153,13 @@ public class MultCounter : MonoBehaviour
 
         while (isDrifting)
         {
+            if (playerScript.Wheels.TouchingGrass())
+            {
+                playerScript.EndDrift();
+                displayImage.sprite = numberSprites[0];
+                break;
+            }
+
             float mult = ScoreManager.instance.CurrentDriftMultiplier;
             
             if (mult >= 10f)
