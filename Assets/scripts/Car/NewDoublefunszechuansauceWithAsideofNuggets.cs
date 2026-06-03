@@ -209,7 +209,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         float frontSide = Mathf.Lerp(5f, 1.2f, t);
         float frontForward = Mathf.Lerp(7f, 3f, t);
-        
+
         float rearSide = Mathf.Lerp(5f, 0.9f, t);
         float rearForward = Mathf.Lerp(7f, 1.5f, t);
 
@@ -253,7 +253,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnDriftPerformed(InputAction.CallbackContext _)
     {
-        if (IsDrifting || MovementInputs.y < 0f)
+        if (IsDrifting)
             return;
 
         IsDrifting = true;
