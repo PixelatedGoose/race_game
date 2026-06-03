@@ -31,7 +31,11 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     private bool isBraking = false;
     Coroutine PixelRecovery;
     private MultCounter multCounter;
+    float steerSmoothedForce;
+    float steerSmoothed;
+    float sideVelSmoothed;
 
+    float driftExitBlend = 1f;
 
     protected override void Awake()
     {
@@ -137,7 +141,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         MovementInputs = ctx.ReadValue<Vector2>();
         Steer();
-        MovementInputs.x = ApplySteerDeadzone(MovementInputs.x);
         rawSteerInput = MovementInputs.x;
 
         if (isBraking) return;
@@ -249,123 +252,103 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Vector3 up = transform.up;
 
         Vector3 planar = Vector3.ProjectOnPlane(vel, up);
+
         float speed = planar.magnitude;
+        if (speed < 0.1f) return;
 
-        if (speed < 0.2f) return;
+        float steer = MovementInputs.x;
 
-        Vector3 forward = planar / speed;
-        Vector3 right = Vector3.Cross(up, forward);
+        float forwardDot = Vector3.Dot(planar.normalized, transform.forward);
 
-        float steer = rawSteerInput;
+        float reverseFactor = Mathf.Lerp(1f, 0.25f, Mathf.Clamp01(-forwardDot));
 
-        smoothedSteer = Mathf.Lerp(smoothedSteer, steer, 8f * Time.fixedDeltaTime);
+        float turnStrength =
+            steer *
+            Mathf.Lerp(60f, 140f, speed / MaxSpeed) *
+            reverseFactor *
+            Time.fixedDeltaTime;
 
-        float speed01 = Mathf.Clamp01(speed / MaxSpeed);
+        Vector3 dir = Quaternion.AngleAxis(turnStrength, up) * planar.normalized;
 
-        float driftStrength = Mathf.MoveTowards(52f, 10f, speed01);
-        print(driftStrength);
+        planar = Vector3.Slerp(planar, dir * planar.magnitude, 0.75f);
 
-        float steerResponse = Mathf.SmoothStep(0f, 1f, Mathf.Abs(smoothedSteer));
+        Vector3 targetVel = planar + Vector3.Project(vel, up);
 
-        Vector3 sideForce =
-            right * smoothedSteer * driftStrength * steerResponse;
-
-        Vector3 lateralVelocity = Vector3.Project(planar, right);
-
-        Vector3 damping =
-            -lateralVelocity * 0.01f; 
-
-        CarRb.linearVelocity += (sideForce + damping) * Time.fixedDeltaTime;
+        CarRb.linearVelocity = Vector3.Lerp(
+            CarRb.linearVelocity,
+            targetVel,
+            driftExitBlend
+        );
     }
 
     void ApplyDriftRotation()
     {
-        Vector3 vel = CarRb.linearVelocity;
-        Vector3 up = transform.up;
+        Vector3 planar = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
 
-        Vector3 planar = Vector3.ProjectOnPlane(vel, up);
+        if (planar.sqrMagnitude < 0.01f)
+            return;
 
-        if (planar.sqrMagnitude < 0.01f) return;
+        float speed01 = Mathf.Clamp01(planar.magnitude / MaxSpeed);
+        float steer = MovementInputs.x;
 
-        Vector3 velocityDir = planar.normalized;
+        Vector3 velDir = planar.normalized;
 
-        float steer = rawSteerInput;
+        Vector3 targetDir = Vector3.Slerp(
+            transform.forward,
+            velDir + transform.right * steer * 0.8f,
+            Mathf.Lerp(0.2f, 0.45f, speed01)
+        );
 
-        Vector3 targetDir =
-            Vector3.RotateTowards(
-                transform.forward,
-                velocityDir + transform.right * steer * 0.8f,
-                6f * Time.fixedDeltaTime,
-                0f
-            );
-
-        Quaternion targetRot = Quaternion.LookRotation(targetDir, up);
+        Quaternion rot = Quaternion.LookRotation(targetDir, transform.up);
 
         CarRb.MoveRotation(
-            Quaternion.Slerp(CarRb.rotation, targetRot, 9f * Time.fixedDeltaTime)
+            Quaternion.Slerp(CarRb.rotation, rot, 12f * Time.fixedDeltaTime)
         );
     }
 
     void SetDriftFriction(bool drifting)
     {
+        float side = drifting ? .3f : 5f;
+        float forward = drifting ? .6f : 5f;
+
         foreach (Wheel wheel in Wheels)
         {
-            WheelFrictionCurve sideways = wheel.collider.sidewaysFriction;
-            WheelFrictionCurve forward = wheel.collider.forwardFriction;
+            var sidewaysfriction = wheel.collider.sidewaysFriction;
+            var forwardfriction = wheel.collider.forwardFriction;
 
-            if (drifting){
-                sideways.stiffness = 0.3f;
-                forward.stiffness = 0.6f;
-            }
-            else{
-                sideways.stiffness = 5f;
-                forward.stiffness = 5f;
-            }
+            sidewaysfriction.stiffness = side;
+            forwardfriction.stiffness = forward;
 
-            wheel.collider.sidewaysFriction = sideways;
-            wheel.collider.forwardFriction = forward;
+            wheel.collider.sidewaysFriction = sidewaysfriction;
+            wheel.collider.forwardFriction = forwardfriction;
         }
     }
 
-    void OnDriftPerformed(InputAction.CallbackContext ctx)
+    void OnDriftPerformed(InputAction.CallbackContext _)
     {
+        if (IsDrifting || MovementInputs.y < 0f)
+            return;
 
+        smoothedSteer = MovementInputs.x;
         IsDrifting = true;
-        
 
         SetDriftFriction(true);
-
         WheelEffects(true);
     }
 
-    void OnDriftCanceled(InputAction.CallbackContext ctx) => EndDrift();
+    void OnDriftCanceled(InputAction.CallbackContext _) => EndDrift();
 
     void EndDrift()
     {
         IsDrifting = false;
-        smoothedDriftAngle = 0f;
-        SetDriftFriction(false);
+        smoothedSteer = 0f;
 
+        SetDriftFriction(false);
         WheelEffects(false);
     }
 
-
-    void OnBrakePerformed(InputAction.CallbackContext ctx)
-    {
-        Wheels.BrakeTorque = BrakeAcceleration;
-        isBraking = true;
-    }
-    void OnBrakeCanceled(InputAction.CallbackContext ctx)
-    {
-        isBraking = false;
-        Wheels.MotorTorque = MovementInputs.y * Acceleration;
-        Wheels.BrakeTorque = 0f;
-    }
-
-    float ApplySteerDeadzone(float steer)
-    {
-        return Mathf.Abs(steer) < steerDeadzone ? 0f : steer;
-    }
+    void OnBrakePerformed(InputAction.CallbackContext ctx) => Wheels.BrakeTorque = BrakeAcceleration;
+    void OnBrakeCanceled(InputAction.CallbackContext ctx) => Wheels.MotorTorque = TargetTorque;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -377,7 +360,15 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         if (PixelCount == null  || collision.impulse.sqrMagnitude < 0.1f ) 
             return;
 
-        float impact = Mathf.Clamp01(collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f));
+        if (IsDrifting)
+            EndDrift();
+
+        float impact = Mathf.Clamp01(
+            collision.relativeVelocity.magnitude / Mathf.Max(MpsMaxSpeed, 0.01f)
+        );
+
+        if (impact > 0.9f)
+            impact = 1f;
 
         impact = Mathf.SmoothStep(0f, 1f, impact);
 
