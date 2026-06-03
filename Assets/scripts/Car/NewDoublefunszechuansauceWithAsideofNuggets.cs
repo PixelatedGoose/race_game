@@ -30,6 +30,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     float recoverTime = 2f;
     private bool isBraking = false;
     Coroutine PixelRecovery;
+    private MultCounter multCounter;
     float steerSmoothedForce;
     float steerSmoothed;
     float sideVelSmoothed;
@@ -40,6 +41,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
     {
         CarRb = GetComponent<Rigidbody>();
         TryGetComponent(out LGM);
+        multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
         
         Controls = new CarInputActions();
 
@@ -141,8 +143,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         Steer();
         rawSteerInput = MovementInputs.x;
 
-        if (isBraking) return;
-        Wheels.MotorTorque = MovementInputs.y * Acceleration;
+        if (!isBraking) Wheels.MotorTorque = MovementInputs.y * Acceleration;
     }
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
@@ -169,18 +170,17 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     protected override void FixedUpdate()
     {
-        TurnSensitivity = MaxTurnSensitivity - CarRb.linearVelocity.magnitude / BaseMaxSpeed * turnSensitivityRange;
-        
+        base.FixedUpdate();
+
         if (GetGroundedWheelCount() >= minGroundedWheelsForDrive)
         {
-            CarMovement();
+            // CarMovement();
 
             if (IsDrifting){
                 DriftPhysics();
             }
             Decelerate();
         }
-        base.FixedUpdate();
     }
 
     int GetGroundedWheelCount()
@@ -207,36 +207,36 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         }
     }
 
-    protected void CarMovement()
-    {
-        Vector3 moveDir =
-        IsDrifting
-            ? Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up).normalized
-            : transform.forward;
+    // protected void CarMovement()
+    // {
+    //     Vector3 moveDir =
+    //     IsDrifting
+    //         ? Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up).normalized
+    //         : transform.forward;
 
-        float forwardDot = Vector3.Dot(CarRb.linearVelocity, moveDir);
+    //     float forwardDot = Vector3.Dot(CarRb.linearVelocity, moveDir);
 
-        float currentSign = Mathf.Abs(forwardDot) > 0.1f ? Mathf.Sign(forwardDot) : Mathf.Sign(MovementInputs.y);
-        float signedSpeed = CarRb.linearVelocity.magnitude * currentSign;
-        float accelMultiplier = IsDrifting ? 0.25f : 1f;
-        float targetSpeed = MaxSpeed * MovementInputs.y;
+    //     float currentSign = Mathf.Abs(forwardDot) > 0.1f ? Mathf.Sign(forwardDot) : Mathf.Sign(MovementInputs.y);
+    //     float signedSpeed = CarRb.linearVelocity.magnitude * currentSign;
+    //     float accelMultiplier = IsDrifting ? 0.25f : 1f;
+    //     float targetSpeed = MaxSpeed * MovementInputs.y;
 
-        if (IsDrifting)
-        {
-            Vector3 slopeVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
-            targetSpeed = Mathf.Max(Mathf.Abs(signedSpeed), Mathf.Abs(targetSpeed));
-            if (slopeVel.sqrMagnitude > 1f) moveDir = slopeVel.normalized;
-        }
+    //     if (IsDrifting)
+    //     {
+    //         Vector3 slopeVel = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
+    //         targetSpeed = Mathf.Max(Mathf.Abs(signedSpeed), Mathf.Abs(targetSpeed));
+    //         if (slopeVel.sqrMagnitude > 1f) moveDir = slopeVel.normalized;
+    //     }
 
-        float forwardSpeed = Mathf.MoveTowards(
-            signedSpeed,
-            targetSpeed,
-            Acceleration * accelMultiplier * Time.fixedDeltaTime
-        );
+    //     float forwardSpeed = Mathf.MoveTowards(
+    //         signedSpeed,
+    //         targetSpeed,
+    //         Acceleration * accelMultiplier * Time.fixedDeltaTime
+    //     );
 
-        Vector3 horiz = moveDir * forwardSpeed;
-        // CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
-    }
+    //     Vector3 horiz = moveDir * forwardSpeed;
+    //     // CarRb.linearVelocity = new Vector3(horiz.x, Mathf.Min(CarRb.linearVelocity.y, horiz.y), horiz.z);
+    // }
 
     //before you even fucking ask lamelemon, YES i used AI a lot bcs the deadline is too close
     void DriftPhysics()
@@ -346,11 +346,26 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
         WheelEffects(false);
     }
 
-    void OnBrakePerformed(InputAction.CallbackContext ctx) => Wheels.BrakeTorque = BrakeAcceleration;
-    void OnBrakeCanceled(InputAction.CallbackContext ctx) => Wheels.MotorTorque = TargetTorque;
+    void OnBrakePerformed(InputAction.CallbackContext ctx)
+    {
+        Wheels.BrakeTorque = BrakeAcceleration;
+        Wheels.MotorTorque = 0;
+        isBraking = true;
+    }
+    void OnBrakeCanceled(InputAction.CallbackContext ctx)
+    {
+        Wheels.BrakeTorque = 0;
+        Wheels.MotorTorque = MovementInputs.y * Acceleration;
+        isBraking = false;
+    }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.layer == grassLayer.value)
+        {
+            multCounter.ResetMultiplier();
+        }
+
         if (PixelCount == null  || collision.impulse.sqrMagnitude < 0.1f ) 
             return;
 
