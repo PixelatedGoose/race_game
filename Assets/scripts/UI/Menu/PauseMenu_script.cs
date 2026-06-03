@@ -26,11 +26,6 @@ public class PauseMenu : MonoBehaviour
     }
 
     private void OnEnable() => Controls.Enable();
-    private void OnDisable()
-    {
-        Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
-        Controls.Disable();
-    }
     private void OnDestroy()
     {
         Controls.CarControls.pausemenu.performed -= ctx => PauseMenuCheck();
