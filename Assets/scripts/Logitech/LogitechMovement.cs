@@ -82,6 +82,8 @@ public class LogitechMovement : MonoBehaviour
         if (NUGGETS == null) return;
 
         NUGGETS.MovementInputs = new Vector2(steer, moveY);
+
+        NUGGETS.Wheels.MotorTorque = moveY * NUGGETS.Acceleration;
     }
 
     internal void ApplyForceFeedback()
