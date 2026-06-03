@@ -30,7 +30,7 @@ public class MusicManager : MonoBehaviour
     public AudioSource resultsTrack;
     public AudioSource finalLapTrack;
 
-    private PlayerCarController carController;
+    private NewDoublefunszechuansauceWithAsideofNuggets carController;
     CarInputActions Controls;
 
     void Awake()
@@ -39,7 +39,7 @@ public class MusicManager : MonoBehaviour
         currentSong = songs[0];
         currentSongTracks = new AudioSource[] { currentSong.baseTrack, currentSong.driftTrack, currentSong.turboTrack };
         Controls = new CarInputActions();
-        carController = FindAnyObjectByType<PlayerCarController>();
+        carController = FindAnyObjectByType<NewDoublefunszechuansauceWithAsideofNuggets>();
 
         Controls.CarControls.Drift.started += ctx => DriftCall();
         Controls.CarControls.Drift.canceled += ctx => DriftCanceled();

@@ -1864,10 +1864,8 @@ GameObject:
   - component: {fileID: 6864653929209379342}
   - component: {fileID: 2434049652232776391}
   - component: {fileID: 3814099347550339855}
-  - component: {fileID: 2285249159904490474}
   - component: {fileID: 187602521392888673}
   - component: {fileID: 1311118830665507097}
-  - component: {fileID: 2608171001088632632}
   - component: {fileID: 7780373918696615088}
   - component: {fileID: 94803597688117432}
   m_Layer: 0
@@ -1959,29 +1957,6 @@ MonoBehaviour:
   steerDeadzone: 0.15
   minGroundedWheelsForDrive: 2
   driftAmount: 0.5
---- !u!114 &2285249159904490474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013609153453077785}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Acceleration: 20000
-  BrakeAcceleration: 200
-  TurnSensitivity: 1
-  MinTurnSensitivity: 17.5
-  MaxTurnSensitivity: 30
-  SteerStrength: 10
-  BaseMaxSpeed: 130
-  maxSpeedDecayDuration: 1
-  MovementInputs: {x: 0, y: 0}
-  TargetTorque: 0
-  carLights: {fileID: 6917815699065409072}
 --- !u!114 &187602521392888673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2023,36 +1998,6 @@ MonoBehaviour:
   - {fileID: 7961062769976980888}
   duration: 3
   lights: {fileID: 0}
---- !u!114 &2608171001088632632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013609153453077785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: 53472e6d66c2c0f4ba2cc137f3d2721b, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: 
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &7780373918696615088
 MonoBehaviour:
   m_ObjectHideFlags: 0

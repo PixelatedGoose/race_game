@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 using Logitech;
 using System.Collections;
 
-[RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(RacerScript))]
 public class PlayerCarController : BaseCarController
