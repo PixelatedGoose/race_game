@@ -324,10 +324,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == grassLayer.value)
-        {
-            multCounter.ResetMultiplier();
-        }
 
         if (PixelCount == null  || collision.impulse.sqrMagnitude < 0.1f ) 
             return;

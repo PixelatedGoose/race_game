@@ -78,6 +78,7 @@ public class Wheels
 
         FrontWheels = wheels.Where(w => w.axel == Wheel.Axel.Front).ToArray();
         RearWheels = wheels.Where(w => w.axel == Wheel.Axel.Rear).ToArray();
+        grassLayer = LayerMask.NameToLayer("grass");
     }
 
     public Wheel this[int index]
@@ -92,7 +93,7 @@ public class Wheels
             wheels[index] = value;
         }
     }
-
+    private LayerMask grassLayer;
     [SerializeField] protected Wheel[] wheels = new Wheel[4];
     public Wheel[] FrontWheels { get; private set; } = new Wheel[2];
     public Wheel[] RearWheels { get; private set; } = new Wheel[2];
@@ -143,5 +144,17 @@ public class Wheels
     public IEnumerator GetEnumerator()
     {
         return wheels.GetEnumerator();
+    }
+
+    public bool TouchingGrass()
+    {
+        foreach (Wheel w in wheels)
+        {
+            if (
+                w.collider.GetGroundHit(out WheelHit hit) 
+                && hit.collider.gameObject.layer == grassLayer
+            ) return true;
+        }
+        return false;
     }
 }

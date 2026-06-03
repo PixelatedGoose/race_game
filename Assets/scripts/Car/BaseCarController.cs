@@ -28,7 +28,7 @@ public class BaseCarController : MonoBehaviour
     public float BaseMaxSpeed = 130f;
     public float BaseMpsMaxSpeed { get; protected set; }
     [SerializeField] protected float maxSpeedDecayDuration = 1.0f;
-    [SerializeField] internal Wheels Wheels;
+    public Wheels Wheels;
     [Header("Trail settings")]
     public Vector2 MovementInputs;
     protected Vector3 _CenterofMass;
@@ -47,20 +47,19 @@ public class BaseCarController : MonoBehaviour
     public Vector3 CarExtents { get; protected set; }
     protected AbstractTurbo turbo;
     private Coroutine MaxSpeedDecay;
-    protected LayerMask grassLayer;
 
     virtual protected void Awake()
     {
-        MaxSpeed = BaseMaxSpeed;
+        ResetMaxSpeed();
         BaseMpsMaxSpeed = BaseMaxSpeed / 3.6f;
         turnSensitivityRange = MaxTurnSensitivity - MinTurnSensitivity;
-        grassLayer = LayerMask.NameToLayer("Grass");
         TryGetComponent(out turbo);
         AutoAssignWheelsAndMaterials();
     }
 
     virtual protected void Start()
     {
+        ResetMaxSpeed();
         carCollider = GetComponentInChildren<Collider>();
         CarExtents = carCollider.bounds.size;
         ClearWheelTrails();
