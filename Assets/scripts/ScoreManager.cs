@@ -32,7 +32,8 @@ public class ScoreManager : MonoBehaviour
     BaseCarController NUGGETS;
     RacerScript racerScript;
 
-    [SerializeField] float scoreFloat, driftTime, driftCompoundMultiplier = 0.65f;
+    [SerializeField] internal float scoreFloat; 
+    [SerializeField] float driftTime, driftCompoundMultiplier = 0.65f;
     float pendingDriftBonusTotal, bonusApplyProgress, bonusAddedSoFar;
     float driftSessionBaseGain, driftStartScore, scoreMultiplier = 1f;
     float TimeStartPoint = 15000f, RaceTimer;
