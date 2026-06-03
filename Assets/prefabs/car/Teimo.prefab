@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: rl
       objectReference: {fileID: 0}
+    - target: {fileID: 1369948176810718315, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1384954644508646451, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -176,6 +180,10 @@ PrefabInstance:
       propertyPath: Wheels.Array.data[3].WheelEffectobj
       value: 
       objectReference: {fileID: 1975435450685398690}
+    - target: {fileID: 2390131765041834094, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 2506942273287056747, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -195,6 +203,10 @@ PrefabInstance:
     - target: {fileID: 3621995110324072295, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_TagString
       value: thisisacar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4200738069657535970, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4447258588949571589, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_Pivot.x
@@ -307,6 +319,10 @@ PrefabInstance:
     - target: {fileID: 8333534453079258259, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_TagString
       value: rl
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684111291001936828, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: m_SidewaysFriction.m_ExtremumSlip
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8808136006470933881, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_text
@@ -446,6 +462,7 @@ MonoBehaviour:
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
   minGroundedWheelsForDrive: 2
+  driftAmount: 0.5
 --- !u!114 &6884080606728841104
 MonoBehaviour:
   m_ObjectHideFlags: 0
