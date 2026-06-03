@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
+using Unity.Splines.Examples;
 
 [RequireComponent(typeof(NewDoublefunszechuansauceWithAsideofNuggets))]
 public class RacerScript : MonoBehaviour
@@ -46,7 +47,7 @@ public class RacerScript : MonoBehaviour
         musicManager = FindAnyObjectByType<MusicManager>();
         sfxmngr = FindAnyObjectByType<SFXManager>();
         carController = GetComponent<NewDoublefunszechuansauceWithAsideofNuggets>();
-        scoreManager = GetComponent<ScoreManager>();
+        scoreManager = FindAnyObjectByType<ScoreManager>();
         multCounter = GameManager.instance.CarUI.GetComponentInChildren<MultCounter>();
         winmenu = FindAnyObjectByType<WinMenu>(FindObjectsInactive.Include);
     }
@@ -81,6 +82,7 @@ public class RacerScript : MonoBehaviour
     {
         respawnPoint = startFinishLine;
         checkpointStates = new bool[checkpoints.Count];
+
     }
 
     void Update()
@@ -127,7 +129,6 @@ public class RacerScript : MonoBehaviour
             RespawnAtLastCheckpoint();
             if (carController.IsDrifting)
             {
-                carController.IsDrifting = false;
                 carController.EndDrift();
                 scoreManager.scoreFloat = 0f; multCounter.ResetMultiplier();
             }

@@ -205,67 +205,13 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void DriftPhysics()
     {
-        ApplyDriftForce();
-        ApplyDriftRotation();
-    }
-
-    void ApplyDriftForce()
-    {
-        Vector3 vel = CarRb.linearVelocity;
-        Vector3 up = transform.up;
-
-        Vector3 planar = Vector3.ProjectOnPlane(vel, up);
-
-        float speed = planar.magnitude;
-        if (speed < 0.1f) return;
-
         float steer = MovementInputs.x;
 
-        float forwardDot = Vector3.Dot(planar.normalized, transform.forward);
+        float speedFactor = Mathf.Clamp01(CarRb.linearVelocity.magnitude / MaxSpeed);
 
-        float reverseFactor = Mathf.Lerp(1f, 0.25f, Mathf.Clamp01(-forwardDot));
-
-        float turnStrength =
-            steer *
-            Mathf.Lerp(60f, 140f, speed / MaxSpeed) *
-            reverseFactor *
-            Time.fixedDeltaTime;
-
-        Vector3 dir = Quaternion.AngleAxis(turnStrength, up) * planar.normalized;
-
-        planar = Vector3.Slerp(planar, dir * planar.magnitude, 0.75f);
-
-        Vector3 targetVel = planar + Vector3.Project(vel, up);
-
-        CarRb.linearVelocity = Vector3.Lerp(
-            CarRb.linearVelocity,
-            targetVel,
-            driftExitBlend
-        );
-    }
-
-    void ApplyDriftRotation()
-    {
-        Vector3 planar = Vector3.ProjectOnPlane(CarRb.linearVelocity, transform.up);
-
-        if (planar.sqrMagnitude < 0.01f)
-            return;
-
-        float speed01 = Mathf.Clamp01(planar.magnitude / MaxSpeed);
-        float steer = MovementInputs.x;
-
-        Vector3 velDir = planar.normalized;
-
-        Vector3 targetDir = Vector3.Slerp(
-            transform.forward,
-            velDir + transform.right * steer * 0.8f,
-            Mathf.Lerp(0.2f, 0.45f, speed01)
-        );
-
-        Quaternion rot = Quaternion.LookRotation(targetDir, transform.up);
-
-        CarRb.MoveRotation(
-            Quaternion.Slerp(CarRb.rotation, rot, 12f * Time.fixedDeltaTime)
+        CarRb.AddRelativeTorque(
+            transform.up * steer  * speedFactor,
+            ForceMode.Acceleration
         );
     }
 
