@@ -39,8 +39,6 @@ public class userDataInput : MonoBehaviour
     void Start()
     {
         winmenu = GetComponent<WinMenu>();
-        enter.interactable = false;
-
     }
     
     [Serializable]
@@ -90,6 +88,13 @@ public class userDataInput : MonoBehaviour
 
     public void CheckForInvalidName()
     {
+        if (userName == null || userName.Length == 0)
+        {
+            invalidNamePopup.text = bannedNamePopups[0];
+            enter.interactable = false;
+            return;
+        }
+
         long startTime = DateTime.Now.Ticks;
         foreach (string bannedName in bannedRegexWords)
         {
@@ -101,18 +106,16 @@ public class userDataInput : MonoBehaviour
                 Debug.Log($"Username censor completed in {(DateTime.Now.Ticks - startTime) / 10} microseconds");
                 return;
             }
-        } 
+        }
 
-        if (userName.Length == 0)
-        {
-            invalidNamePopup.text = bannedNamePopups[0];
-            enter.interactable = false;
-        }
-        else
-        {
-            invalidNamePopup.text = "";
-            enter.interactable = true;
-        }
+        invalidNamePopup.text = "";
+        enter.interactable = true;
+    }
+
+    public void ReturnToInputField()
+    {
+        if (enter.interactable) return;
+        inputField.Select();
     }
 
     public void SaveDataWithUserName()
