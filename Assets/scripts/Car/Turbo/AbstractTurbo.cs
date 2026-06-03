@@ -55,6 +55,7 @@ public abstract class AbstractTurbo : MonoBehaviour
 
         carController.IsTurboActive = true;
         carController.MaxSpeed *= maxSpeedMultiplier;
+        GameManager.sfx.turboActivate.Play();
 
         if (turboCoroutine != null) StopCoroutine(turboCoroutine);
         turboCoroutine = StartCoroutine(Consume());
@@ -63,6 +64,8 @@ public abstract class AbstractTurbo : MonoBehaviour
     public virtual void Stop()
     {
         carController.IsTurboActive = false;
+        GameManager.sfx.turboActivate.Stop();
+        GameManager.sfx.turboStop.Play();
         carController.DecayMaxSpeed(0);
 
         if (turboCoroutine != null) StopCoroutine(turboCoroutine);

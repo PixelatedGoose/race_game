@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 public class userDataInput : MonoBehaviour
 {
     private TMP_InputField inputField;
-    public string userName;
+    private string userName;
     private TextAsset jsonText;
     private TextAsset jsonRegexText;
     private string[] bannedNamesArray;
@@ -19,7 +19,7 @@ public class userDataInput : MonoBehaviour
         "Name cannot be empty!",
         "Invalid name!"
     };
-    [SerializeField] private Text bannedPopup;
+    [SerializeField] private TMP_Text invalidNamePopup;
     private Button enter;
     private WinMenu winmenu;
     private HashSet<string> bannedRegexWords;
@@ -94,7 +94,7 @@ public class userDataInput : MonoBehaviour
             //huom. tää jo toimii
             if (Regex.IsMatch(userName, bannedName))
             {
-                bannedPopup.text = bannedNamePopups[1];
+                invalidNamePopup.text = bannedNamePopups[1];
                 enter.interactable = false;
                 Debug.Log($"Username censor completed in {(DateTime.Now.Ticks - startTime) / 10} microseconds");
                 return;
@@ -103,12 +103,12 @@ public class userDataInput : MonoBehaviour
 
         if (userName.Length == 0)
         {
-            bannedPopup.text = bannedNamePopups[0];
+            invalidNamePopup.text = bannedNamePopups[0];
             enter.interactable = false;
         }
         else
         {
-            bannedPopup.text = "";
+            invalidNamePopup.text = "";
             enter.interactable = true;
         }
     }
@@ -117,5 +117,7 @@ public class userDataInput : MonoBehaviour
     {
         RaceResultCollector.instance.SaveRaceResult(userName);
         winmenu.FinalizeRaceAndSaveData();
+        LeaderBoard lb = GetComponentInChildren<LeaderBoard>();
+        lb.UpdateLeaderboard();
     }
 }

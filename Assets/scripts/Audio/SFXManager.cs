@@ -18,6 +18,8 @@ public class SFXManager : MonoBehaviour
     public AudioSource raceFinished;
     public AudioSource playerRespawn;
     [SerializeField] private AudioSource lights;
+    public AudioSource turboActivate;
+    public AudioSource turboStop;
 
     [ContextMenu("Assign SFX")]
     void FindSounds()
