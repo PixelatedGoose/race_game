@@ -45,7 +45,7 @@ public class PauseMenu : MonoBehaviour
     void PauseMenuCheck()
     {
         Debug.Log("checking for pause menu");
-        if (!optionsPanel.activeSelf && !racerScript.raceFinished && racerScript.racestarted) TogglePauseMenu();
+        if (!optionsPanel.activeInHierarchy && !racerScript.raceFinished && racerScript.racestarted) TogglePauseMenu();
     }
 
     public void TogglePauseMenu()
