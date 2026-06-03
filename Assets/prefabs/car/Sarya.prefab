@@ -945,7 +945,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1954,9 +1954,6 @@ MonoBehaviour:
   maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
-  Turbesped: 60
-  BaseSpeed: 180
-  DriftMaxSpeed: 140
   carLights: {fileID: 6917815699065409072}
   PixelCount: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
   steerDeadzone: 0.15
@@ -1983,9 +1980,6 @@ MonoBehaviour:
   maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
-  Turbesped: 60
-  BaseSpeed: 130
-  DriftMaxSpeed: 100
   carLights: {fileID: 6917815699065409072}
 --- !u!114 &187602521392888673
 MonoBehaviour:
@@ -2092,7 +2086,6 @@ MonoBehaviour:
   regenerationRate: 15
   waitTime: 2
   maxSpeedMultiplier: 1.15
-  maxSpeedDecayDuration: 4
 --- !u!1 &3041090505714790773
 GameObject:
   m_ObjectHideFlags: 0

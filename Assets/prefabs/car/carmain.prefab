@@ -2454,7 +2454,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -3079,11 +3079,9 @@ MonoBehaviour:
   MaxTurnSensitivity: 30
   SteerStrength: 10
   BaseMaxSpeed: 130
+  maxSpeedDecayDuration: 1
   MovementInputs: {x: 0, y: 0}
   TargetTorque: 0
-  Turbesped: 60
-  BaseSpeed: 130
-  DriftMaxSpeed: 100
   carLights: {fileID: 0}
 --- !u!114 &7459402881261962299
 MonoBehaviour:
@@ -3127,6 +3125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf77673f73d573c489fdc8dfb2a2c314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftLights: []
+  rightLights: []
   duration: 3
   lights: {fileID: 0}
 --- !u!114 &6055393316180837957
