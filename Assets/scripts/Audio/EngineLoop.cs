@@ -4,8 +4,8 @@ public class EngineLoop : MonoBehaviour
 {
     private AudioSource engine;
     private BaseCarController controller;
-    [SerializeField] float volumeMin = 0.2f, volumeMax = 0.83f;
-    [SerializeField] float pitchMin = 0.2f, pitchMax = 1.5f;
+    [SerializeField] float volumeMin = 0.3f, volumeMax = 0.83f;
+    [SerializeField] float pitchMin = 0.3f, pitchMax = 1.5f;
     private void Awake()
     {
         engine = GetComponent<AudioSource>();
@@ -13,9 +13,9 @@ public class EngineLoop : MonoBehaviour
     }
     private void Update()
     {
-        bool carControllable = !GameManager.racerscript.racestarted || GameManager.racerscript.raceFinished;
+        bool carNotControllable = !GameManager.racerscript.racestarted || GameManager.racerscript.raceFinished;
         float fard = controller.CarRb.linearVelocity.sqrMagnitude / (controller.BaseMpsMaxSpeed * controller.BaseMpsMaxSpeed);
-        engine.pitch = Mathf.Clamp(fard * pitchMax, carControllable ? 0f : pitchMin, pitchMax);
-        engine.volume = Mathf.Clamp(fard * volumeMax, carControllable ? 0f : volumeMin, volumeMax);
+        engine.pitch = Mathf.Clamp(fard * (pitchMax - pitchMin) + 0.2f, carNotControllable ? 0f : pitchMin, pitchMax);
+        engine.volume = carNotControllable ? 0f : (fard * volumeMax) + 0.2f;
     }
 }
