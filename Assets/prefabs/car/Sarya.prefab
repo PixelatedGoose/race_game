@@ -1868,6 +1868,8 @@ GameObject:
   - component: {fileID: 1311118830665507097}
   - component: {fileID: 7780373918696615088}
   - component: {fileID: 94803597688117432}
+  - component: {fileID: 4898665158315977442}
+  - component: {fileID: 2314139342738273677}
   m_Layer: 0
   m_Name: car
   m_TagString: Untagged
@@ -2032,6 +2034,59 @@ MonoBehaviour:
   regenerationRate: 15
   waitTime: 2
   maxSpeedMultiplier: 1.15
+--- !u!114 &4898665158315977442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013609153453077785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 53472e6d66c2c0f4ba2cc137f3d2721b, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: 
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &2314139342738273677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013609153453077785}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846c21108a9446549ac1ccfe7dfd277a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Acceleration: 700
+  BrakeAcceleration: 200
+  TurnSensitivity: 1
+  MinTurnSensitivity: 17.5
+  MaxTurnSensitivity: 30
+  SteerStrength: 10
+  BaseMaxSpeed: 130
+  maxSpeedDecayDuration: 1
+  MovementInputs: {x: 0, y: 0}
+  TargetTorque: 0
+  carLights: {fileID: 6917815699065409072}
 --- !u!1 &3041090505714790773
 GameObject:
   m_ObjectHideFlags: 0
