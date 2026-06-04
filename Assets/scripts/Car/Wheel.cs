@@ -157,4 +157,13 @@ public class Wheels
         }
         return false;
     }
+
+    public bool IsTouchingGround()
+    {
+        foreach (Wheel w in wheels)
+        {
+            if (w.collider.isGrounded) return true;
+        }
+        return false;
+    }
 }
