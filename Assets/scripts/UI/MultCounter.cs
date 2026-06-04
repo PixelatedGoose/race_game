@@ -153,12 +153,14 @@ public class MultCounter : MonoBehaviour
 
         while (isDrifting)
         {
-            if (playerScript.Wheels.TouchingGrass())
-            {
-                playerScript.EndDrift();
-                displayImage.sprite = numberSprites[0];
-                break;
-            }
+            // if (playerScript.Wheels.TouchingGrass())
+            // {
+            //     // playerScript.EndDrift();
+            //     ScoreManager.instance.bonus = 0f;
+            //     displayImage.sprite = numberSprites[0];
+                
+            //     break;
+            // }
 
             float mult = ScoreManager.instance.CurrentDriftMultiplier;
             

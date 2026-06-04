@@ -130,7 +130,7 @@ public class RacerScript : MonoBehaviour
             if (carController.IsDrifting)
             {
                 carController.EndDrift();
-                scoreManager.scoreFloat = 0f; multCounter.ResetMultiplier();
+                scoreManager.bonus = 0f; multCounter.ResetMultiplier();
             }
             LeanTween.value(respawnfade.GetComponent<RawImage>().color.a, 0f, 0.25f).setOnUpdate((float val) =>
             {

@@ -19,6 +19,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField, Range(0f, 1f)] float midTierThreshold = 0.4f;
     [SerializeField] float bonusApplyDuration = 1f;
     [SerializeField] bool debugScoreBreakdown;
+    internal float bonus;  
 
     [Header("UI")]
     [SerializeField] MultCounter multCounter;
@@ -165,7 +166,7 @@ public class ScoreManager : MonoBehaviour
         driftCount++;
         float intensity     = Mathf.InverseLerp(1f, maxDriftMultiplier, driftCompoundMultiplier);
         float combinedQuality = Mathf.Clamp01(0.5f * intensity + 0.5f * driftTime / 3f);
-        float bonus         = CalculateDriftBonus(combinedQuality) * 0.65f * scoreMultiplier;
+        bonus       = CalculateDriftBonus(combinedQuality) * 0.65f * scoreMultiplier;
         pendingDriftBonusTotal = bonus; isApplyingBonus = bonus > 0f; bonusApplyProgress = bonusAddedSoFar = 0f;
         if (debugScoreBreakdown)
             Debug.Log($"[DRIFT #{driftCount}] {(combinedQuality < midTierThreshold ? "LOW-MID" : "MID-HIGH")} | dur:{driftTime:F2}s mult:x{driftCompoundMultiplier:F2} quality:{combinedQuality:P0} bonus:+{bonus:N0}");
