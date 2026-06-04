@@ -71,7 +71,7 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
         basePixel = PixelCount.GetFloat("_pixelcount");
 
-        LGM.useLogitechWheel = false;
+        LGM.useLogitechWheel = true;
         LGM.allowAutoEnable = true;
     }
 
@@ -160,7 +160,6 @@ public class NewDoublefunszechuansauceWithAsideofNuggets : BaseCarController
 
     void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
-        if (LGM != null && LGM.useLogitechWheel) return;
         MovementInputs = Vector2.zero;
         Steer();
         Wheels.MotorTorque = 0;

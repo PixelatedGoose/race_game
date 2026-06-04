@@ -204,6 +204,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: thisisacar
       objectReference: {fileID: 0}
+    - target: {fileID: 3628007734711761796, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: carLights
+      value: 
+      objectReference: {fileID: 4696615603691038456}
+    - target: {fileID: 3628007734711761796, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
+      propertyPath: PixelCount
+      value: 
+      objectReference: {fileID: 2100000, guid: 7a29e55765b13f14e9e4cdef3bd67bfc, type: 2}
     - target: {fileID: 4200738069657535970, guid: d564b44e6c3401a46a68ee07eb6a202c, type: 3}
       propertyPath: m_SidewaysFriction.m_ExtremumSlip
       value: 0.3

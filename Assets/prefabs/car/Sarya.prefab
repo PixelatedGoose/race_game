@@ -2012,7 +2012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e6fbb8ef19c234ca285880fb02ce6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LogitechMovement
-  useLogitechWheel: 0
+  useLogitechWheel: 1
   forceFeedbackMultiplier: 1
   allowAutoEnable: 1
 --- !u!114 &94803597688117432
