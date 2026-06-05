@@ -54,7 +54,7 @@ public abstract class AbstractTurbo : MonoBehaviour
         if (Amount <= 0 || carController.IsTurboActive) return;
 
         carController.IsTurboActive = true;
-        carController.MaxSpeed *= maxSpeedMultiplier;
+        carController.MaxSpeed = maxSpeedMultiplier * carController.BaseMaxSpeed;
         GameManager.sfx.turboActivate.Play();
 
         if (turboCoroutine != null) StopCoroutine(turboCoroutine);
