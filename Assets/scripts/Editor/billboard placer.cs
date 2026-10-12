@@ -314,7 +314,7 @@ public class BillboardPlacer : EditorWindow
         if (useRandomScale)
         {
             float randomScale = Random.Range(randomScaleMin, randomScaleMax);
-            newObject.transform.localScale = Vector3.one * randomScale;
+            newObject.transform.localScale *= randomScale;
         }
         
         // Set parent
